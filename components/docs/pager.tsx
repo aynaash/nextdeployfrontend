@@ -19,7 +19,7 @@ export function DocsPager({ doc }: DocsPagerProps) {
 
   return (
     <div className="flex flex-row items-center justify-between">
-      {pager?.prev && (
+      {pager?.prev && ( 
         <Link
           href={pager.prev.href}
           className={cn(buttonVariants({ variant: "outline" }))}
