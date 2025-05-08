@@ -9,10 +9,10 @@ export const siteConfig: SiteConfig = {
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
   links: {
-    twitter: "https://twitter.com/nextdeployhq",
-    github: "https://github.com/nextdeploy/nextdeploy",
+    twitter: "https://twitter.com/nextdeploy",
+    github: "https://github.com/aynaash",
   },
-  mailSupport: "support@nextdeploy.io",
+  mailSupport: "nextdeploy@nextdeploy.one",
 };
 export const footerLinks: SidebarNavItem[] = [
   {

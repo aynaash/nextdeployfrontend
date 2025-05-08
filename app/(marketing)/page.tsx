@@ -15,7 +15,9 @@ export default function IndexPage() {
       <Powered />
       <BentoGrid />
       <InfoLanding data={infos[0]} reverse={true} />
-      {/* <InfoLanding data={infos[1]} /> */}
+      {/* This component requires session data*/}
+   {/* <InfoLanding data={infos[1]} /> */}
+
       <Features />
     </>
   );
