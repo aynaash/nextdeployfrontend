@@ -5,7 +5,7 @@ export const infos: InfoLdg[] = [
     title: "Empower Your Deployments",
     description:
       "Unlock the full potential of your deployments with our platform. Scale effortlessly, monitor performance in real time, and streamline your workflow from development to production.",
-    image: "/_static/illustrations/deployment.jpg", // Replace with appropriate image
+    image: "/_static/illustrations/work-from-home.jpg",
     list: [
       {
         title: "Collaborative",

@@ -17,7 +17,6 @@ export default function IndexPage() {
       <InfoLanding data={infos[0]} reverse={true} />
       {/* <InfoLanding data={infos[1]} /> */}
       <Features />
-      <Testimonials />
     </>
   );
 }

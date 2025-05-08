@@ -93,8 +93,8 @@ export default function BentoGrid() {
                   Secure by default
                 </h2>
                 <p className="text-muted-foreground">
-                  Provident fugit and vero voluptate. magnam magni doloribus
-                  dolores voluptates a sapiente nisi.
+                 
+NextDeploy is secure by default with encryption, isolation, SSH, and access controls.
                 </p>
               </div>
             </div>
@@ -190,8 +190,8 @@ export default function BentoGrid() {
                   Faster than light
                 </h2>
                 <p className="text-muted-foreground">
-                  Provident fugit vero voluptate. magnam magni doloribus dolores
-                  voluptates inventore nisi.
+                
+NextDeploy is fast by design, optimizing builds, deployments, networking, and performance tuning.
                 </p>
               </div>
             </div>
@@ -222,8 +222,8 @@ export default function BentoGrid() {
                     Faster than light
                   </h2>
                   <p className="text-muted-foreground">
-                    Provident fugit vero voluptate. Voluptates a sapiente
-                    inventore nisi.
+                    
+NextDeploy is fast by design, optimizing builds, deployments, networking, and performance tuning.
                   </p>
                 </div>
               </div>
@@ -304,11 +304,11 @@ export default function BentoGrid() {
                 </div>
                 <div className="space-y-2">
                   <h2 className="text-lg font-medium text-foreground">
-                    Keep your loved ones safe
+                    Extensible and collaboration-centric
                   </h2>
                   <p className="text-muted-foreground">
-                    Voluptate. magnam magni doloribus dolores voluptates a
-                    sapiente.
+                    
+NextDeploy supports team collaboration and instant rollbacks with versioned deployments and audit trails.
                   </p>
                 </div>
               </div>
@@ -339,7 +339,7 @@ export default function BentoGrid() {
                       />
                     </div>
                     <span className="block h-fit rounded-md border bg-muted/50 px-2 py-1 text-xs">
-                      M. Irung
+                      M. Irungu
                     </span>
                   </div>
                   <div className="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
