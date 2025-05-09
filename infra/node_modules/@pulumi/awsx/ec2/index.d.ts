@@ -1,0 +1,10 @@
+export { DefaultVpcArgs } from "./defaultVpc";
+export type DefaultVpc = import("./defaultVpc").DefaultVpc;
+export declare const DefaultVpc: typeof import("./defaultVpc").DefaultVpc;
+export { GetDefaultVpcArgs, GetDefaultVpcResult } from "./getDefaultVpc";
+export declare const getDefaultVpc: typeof import("./getDefaultVpc").getDefaultVpc;
+export declare const getDefaultVpcOutput: typeof import("./getDefaultVpc").getDefaultVpcOutput;
+export { VpcArgs } from "./vpc";
+export type Vpc = import("./vpc").Vpc;
+export declare const Vpc: typeof import("./vpc").Vpc;
+export * from "../types/enums/ec2";

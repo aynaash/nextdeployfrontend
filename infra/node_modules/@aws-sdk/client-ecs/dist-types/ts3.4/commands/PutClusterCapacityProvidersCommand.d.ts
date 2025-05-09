@@ -1,0 +1,51 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import {
+  PutClusterCapacityProvidersRequest,
+  PutClusterCapacityProvidersResponse,
+} from "../models/models_0";
+export { __MetadataBearer };
+export { $Command };
+export interface PutClusterCapacityProvidersCommandInput
+  extends PutClusterCapacityProvidersRequest {}
+export interface PutClusterCapacityProvidersCommandOutput
+  extends PutClusterCapacityProvidersResponse,
+    __MetadataBearer {}
+declare const PutClusterCapacityProvidersCommand_base: {
+  new (
+    input: PutClusterCapacityProvidersCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    PutClusterCapacityProvidersCommandInput,
+    PutClusterCapacityProvidersCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: PutClusterCapacityProvidersCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    PutClusterCapacityProvidersCommandInput,
+    PutClusterCapacityProvidersCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class PutClusterCapacityProvidersCommand extends PutClusterCapacityProvidersCommand_base {
+  protected static __types: {
+    api: {
+      input: PutClusterCapacityProvidersRequest;
+      output: PutClusterCapacityProvidersResponse;
+    };
+    sdk: {
+      input: PutClusterCapacityProvidersCommandInput;
+      output: PutClusterCapacityProvidersCommandOutput;
+    };
+  };
+}

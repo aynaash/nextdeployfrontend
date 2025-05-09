@@ -1,0 +1,14 @@
+{
+    "name": "nextdeploy",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@pulumi/aiven": "^5.4.0",
+        "@pulumi/aws": "6.80.0",
+        "@pulumi/awsx": "2.21.1",
+        "@pulumi/pulumi": "^3.113.0"
+    }
+}

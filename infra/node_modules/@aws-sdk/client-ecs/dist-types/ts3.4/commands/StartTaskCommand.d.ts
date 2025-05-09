@@ -1,0 +1,47 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import { StartTaskRequest, StartTaskResponse } from "../models/models_0";
+export { __MetadataBearer };
+export { $Command };
+export interface StartTaskCommandInput extends StartTaskRequest {}
+export interface StartTaskCommandOutput
+  extends StartTaskResponse,
+    __MetadataBearer {}
+declare const StartTaskCommand_base: {
+  new (
+    input: StartTaskCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    StartTaskCommandInput,
+    StartTaskCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: StartTaskCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    StartTaskCommandInput,
+    StartTaskCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class StartTaskCommand extends StartTaskCommand_base {
+  protected static __types: {
+    api: {
+      input: StartTaskRequest;
+      output: StartTaskResponse;
+    };
+    sdk: {
+      input: StartTaskCommandInput;
+      output: StartTaskCommandOutput;
+    };
+  };
+}

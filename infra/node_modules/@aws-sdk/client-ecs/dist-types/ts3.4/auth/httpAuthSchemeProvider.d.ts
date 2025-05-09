@@ -1,0 +1,46 @@
+import {
+  AwsSdkSigV4AuthInputConfig,
+  AwsSdkSigV4AuthResolvedConfig,
+  AwsSdkSigV4PreviouslyResolved,
+} from "@aws-sdk/core";
+import {
+  HandlerExecutionContext,
+  HttpAuthScheme,
+  HttpAuthSchemeParameters,
+  HttpAuthSchemeParametersProvider,
+  HttpAuthSchemeProvider,
+  Provider,
+} from "@smithy/types";
+import { ECSClientResolvedConfig } from "../ECSClient";
+export interface ECSHttpAuthSchemeParameters extends HttpAuthSchemeParameters {
+  region?: string;
+}
+export interface ECSHttpAuthSchemeParametersProvider
+  extends HttpAuthSchemeParametersProvider<
+    ECSClientResolvedConfig,
+    HandlerExecutionContext,
+    ECSHttpAuthSchemeParameters,
+    object
+  > {}
+export declare const defaultECSHttpAuthSchemeParametersProvider: (
+  config: ECSClientResolvedConfig,
+  context: HandlerExecutionContext,
+  input: object
+) => Promise<ECSHttpAuthSchemeParameters>;
+export interface ECSHttpAuthSchemeProvider
+  extends HttpAuthSchemeProvider<ECSHttpAuthSchemeParameters> {}
+export declare const defaultECSHttpAuthSchemeProvider: ECSHttpAuthSchemeProvider;
+export interface HttpAuthSchemeInputConfig extends AwsSdkSigV4AuthInputConfig {
+  authSchemePreference?: string[] | Provider<string[]>;
+  httpAuthSchemes?: HttpAuthScheme[];
+  httpAuthSchemeProvider?: ECSHttpAuthSchemeProvider;
+}
+export interface HttpAuthSchemeResolvedConfig
+  extends AwsSdkSigV4AuthResolvedConfig {
+  readonly authSchemePreference: Provider<string[]>;
+  readonly httpAuthSchemes: HttpAuthScheme[];
+  readonly httpAuthSchemeProvider: ECSHttpAuthSchemeProvider;
+}
+export declare const resolveHttpAuthSchemeConfig: <T>(
+  config: T & HttpAuthSchemeInputConfig & AwsSdkSigV4PreviouslyResolved
+) => T & HttpAuthSchemeResolvedConfig;

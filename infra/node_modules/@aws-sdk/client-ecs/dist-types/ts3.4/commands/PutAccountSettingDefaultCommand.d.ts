@@ -1,0 +1,51 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import {
+  PutAccountSettingDefaultRequest,
+  PutAccountSettingDefaultResponse,
+} from "../models/models_0";
+export { __MetadataBearer };
+export { $Command };
+export interface PutAccountSettingDefaultCommandInput
+  extends PutAccountSettingDefaultRequest {}
+export interface PutAccountSettingDefaultCommandOutput
+  extends PutAccountSettingDefaultResponse,
+    __MetadataBearer {}
+declare const PutAccountSettingDefaultCommand_base: {
+  new (
+    input: PutAccountSettingDefaultCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    PutAccountSettingDefaultCommandInput,
+    PutAccountSettingDefaultCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: PutAccountSettingDefaultCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    PutAccountSettingDefaultCommandInput,
+    PutAccountSettingDefaultCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class PutAccountSettingDefaultCommand extends PutAccountSettingDefaultCommand_base {
+  protected static __types: {
+    api: {
+      input: PutAccountSettingDefaultRequest;
+      output: PutAccountSettingDefaultResponse;
+    };
+    sdk: {
+      input: PutAccountSettingDefaultCommandInput;
+      output: PutAccountSettingDefaultCommandOutput;
+    };
+  };
+}

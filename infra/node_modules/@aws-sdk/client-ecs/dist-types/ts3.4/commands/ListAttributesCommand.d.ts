@@ -1,0 +1,50 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import {
+  ListAttributesRequest,
+  ListAttributesResponse,
+} from "../models/models_0";
+export { __MetadataBearer };
+export { $Command };
+export interface ListAttributesCommandInput extends ListAttributesRequest {}
+export interface ListAttributesCommandOutput
+  extends ListAttributesResponse,
+    __MetadataBearer {}
+declare const ListAttributesCommand_base: {
+  new (
+    input: ListAttributesCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    ListAttributesCommandInput,
+    ListAttributesCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: ListAttributesCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    ListAttributesCommandInput,
+    ListAttributesCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class ListAttributesCommand extends ListAttributesCommand_base {
+  protected static __types: {
+    api: {
+      input: ListAttributesRequest;
+      output: ListAttributesResponse;
+    };
+    sdk: {
+      input: ListAttributesCommandInput;
+      output: ListAttributesCommandOutput;
+    };
+  };
+}

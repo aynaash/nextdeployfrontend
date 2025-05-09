@@ -1,0 +1,47 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import { StopTaskRequest, StopTaskResponse } from "../models/models_0";
+export { __MetadataBearer };
+export { $Command };
+export interface StopTaskCommandInput extends StopTaskRequest {}
+export interface StopTaskCommandOutput
+  extends StopTaskResponse,
+    __MetadataBearer {}
+declare const StopTaskCommand_base: {
+  new (
+    input: StopTaskCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    StopTaskCommandInput,
+    StopTaskCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: StopTaskCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    StopTaskCommandInput,
+    StopTaskCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class StopTaskCommand extends StopTaskCommand_base {
+  protected static __types: {
+    api: {
+      input: StopTaskRequest;
+      output: StopTaskResponse;
+    };
+    sdk: {
+      input: StopTaskCommandInput;
+      output: StopTaskCommandOutput;
+    };
+  };
+}

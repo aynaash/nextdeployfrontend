@@ -1,0 +1,50 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import {
+  UpdateTaskSetRequest,
+  UpdateTaskSetResponse,
+} from "../models/models_1";
+export { __MetadataBearer };
+export { $Command };
+export interface UpdateTaskSetCommandInput extends UpdateTaskSetRequest {}
+export interface UpdateTaskSetCommandOutput
+  extends UpdateTaskSetResponse,
+    __MetadataBearer {}
+declare const UpdateTaskSetCommand_base: {
+  new (
+    input: UpdateTaskSetCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    UpdateTaskSetCommandInput,
+    UpdateTaskSetCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: UpdateTaskSetCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    UpdateTaskSetCommandInput,
+    UpdateTaskSetCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class UpdateTaskSetCommand extends UpdateTaskSetCommand_base {
+  protected static __types: {
+    api: {
+      input: UpdateTaskSetRequest;
+      output: UpdateTaskSetResponse;
+    };
+    sdk: {
+      input: UpdateTaskSetCommandInput;
+      output: UpdateTaskSetCommandOutput;
+    };
+  };
+}

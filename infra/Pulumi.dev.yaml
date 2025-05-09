@@ -1,0 +1,8 @@
+config:
+  nextdeploy:cloudName: aws us-east1
+  nextdeploy:plan: compute
+  nextdeploy:project: nextdeploy
+  nextdeploy:serviceName: aws
+  aws:region: us-east-1
+  nextdeploy:dbPassword:
+    secure: AAABAIxst+cjpBd01FuQR2dpcaXP01NHNkx+gYWcrrlaJ+UW3Y9vVzcGiQ==

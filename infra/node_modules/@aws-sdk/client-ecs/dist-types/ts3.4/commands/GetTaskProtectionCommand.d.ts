@@ -1,0 +1,51 @@
+import { Command as $Command } from "@smithy/smithy-client";
+import { MetadataBearer as __MetadataBearer } from "@smithy/types";
+import {
+  ECSClientResolvedConfig,
+  ServiceInputTypes,
+  ServiceOutputTypes,
+} from "../ECSClient";
+import {
+  GetTaskProtectionRequest,
+  GetTaskProtectionResponse,
+} from "../models/models_0";
+export { __MetadataBearer };
+export { $Command };
+export interface GetTaskProtectionCommandInput
+  extends GetTaskProtectionRequest {}
+export interface GetTaskProtectionCommandOutput
+  extends GetTaskProtectionResponse,
+    __MetadataBearer {}
+declare const GetTaskProtectionCommand_base: {
+  new (
+    input: GetTaskProtectionCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    GetTaskProtectionCommandInput,
+    GetTaskProtectionCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  new (
+    input: GetTaskProtectionCommandInput
+  ): import("@smithy/smithy-client").CommandImpl<
+    GetTaskProtectionCommandInput,
+    GetTaskProtectionCommandOutput,
+    ECSClientResolvedConfig,
+    ServiceInputTypes,
+    ServiceOutputTypes
+  >;
+  getEndpointParameterInstructions(): import("@smithy/middleware-endpoint").EndpointParameterInstructions;
+};
+export declare class GetTaskProtectionCommand extends GetTaskProtectionCommand_base {
+  protected static __types: {
+    api: {
+      input: GetTaskProtectionRequest;
+      output: GetTaskProtectionResponse;
+    };
+    sdk: {
+      input: GetTaskProtectionCommandInput;
+      output: GetTaskProtectionCommandOutput;
+    };
+  };
+}
