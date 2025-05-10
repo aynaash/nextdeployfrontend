@@ -1,11 +1,9 @@
 import * as aws from "@pulumi/aws";
 import { createVpc } from "./config/networking";
-import { createEc2Instance } from "./config/ec2";
 import { createVolume } from "./config/storage";
 import { createPostgresDB } from "./config/rds";
 import { createBucket } from "./config/s3";
-import { createFrontendAndBackendServers } from "./confige/ec2";
-
+import { createFrontendAndBackendServers } from "./config/ec2";
 const servers = await createFrontendAndBackendServers(vpc);
 
 export const frontendIP = servers.frontend.publicIp;

@@ -1,10 +1,8 @@
 import { MagicLinkEmail } from "@/emails/magic-link-email";
 import { EmailConfig } from "next-auth/providers/email";
 import { Resend } from "resend";
-
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
-
 import { getUserByEmail } from "./user";
 
 export const resend = new Resend(env.RESEND_API_KEY);
