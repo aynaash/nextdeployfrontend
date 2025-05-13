@@ -1,5 +1,5 @@
-import { pgTable, text, timestamp, integer } from "drizzle-orm/pg-core";
-
+import { pgTable, text, timestamp, integer, real } from "drizzle-orm/pg-core";
+import {deployments} from "./deployments.ts"
 export const metrics = pgTable("metrics", {
   id:text("id").$defaultFn(()=> randomUUID()).primaryKey(),
   deploymentId: text("deployment_id").notNull().references(() => deployments.id),

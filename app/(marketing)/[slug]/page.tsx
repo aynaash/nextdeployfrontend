@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { allPages } from "contentlayer/generated";
+import { allPages } from "@/.contentlayer/generated";
 
 import { Mdx } from "@/components/content/mdx-components";
 

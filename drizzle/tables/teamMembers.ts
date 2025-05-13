@@ -1,5 +1,7 @@
 
 import { pgTable, text, timestamp,varchar, integer } from "drizzle-orm/pg-core";
+import {users} from "./users.ts"
+import {teams} from "./teams.ts"
 export const teamMembers = pgTable("team_members", {
   id: text("id").$defaultFn(()=> randomUUID()),
   userId: text("user_id").notNull().references(() => users.id),
