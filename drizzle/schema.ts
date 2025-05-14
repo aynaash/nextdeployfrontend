@@ -17,3 +17,4 @@ export * from "./tables/plans";
 export * from "./tables/projectEnvironments";
 export * from  "./tables/webhookEvents";
 export * from "./tables/authenticator"
+export * from "./tables/rateLimits"

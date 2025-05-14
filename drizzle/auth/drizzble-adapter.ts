@@ -2,8 +2,13 @@ import { db } from "@/lib/db";
 import { users, accounts, sessions, verificationTokens } from "../schema.ts";
 import { eq, and } from "drizzle-orm";
 import { Adapter } from "next-auth/adapters";
-
+import {isEdgeRuntime} from "../../lib/runtime.ts"
 export function DrizzleAdapter(): Adapter {
+  if(isEdgeRuntime()){
+    throw new Error(
+      "Drizzle adapter is not compabtible with edge runtime use api for auth"
+    )
+  }
   return {
     async createUser(user) {
       const [newUser] = await db.insert(users).values({
