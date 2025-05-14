@@ -1,6 +1,6 @@
-import authConfig from "@/auth.config";
-import { DrizzleAdapter } from "@/lib/drizzle-adapter";
-import { UserRole } from "@/lib/schema";
+import authConfig from "./auth.config.ts";
+import { DrizzleAdapter } from "./drizzble-adapter.ts";
+import { UserRole } from "../schema.ts";
 import NextAuth, { type DefaultSession } from "next-auth";
 
 import { db } from "@/lib/db";

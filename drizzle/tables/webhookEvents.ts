@@ -1,17 +1,29 @@
 
-import { pgTable, text, timestamp, jsonb, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, jsonb, boolean, index, integer } from "drizzle-orm/pg-core";
 
-// Define the 'webhook_events' table
 export const webhookEvents = pgTable("webhook_events", {
-  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  source: text("source").notNull(),
-  payload: jsonb("payload").notNull(),
-  receivedAt: timestamp("received_at").defaultNow(),
-  processed: boolean("processed").default(false),
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+
   tenantId: text("tenant_id").notNull(),
+
+  source: text("source").notNull(), // e.g., 'github', 'stripe', 'vercel'
+
+  eventType: text("event_type").notNull(), // 🆕 e.g., 'deployment.success'
+
+  uniqueRequestId: text("unique_request_id").notNull(), // 🆕 idempotency key
+
+  payload: jsonb("payload").notNull(),
+
+  processed: boolean("processed").default(false),
+
+  responseStatus: integer("response_status"), // 🆕 capture HTTP status codes
+
+  receivedAt: timestamp("received_at").defaultNow(),
+  processedAt: timestamp("processed_at"), // 🆕
+
 }, (table) => {
-  // Define index inside the schema block
   return {
-    webhookSourceIdx: index("webhook_source_idx").on(table.source), // Must use `table.source` here
+    webhookSourceIdx: index("webhook_source_idx").on(table.source),
+    uniqueReqIdx: index("webhook_request_idx").on(table.uniqueRequestId), // 🆕 fast lookup
   };
 });

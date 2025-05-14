@@ -1,0 +1,6 @@
+
+app_name: nextdeplyfrontend
+port: 3000
+deploy:
+  ssh_host: 838438
+  docker_compose_path: 

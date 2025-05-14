@@ -12,7 +12,9 @@ import {
   teamMembers,
   auditLogs,
   webhooks,
-} from "./tables"; // Adjust import path based on how you structure `tables`
+  apiKeys,
+  metrics,
+} from "./tables"; // Adjust import path based on your project structure
 
 // Users
 export const usersRelations = relations(users, ({ many }) => ({

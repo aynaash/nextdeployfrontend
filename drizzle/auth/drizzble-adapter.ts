@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { users, accounts, sessions, verificationTokens } from "./schema";
+import { users, accounts, sessions, verificationTokens } from "../schema.ts";
 import { eq, and } from "drizzle-orm";
 import { Adapter } from "next-auth/adapters";
 
