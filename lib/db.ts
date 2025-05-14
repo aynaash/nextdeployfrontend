@@ -16,7 +16,7 @@ if (isEdgeRuntime()) {
   db = drizzleEdge(client, { schema });
 } else {
   // Node.js Runtime Configuration
-  console.log('Using Node.js database client');
+  console.log('Using Node.js database client run time');
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false

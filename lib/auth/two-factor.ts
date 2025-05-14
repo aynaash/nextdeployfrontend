@@ -1,8 +1,11 @@
-// lib/auth/two-factor.ts
 import { authenticator } from "otplib";
 import { db } from "../db.ts";
 import { users } from "../../drizzle/schema.ts";
 import { eq } from "drizzle-orm";
+
+export function generateTwoFactorSecret() {
+  return authenticator.generateSecret();
+}
 
 export async function enableTwoFactorAuth(userId: string) {
   return db
@@ -14,10 +17,10 @@ export async function enableTwoFactorAuth(userId: string) {
 export async function disableTwoFactorAuth(userId: string) {
   return db
     .update(users)
-    .set({ 
+    .set({
       isTwoFactorEnabled: false,
       twoFactorSecret: null,
-      twoFactorBackupCodes: null 
+      twoFactorBackupCodes: null,
     })
     .where(eq(users.id, userId));
 }

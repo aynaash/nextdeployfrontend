@@ -950,7 +950,6 @@ If you want, I can now:
 * Plan the `nextdeploy.yml` structure for user configuration.
 
 Just say the word — we’re nearly production-ready 🚀
- f
 Awesome. Here’s the final structured **NextDeploy MVP schema with enhancements**, ready to use in Drizzle, `sqlc`, or any ORM you prefer.
 
 ---

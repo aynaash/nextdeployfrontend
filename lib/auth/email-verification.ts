@@ -1,4 +1,3 @@
-// lib/auth/email-verification.ts
 import { db } from "../db.ts";
 import { verificationTokens, users } from "../../drizzle/schema.ts";
 import { eq, and } from "drizzle-orm";
@@ -48,3 +47,6 @@ export async function verifyVerificationToken(token: string) {
 
   return existingToken.identifier; // returns the verified email
 }
+export const sendVerificationEmail = () =>{
+console.log("Sent verificationTokens")
+};

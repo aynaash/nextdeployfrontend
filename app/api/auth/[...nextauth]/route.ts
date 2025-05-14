@@ -1,1 +1,1 @@
-export { GET, POST } from "../../../../drizzle/auth/auth.ts"
+export { GET, POST } from "../../../../auth.ts"
