@@ -1,26 +1,44 @@
 "use client";
 
-import { createContext, Dispatch, ReactNode, SetStateAction } from "react";
+import { createContext, useContext, ReactNode, Dispatch, SetStateAction } from "react";
+import { useAuthModal } from "./sign-in-modal.tsx";
 
-import { useSignInModal } from "@/components/modals//sign-in-modal";
-
-export const ModalContext = createContext<{
+type ModalContextType = {
+  // Original functionality
   setShowSignInModal: Dispatch<SetStateAction<boolean>>;
-}>({
+  // New functionality
+  showAuthModal: (isSignUp?: boolean) => void;
+  setIsSignUp: Dispatch<SetStateAction<boolean>>;
+};
+
+export const ModalContext = createContext<ModalContextType>({
   setShowSignInModal: () => {},
+  showAuthModal: () => {},
+  setIsSignUp: () => {},
 });
 
 export default function ModalProvider({ children }: { children: ReactNode }) {
-  const { SignInModal, setShowSignInModal } = useSignInModal();
+  const { AuthModal, setShowModal, setIsSignUp, isSignUp } = useAuthModal();
+
+  const showAuthModal = (signUp = false) => {
+    setIsSignUp(signUp);
+    setShowModal(true);
+  };
 
   return (
     <ModalContext.Provider
       value={{
-        setShowSignInModal,
+        // Original functionality
+        setShowSignInModal: setShowModal, // Maps setShowSignInModal to setShowModal
+        // New functionality
+        showAuthModal,
+        setIsSignUp,
       }}
     >
-      <SignInModal />
       {children}
+      <AuthModal />
     </ModalContext.Provider>
   );
 }
+
+export const useModal = () => useContext(ModalContext);

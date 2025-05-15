@@ -265,6 +265,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@better-auth/stripe@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "@better-auth/stripe@npm:1.2.7"
+  dependencies:
+    better-auth: "npm:^1.2.7"
+    zod: "npm:^3.24.1"
+  checksum: 10c0/373afc139c1d15a1093f76970995cfc1617640625f381a6a81c3eed2d6c0e4af8f37b664f55c8662ca5083d118445e1fde25916629adc2089a7c1743ebba125c
+  languageName: node
+  linkType: hard
+
 "@better-auth/utils@npm:0.2.4":
   version: 0.2.4
   resolution: "@better-auth/utils@npm:0.2.4"
@@ -5590,6 +5600,7 @@ __metadata:
   resolution: "NextDeploy@workspace:."
   dependencies:
     "@auth/drizzle-adapter": "npm:^1.9.1"
+    "@better-auth/stripe": "npm:^1.2.7"
     "@commitlint/cli": "npm:^19.3.0"
     "@commitlint/config-conventional": "npm:^19.2.2"
     "@hookform/resolvers": "npm:^3.9.0"
@@ -5656,6 +5667,7 @@ __metadata:
     husky: "npm:^9.1.1"
     lucide-react: "npm:^0.414.0"
     mdast-util-toc: "npm:^7.1.0"
+    motion: "npm:^12.11.3"
     ms: "npm:^2.1.3"
     next: "npm:14.2.5"
     next-auth: "npm:5.0.0-beta.19"
@@ -6137,7 +6149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-auth@npm:1.2.7":
+"better-auth@npm:1.2.7, better-auth@npm:^1.2.7":
   version: 1.2.7
   resolution: "better-auth@npm:1.2.7"
   dependencies:
@@ -8666,6 +8678,28 @@ __metadata:
     react-dom:
       optional: true
   checksum: 10c0/7582ff7de42390c517602ea65f533d153ea3ef770944dcf09174d46d863e90e0d2d69c824b20d1ddc19e3a4e9a7f3f89c0d23a7082644e815adfa4fd293b7d38
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^12.11.3":
+  version: 12.11.3
+  resolution: "framer-motion@npm:12.11.3"
+  dependencies:
+    motion-dom: "npm:^12.11.2"
+    motion-utils: "npm:^12.9.4"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/6b286d4ee2d314d36d70e5184fd670dde8ec9966af4265bdc08f73dbc35e477b54488f42e7925faabba0c9618f8f932215af90dd2c44a26c84ab04cefd96b625
   languageName: node
   linkType: hard
 
@@ -11259,6 +11293,43 @@ __metadata:
   bin:
     mkdirp: dist/cjs/src/bin.js
   checksum: 10c0/9f2b975e9246351f5e3a40dcfac99fcd0baa31fbfab615fe059fb11e51f10e4803c63de1f384c54d656e4db31d000e4767e9ef076a22e12a641357602e31d57d
+  languageName: node
+  linkType: hard
+
+"motion-dom@npm:^12.11.2":
+  version: 12.11.2
+  resolution: "motion-dom@npm:12.11.2"
+  dependencies:
+    motion-utils: "npm:^12.9.4"
+  checksum: 10c0/74ecfd8f3879ff5db6ce9487341b3a02389fc90c33caaa77123ff11b842b4272e6f56d479f714a959577b59b475e5541689a454850e28a3edad87c631857a03b
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.9.4":
+  version: 12.9.4
+  resolution: "motion-utils@npm:12.9.4"
+  checksum: 10c0/b6783babfd1282ad320585f7cdac9fe7a1f97b39e07d12a500d3709534441bd9d49b556fa1cd838d1bde188570d4ab6b4c5aa9d297f7f5aa9dc16d600c17afdc
+  languageName: node
+  linkType: hard
+
+"motion@npm:^12.11.3":
+  version: 12.11.3
+  resolution: "motion@npm:12.11.3"
+  dependencies:
+    framer-motion: "npm:^12.11.3"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/361b2934412f50c670f0b44f461887bb774a95e16fa284ddeecf61c52970f94d0e71ae9be83955994da5154b7c761b6c6d6b72ac00d0050e39de12aa8686e105
   languageName: node
   linkType: hard
 

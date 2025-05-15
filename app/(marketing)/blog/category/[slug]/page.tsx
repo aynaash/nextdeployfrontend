@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { allPosts } from "contentlayer/generated";
-
+import { allPosts } from "@/.contentlayer/generated";
 import { BLOG_CATEGORIES } from "@/config/blog";
 import { constructMetadata, getBlurDataURL } from "@/lib/utils";
 import { BlogCard } from "@/components/content/blog-card";

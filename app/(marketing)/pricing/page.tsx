@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import { client } from "../../../auth-client.ts";
 import { getCurrentUser } from "@/lib/session";
 import { getUserSubscriptionPlan } from "@/lib/subscription";
 import { constructMetadata } from "@/lib/utils";
@@ -9,13 +9,19 @@ import { PricingCards } from "@/components/pricing/pricing-cards";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
 
 export const metadata = constructMetadata({
-  title: "Pricing – NextDeploy",
+  title: "Pricing – NextDeploy",
   description: "Explore our subscription plans.",
 });
 
 export default async function PricingPage() {
+  // Get session from auth client
+  const { session, error } = await client.getSession();
+  if (error) console.error("Auth session error:", error);
+
+  // Get user info - but don't block if not logged in
   const user = await getCurrentUser();
 
+  // Admin redirect section (only if user is logged in and is admin)
   if (user?.role === "ADMIN") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
@@ -28,7 +34,7 @@ export default async function PricingPage() {
           className="pointer-events-none -my-20 dark:invert"
         />
         <p className="text-balance px-4 text-center text-2xl font-medium">
-          You are an {user.role}. Back to{" "}
+          You are an <strong>{user.role}</strong>. Back to{" "}
           <Link
             href="/admin"
             className="text-muted-foreground underline underline-offset-4 hover:text-purple-500"
@@ -41,14 +47,18 @@ export default async function PricingPage() {
     );
   }
 
-  let subscriptionPlan;
-  if (user && user.id) {
-    subscriptionPlan = await getUserSubscriptionPlan(user.id);
-  }
+  // Get subscription info only if user is logged in
+  const subscriptionPlan = user?.id
+    ? await getUserSubscriptionPlan(user.id)
+    : null;
 
   return (
     <div className="flex w-full flex-col gap-16 py-8 md:py-8">
-      <PricingCards userId={user?.id} subscriptionPlan={subscriptionPlan} />
+      <PricingCards 
+        userId={user?.id} 
+        subscriptionPlan={subscriptionPlan} 
+        isSignedIn={!!user}
+      />
       <hr className="container" />
       <ComparePlans />
       <PricingFaq />

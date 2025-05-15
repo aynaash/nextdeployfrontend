@@ -1,21 +1,22 @@
 import { auth } from "../../auth.ts";
-import { db } from "../db.ts";
-import { sessions } from "../session.ts";
-import { eq, lt } from "drizzle-orm";
+import { cache } from "react";
+import { headers } from "next/headers";
 
-export async function getActiveSessions(userId: string) {
-  return db.query.sessions.findMany({
-    where: and(
-      eq(sessions.userId, userId),
-      lt(sessions.expires, new Date())
-    ),
+export const getCurrentUser = cache(async () => {
+  const requestHeaders = headers();
+  console.log("Request headers at session.ts:", requestHeaders);
+
+  const session = await auth.api.getSession({
+    headers: requestHeaders,
   });
-}
 
-export async function revokeSession(sessionId: string) {
-  return db.delete(sessions).where(eq(sessions.id, sessionId));
-}
+  console.log("Session returned from Better Auth at session.ts:", session);
 
-export async function revokeAllSessions(userId: string) {
-  return db.delete(sessions).where(eq(sessions.userId, userId));
-}
+  if (!session?.user) {
+    console.warn("No user in session.");
+    return undefined;
+  }
+
+  console.info("Authenticated user:", session.user);
+  return session.user;
+});
