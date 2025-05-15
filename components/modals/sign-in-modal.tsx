@@ -34,16 +34,72 @@ export function AuthModal({
 }) {
   const [loadingProvider, setLoadingProvider] = useState<"google" | "github" | null>(null)
 
-  const handleAuth = async (provider: "google" | "github") => {
-    setLoadingProvider(provider)
-    await signIn(provider, {
-      redirect: false,
-      callbackUrl: isSignUp ? "/onboarding" : "/dashboard",
-    })
-    setShowModal(false)
+  const handleGoogleAuth = async () => {
+    console.log('Initiating Google auth flow...')
+    console.log(`Current mode: ${isSignUp ? 'Sign Up' : 'Sign In'}`)
+    
+    setLoadingProvider("google")
+    try {
+      const callbackUrl = isSignUp ? "/onboarding/google" : "/dashboard"
+      console.log(`Using callback URL: ${callbackUrl}`)
+      
+      const response = await signIn("google", { 
+        redirect: false, 
+        callbackUrl 
+      })
+      
+      console.log('Google auth response:', response)
+      
+      if (response?.error) {
+        console.error('Google auth error:', response.error)
+        throw new Error(response.error)
+      }
+      
+      console.log('Google auth successful, closing modal')
+      setShowModal(false)
+    } catch (error) {
+      console.error('Google authentication failed:', error)
+      // Here you could set an error state to show to the user
+    } finally {
+      console.log('Google auth flow completed')
+      setLoadingProvider(null)
+    }
+  }
+
+  const handleGitHubAuth = async () => {
+    console.log('Initiating GitHub auth flow...')
+    console.log(`Current mode: ${isSignUp ? 'Sign Up' : 'Sign In'}`)
+    
+    setLoadingProvider("github")
+    try {
+      const callbackUrl = isSignUp ? "/onboarding/github" : "/dashboard"
+      console.log(`Using callback URL: ${callbackUrl}`)
+      
+      const response = await signIn("github", { 
+        redirect: false, 
+        callbackUrl 
+      })
+      
+      console.log('GitHub auth response:', response)
+      
+      if (response?.error) {
+        console.error('GitHub auth error:', response.error)
+        throw new Error(response.error)
+      }
+      
+      console.log('GitHub auth successful, closing modal')
+      setShowModal(false)
+    } catch (error) {
+      console.error('GitHub authentication failed:', error)
+      // Here you could set an error state to show to the user
+    } finally {
+      console.log('GitHub auth flow completed')
+      setLoadingProvider(null)
+    }
   }
 
   const toggleAuthMode = () => {
+    console.log(`Toggling auth mode from ${isSignUp ? 'Sign Up' : 'Sign In'} to ${!isSignUp ? 'Sign Up' : 'Sign In'}`)
     setIsSignUp(!isSignUp)
   }
 
@@ -110,7 +166,7 @@ export function AuthModal({
 
         <div className="space-y-4">
           <Button
-            onClick={() => handleAuth("google")}
+            onClick={handleGoogleAuth}
             disabled={!!loadingProvider}
             className="w-full bg-white text-slate-800 hover:bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700 h-11"
           >
@@ -152,7 +208,7 @@ export function AuthModal({
 
           <Button
             variant="outline"
-            onClick={() => handleAuth("github")}
+            onClick={handleGitHubAuth}
             disabled={!!loadingProvider}
             className="w-full h-11 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
           >

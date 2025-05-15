@@ -52,10 +52,17 @@ export const client = createAuthClient({
   },
 });
 
+export const signIn = async() => {
+  const data = await client.signIn.social({
+    providers:[
+      "google",
+      "github"
+      ],
+     })
+}
 // Destructured methods for usage in components
 export const {
   signUp,
-  signIn,
   signOut,
   useSession,
   organization,
