@@ -1,39 +1,32 @@
-// @ts-nocheck
-// TODO: Fix this when we turn strict mode on.
-import { UserSubscriptionPlan } from "types";
-import { pricingData } from "@/config/subscriptions";
-import { prisma } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { db } from "../drizzle/index.ts";
+import { users } from "../drizzle/schema.ts";
 import { stripe } from "@/lib/stripe";
+import { pricingData } from "@/config/subscriptions";
+import { UserSubscriptionPlan } from "types";
 
 export async function getUserSubscriptionPlan(
   userId: string,
 ): Promise<UserSubscriptionPlan> {
   if (!userId) throw new Error("Missing parameters");
 
-  const user = await prisma.user.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      stripeSubscriptionId: true,
-      stripeCurrentPeriodEnd: true,
-      stripeCustomerId: true,
-      stripePriceId: true,
-    },
-  });
+  const [user] = await db
+    .select({
+      stripeSubscriptionId: users.stripeSubscriptionId,
+      stripeCurrentPeriodEnd: users.stripeCurrentPeriodEnd,
+      stripeCustomerId: users.stripeCustomerId,
+      stripePriceId: users.stripePriceId,
+    })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+  if (!user) throw new Error("User not found");
 
-  // Check if user is on a paid plan.
   const isPaid =
     user.stripePriceId &&
-    user.stripeCurrentPeriodEnd?.getTime() + 86_400_000 > Date.now()
-      ? true
-      : false;
+    user.stripeCurrentPeriodEnd?.getTime() + 86_400_000 > Date.now();
 
-  // Find the pricing data corresponding to the user's plan
   const userPlan =
     pricingData.find((plan) => plan.stripeIds.monthly === user.stripePriceId) ||
     pricingData.find((plan) => plan.stripeIds.yearly === user.stripePriceId);

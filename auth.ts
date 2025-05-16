@@ -22,13 +22,13 @@ import { nextCookies } from "better-auth/next-js";
 import { stripe } from "@better-auth/stripe";
 import { Stripe } from "stripe";
 
-const from = process.env.BETTER_AUTH_EMAIL || "support@nextdeploy.dev";
+const from = process.env.BETTER_AUTH_EMAIL || "support@nextdeploy.one";
 const to = process.env.TEST_EMAIL || "";
 
 // ✅ PostgreSQL dialect only
 const dialect = new PostgresDialect({
   pool: new Pool({
-    connectionString: process.env.POSTGRES_URL!,
+    connectionString: process.env.DATABASE_URL!,
   }),
 });
 

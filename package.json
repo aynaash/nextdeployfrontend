@@ -18,7 +18,7 @@
     "drizzle:migrate": "drizzle-kit push:pg",
     "drizzle:studio": "drizzle-kit studio",
     "email": "email dev --dir emails --port 3333",
-    "db:generate-erd": "drizzle-erd --in ./drizzle/schema.ts --out erd.svg"
+    "dbml": "tsx  ./drizzle/schema.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.1",
@@ -80,6 +80,7 @@
     "node-postgres": "^0.6.2",
     "otplib": "^12.0.1",
     "pg": "^8.16.0",
+    "pg-erd": "^0.0.1",
     "prop-types": "^15.8.1",
     "react": "18.3.1",
     "react-day-picker": "^8.10.1",
@@ -109,6 +110,7 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "autoprefixer": "^10.4.19",
+    "drizzle-dbml-generator": "^0.10.0",
     "drizzle-kit": "^0.31.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",

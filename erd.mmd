@@ -1,0 +1,232 @@
+erDiagram
+
+%% -------------------------
+%% User & Authentication Domain
+%% -------------------------
+subgraph "🧑 User Domain"
+  users {
+    id text
+    name text
+    email text
+    emailVerified timestamp
+    image text
+    password text
+    role USER-DEFINED
+    stripe_customer_id text
+    stripe_subscription_id text
+    stripe_price_id text
+    stripe_current_period_end timestamp
+    created_at timestamp
+    updated_at timestamp
+    tenantId text
+  }
+  accounts {
+    id text
+    type text
+    provider text
+    providerAccountId text
+    refresh_token text
+    access_token text
+    expires_at integer
+    token_type text
+    scope text
+    id_token text
+    session_state text
+    created_at timestamp
+    updated_at timestamp
+    tenantId text
+  }
+  sessions {
+    id text
+    sessionToken text
+    userId text
+    expires timestamp
+    tenantId text
+  }
+  verification_tokens {
+    identifier text
+    token text
+    expires timestamp
+    tenantId text
+  }
+  authenticators {
+    credential_id text
+    user_id text
+    provider_account_id text
+    credential_public_key text
+    counter integer
+    credential_device_type USER-DEFINED
+    credential_backed_up boolean
+    transports ARRAY
+  }
+  user_accounts {
+    id text
+    userId text
+    accountId text
+    tenantId text
+  }
+end
+
+users ||--o{ accounts : "has"
+users ||--o{ sessions : "has"
+users ||--o{ authenticators : "has"
+users ||--o{ user_accounts : "has"
+
+%% -------------------------
+%% Team & Projects Domain
+%% -------------------------
+subgraph "👥 Team & Project Domain"
+  teams {
+    id text
+    name varchar
+    owner_id text
+    is_deleted boolean
+    tenant_id text
+    created_at timestamp
+  }
+  team_members {
+    id text
+    user_id text
+    team_id text
+    role varchar
+    invited_by_user_id text
+    status USER-DEFINED
+    joined_at timestamp
+  }
+  projects {
+    id text
+    name text
+    tenantId text
+    ownerId text
+    createdAt timestamp
+    updatedAt timestamp
+  }
+  project_environments {
+    id text
+    project_id text
+    name text
+    type USER-DEFINED
+    env_vars jsonb
+    is_active boolean
+    deleted_at timestamp
+    created_at timestamp
+  }
+end
+
+team_members }o--|| users : "user_id to id"
+team_members }o--|| teams : "team_id to id"
+project_environments }o--|| projects : "project_id to id"
+
+%% -------------------------
+%% API & Rate Limiting Domain
+%% -------------------------
+subgraph "🔑 API & Rate Limits"
+  api_keys {
+    id text
+    key_hash text
+    name varchar
+    team_id text
+    scope USER-DEFINED
+    created_at timestamp
+    last_used_at timestamp
+    revoked_at timestamp
+    is_revoked boolean
+  }
+  rate_limits {
+    identifier text
+    tokens integer
+    last_refill timestamp
+    created_at timestamp
+    updated_at timestamp
+  }
+end
+
+api_keys }o--|| teams : "team_id to id"
+
+%% -------------------------
+%% Deployment & Monitoring Domain
+%% -------------------------
+subgraph "🚀 Deployment & Monitoring"
+  deployments {
+    id text
+    imageUrl text
+    status USER-DEFINED
+    tenantId text
+    projectId text
+    createdAt timestamp
+    updatedAt timestamp
+  }
+  deployment_logs {
+    id text
+    deployment_id text
+    service_name varchar
+    container_name varchar
+    daemon varchar
+    request_id text
+    level text
+    message text
+    created_at timestamp
+  }
+  metrics {
+    id text
+    deployment_id text
+    cpu_usage real
+    memory_usage real
+    disk_usage real
+    network_in real
+    network_out real
+    uptime real
+    created_at timestamp
+  }
+end
+
+deployment_logs }o--|| deployments : "deployment_id to id"
+metrics }o--|| deployments : "deployment_id to id"
+
+%% -------------------------
+%% Billing Domain
+%% -------------------------
+subgraph "💳 Billing & Plans"
+  plans {
+    id text
+    name text
+    description text
+    price real
+    interval text
+    stripe_price_id text
+    features jsonb
+    feature_list jsonb
+    max_projects integer
+    max_deployments integer
+    max_team_members integer
+    is_trial boolean
+    trial_days integer
+    created_at timestamp
+  }
+  billings {
+    id text
+    amount real
+    status USER-DEFINED
+    tenantId text
+    userId text
+    createdAt timestamp
+  }
+end
+
+%% -------------------------
+%% Webhooks Domain
+%% -------------------------
+subgraph "📬 Webhooks"
+  webhook_events {
+    id text
+    tenant_id text
+    source text
+    event_type text
+    unique_request_id text
+    payload jsonb
+    processed boolean
+    response_status integer
+    received_at timestamp
+    processed_at timestamp
+  }
+end
