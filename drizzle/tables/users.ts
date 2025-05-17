@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 import { userRoleEnum } from "../enums";
 
 export const users = pgTable("users", {
@@ -16,5 +16,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   tenantId: text("tenantId"),
-  banned:
+  banned:boolean("banned").default(false),
+  banReason:text("banReason"),
+  twoFactorEnabled:boolean("twoFactorEnabled").default(true)
 });

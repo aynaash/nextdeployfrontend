@@ -18,3 +18,7 @@ export * from "./tables/projectEnvironments";
 export * from  "./tables/webhookEvents";
 export * from "./tables/authenticator"
 export * from "./tables/rateLimits"
+export * from "./tables/subscriptions.ts"
+export * from "./tables/passkey.ts"
+export * from "./tables/organization.ts"
+export * from "./tables/invitation.ts"

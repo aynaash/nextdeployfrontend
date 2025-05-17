@@ -1,18 +1,34 @@
-import { pgTable, text, timestamp, integer } from "drizzle-orm/pg-core";
 
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { randomUUID } from "crypto";
+import {users} from "./users.ts"
 export const accounts = pgTable("accounts", {
-  id: text("id").primaryKey().$defaultFn(()=> randomUUID()),
-  type: text("type"),
-  provider: text("provider"),
-  providerAccountId: text("providerAccountId"),
-  refresh_token: text("refresh_token"),
-  access_token: text("access_token"),
-  expires_at: integer("expires_at"),
-  token_type: text("token_type"),
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+
+  // OAuth provider info
+  provider: text("provider").notNull(),
+  providerAccountId: text("provider_account_id").notNull(),
+
+  // Foreign key reference to users
+  userId: text("user_id").notNull().references(() => users.id, {
+    onDelete: "cascade",
+  }),
+
+  // Tokens and auth metadata
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   scope: text("scope"),
-  id_token: text("id_token"),
-  session_state: text("session_state"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-  tenantId: text("tenantId"),
+  tokenType: text("token_type"),
+  sessionState: text("session_state"),
+  password: text("password"),
+
+  // Timestamps
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
+  // Multitenancy
+  tenantId: text("tenant_id"),
 });
