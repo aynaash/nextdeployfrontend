@@ -16,4 +16,5 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   tenantId: text("tenantId"),
+  banned:
 });

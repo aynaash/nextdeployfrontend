@@ -5,7 +5,73 @@ import { twMerge } from "tailwind-merge";
 
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
+import { NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 
+export class ApiError extends Error {
+  status: number;
+  
+  constructor(message: string, status: number = 400) {
+    super(message);
+    this.status = status;
+    this.name = 'ApiError';
+  }
+  
+  toResponse() {
+    return NextResponse.json(
+      { error: this.message },
+      { status: this.status }
+    );
+  }
+}
+
+export function handleApiError(error: unknown) {
+  if (error instanceof ApiError) {
+    return error.toResponse();
+  }
+  
+  if (error instanceof ZodError) {
+    return NextResponse.json(
+      { error: 'Validation error', issues: error.errors },
+      { status: 400 }
+    );
+  }
+  
+  console.error(error);
+  return NextResponse.json(
+    { error: 'Internal server error' },
+    { status: 500 }
+  );
+}
+
+export async function parseRequestBody<T>(request: Request, schema?: ZodSchema<T>): Promise<T> {
+  try {
+    const body = await request.json();
+    
+    if (schema) {
+      return schema.parse(body);
+    }
+    
+    return body;
+  } catch (error) {
+    if (error instanceof ZodError) {
+      throw new ApiError('Invalid request body', 400);
+    }
+    throw new ApiError('Failed to parse request body', 400);
+  }
+}
+
+export function successResponse(data: any, status = 200) {
+  return NextResponse.json(data, { status });
+}
+
+export function createdResponse(data: any) {
+  return successResponse(data, 201);
+}
+
+export function noContentResponse() {
+  return new NextResponse(null, { status: 204 });
+}
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

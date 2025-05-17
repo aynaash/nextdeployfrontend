@@ -1,104 +1,163 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "./lib/db";
+import { resend } from "./lib/auth/authUtils";
+import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
+import { Stripe } from "stripe";
+import { stripe } from "@better-auth/stripe";
+
+// Plugins
 import {
-  bearer,
   admin,
+  bearer,
   multiSession,
   organization,
   twoFactor,
-  oneTap,
-  oAuthProxy,
   openAPI,
-  oidcProvider,
-  customSession,
+  nextCookies,
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
-import { reactInvitationEmail } from "./lib/auth/authUtils.ts";
-import { reactResetPasswordEmail } from "./lib/auth/authUtils.ts";
-import { resend } from "./lib/auth/authUtils.ts";
-import { MysqlDialect } from "kysely"; // Only for MySQL, skipped in this config
-import { PostgresDialect } from "kysely";
-import { Pool } from "pg";
-import { nextCookies } from "better-auth/next-js";
-import { stripe } from "@better-auth/stripe";
-import { Stripe } from "stripe";
 
-const from = process.env.BETTER_AUTH_EMAIL || "support@nextdeploy.one";
-const to = process.env.TEST_EMAIL || "";
+// Environment variables with validation
+const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
+console.log("BETTER_AUTH_URL:",BETTER_AUTH_URL)
+const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
+console.log("FROM EMAIL:", FROM_EMAIL);
+const TEST_EMAIL = process.env.TEST_EMAIL;
+console.log("TEST_EMAIL:", TEST_EMAIL);
+const STRIPE_KEY = process.env.STRIPE_API_KEY;
+console.log("STRIPE_KEY:",STRIPE_KEY);
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+console.log("STRIPE_WEBHOOK_SECRET:", STRIPE_WEBHOOK_SECRET)
 
-// ✅ PostgreSQL dialect only
-const dialect = new PostgresDialect({
-  pool: new Pool({
-    connectionString: process.env.DATABASE_URL!,
-  }),
-});
+if (!BETTER_AUTH_URL || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET) {
+  throw new Error("Missing required environment variables");
+}
 
 // Pricing IDs
-const PROFESSION_PRICE_ID = {
-  default: "price_live_PRO",
-  annual: "price_live_PRO_ANNUAL",
-};
-
-const STARTER_PRICE_ID = {
-  default: "price_live_STARTER",
-  annual: "price_live_STARTER_ANNUAL",
+const PRICING_IDS = {
+  professional: {
+    default: "price_live_PRO",
+    annual: "price_live_PRO_ANNUAL",
+  },
+  starter: {
+    default: "price_live_STARTER",
+    annual: "price_live_STARTER_ANNUAL",
+  },
 };
 
 export const auth = betterAuth({
-  appName: "NextDeploy Auth",
-  database: {
-    dialect,
-    type: "postgres",
-  },
-  emailVerification: {
-    async sendVerificationEmail({ user, url }) {
-      await resend.emails.send({
-        from,
-        to: user.email,
-        subject: "Verify your email",
-        html: `<a href="${url}">Click here to verify your email</a>`,
-      });
+  appName: "NextDeploy",
+  baseUrl: BETTER_AUTH_URL,
+  
+  // Database configuration
+  database: drizzleAdapter(db, {
+    provider: "postgresql",
+  }),
+
+  // Session management
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // Update session every 24 hours
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // 5 minutes
     },
   },
+
+  // Email verification
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      try {
+        await resend.emails.send({
+          from: FROM_EMAIL,
+          to: user.email,
+          subject: "Verify your NextDeploy account",
+          html: `<a href="${url}">Click here to verify your email</a>`,
+        });
+      } catch (error) {
+        console.error("Failed to send verification email:", error);
+        throw error;
+      }
+    },
+  },
+
+  // Email/password authentication
+  emailAndPassword: {
+    enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      try {
+        await resend.emails.send({
+          from: FROM_EMAIL,
+          to: user.email,
+          subject: "Reset your NextDeploy password",
+          react: reactResetPasswordEmail({
+            username: user.email,
+            resetLink: url,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to send password reset email:", error);
+        throw error;
+      }
+    },
+  },
+
+  // Social providers
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      redirectURI: `${BETTER_AUTH_URL}/api/auth/callback/github`,
+    },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      redirectUrl: `${BETTER_AUTH_URL}/api/auth/callback/google`,
+      prompt: "select_account",
+    },
+  },
+
+  // Account linking
   account: {
     accountLinking: {
       trustedProviders: ["google", "github"],
     },
   },
-  emailAndPassword: {
-    enabled: true,
-    async sendResetPassword({ user, url }) {
-      await resend.emails.send({
-        from,
-        to: user.email,
-        subject: "Reset your password",
-        react: reactResetPasswordEmail({
-          username: user.email,
-          resetLink: url,
-        }),
-      });
-    },
-  },
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    },
-    google: {
-      prompt:"select_account",
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    },
-  },
+
+  // Plugins
   plugins: [
+    // Core plugins first
+    bearer(),
+    openAPI(),
+
+    // Authentication enhancements
+    twoFactor({
+      otpOptions: {
+        sendOTP: async ({ user, otp }) => {
+          await resend.emails.send({
+            from: FROM_EMAIL,
+            to: user.email,
+            subject: "Your NextDeploy OTP Code",
+            html: `Your verification code is: <strong>${otp}</strong>`,
+          });
+        },
+      },
+    }),
+    passkey(),
+
+    // Organization features
     organization({
-      async sendInvitationEmail(data) {
+      sendInvitationEmail: async (data) => {
         await resend.emails.send({
-          from,
+          from: FROM_EMAIL,
           to: data.email,
-          subject: "You're invited to NextDeploy",
+          subject: `Invitation to join ${data.organization.name} on NextDeploy`,
           react: reactInvitationEmail({
             username: data.email,
-            invitedByUsername: data.inviter.user.name,
+            invitedByUsername: data.inviter.user.name || data.inviter.user.email,
             invitedByEmail: data.inviter.user.email,
             teamName: data.organization.name,
             inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${data.id}`,
@@ -106,59 +165,45 @@ export const auth = betterAuth({
         });
       },
     }),
-    twoFactor({
-      otpOptions: {
-        async sendOTP({ user, otp }) {
-          await resend.emails.send({
-            from,
-            to: user.email,
-            subject: "Your OTP",
-            html: `Your One-Time Password is: <strong>${otp}</strong>`,
-          });
-        },
-      },
-    }),
-    passkey(),
-    openAPI(),
-    bearer(),
+
+    // Admin features
     admin({
-      adminUserIds: ["your-admin-user-id"],
+      adminUserIds: process.env.ADMIN_USER_IDS?.split(",") || [],
     }),
+
+    // Multi-session support
     multiSession(),
-    oAuthProxy(),
-    nextCookies(),
-    oidcProvider({ loginPage: "/sign-in" }),
-    oneTap(),
-    customSession(async (session) => ({
-      ...session,
-      user: {
-        ...session.user,
-        plan: "starter",
-      },
-    })),
+
+    // Stripe integration
     stripe({
-      stripeClient: new Stripe(process.env.STRIPE_KEY!),
-      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      stripeClient: new Stripe(STRIPE_KEY),
+      stripeWebhookSecret: STRIPE_WEBHOOK_SECRET,
       subscription: {
         enabled: true,
         plans: [
           {
             name: "Starter",
-            priceId: STARTER_PRICE_ID.default,
-            annualDiscountPriceId: STARTER_PRICE_ID.annual,
+            priceId: PRICING_IDS.starter.default,
+            annualDiscountPriceId: PRICING_IDS.starter.annual,
             freeTrial: { days: 7 },
           },
           {
             name: "Professional",
-            priceId: PROFESSION_PRICE_ID.default,
-            annualDiscountPriceId: PROFESSION_PRICE_ID.annual,
+            priceId: PRICING_IDS.professional.default,
+            annualDiscountPriceId: PRICING_IDS.professional.annual,
           },
           {
             name: "Enterprise",
+            customPricing: true,
           },
         ],
       },
     }),
   ],
-  trustedOrigins: ["https://nextdeploy.dev"],
-});
+
+  // Security
+  trustedOrigins: [
+    BETTER_AUTH_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
+  ].filter(Boolean) as string[],
+} satisfies BetterAuthOptions);

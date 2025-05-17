@@ -54,7 +54,7 @@ export const NextDeployLogo = () => {
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-yellow-500">Next</span>
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-blue-600">Deploy</span>
         </span>
-        <span className="text-xs text-slate-500 dark:text-slate-400">DevOps Simplified</span>
+        <span className="text-xs text-slate-500 dark:text-slate-400">Ship fast and safe</span>
       </div>
     </div>
   )
