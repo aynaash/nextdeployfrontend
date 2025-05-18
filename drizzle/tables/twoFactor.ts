@@ -1,6 +1,6 @@
 
 import { pgTable, text, json } from "drizzle-orm/pg-core";
-import { user } from "./users.ts"; // Ensure this import points to a correct `user` table definition
+import { user } from "./users.ts";
 import { randomUUID } from "crypto";
 
 export const twoFactor = pgTable("two_factor", {

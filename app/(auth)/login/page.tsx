@@ -116,28 +116,6 @@ export default function LoginPage() {
               </Suspense>
             </motion.div>
 
-            <motion.div className="flex items-center gap-4 my-6" variants={itemVariants}>
-              <div className="h-px bg-slate-700 flex-1" />
-              <span className="text-sm text-slate-400">OR</span>
-              <div className="h-px bg-slate-700 flex-1" />
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <button
-                onClick={() => signIn("github")}
-                className="w-full inline-flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 transition text-white py-3 px-4 gap-3 text-sm font-medium"
-              >
-                <Github className="size-5" />
-                Continue with GitHub
-              </button>
-            </motion.div>
-
-            <motion.div className="mt-6 text-center text-sm text-slate-400" variants={itemVariants}>
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="font-medium text-emerald-500 hover:text-emerald-400">
-                Sign up
-              </Link>
-            </motion.div>
           </div>
         </motion.div>
       </div>

@@ -1,12 +1,12 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { user } from "../schema.ts";
+import { users } from "./users.ts";
 
 export const sessions = pgTable("sessions", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   sessionToken: text("sessionToken").notNull().unique(),
-  userId: text("userId").notNull().references(() => user.id, { onDelete: "cascade" }),
+  userId: text("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires").notNull(),
   tenantId: text("tenantId").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),

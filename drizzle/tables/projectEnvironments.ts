@@ -13,15 +13,15 @@ export const projectEnvironments = pgTable("project_environments", {
     .notNull()
     .references(() => projects.id, { onDelete: "cascade" }),
 
-  name: text("name").notNull(), // Optional: Enforce uniqueness per project via composite index
+  name: text("name").notNull(),
 
-  type: envTypeEnum("type").notNull().default("development"), // 🆕
+  type: envTypeEnum("type").notNull().default("development"),
 
-  envVars: jsonb("env_vars").notNull(), // JSON-structured key/value pairs
+  envVars: jsonb("env_vars").notNull(),
 
-  isActive: boolean("is_active").default(true), // 🆕
+  isActive: boolean("is_active").default(true),
 
-  deletedAt: timestamp("deleted_at"), // Soft deletion timestamp
+  deletedAt: timestamp("deleted_at"),
 
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => {

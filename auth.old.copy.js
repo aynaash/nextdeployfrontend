@@ -2,12 +2,11 @@
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./lib/db";
-import { users, sessions, verificationTokens } from "./drizzle/schema.ts"; // Import your Drizzle schemas
 import { resend } from "./lib/auth/authUtils";
 import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
 import { Stripe } from "stripe";
 import { stripe } from "@better-auth/stripe";
-import {schema} from "./drizzle/schema.ts"
+
 // Plugins
 import {
   admin,
@@ -20,43 +19,50 @@ import {
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
 
-// Environment validation
+// Environment variables with validation
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
+console.log("BETTER_AUTH_URL:",BETTER_AUTH_URL)
 const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
+console.log("FROM EMAIL:", FROM_EMAIL);
+const TEST_EMAIL = process.env.TEST_EMAIL;
+console.log("TEST_EMAIL:", TEST_EMAIL);
 const STRIPE_KEY = process.env.STRIPE_API_KEY;
+console.log("STRIPE_KEY:",STRIPE_KEY);
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+console.log("STRIPE_WEBHOOK_SECRET:", STRIPE_WEBHOOK_SECRET)
 
 if (!BETTER_AUTH_URL || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET) {
   throw new Error("Missing required environment variables");
 }
 
+// Pricing IDs
+const PRICING_IDS = {
+  professional: {
+    default: "price_live_PRO",
+    annual: "price_live_PRO_ANNUAL",
+  },
+  starter: {
+    default: "price_live_STARTER",
+    annual: "price_live_STARTER_ANNUAL",
+  },
+};
+
 export const auth = betterAuth({
   appName: "NextDeploy",
   baseUrl: BETTER_AUTH_URL,
   
-  // Fixed Drizzle adapter configuration
+  // Database configuration
   database: drizzleAdapter(db, {
     provider: "postgresql",
-    schema: {
-      ...schema,
-    }
   }),
 
-  // Session configuration
+  // Session management
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // Update every 24 hours
+    updateAge: 60 * 60 * 24, // Update session every 24 hours
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // 5 minutes
-    },
-  },
-
-  // User fields configuration
-  user: {
-    additionalFields: {
-      firstName: { type: "string", required: true },
-      lastName: { type: "string", required: true },
     },
   },
 
@@ -114,11 +120,21 @@ export const auth = betterAuth({
       prompt: "select_account",
     },
   },
- usePlural: true,
+
+  // Account linking
+  account: {
+    accountLinking: {
+      trustedProviders: ["google", "github"],
+    },
+  },
+
   // Plugins
   plugins: [
+    // Core plugins first
     bearer(),
     openAPI(),
+
+    // Authentication enhancements
     twoFactor({
       otpOptions: {
         sendOTP: async ({ user, otp }) => {
@@ -132,6 +148,8 @@ export const auth = betterAuth({
       },
     }),
     passkey(),
+
+    // Organization features
     organization({
       sendInvitationEmail: async (data) => {
         await resend.emails.send({
@@ -148,10 +166,16 @@ export const auth = betterAuth({
         });
       },
     }),
+
+    // Admin features
     admin({
       adminUserIds: process.env.ADMIN_USER_IDS?.split(",") || [],
     }),
+
+    // Multi-session support
     multiSession(),
+
+    // Stripe integration
     stripe({
       stripeClient: new Stripe(STRIPE_KEY),
       stripeWebhookSecret: STRIPE_WEBHOOK_SECRET,
@@ -160,14 +184,18 @@ export const auth = betterAuth({
         plans: [
           {
             name: "Starter",
-            priceId: process.env.STRIPE_STARTER_PRICE_ID!,
-            annualDiscountPriceId: process.env.STRIPE_STARTER_ANNUAL_PRICE_ID!,
+            priceId: PRICING_IDS.starter.default,
+            annualDiscountPriceId: PRICING_IDS.starter.annual,
             freeTrial: { days: 7 },
           },
           {
             name: "Professional",
-            priceId: process.env.STRIPE_PRO_PRICE_ID!,
-            annualDiscountPriceId: process.env.STRIPE_PRO_ANNUAL_PRICE_ID!,
+            priceId: PRICING_IDS.professional.default,
+            annualDiscountPriceId: PRICING_IDS.professional.annual,
+          },
+          {
+            name: "Enterprise",
+            customPricing: true,
           },
         ],
       },

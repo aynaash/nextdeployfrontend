@@ -1,25 +1,19 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { user } from "./users";
-import { organization } from "./organization";
+import { users } from "./users";
+import { organization } from "./organizations";
 
-export const invitation = pgTable("invitation", {
+export const invitation = pgTable("invitations", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-
   organizationId: text("organization_id")
     .notNull()
     .references(() => organization.id, { onDelete: "cascade" }),
-
   email: text("email").notNull(),
-
-  role: text("role"), // Consider enum if you support specific roles like "admin", "member"
-
-  status: text("status").default("pending").notNull(), // Defaulting to "pending"
-
+  role: text("role"),
+  status: text("status").default("pending").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
-
   inviterId: text("inviter_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
 });

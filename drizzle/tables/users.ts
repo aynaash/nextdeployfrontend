@@ -4,6 +4,8 @@ import { userRoleEnum } from "../enums";
 export const users = pgTable("users", {
   id: text("id", {length:36}).primaryKey().$defaultFn(()=> randomUUID()),
   name: text("name"),
+  firstName: text("first_name", { length: 100 }),
+  lastName: text("last_name", { length: 100 }),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified"),
   image: text("image"),

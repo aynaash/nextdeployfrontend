@@ -6,14 +6,14 @@ export const plans = pgTable("plans", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
 
   name: text("name").notNull().unique(),
-  description: text("description"), // short description for UI/landing
-  price: real("price").notNull(), // in USD
-  interval: text("interval").default("monthly"), // monthly or yearly
+  description: text("description"),
+  price: real("price").notNull(),
+  interval: text("interval").default("monthly"),
 
-  stripePriceId: text("stripe_price_id").notNull(), // links to Stripe billing
+  stripePriceId: text("stripe_price_id").notNull(),
 
-  features: jsonb("features").notNull(), // ex: ["ci_cd", "webhooks", "analytics"]
-  featureList: jsonb("feature_list"), // optional marketing-rich structure
+  features: jsonb("features").notNull(),
+  featureList: jsonb("feature_list"),
 
   // Enforcement fields
   maxProjects: integer("max_projects").notNull().default(1),

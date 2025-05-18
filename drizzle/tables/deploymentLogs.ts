@@ -10,19 +10,14 @@ import { deployments } from "./deployments";
 
 export const deploymentLogs = pgTable("deployment_logs", {
   id: text("id").$defaultFn(() => crypto.randomUUID()).primaryKey(),
-
-  // Foreign key to the deployment session
   deployment_id: text("deployment_id")
     .notNull()
     .references(() => deployments.id, { onDelete: "cascade" }),
-
-  // 🔍 Log metadata
-  service_name: varchar("service_name", { length: 100 }), // e.g., "next-logger-daemon"
-  container_name: varchar("container_name", { length: 100 }), // e.g., "next-js-app"
-  daemon: varchar("daemon", { length: 100 }), // e.g., "response_logger"
-
-  request_id: text("request_id"), // Optional: trace individual request per log
-  level: text("level").default("info"), // info, warn, error, debug
+  service_name: varchar("service_name", { length: 100 }),
+  container_name: varchar("container_name", { length: 100 }),
+  daemon: varchar("daemon", { length: 100 }),
+  request_id: text("request_id"),
+  level: text("level").default("info"),
 
   // 📄 Main log content
   message: text("message").notNull(),

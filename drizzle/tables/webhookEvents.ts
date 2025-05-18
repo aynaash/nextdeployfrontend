@@ -6,24 +6,24 @@ export const webhookEvents = pgTable("webhook_events", {
 
   tenantId: text("tenant_id").notNull(),
 
-  source: text("source").notNull(), // e.g., 'github', 'stripe', 'vercel'
+  source: text("source").notNull(),
 
-  eventType: text("event_type").notNull(), // 🆕 e.g., 'deployment.success'
+  eventType: text("event_type").notNull(),
 
-  uniqueRequestId: text("unique_request_id").notNull(), // 🆕 idempotency key
+  uniqueRequestId: text("unique_request_id").notNull(),
 
   payload: jsonb("payload").notNull(),
 
   processed: boolean("processed").default(false),
 
-  responseStatus: integer("response_status"), // 🆕 capture HTTP status codes
+  responseStatus: integer("response_status"),
 
   receivedAt: timestamp("received_at").defaultNow(),
-  processedAt: timestamp("processed_at"), // 🆕
+  processedAt: timestamp("processed_at"),
 
 }, (table) => {
   return {
     webhookSourceIdx: index("webhook_source_idx").on(table.source),
-    uniqueReqIdx: index("webhook_request_idx").on(table.uniqueRequestId), // 🆕 fast lookup
+    uniqueReqIdx: index("webhook_request_idx").on(table.uniqueRequestId),
   };
 });
