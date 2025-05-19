@@ -1,11 +1,11 @@
 {
-  "id": "e15818ec-3cfc-49bc-a1ee-3d339235d98c",
+  "id": "9e5829a2-4c25-44d3-80ea-274663ae4ca2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.users": {
-      "name": "users",
+    "public.user": {
+      "name": "user",
       "schema": "",
       "columns": {
         "id": {
@@ -133,22 +133,22 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
+        "user_email_unique": {
+          "name": "user_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
           ]
         },
-        "users_stripe_customer_id_unique": {
-          "name": "users_stripe_customer_id_unique",
+        "user_stripe_customer_id_unique": {
+          "name": "user_stripe_customer_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "stripe_customer_id"
           ]
         },
-        "users_stripe_subscription_id_unique": {
-          "name": "users_stripe_subscription_id_unique",
+        "user_stripe_subscription_id_unique": {
+          "name": "user_stripe_subscription_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "stripe_subscription_id"
@@ -159,8 +159,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.accounts": {
-      "name": "accounts",
+    "public.account": {
+      "name": "account",
       "schema": "",
       "columns": {
         "id": {
@@ -264,10 +264,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "accounts_user_id_users_id_fk": {
-          "name": "accounts_user_id_users_id_fk",
-          "tableFrom": "accounts",
-          "tableTo": "users",
+        "account_user_id_user_id_fk": {
+          "name": "account_user_id_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -321,8 +321,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.sessions": {
-      "name": "sessions",
+    "public.session": {
+      "name": "session",
       "schema": "",
       "columns": {
         "id": {
@@ -396,10 +396,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "sessions_userId_users_id_fk": {
-          "name": "sessions_userId_users_id_fk",
-          "tableFrom": "sessions",
-          "tableTo": "users",
+        "session_userId_user_id_fk": {
+          "name": "session_userId_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -412,8 +412,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "sessions_sessionToken_unique": {
-          "name": "sessions_sessionToken_unique",
+        "session_sessionToken_unique": {
+          "name": "session_sessionToken_unique",
           "nullsNotDistinct": false,
           "columns": [
             "sessionToken"
@@ -424,8 +424,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.verification_tokens": {
-      "name": "verification_tokens",
+    "public.verification_token": {
+      "name": "verification_token",
       "schema": "",
       "columns": {
         "identifier": {
@@ -457,8 +457,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "verification_tokens_token_unique": {
-          "name": "verification_tokens_token_unique",
+        "verification_token_token_unique": {
+          "name": "verification_token_token_unique",
           "nullsNotDistinct": false,
           "columns": [
             "token"
@@ -469,8 +469,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.projects": {
-      "name": "projects",
+    "public.project": {
+      "name": "project",
       "schema": "",
       "columns": {
         "id": {
@@ -520,8 +520,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.deployments": {
-      "name": "deployments",
+    "public.deployment": {
+      "name": "deployment",
       "schema": "",
       "columns": {
         "id": {
@@ -578,8 +578,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.billings": {
-      "name": "billings",
+    "public.billing": {
+      "name": "billing",
       "schema": "",
       "columns": {
         "id": {
@@ -669,10 +669,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "billings_user_id_users_id_fk": {
-          "name": "billings_user_id_users_id_fk",
-          "tableFrom": "billings",
-          "tableTo": "users",
+        "billing_user_id_user_id_fk": {
+          "name": "billing_user_id_user_id_fk",
+          "tableFrom": "billing",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -682,10 +682,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "billings_team_id_teams_id_fk": {
-          "name": "billings_team_id_teams_id_fk",
-          "tableFrom": "billings",
-          "tableTo": "teams",
+        "billing_team_id_team_id_fk": {
+          "name": "billing_team_id_team_id_fk",
+          "tableFrom": "billing",
+          "tableTo": "team",
           "columnsFrom": [
             "team_id"
           ],
@@ -695,10 +695,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "billings_subscription_id_subscriptions_id_fk": {
-          "name": "billings_subscription_id_subscriptions_id_fk",
-          "tableFrom": "billings",
-          "tableTo": "subscriptions",
+        "billing_subscription_id_subscription_id_fk": {
+          "name": "billing_subscription_id_subscription_id_fk",
+          "tableFrom": "billing",
+          "tableTo": "subscription",
           "columnsFrom": [
             "subscription_id"
           ],
@@ -708,10 +708,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "billings_plan_id_plans_id_fk": {
-          "name": "billings_plan_id_plans_id_fk",
-          "tableFrom": "billings",
-          "tableTo": "plans",
+        "billing_plan_id_plan_id_fk": {
+          "name": "billing_plan_id_plan_id_fk",
+          "tableFrom": "billing",
+          "tableTo": "plan",
           "columnsFrom": [
             "plan_id"
           ],
@@ -728,8 +728,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.team_members": {
-      "name": "team_members",
+    "public.team_member": {
+      "name": "team_member",
       "schema": "",
       "columns": {
         "id": {
@@ -781,10 +781,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "team_members_user_id_users_id_fk": {
-          "name": "team_members_user_id_users_id_fk",
-          "tableFrom": "team_members",
-          "tableTo": "users",
+        "team_member_user_id_user_id_fk": {
+          "name": "team_member_user_id_user_id_fk",
+          "tableFrom": "team_member",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -794,10 +794,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "team_members_team_id_teams_id_fk": {
-          "name": "team_members_team_id_teams_id_fk",
-          "tableFrom": "team_members",
-          "tableTo": "teams",
+        "team_member_team_id_team_id_fk": {
+          "name": "team_member_team_id_team_id_fk",
+          "tableFrom": "team_member",
+          "tableTo": "team",
           "columnsFrom": [
             "team_id"
           ],
@@ -814,8 +814,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.teams": {
-      "name": "teams",
+    "public.team": {
+      "name": "team",
       "schema": "",
       "columns": {
         "id": {
@@ -865,8 +865,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.api_keys": {
-      "name": "api_keys",
+    "public.api_key": {
+      "name": "api_key",
       "schema": "",
       "columns": {
         "id": {
@@ -930,10 +930,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "api_keys_team_id_teams_id_fk": {
-          "name": "api_keys_team_id_teams_id_fk",
-          "tableFrom": "api_keys",
-          "tableTo": "teams",
+        "api_key_team_id_team_id_fk": {
+          "name": "api_key_team_id_team_id_fk",
+          "tableFrom": "api_key",
+          "tableTo": "team",
           "columnsFrom": [
             "team_id"
           ],
@@ -950,8 +950,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.deployment_logs": {
-      "name": "deployment_logs",
+    "public.deployment_log": {
+      "name": "deployment_log",
       "schema": "",
       "columns": {
         "id": {
@@ -1059,10 +1059,10 @@
         }
       },
       "foreignKeys": {
-        "deployment_logs_deployment_id_deployments_id_fk": {
-          "name": "deployment_logs_deployment_id_deployments_id_fk",
-          "tableFrom": "deployment_logs",
-          "tableTo": "deployments",
+        "deployment_log_deployment_id_deployment_id_fk": {
+          "name": "deployment_log_deployment_id_deployment_id_fk",
+          "tableFrom": "deployment_log",
+          "tableTo": "deployment",
           "columnsFrom": [
             "deployment_id"
           ],
@@ -1079,8 +1079,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.metrics": {
-      "name": "metrics",
+    "public.metric": {
+      "name": "metric",
       "schema": "",
       "columns": {
         "id": {
@@ -1141,10 +1141,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "metrics_deployment_id_deployments_id_fk": {
-          "name": "metrics_deployment_id_deployments_id_fk",
-          "tableFrom": "metrics",
-          "tableTo": "deployments",
+        "metric_deployment_id_deployment_id_fk": {
+          "name": "metric_deployment_id_deployment_id_fk",
+          "tableFrom": "metric",
+          "tableTo": "deployment",
           "columnsFrom": [
             "deployment_id"
           ],
@@ -1161,8 +1161,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.plans": {
-      "name": "plans",
+    "public.plan": {
+      "name": "plan",
       "schema": "",
       "columns": {
         "id": {
@@ -1277,8 +1277,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "plans_name_unique": {
-          "name": "plans_name_unique",
+        "plan_name_unique": {
+          "name": "plan_name_unique",
           "nullsNotDistinct": false,
           "columns": [
             "name"
@@ -1289,8 +1289,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.project_environments": {
-      "name": "project_environments",
+    "public.project_environment": {
+      "name": "project_environment",
       "schema": "",
       "columns": {
         "id": {
@@ -1364,10 +1364,10 @@
         }
       },
       "foreignKeys": {
-        "project_environments_project_id_projects_id_fk": {
-          "name": "project_environments_project_id_projects_id_fk",
-          "tableFrom": "project_environments",
-          "tableTo": "projects",
+        "project_environment_project_id_project_id_fk": {
+          "name": "project_environment_project_id_project_id_fk",
+          "tableFrom": "project_environment",
+          "tableTo": "project",
           "columnsFrom": [
             "project_id"
           ],
@@ -1384,8 +1384,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.webhook_events": {
-      "name": "webhook_events",
+    "public.webhook_event": {
+      "name": "webhook_event",
       "schema": "",
       "columns": {
         "id": {
@@ -1490,8 +1490,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.authenticators": {
-      "name": "authenticators",
+    "public.authenticator": {
+      "name": "authenticator",
       "schema": "",
       "columns": {
         "credential_id": {
@@ -1546,10 +1546,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "authenticators_user_id_users_id_fk": {
-          "name": "authenticators_user_id_users_id_fk",
-          "tableFrom": "authenticators",
-          "tableTo": "users",
+        "authenticator_user_id_user_id_fk": {
+          "name": "authenticator_user_id_user_id_fk",
+          "tableFrom": "authenticator",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -1561,8 +1561,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "authenticators_user_id_credential_id_pk": {
-          "name": "authenticators_user_id_credential_id_pk",
+        "authenticator_user_id_credential_id_pk": {
+          "name": "authenticator_user_id_credential_id_pk",
           "columns": [
             "user_id",
             "credential_id"
@@ -1570,8 +1570,8 @@
         }
       },
       "uniqueConstraints": {
-        "authenticators_credential_id_unique": {
-          "name": "authenticators_credential_id_unique",
+        "authenticator_credential_id_unique": {
+          "name": "authenticator_credential_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "credential_id"
@@ -1582,8 +1582,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.rate_limits": {
-      "name": "rate_limits",
+    "public.rate_limit": {
+      "name": "rate_limit",
       "schema": "",
       "columns": {
         "identifier": {
@@ -1643,8 +1643,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.subscriptions": {
-      "name": "subscriptions",
+    "public.subscription": {
+      "name": "subscription",
       "schema": "",
       "columns": {
         "id": {
@@ -1719,8 +1719,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.passkeys": {
-      "name": "passkeys",
+    "public.passkey": {
+      "name": "passkey",
       "schema": "",
       "columns": {
         "id": {
@@ -1787,10 +1787,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "passkeys_user_id_users_id_fk": {
-          "name": "passkeys_user_id_users_id_fk",
-          "tableFrom": "passkeys",
-          "tableTo": "users",
+        "passkey_user_id_user_id_fk": {
+          "name": "passkey_user_id_user_id_fk",
+          "tableFrom": "passkey",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -1807,8 +1807,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.organizations": {
-      "name": "organizations",
+    "public.organization": {
+      "name": "organization",
       "schema": "",
       "columns": {
         "id": {
@@ -1853,8 +1853,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "organizations_slug_unique": {
-          "name": "organizations_slug_unique",
+        "organization_slug_unique": {
+          "name": "organization_slug_unique",
           "nullsNotDistinct": false,
           "columns": [
             "slug"
@@ -1865,8 +1865,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.invitations": {
-      "name": "invitations",
+    "public.invitation": {
+      "name": "invitation",
       "schema": "",
       "columns": {
         "id": {
@@ -1915,10 +1915,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "invitations_organization_id_organizations_id_fk": {
-          "name": "invitations_organization_id_organizations_id_fk",
-          "tableFrom": "invitations",
-          "tableTo": "organizations",
+        "invitation_organization_id_organization_id_fk": {
+          "name": "invitation_organization_id_organization_id_fk",
+          "tableFrom": "invitation",
+          "tableTo": "organization",
           "columnsFrom": [
             "organization_id"
           ],
@@ -1928,10 +1928,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "invitations_inviter_id_users_id_fk": {
-          "name": "invitations_inviter_id_users_id_fk",
-          "tableFrom": "invitations",
-          "tableTo": "users",
+        "invitation_inviter_id_user_id_fk": {
+          "name": "invitation_inviter_id_user_id_fk",
+          "tableFrom": "invitation",
+          "tableTo": "user",
           "columnsFrom": [
             "inviter_id"
           ],

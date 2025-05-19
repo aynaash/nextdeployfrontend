@@ -14,7 +14,7 @@ export const passkey = pgTable("passkey", {
   transports: json("transports"),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
 
   createdAt: timestamp("created_at").defaultNow()
 });

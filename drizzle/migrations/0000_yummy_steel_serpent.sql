@@ -6,7 +6,7 @@ CREATE TYPE "public"."api_key_scope" AS ENUM('read', 'write', 'admin');--> state
 CREATE TYPE "public"."env_type" AS ENUM('development', 'staging', 'production');--> statement-breakpoint
 CREATE TYPE "public"."device_type" AS ENUM('singleDevice', 'multiDevice');--> statement-breakpoint
 CREATE TYPE "public"."transports" AS ENUM('usb', 'nfc', 'ble', 'internal');--> statement-breakpoint
-CREATE TABLE "users" (
+CREATE TABLE "user" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"first_name" text,
@@ -26,12 +26,12 @@ CREATE TABLE "users" (
 	"banned" boolean DEFAULT false,
 	"banReason" text,
 	"twoFactorEnabled" boolean DEFAULT true,
-	CONSTRAINT "users_email_unique" UNIQUE("email"),
-	CONSTRAINT "users_stripe_customer_id_unique" UNIQUE("stripe_customer_id"),
-	CONSTRAINT "users_stripe_subscription_id_unique" UNIQUE("stripe_subscription_id")
+	CONSTRAINT "user_email_unique" UNIQUE("email"),
+	CONSTRAINT "user_stripe_customer_id_unique" UNIQUE("stripe_customer_id"),
+	CONSTRAINT "user_stripe_subscription_id_unique" UNIQUE("stripe_subscription_id")
 );
 --> statement-breakpoint
-CREATE TABLE "accounts" (
+CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"provider" text NOT NULL,
 	"provider_account_id" text NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE "user_accounts" (
 	"tenantId" text
 );
 --> statement-breakpoint
-CREATE TABLE "sessions" (
+CREATE TABLE "session" (
 	"id" text PRIMARY KEY NOT NULL,
 	"sessionToken" text NOT NULL,
 	"userId" text NOT NULL,
@@ -69,18 +69,18 @@ CREATE TABLE "sessions" (
 	"user_agent" text,
 	"active_organization_id" text,
 	"impersonated_by" text,
-	CONSTRAINT "sessions_sessionToken_unique" UNIQUE("sessionToken")
+	CONSTRAINT "session_sessionToken_unique" UNIQUE("sessionToken")
 );
 --> statement-breakpoint
-CREATE TABLE "verification_tokens" (
+CREATE TABLE "verification_token" (
 	"identifier" text,
 	"token" text,
 	"expires" timestamp,
 	"tenantId" text,
-	CONSTRAINT "verification_tokens_token_unique" UNIQUE("token")
+	CONSTRAINT "verification_token_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
-CREATE TABLE "projects" (
+CREATE TABLE "project" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"tenantId" text,
@@ -89,7 +89,7 @@ CREATE TABLE "projects" (
 	"updatedAt" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "deployments" (
+CREATE TABLE "deployment" (
 	"id" text PRIMARY KEY NOT NULL,
 	"imageUrl" text,
 	"status" "DeploymentStatus",
@@ -99,7 +99,7 @@ CREATE TABLE "deployments" (
 	"updatedAt" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "billings" (
+CREATE TABLE "billing" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"team_id" uuid,
@@ -115,7 +115,7 @@ CREATE TABLE "billings" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "team_members" (
+CREATE TABLE "team_member" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"team_id" text NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE "team_members" (
 	"joined_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "teams" (
+CREATE TABLE "team" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" varchar(100) NOT NULL,
 	"owner_id" text NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE "teams" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "api_keys" (
+CREATE TABLE "api_key" (
 	"id" text PRIMARY KEY NOT NULL,
 	"key_hash" text NOT NULL,
 	"name" varchar(100),
@@ -146,7 +146,7 @@ CREATE TABLE "api_keys" (
 	"is_revoked" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "deployment_logs" (
+CREATE TABLE "deployment_log" (
 	"id" text PRIMARY KEY NOT NULL,
 	"deployment_id" text NOT NULL,
 	"service_name" varchar(100),
@@ -158,7 +158,7 @@ CREATE TABLE "deployment_logs" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "metrics" (
+CREATE TABLE "metric" (
 	"id" text PRIMARY KEY NOT NULL,
 	"deployment_id" text NOT NULL,
 	"cpu_usage" real NOT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE "metrics" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "plans" (
+CREATE TABLE "plan" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"description" text,
@@ -185,10 +185,10 @@ CREATE TABLE "plans" (
 	"is_trial" boolean DEFAULT false,
 	"trial_days" integer DEFAULT 14,
 	"created_at" timestamp DEFAULT now(),
-	CONSTRAINT "plans_name_unique" UNIQUE("name")
+	CONSTRAINT "plan_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
-CREATE TABLE "project_environments" (
+CREATE TABLE "project_environment" (
 	"id" text PRIMARY KEY NOT NULL,
 	"project_id" text NOT NULL,
 	"name" text NOT NULL,
@@ -199,7 +199,7 @@ CREATE TABLE "project_environments" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "webhook_events" (
+CREATE TABLE "webhook_event" (
 	"id" text PRIMARY KEY NOT NULL,
 	"tenant_id" text NOT NULL,
 	"source" text NOT NULL,
@@ -212,7 +212,7 @@ CREATE TABLE "webhook_events" (
 	"processed_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "authenticators" (
+CREATE TABLE "authenticator" (
 	"credential_id" text NOT NULL,
 	"user_id" text NOT NULL,
 	"provider_account_id" text NOT NULL,
@@ -221,11 +221,11 @@ CREATE TABLE "authenticators" (
 	"credential_device_type" "device_type" NOT NULL,
 	"credential_backed_up" boolean NOT NULL,
 	"transports" text[],
-	CONSTRAINT "authenticators_user_id_credential_id_pk" PRIMARY KEY("user_id","credential_id"),
-	CONSTRAINT "authenticators_credential_id_unique" UNIQUE("credential_id")
+	CONSTRAINT "authenticator_user_id_credential_id_pk" PRIMARY KEY("user_id","credential_id"),
+	CONSTRAINT "authenticator_credential_id_unique" UNIQUE("credential_id")
 );
 --> statement-breakpoint
-CREATE TABLE "rate_limits" (
+CREATE TABLE "rate_limit" (
 	"identifier" text PRIMARY KEY NOT NULL,
 	"tokens" integer NOT NULL,
 	"last_refill" timestamp NOT NULL,
@@ -233,7 +233,7 @@ CREATE TABLE "rate_limits" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "subscriptions" (
+CREATE TABLE "subscription" (
 	"id" text PRIMARY KEY NOT NULL,
 	"plan" text NOT NULL,
 	"reference_id" text NOT NULL,
@@ -246,7 +246,7 @@ CREATE TABLE "subscriptions" (
 	"seats" integer DEFAULT 1
 );
 --> statement-breakpoint
-CREATE TABLE "passkeys" (
+CREATE TABLE "passkey" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"credential_id" text NOT NULL,
@@ -259,17 +259,17 @@ CREATE TABLE "passkeys" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "organizations" (
+CREATE TABLE "organization" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"slug" text,
 	"logo" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"metadata" json,
-	CONSTRAINT "organizations_slug_unique" UNIQUE("slug")
+	CONSTRAINT "organization_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
-CREATE TABLE "invitations" (
+CREATE TABLE "invitation" (
 	"id" text PRIMARY KEY NOT NULL,
 	"organization_id" text NOT NULL,
 	"email" text NOT NULL,
@@ -279,27 +279,27 @@ CREATE TABLE "invitations" (
 	"inviter_id" text NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "billings" ADD CONSTRAINT "billings_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "billings" ADD CONSTRAINT "billings_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "billings" ADD CONSTRAINT "billings_subscription_id_subscriptions_id_fk" FOREIGN KEY ("subscription_id") REFERENCES "public"."subscriptions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "billings" ADD CONSTRAINT "billings_plan_id_plans_id_fk" FOREIGN KEY ("plan_id") REFERENCES "public"."plans"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "team_members" ADD CONSTRAINT "team_members_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "team_members" ADD CONSTRAINT "team_members_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "api_keys" ADD CONSTRAINT "api_keys_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "deployment_logs" ADD CONSTRAINT "deployment_logs_deployment_id_deployments_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployments"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "metrics" ADD CONSTRAINT "metrics_deployment_id_deployments_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployments"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "project_environments" ADD CONSTRAINT "project_environments_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "authenticators" ADD CONSTRAINT "authenticators_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "passkeys" ADD CONSTRAINT "passkeys_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "invitations" ADD CONSTRAINT "invitations_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "invitations" ADD CONSTRAINT "invitations_inviter_id_users_id_fk" FOREIGN KEY ("inviter_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "log_deployment_idx" ON "deployment_logs" USING btree ("deployment_id");--> statement-breakpoint
-CREATE INDEX "log_created_at_idx" ON "deployment_logs" USING btree ("created_at");--> statement-breakpoint
-CREATE INDEX "log_request_id_idx" ON "deployment_logs" USING btree ("request_id");--> statement-breakpoint
-CREATE INDEX "plan_price_idx" ON "plans" USING btree ("price");--> statement-breakpoint
-CREATE INDEX "env_project_idx" ON "project_environments" USING btree ("project_id");--> statement-breakpoint
-CREATE INDEX "webhook_source_idx" ON "webhook_events" USING btree ("source");--> statement-breakpoint
-CREATE INDEX "webhook_request_idx" ON "webhook_events" USING btree ("unique_request_id");--> statement-breakpoint
-CREATE INDEX "idx_rate_limits_identifier" ON "rate_limits" USING btree ("identifier");
+ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billing" ADD CONSTRAINT "billing_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billing" ADD CONSTRAINT "billing_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billing" ADD CONSTRAINT "billing_subscription_id_subscription_id_fk" FOREIGN KEY ("subscription_id") REFERENCES "public"."subscription"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billing" ADD CONSTRAINT "billing_plan_id_plan_id_fk" FOREIGN KEY ("plan_id") REFERENCES "public"."plan"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "team_member" ADD CONSTRAINT "team_member_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "team_member" ADD CONSTRAINT "team_member_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "api_key" ADD CONSTRAINT "api_key_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "deployment_log" ADD CONSTRAINT "deployment_log_deployment_id_deployment_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployment"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "metric" ADD CONSTRAINT "metric_deployment_id_deployment_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployment"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "project_environment" ADD CONSTRAINT "project_environment_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "authenticator" ADD CONSTRAINT "authenticator_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "passkey" ADD CONSTRAINT "passkey_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "invitation" ADD CONSTRAINT "invitation_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "invitation" ADD CONSTRAINT "invitation_inviter_id_user_id_fk" FOREIGN KEY ("inviter_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "log_deployment_idx" ON "deployment_log" USING btree ("deployment_id");--> statement-breakpoint
+CREATE INDEX "log_created_at_idx" ON "deployment_log" USING btree ("created_at");--> statement-breakpoint
+CREATE INDEX "log_request_id_idx" ON "deployment_log" USING btree ("request_id");--> statement-breakpoint
+CREATE INDEX "plan_price_idx" ON "plan" USING btree ("price");--> statement-breakpoint
+CREATE INDEX "env_project_idx" ON "project_environment" USING btree ("project_id");--> statement-breakpoint
+CREATE INDEX "webhook_source_idx" ON "webhook_event" USING btree ("source");--> statement-breakpoint
+CREATE INDEX "webhook_request_idx" ON "webhook_event" USING btree ("unique_request_id");--> statement-breakpoint
+CREATE INDEX "idx_rate_limits_identifier" ON "rate_limit" USING btree ("identifier");
