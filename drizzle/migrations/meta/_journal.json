@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1747225339953,
-      "tag": "0000_motionless_may_parker",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1747551574998,
-      "tag": "0001_classy_sunspot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1747559832173,
-      "tag": "0002_green_makkari",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1747573242703,
-      "tag": "0003_soft_namora",
+      "when": 1747575013656,
+      "tag": "0000_next_nightcrawler",
       "breakpoints": true
     }
   ]

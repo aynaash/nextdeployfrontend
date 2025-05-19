@@ -9,6 +9,8 @@ CREATE TYPE "public"."transports" AS ENUM('usb', 'nfc', 'ble', 'internal');--> s
 CREATE TABLE "users" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
+	"first_name" text,
+	"last_name" text,
 	"email" text,
 	"emailVerified" timestamp,
 	"image" text,
@@ -21,6 +23,9 @@ CREATE TABLE "users" (
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"tenantId" text,
+	"banned" boolean DEFAULT false,
+	"banReason" text,
+	"twoFactorEnabled" boolean DEFAULT true,
 	CONSTRAINT "users_email_unique" UNIQUE("email"),
 	CONSTRAINT "users_stripe_customer_id_unique" UNIQUE("stripe_customer_id"),
 	CONSTRAINT "users_stripe_subscription_id_unique" UNIQUE("stripe_subscription_id")
@@ -28,19 +33,21 @@ CREATE TABLE "users" (
 --> statement-breakpoint
 CREATE TABLE "accounts" (
 	"id" text PRIMARY KEY NOT NULL,
-	"type" text,
-	"provider" text,
-	"providerAccountId" text,
-	"refresh_token" text,
+	"provider" text NOT NULL,
+	"provider_account_id" text NOT NULL,
+	"user_id" text NOT NULL,
 	"access_token" text,
-	"expires_at" integer,
-	"token_type" text,
-	"scope" text,
+	"refresh_token" text,
 	"id_token" text,
+	"access_token_expires_at" timestamp,
+	"refresh_token_expires_at" timestamp,
+	"scope" text,
+	"token_type" text,
 	"session_state" text,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now(),
-	"tenantId" text
+	"password" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"tenant_id" text
 );
 --> statement-breakpoint
 CREATE TABLE "user_accounts" (
@@ -52,10 +59,16 @@ CREATE TABLE "user_accounts" (
 --> statement-breakpoint
 CREATE TABLE "sessions" (
 	"id" text PRIMARY KEY NOT NULL,
-	"sessionToken" text,
-	"userId" text,
-	"expires" timestamp,
-	"tenantId" text,
+	"sessionToken" text NOT NULL,
+	"userId" text NOT NULL,
+	"expires" timestamp NOT NULL,
+	"tenantId" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"ip_address" text,
+	"user_agent" text,
+	"active_organization_id" text,
+	"impersonated_by" text,
 	CONSTRAINT "sessions_sessionToken_unique" UNIQUE("sessionToken")
 );
 --> statement-breakpoint
@@ -88,11 +101,18 @@ CREATE TABLE "deployments" (
 --> statement-breakpoint
 CREATE TABLE "billings" (
 	"id" text PRIMARY KEY NOT NULL,
-	"amount" real,
-	"status" "billingStatus",
-	"tenantId" text,
-	"userId" text,
-	"createdAt" timestamp DEFAULT now()
+	"user_id" uuid NOT NULL,
+	"team_id" uuid,
+	"subscription_id" uuid,
+	"plan_id" uuid NOT NULL,
+	"amount" numeric(10, 2) NOT NULL,
+	"currency" text DEFAULT 'USD' NOT NULL,
+	"billing_period" text DEFAULT 'monthly',
+	"paid" boolean DEFAULT false NOT NULL,
+	"invoice_url" text,
+	"provider" text DEFAULT 'manual',
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "team_members" (
@@ -213,6 +233,58 @@ CREATE TABLE "rate_limits" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "subscriptions" (
+	"id" text PRIMARY KEY NOT NULL,
+	"plan" text NOT NULL,
+	"reference_id" text NOT NULL,
+	"stripe_customer_id" text,
+	"stripe_subscription_id" text,
+	"status" text DEFAULT 'incomplete',
+	"period_start" timestamp,
+	"period_end" timestamp,
+	"cancel_at_period_end" boolean DEFAULT false,
+	"seats" integer DEFAULT 1
+);
+--> statement-breakpoint
+CREATE TABLE "passkeys" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text,
+	"credential_id" text NOT NULL,
+	"public_key" text NOT NULL,
+	"counter" integer NOT NULL,
+	"device_type" text NOT NULL,
+	"backed_up" boolean NOT NULL,
+	"transports" json,
+	"user_id" text NOT NULL,
+	"created_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE "organizations" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"slug" text,
+	"logo" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"metadata" json,
+	CONSTRAINT "organizations_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
+CREATE TABLE "invitations" (
+	"id" text PRIMARY KEY NOT NULL,
+	"organization_id" text NOT NULL,
+	"email" text NOT NULL,
+	"role" text,
+	"status" text DEFAULT 'pending' NOT NULL,
+	"expires_at" timestamp NOT NULL,
+	"inviter_id" text NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billings" ADD CONSTRAINT "billings_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billings" ADD CONSTRAINT "billings_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billings" ADD CONSTRAINT "billings_subscription_id_subscriptions_id_fk" FOREIGN KEY ("subscription_id") REFERENCES "public"."subscriptions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "billings" ADD CONSTRAINT "billings_plan_id_plans_id_fk" FOREIGN KEY ("plan_id") REFERENCES "public"."plans"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "team_members" ADD CONSTRAINT "team_members_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "team_members" ADD CONSTRAINT "team_members_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "api_keys" ADD CONSTRAINT "api_keys_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -220,6 +292,9 @@ ALTER TABLE "deployment_logs" ADD CONSTRAINT "deployment_logs_deployment_id_depl
 ALTER TABLE "metrics" ADD CONSTRAINT "metrics_deployment_id_deployments_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployments"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "project_environments" ADD CONSTRAINT "project_environments_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "authenticators" ADD CONSTRAINT "authenticators_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "passkeys" ADD CONSTRAINT "passkeys_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "invitations" ADD CONSTRAINT "invitations_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "invitations" ADD CONSTRAINT "invitations_inviter_id_users_id_fk" FOREIGN KEY ("inviter_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "log_deployment_idx" ON "deployment_logs" USING btree ("deployment_id");--> statement-breakpoint
 CREATE INDEX "log_created_at_idx" ON "deployment_logs" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "log_request_id_idx" ON "deployment_logs" USING btree ("request_id");--> statement-breakpoint

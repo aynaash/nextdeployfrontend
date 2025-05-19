@@ -1,7 +1,7 @@
 
 import { pgTable, text, timestamp, jsonb, boolean, index, integer } from "drizzle-orm/pg-core";
 
-export const webhookEvents = pgTable("webhook_events", {
+export const webhookEvent = pgTable("webhook_event", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
 
   tenantId: text("tenant_id").notNull(),

@@ -8,12 +8,12 @@ import {
   boolean,
 } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { teams } from "./teams";
+import { team } from "./teams";
 
 // Define enum for key scopes
 export const apiKeyScopeEnum = pgEnum("api_key_scope", ["read", "write", "admin"]);
 
-export const apiKeys = pgTable("api_keys", {
+export const apiKey = pgTable("api_key", {
   id: text("id").$defaultFn(() => randomUUID()).primaryKey(),
 
   // 🔐 Hashed API key (store only hashed for security)
@@ -23,7 +23,7 @@ export const apiKeys = pgTable("api_keys", {
   name: varchar("name", { length: 100 }),
 
   // 🌍 Multi-tenant awareness
-  team_id: text("team_id").notNull().references(() => teams.id),
+  team_id: text("team_id").notNull().references(() => team.id),
 
   // 🎯 Scope for fine-grained permission control
   scope: apiKeyScopeEnum("scope").notNull().default("read"),

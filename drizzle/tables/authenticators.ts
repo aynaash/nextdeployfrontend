@@ -7,19 +7,19 @@ import {
   primaryKey,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { user } from "./users";
 
 // Define enums
 export const deviceTypeEnum = pgEnum("device_type", ["singleDevice", "multiDevice"]);
 export const transportsEnum = pgEnum("transports", ["usb", "nfc", "ble", "internal"]);
 
-export const authenticators = pgTable(
-  "authenticators",
+export const authenticator = pgTable(
+  "authenticator",
   {
     credentialID: text("credential_id").notNull().unique(),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     providerAccountId: text("provider_account_id").notNull(),
     credentialPublicKey: text("credential_public_key").notNull(),
     counter: integer("counter").notNull(),

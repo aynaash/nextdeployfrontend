@@ -1,20 +1,14 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import {users} from "./users.ts"
-export const accounts = pgTable("accounts", {
+import {user } from "./users.ts"
+export const account = pgTable("account", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-
-  // OAuth provider info
   provider: text("provider").notNull(),
   providerAccountId: text("provider_account_id").notNull(),
-
-  // Foreign key reference to users
-  userId: text("user_id").notNull().references(() => users.id, {
+  userId: text("user_id").notNull().references(() => user.id, {
     onDelete: "cascade",
   }),
-
-  // Tokens and auth metadata
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),

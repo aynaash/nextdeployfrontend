@@ -1,10 +1,10 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { users } from "./users";
+import { user } from "./users";
 import { organization } from "./organizations";
 
-export const invitation = pgTable("invitations", {
+export const invitation = pgTable("invitation", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   organizationId: text("organization_id")
     .notNull()

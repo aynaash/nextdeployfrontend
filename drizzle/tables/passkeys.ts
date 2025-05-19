@@ -1,9 +1,9 @@
 
 import { pgTable, text, integer, boolean, json, timestamp } from "drizzle-orm/pg-core";
-import { users } from "./users.ts";
+import { user } from "./users.ts";
 import { randomUUID } from "crypto";
 
-export const passkey = pgTable("passkeys", {
+export const passkey = pgTable("passkey", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name"),
   credentialID: text("credential_id").notNull(),

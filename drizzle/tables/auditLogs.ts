@@ -1,8 +1,8 @@
 
 import { pgTable, text, timestamp, integer } from "drizzle-orm/pg-core";
-export const auditLogs = pgTable("audit_logs", {
+export const auditLog = pgTable("audit_log", {
  id: text("id").primaryKey().$defaultFn(()=> randomUUID()),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   action: text("action").notNull(),
   resource: text("resource").notNull(),
   resourceId: text("resource_id"),
@@ -12,5 +12,5 @@ export const auditLogs = pgTable("audit_logs", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const auditLogUserIdx = index("auditlog_user_idx").on(auditLogs.userId);
-export const auditLogTenantIdx = index("auditlog_tenant_idx").on(auditLogs.tenantId);
+export const auditLogUserIdx = index("auditlog_user_idx").on(auditLog.userId);
+export const auditLogTenantIdx = index("auditlog_tenant_idx").on(auditLog.tenantId);

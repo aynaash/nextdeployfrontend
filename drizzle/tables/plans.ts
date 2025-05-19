@@ -2,7 +2,7 @@
 import { pgTable, text, timestamp, real, index, jsonb, integer, boolean } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
 
-export const plans = pgTable("plans", {
+export const plan = pgTable("plan", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
 
   name: text("name").notNull().unique(),

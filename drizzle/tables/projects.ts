@@ -1,7 +1,7 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
-export const projects = pgTable("projects", {
+export const project = pgTable("project", {
   id: text("id").primaryKey().$defaultFn(()=> randomUUID()),
   name: text("name"),
   tenantId: text("tenantId"),

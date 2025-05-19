@@ -1,7 +1,7 @@
 
 import { pgTable, text, integer, timestamp, primaryKey, index } from "drizzle-orm/pg-core";
 
-export const rateLimits = pgTable("rate_limits", {
+export const rateLimit = pgTable("rate_limit", {
   identifier: text("identifier").notNull().primaryKey(),
   tokens: integer("tokens").notNull(),
   lastRefill: timestamp("last_refill", { mode: "date" }).notNull(),

@@ -1,17 +1,17 @@
 
 import { pgTable, text, timestamp, jsonb, index, boolean, pgEnum } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { projects } from "./projects.ts";
+import { project } from "./projects.ts";
 
 // Define a new enum for environment types
 export const envTypeEnum = pgEnum("env_type", ["development", "staging", "production"]);
 
-export const projectEnvironments = pgTable("project_environments", {
+export const projectEnvironment = pgTable("project_environment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
 
   projectId: text("project_id")
     .notNull()
-    .references(() => projects.id, { onDelete: "cascade" }),
+    .references(() => project.id, { onDelete: "cascade" }),
 
   name: text("name").notNull(),
 

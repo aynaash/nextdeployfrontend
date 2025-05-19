@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 import { userRoleEnum } from "../enums";
 
-export const users = pgTable("users", {
+export const user = pgTable("user", {
   id: text("id", {length:36}).primaryKey().$defaultFn(()=> randomUUID()),
   name: text("name"),
   firstName: text("first_name", { length: 100 }),
