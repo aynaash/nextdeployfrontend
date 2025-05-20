@@ -7,11 +7,9 @@ import { useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import type { z } from "zod"
-
 import { cn } from "@/lib/utils"
 import { userAuthSchema } from "@/lib/validations/auth"
 import { signUp } from "../../lib/actions"
-
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -19,7 +17,7 @@ import { Icons } from "@/components/shared/icons"
 import { toast } from "sonner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { PasswordStrengthIndicator } from "../../components/ui/password-strength-indicator.tsx"
-
+import {useRouter} from "next/navigation";
 type FormData = z.infer<typeof userAuthSchema>
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -47,6 +45,7 @@ export function UserAuthForm({ className, type = "login", ...props }: UserAuthFo
   })
 
   const [isSocialLoading, setIsSocialLoading] = React.useState<"google" | "github" | null>(null)
+  const router = useRouter();
   const searchParams = useSearchParams()
   const callbackUrl = searchParams?.get("from") || "/dashboard"
 
@@ -134,7 +133,10 @@ export function UserAuthForm({ className, type = "login", ...props }: UserAuthFo
 
   const onSubmit = async (data: FormData) => {
     if (type === "register") {
-      await handleSignUp(data)
+      const singup = await handleSignUp(data);
+      if(signup.success){
+        router.push("/dashboard")
+      }
     } else {
       await handleEmailSignIn(data)
     }

@@ -8,10 +8,10 @@ import { subscription } from "./subscriptions";
 export const billing = pgTable("billing", {
   id: text("id").$defaultFn(()=> randomUUID()).primaryKey(),
   // Foreign Keys
-  userId: uuid("user_id").references(() => user.id).notNull(),
-  teamId: uuid("team_id").references(() => team.id),
-  subscriptionId: uuid("subscription_id").references(() => subscription.id),
-  planId: uuid("plan_id").references(() => plan.id).notNull(),
+  userId:text("user_id").references(() => user.id).notNull(),
+  teamId: text("team_id").references(() => team.id),
+  subscriptionId: text("subscription_id").references(() => subscription.id),
+  planId: text("plan_id").references(() => plan.id).notNull(),
 
   // Billing Metadata
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),

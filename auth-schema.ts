@@ -13,7 +13,9 @@ export const user = postgresqlTable("user", {
  banned: undefined,
  banReason: undefined,
  banExpires: undefined,
- stripeCustomerId: undefined
+ stripeCustomerId: undefined,
+ firstName: undefined.notNull(),
+ lastName: undefined.notNull()
 				});
 
 export const session = postgresqlTable("session", {
