@@ -7,7 +7,7 @@ import {
   primaryKey,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { user } from "./users";
+import { user } from "./user";
 
 // Define enums
 export const deviceTypeEnum = pgEnum("device_type", ["singleDevice", "multiDevice"]);

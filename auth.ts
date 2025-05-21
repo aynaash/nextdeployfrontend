@@ -33,12 +33,11 @@ if (!BETTER_AUTH_URL || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET) {
 export const auth = betterAuth({
   appName: "NextDeploy",
   baseUrl: BETTER_AUTH_URL,
-  
-  // Fixed Drizzle adapter configuration
   database: drizzleAdapter(db, {
-    provider: "postgresql",
+    provider: "pg",
     schema: {
       ...schema,
+      user: schema.user
     }
   }),
 

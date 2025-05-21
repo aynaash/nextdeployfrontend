@@ -1,136 +1,120 @@
-"use client"
+"use client";
+import { useState } from "react";
+import { authClient } from "../../../auth-client.ts";
 
-import { Suspense } from "react"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { ArrowLeft, Check } from "lucide-react"
+export default function SignupPage() {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-import Logo from "../../../components/logo.tsx"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/components/forms/user-auth-form"
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-const features = [
-  ["Continuous Deployment", "Automated builds and deployments from GitHub with zero configuration."],
-  ["Infrastructure as Code", "Manage infrastructure with version-controlled declarative files."],
-  ["Monitoring & Alerts", "Real-time system metrics, logs, and health checks."],
-  ["GitHub Webhooks", "Trigger deployments directly from your repos."],
-  ["SSH Key Auth", "Secure deployments using private keys and VPS access."],
-  ["Daemon Logs", "Log streaming and container health tracking."],
-  ["Multitenancy Support", "Works for individuals and dev teams with scoped resources."],
-]
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const { data, error: authError } = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+        callbackURL: "/dashboard",
+        rememberMe: false
+      }, {
+        // You can add callbacks here if needed
+        onSuccess: () => {
+          console.log("Sign in successful");
+          setSuccess(true);
+        },
+        onError: (err) => {
+          console.error("Sign in error:", err);
+          setError(err.message || "An error occurred during sign in");
+        }
+      });
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      when: "beforeChildren",
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-}
+      if (authError) {
+        throw authError;
+      }
 
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { type: "spring", stiffness: 300, damping: 30 },
-  },
-}
+      console.log("Sign in successful:", data);
+      setSuccess(true);
+      // You might want to redirect here or handle the successful sign in
+    } catch (err) {
+      console.error("Sign in error:", err);
+      setError(err.message || "An error occurred during sign in");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-export default function RegisterPage() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 to-slate-800">
-      {/* Back Navigation */}
-      <motion.div
-        initial={{ x: -10, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="absolute top-4 left-4 md:top-8 md:left-8 z-10"
-      >
-        <Link
-          href="/"
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "flex items-center gap-2 backdrop-blur-sm bg-white/10 text-white hover:bg-white/20",
-          )}
-        >
-          <ArrowLeft className="size-4" />
-          Back to Home
-        </Link>
-      </motion.div>
-
-      <div className="container grid h-screen items-center justify-center lg:grid-cols-2 lg:px-0">
-        {/* Left Features */}
-        <motion.div
-          className="hidden lg:flex h-full flex-col items-center justify-center p-8 bg-slate-950 relative overflow-hidden"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 30 }}
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.2),transparent_50%),radial-gradient(circle_at_70%_70%,rgba(16,185,129,0.2),transparent_50%)]" />
-
-          <div className="relative z-10 max-w-md space-y-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Logo />
-            </div>
-
-            <h2 className="text-3xl font-bold text-white leading-tight">
-              Streamline your <span className="text-emerald-400">deployment workflow</span>
-            </h2>
-
-            <div className="space-y-4">
-              {features.map(([title, desc], i) => (
-                <div className="flex items-start gap-4" key={i}>
-                  <Check className="size-5 text-emerald-400 mt-1" />
-                  <div>
-                    <h4 className="text-white font-medium">{title}</h4>
-                    <p className="text-slate-300 text-sm mt-1">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-6 rounded shadow">
+        <h1 className="text-2xl font-bold mb-4">Register</h1>
+        
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+            {error}
           </div>
-        </motion.div>
-
-        {/* Right Auth Form */}
-        <motion.div
-          className="flex items-center justify-center p-4 sm:p-8 lg:p-12"
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
+        )}
+        
+        {success && (
+          <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+            Registration successful! Please check your email to verify your account.
+          </div>
+        )}
+        
+        <input
+          name="firstname"
+          placeholder="First Name"
+          value={formData.firstname}
+          onChange={handleChange}
+          className="w-full mb-2 p-2 border border-gray-300 rounded"
+          required
+        />
+        <input
+          name="lastname"
+          placeholder="Last Name"
+          value={formData.lastname}
+          onChange={handleChange}
+          className="w-full mb-2 p-2 border border-gray-300 rounded"
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full mb-2 p-2 border border-gray-300 rounded"
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="w-full mb-4 p-2 border border-gray-300 rounded"
+          required
+          minLength="6"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          <motion.div
-            className="w-full max-w-md bg-slate-900/80 text-white rounded-xl shadow-lg p-6 sm:p-8 backdrop-blur"
-            variants={itemVariants}
-          >
-            <motion.div className="text-center space-y-3 mb-6" variants={itemVariants}>
-              <h1 className="text-3xl font-bold tracking-tight">Welcome to NextDeploy</h1>
-              <p className="text-sm text-slate-400">Sign up to manage your deployments</p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="mb-4">
-              <Suspense
-                fallback={
-                  <div className="h-[250px] flex items-center justify-center animate-pulse">
-                    Loading authentication...
-                  </div>
-                }
-              >
-                <UserAuthForm type="register" />
-              </Suspense>
-              <div className="mt-4 text-center">
-                <Link href="/reset-password" className="text-sm text-emerald-400 hover:underline">
-                  Forgot your password?
-                </Link>
-              </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </div>
+          {loading ? 'Processing...' : 'Register'}
+        </button>
+      </form>
     </div>
-  )
+  );
 }

@@ -7,7 +7,7 @@ CREATE TYPE "public"."env_type" AS ENUM('development', 'staging', 'production');
 CREATE TYPE "public"."device_type" AS ENUM('singleDevice', 'multiDevice');--> statement-breakpoint
 CREATE TYPE "public"."transports" AS ENUM('usb', 'nfc', 'ble', 'internal');--> statement-breakpoint
 CREATE TABLE "user" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"first_name" text,
 	"last_name" text,
@@ -22,7 +22,7 @@ CREATE TABLE "user" (
 	"stripe_current_period_end" timestamp,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
-	"tenantId" uuid,
+	"tenantId" text,
 	"banned" boolean DEFAULT false,
 	"banReason" text,
 	"twoFactorEnabled" boolean DEFAULT true,
@@ -32,10 +32,10 @@ CREATE TABLE "user" (
 );
 --> statement-breakpoint
 CREATE TABLE "account" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"provider" text NOT NULL,
 	"provider_account_id" text NOT NULL,
-	"user_id" uuid NOT NULL,
+	"user_id" text NOT NULL,
 	"access_token" text,
 	"refresh_token" text,
 	"id_token" text,
@@ -51,16 +51,16 @@ CREATE TABLE "account" (
 );
 --> statement-breakpoint
 CREATE TABLE "user_account" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"userId" text,
 	"accountId" text,
 	"tenantId" text
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"sessionToken" text NOT NULL,
-	"userId" uuid NOT NULL,
+	"userId" text NOT NULL,
 	"expires" timestamp NOT NULL,
 	"tenantId" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE "verification_token" (
 );
 --> statement-breakpoint
 CREATE TABLE "project" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"tenantId" text,
 	"ownerId" text,
@@ -90,21 +90,21 @@ CREATE TABLE "project" (
 );
 --> statement-breakpoint
 CREATE TABLE "deployment" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"imageUrl" text,
 	"status" "DeploymentStatus",
-	"tenantId" uuid,
-	"projectId" uuid,
+	"tenantId" text,
+	"projectId" text,
 	"createdAt" timestamp DEFAULT now(),
 	"updatedAt" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "billing" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"user_id" uuid NOT NULL,
-	"team_id" uuid,
-	"subscription_id" uuid,
-	"plan_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"team_id" text,
+	"subscription_id" text,
+	"plan_id" text NOT NULL,
 	"amount" numeric(10, 2) NOT NULL,
 	"currency" text DEFAULT 'USD' NOT NULL,
 	"billing_period" text DEFAULT 'monthly',
@@ -116,9 +116,9 @@ CREATE TABLE "billing" (
 );
 --> statement-breakpoint
 CREATE TABLE "team_member" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"user_id" uuid NOT NULL,
-	"team_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"team_id" text NOT NULL,
 	"role" varchar(50) DEFAULT 'member',
 	"invited_by_user_id" text,
 	"status" "member_status" DEFAULT 'pending' NOT NULL,
@@ -126,19 +126,19 @@ CREATE TABLE "team_member" (
 );
 --> statement-breakpoint
 CREATE TABLE "team" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" varchar(100) NOT NULL,
-	"owner_id" uuid NOT NULL,
+	"owner_id" text NOT NULL,
 	"is_deleted" boolean DEFAULT false,
-	"tenant_id" uuid NOT NULL,
+	"tenant_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "api_key" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"key_hash" text NOT NULL,
 	"name" varchar(100),
-	"team_id" uuid NOT NULL,
+	"team_id" text NOT NULL,
 	"scope" "api_key_scope" DEFAULT 'read' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"last_used_at" timestamp,
@@ -147,8 +147,8 @@ CREATE TABLE "api_key" (
 );
 --> statement-breakpoint
 CREATE TABLE "deployment_log" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"deployment_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"deployment_id" text NOT NULL,
 	"service_name" varchar(100),
 	"container_name" varchar(100),
 	"daemon" varchar(100),
@@ -159,8 +159,8 @@ CREATE TABLE "deployment_log" (
 );
 --> statement-breakpoint
 CREATE TABLE "metric" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"deployment_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"deployment_id" text NOT NULL,
 	"cpu_usage" real NOT NULL,
 	"memory_usage" real NOT NULL,
 	"disk_usage" real,
@@ -171,7 +171,7 @@ CREATE TABLE "metric" (
 );
 --> statement-breakpoint
 CREATE TABLE "plan" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"description" text,
 	"price" real NOT NULL,
@@ -189,8 +189,8 @@ CREATE TABLE "plan" (
 );
 --> statement-breakpoint
 CREATE TABLE "project_environment" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"project_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"project_id" text NOT NULL,
 	"name" text NOT NULL,
 	"type" "env_type" DEFAULT 'development' NOT NULL,
 	"env_vars" jsonb NOT NULL,
@@ -200,11 +200,11 @@ CREATE TABLE "project_environment" (
 );
 --> statement-breakpoint
 CREATE TABLE "webhook_event" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"tenant_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"tenant_id" text NOT NULL,
 	"source" text NOT NULL,
 	"event_type" text NOT NULL,
-	"unique_request_id" uuid NOT NULL,
+	"unique_request_id" text NOT NULL,
 	"payload" jsonb NOT NULL,
 	"processed" boolean DEFAULT false,
 	"response_status" integer,
@@ -214,7 +214,7 @@ CREATE TABLE "webhook_event" (
 --> statement-breakpoint
 CREATE TABLE "authenticator" (
 	"credential_id" text NOT NULL,
-	"user_id" uuid NOT NULL,
+	"user_id" text NOT NULL,
 	"provider_account_id" text NOT NULL,
 	"credential_public_key" text NOT NULL,
 	"counter" integer NOT NULL,
@@ -226,7 +226,7 @@ CREATE TABLE "authenticator" (
 );
 --> statement-breakpoint
 CREATE TABLE "rate_limit" (
-	"identifier" uuid PRIMARY KEY NOT NULL,
+	"identifier" text PRIMARY KEY NOT NULL,
 	"tokens" integer NOT NULL,
 	"last_refill" timestamp NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -234,10 +234,10 @@ CREATE TABLE "rate_limit" (
 );
 --> statement-breakpoint
 CREATE TABLE "subscription" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"plan" text NOT NULL,
 	"reference_id" text NOT NULL,
-	"stripe_customer_id" uuid,
+	"stripe_customer_id" text,
 	"stripe_subscription_id" text,
 	"status" text DEFAULT 'incomplete',
 	"period_start" timestamp,
@@ -247,7 +247,7 @@ CREATE TABLE "subscription" (
 );
 --> statement-breakpoint
 CREATE TABLE "passkey" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"credential_id" text NOT NULL,
 	"public_key" text NOT NULL,
@@ -255,12 +255,12 @@ CREATE TABLE "passkey" (
 	"device_type" text NOT NULL,
 	"backed_up" boolean NOT NULL,
 	"transports" json,
-	"user_id" uuid NOT NULL,
+	"user_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "organization" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"slug" text,
 	"logo" text,
@@ -270,13 +270,13 @@ CREATE TABLE "organization" (
 );
 --> statement-breakpoint
 CREATE TABLE "invitation" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"organization_id" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"organization_id" text NOT NULL,
 	"email" text NOT NULL,
 	"role" text,
 	"status" text DEFAULT 'pending' NOT NULL,
 	"expires_at" timestamp NOT NULL,
-	"inviter_id" uuid NOT NULL
+	"inviter_id" text NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

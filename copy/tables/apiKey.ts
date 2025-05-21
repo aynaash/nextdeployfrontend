@@ -8,7 +8,7 @@ import {
   boolean,
 } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { team } from "./teams";
+import { team } from "./team";
 
 // Define enum for key scopes
 export const apiKeyScopeEnum = pgEnum("api_key_scope", ["read", "write", "admin"]);

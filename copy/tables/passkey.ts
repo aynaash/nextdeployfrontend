@@ -1,6 +1,6 @@
 
 import { pgTable, text, integer, boolean, json, timestamp } from "drizzle-orm/pg-core";
-import { user } from "./users.ts";
+import { user } from "./user.ts";
 import { randomUUID } from "crypto";
 
 export const passkey = pgTable("passkey", {

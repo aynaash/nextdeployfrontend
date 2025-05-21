@@ -1,7 +1,7 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { user } from "./users.ts";
+import { user } from "./user.ts";
 
 export const session = pgTable("session", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),

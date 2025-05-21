@@ -18,7 +18,7 @@ if (!googleClientId) {
   console.warn("⚠️ NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
 }
 
-export const client = createAuthClient({
+export const authClient = createAuthClient({
   plugins: [
     organizationClient(),
     twoFactorClient({
@@ -61,9 +61,9 @@ export const {
   organization,
   useListOrganizations,
   useActiveOrganization,
-} = client;
+} = authClient;
 
 // Optional session change listener (useful for syncing global state)
-client.$store.listen("$sessionSignal", async () => {
+authClient.$store.listen("$sessionSignal", async () => {
   // Optionally trigger data refresh here
 });

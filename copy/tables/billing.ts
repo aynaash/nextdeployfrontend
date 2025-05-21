@@ -1,9 +1,9 @@
 
 import { pgTable, uuid, text, integer, timestamp, numeric, boolean } from "drizzle-orm/pg-core";
-import { user } from "./users";
-import { team } from "./teams";
-import { plan }from "./plans";
-import { subscription } from "./subscriptions";
+import { user } from "./user";
+import { team } from "./team";
+import { plan }from "./plan";
+import { subscription } from "./subscription";
 
 export const billing = pgTable("billing", {
   id: text("id").$defaultFn(()=> randomUUID()).primaryKey(),

@@ -6,7 +6,7 @@ import {
   index,
   varchar,
 } from "drizzle-orm/pg-core";
-import { deployment } from "./deployments";
+import { deployment } from "./deployment";
 
 export const deploymentLog = pgTable("deployment_log", {
   id: text("id").$defaultFn(() => crypto.randomUUID()).primaryKey(),

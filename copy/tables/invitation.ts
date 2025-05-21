@@ -1,8 +1,8 @@
 
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { user } from "./users";
-import { organization } from "./organizations";
+import { user } from "./user";
+import { organization } from "./organization";
 
 export const invitation = pgTable("invitation", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),

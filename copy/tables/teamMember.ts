@@ -1,7 +1,7 @@
 import { pgTable,pgEnum, text, timestamp, varchar, integer } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { user } from "./users";
-import { team } from "./teams";
+import { user } from "./user";
+import { team } from "./team";
 
 // Define the status enum (pending, accepted, rejected)
 export const memberStatusEnum = pgEnum("member_status", ["pending", "accepted", "rejected"]);

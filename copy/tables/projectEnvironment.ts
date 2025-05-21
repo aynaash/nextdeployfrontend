@@ -1,7 +1,7 @@
 
 import { pgTable, text, timestamp, jsonb, index, boolean, pgEnum } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { project } from "./projects.ts";
+import { project } from "./project.ts";
 
 // Define a new enum for environment types
 export const envTypeEnum = pgEnum("env_type", ["development", "staging", "production"]);

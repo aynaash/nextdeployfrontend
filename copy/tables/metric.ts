@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, real } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { deployment } from "./deployments";
+import { deployment } from "./deployment";
 
 export const metric = pgTable("metric", {
   id: text("id").$defaultFn(() => randomUUID()).primaryKey(),
