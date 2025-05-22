@@ -1,7 +1,5 @@
-
-import { pgTable, text, timestamp, json, jsonb, boolean, integer, varchar, real, numeric, pgEnum, index, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, json, jsonb, boolean, integer, varchar, real, numeric, pgEnum, index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-
 import { relations } from "drizzle-orm";
 // ====================== ENUMS ======================
 export const userRoleEnum = pgEnum("user_role", ["ADMIN", "USER", "SUPER_ADMIN"]);
@@ -46,7 +44,7 @@ export const users = pgTable("user", {
   lastLoginAt: timestamp("last_login_at"),
   preferredLanguage: text("preferred_language").default("en"),
 });
-
+//======== Account ===========
 export const accounts = pgTable("account", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   provider: text("provider").notNull(),
@@ -65,7 +63,7 @@ export const accounts = pgTable("account", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   tenantId: text("tenant_id"),
 });
-
+//========================User Account ============================
 export const userAccounts = pgTable("user_account", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   userId: text("user_id").notNull().references(() => users.id),
@@ -74,7 +72,7 @@ export const userAccounts = pgTable("user_account", {
   isPrimary: boolean("is_primary").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
-
+//====================Session ======================
 export const sessions = pgTable("session", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   sessionToken: text("session_token").notNull().unique(),
@@ -88,7 +86,7 @@ export const sessions = pgTable("session", {
   activeOrganizationId: text("active_organization_id"),
   impersonatedBy: text("impersonated_by"),
 });
-
+//================Verification Token ============================
 export const verificationTokens = pgTable("verification_token", {
   identifier: text("identifier").notNull(),
   token: text("token").notNull().unique(),
@@ -97,7 +95,7 @@ export const verificationTokens = pgTable("verification_token", {
 }, (vt) => ({
   compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
 }));
-
+//=====================twoFactor======================
 export const twoFactor = pgTable("two_factor", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   secret: text("secret").notNull(),
@@ -106,7 +104,7 @@ export const twoFactor = pgTable("two_factor", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
-
+//==============Passkeys===================
 export const passkeys = pgTable("passkey", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name"),
@@ -120,7 +118,7 @@ export const passkeys = pgTable("passkey", {
   createdAt: timestamp("created_at").defaultNow(),
   lastUsedAt: timestamp("last_used_at"),
 });
-
+// ===============Organization =========================
 export const organizations = pgTable("organization", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
@@ -132,7 +130,7 @@ export const organizations = pgTable("organization", {
   billingEmail: text("billing_email"),
   ownerId: text("owner_id").references(() => users.id),
 });
-
+//================Team ========================
 export const teams = pgTable("team", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: varchar("name", { length: 100 }).notNull(),
@@ -145,21 +143,25 @@ export const teams = pgTable("team", {
   updatedAt: timestamp("updated_at").defaultNow(),
   avatarUrl: text("avatar_url"),
 });
-
-export const teamMembers = pgTable("team_member", {
-  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  userId: text("user_id").notNull().references(() => users.id),
-  teamId: text("team_id").notNull().references(() => teams.id),
-  role: userRoleEnum("role").default("USER"),
-  invitedById: text("invited_by_id").references(() => users.id),
-  status: memberStatusEnum("status").notNull().default("PENDING"),
-  joinedAt: timestamp("joined_at"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-}, (tm) => ({
-  uniqueUserTeam: primaryKey({ columns: [tm.userId, tm.teamId] })
-}));
-
+//===============Team Members =================
+export const teamMembers = pgTable(
+  'team_member',
+  {
+    id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+    userId: text('user_id').notNull().references(() => users.id),
+    teamId: text('team_id').notNull().references(() => teams.id),
+    role: userRoleEnum('role').default('USER'),
+    invitedById: text('invited_by_id').references(() => users.id),
+    status: memberStatusEnum('status').notNull().default('PENDING'),
+    joinedAt: timestamp('joined_at'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+  },
+  (tm) => [
+    uniqueIndex('unique_user_team_index').on(tm.userId, tm.teamId),
+  ],
+);
+//==============Project =======================
 export const projects = pgTable("project", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
@@ -176,7 +178,7 @@ export const projects = pgTable("project", {
   framework: text("framework"),
   productionBranch: text("production_branch").default("main"),
 });
-
+//=======================Project environment ===============
 export const projectEnvironments = pgTable("project_environment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   projectId: text("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
@@ -190,7 +192,7 @@ export const projectEnvironments = pgTable("project_environment", {
 }, (pe) => ({
   projectEnvIdx: index("project_env_idx").on(pe.projectId, pe.name),
 }));
-
+//===============Deployments =======================
 export const deployments = pgTable("deployment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   projectId: text("project_id").notNull().references(() => projects.id),
@@ -213,6 +215,7 @@ export const deployments = pgTable("deployment", {
   createdAtIdx: index("deployment_created_at_idx").on(d.createdAt),
 }));
 
+// ===========Deplyoyment log =======================
 export const deploymentLogs = pgTable("deployment_log", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   deploymentId: text("deployment_id").notNull().references(() => deployments.id, { onDelete: "cascade" }),
@@ -229,7 +232,7 @@ export const deploymentLogs = pgTable("deployment_log", {
   createdAtIdx: index("log_created_at_idx").on(dl.createdAt),
   requestIdIdx: index("log_request_id_idx").on(dl.requestId),
 }));
-
+//================Metric ====================
 export const metrics = pgTable("metric", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   deploymentId: text("deployment_id").notNull().references(() => deployments.id, { onDelete: "cascade" }),
@@ -246,7 +249,7 @@ export const metrics = pgTable("metric", {
 }, (m) => ({
   deploymentIdx: index("metric_deployment_idx").on(m.deploymentId),
 }));
-
+//==============Plan =======================
 export const plans = pgTable("plan", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull().unique(),
@@ -268,7 +271,7 @@ export const plans = pgTable("plan", {
 }, (p) => ({
   priceIdx: index("plan_price_idx").on(p.price),
 }));
-
+// ================Subscription ================
 export const subscriptions = pgTable("subscription", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   planId: text("plan_id").notNull().references(() => plans.id),
@@ -291,7 +294,7 @@ export const subscriptions = pgTable("subscription", {
   statusIdx: index("subscription_status_idx").on(s.status),
   stripeIdx: index("subscription_stripe_idx").on(s.stripeSubscriptionId),
 }));
-
+//=============Billing =====================
 export const billings = pgTable("billing", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   userId: text("user_id").notNull().references(() => users.id),
@@ -313,7 +316,7 @@ export const billings = pgTable("billing", {
 }, (b) => ({
   userStatusIdx: index("billing_user_status_idx").on(b.userId, b.status),
 }));
-
+//===================ApiKeys =========================
 export const apiKeys = pgTable("api_key", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   keyHash: text("key_hash").notNull(),
@@ -331,7 +334,7 @@ export const apiKeys = pgTable("api_key", {
 }, (ak) => ({
   keyHashIdx: index("api_key_hash_idx").on(ak.keyHash),
 }));
-
+//====================WebHook =====================
 export const webhooks = pgTable("webhook", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
@@ -348,7 +351,7 @@ export const webhooks = pgTable("webhook", {
 }, (w) => ({
   urlIdx: index("webhook_url_idx").on(w.url),
 }));
-
+//=====================WebHook event =================
 export const webhookEvents = pgTable("webhook_event", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   webhookId: text("webhook_id").references(() => webhooks.id),
@@ -368,7 +371,7 @@ export const webhookEvents = pgTable("webhook_event", {
   requestIdx: index("webhook_request_idx").on(we.uniqueRequestId),
   processedIdx: index("webhook_processed_idx").on(we.processed),
 }));
-
+//===========AuditLogs ============================
 export const auditLogs = pgTable("audit_log", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
@@ -389,7 +392,7 @@ export const auditLogs = pgTable("audit_log", {
   tenantIdx: index("auditlog_tenant_idx").on(al.tenantId),
   resourceIdx: index("auditlog_resource_idx").on(al.resourceType, al.resourceId),
 }));
-
+//====================RateLimit ====================
 export const rateLimits = pgTable("rate_limit", {
   identifier: text("identifier").notNull().primaryKey(),
   tokens: integer("tokens").notNull(),
