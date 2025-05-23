@@ -1,6 +1,7 @@
 import { pgTable, text, timestamp, json, jsonb, boolean, integer, varchar, real, numeric, pgEnum, index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { relations } from "drizzle-orm";
+import { many, relations } from 'drizzle-orm';
+
 // ====================== ENUMS ======================
 export const userRoleEnum = pgEnum("user_role", ["ADMIN", "USER", "SUPER_ADMIN"]);
 export const deploymentStatusEnum = pgEnum("deployment_status", ["PENDING", "BUILDING", "DEPLOYING", "RUNNING", "SUCCESS", "FAILED", "CANCELLED"]);
@@ -411,6 +412,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   teams: many(teamMembers),
   ownedTeams: many(teams, { relationName: "teamOwner" }),
   projects: many(projects),
+  teamMemberships:many(teamMembers, {relationName:"teamMemberUser"}),
+  invitedTeamMembers: many(teamMembers, {relationName:"teamMemberInvitedBy"}),
   createdDeployments: many(deployments, { relationName: "deploymentCreator" }),
   twoFactor: many(twoFactor),
   passkeys: many(passkeys),
@@ -481,9 +484,10 @@ export const teamsRelations = relations(teams, ({ many, one }) => ({
 }));
 
 export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
-  user: one(users, {
+  member: one(users, {
     fields: [teamMembers.userId],
     references: [users.id],
+    relationName: "teamMemberUser", 
   }),
   team: one(teams, {
     fields: [teamMembers.teamId],
@@ -492,7 +496,7 @@ export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
   invitedBy: one(users, {
     fields: [teamMembers.invitedById],
     references: [users.id],
-    relationName: "invitedByUser"
+    relationName: "teamMemberInvitedBy",
   }),
 }));
 
@@ -558,7 +562,7 @@ export const plansRelations = relations(plans, ({ many }) => ({
   billings: many(billings),
 }));
 
-export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+export const subscriptionsRelations = relations(subscriptions, ({ one , many}) => ({
   plan: one(plans, {
     fields: [subscriptions.planId],
     references: [plans.id],

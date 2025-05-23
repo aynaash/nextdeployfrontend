@@ -2,12 +2,12 @@
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./lib/db";
-import { users, sessions, verificationTokens } from "./drizzle/schema.ts"; // Import your Drizzle schemas
+import { users as userTable, sessions as session , verificationTokens as verificationToken } from "./drizzle/schema";
 import { resend } from "./lib/auth/authUtils";
 import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
 import { Stripe } from "stripe";
 import { stripe } from "@better-auth/stripe";
-import {schema} from "./drizzle/schema.ts"
+
 // Plugins
 import {
   admin,
@@ -19,7 +19,6 @@ import {
   nextCookies,
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
-
 // Environment validation
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
 const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
@@ -36,8 +35,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
-      ...schema,
-      user: schema.user
+      users: userTable,
+      session,
+      verificationToken
     }
   }),
 
@@ -113,7 +113,8 @@ export const auth = betterAuth({
       prompt: "select_account",
     },
   },
- usePlural: true,
+  usePlural: true,
+
   // Plugins
   plugins: [
     bearer(),
