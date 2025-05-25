@@ -1,13 +1,13 @@
-CREATE TYPE "public"."api_key_scope" AS ENUM('READ', 'WRITE', 'ADMIN');--> statement-breakpoint
-CREATE TYPE "public"."billing_status" AS ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED');--> statement-breakpoint
-CREATE TYPE "public"."deployment_status" AS ENUM('PENDING', 'BUILDING', 'DEPLOYING', 'RUNNING', 'SUCCESS', 'FAILED', 'CANCELLED');--> statement-breakpoint
-CREATE TYPE "public"."device_type" AS ENUM('SINGLE_DEVICE', 'MULTI_DEVICE');--> statement-breakpoint
-CREATE TYPE "public"."env_type" AS ENUM('DEVELOPMENT', 'STAGING', 'PRODUCTION');--> statement-breakpoint
-CREATE TYPE "public"."log_level" AS ENUM('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL');--> statement-breakpoint
-CREATE TYPE "public"."member_status" AS ENUM('PENDING', 'ACTIVE', 'INACTIVE', 'REJECTED');--> statement-breakpoint
-CREATE TYPE "public"."transports" AS ENUM('USB', 'NFC', 'BLE', 'INTERNAL');--> statement-breakpoint
-CREATE TYPE "public"."user_role" AS ENUM('admin', 'user', 'superadmin');--> statement-breakpoint
-CREATE TYPE "public"."webhook_event_type" AS ENUM('DEPLOYMENT_STARTED', 'DEPLOYMENT_SUCCESS', 'DEPLOYMENT_FAILED', 'BILLING_UPDATED', 'TEAM_INVITE', 'PROJECT_CREATED');--> statement-breakpoint
+CREATE TYPE "public"."api_key_scope" AS ENUM('read', 'write', 'admin');--> statement-breakpoint
+CREATE TYPE "public"."billing_status" AS ENUM('pending', 'paid', 'failed', 'refunded');--> statement-breakpoint
+CREATE TYPE "public"."deployment_status" AS ENUM('pending', 'building', 'deploying', 'running', 'success', 'failed', 'cancelled');--> statement-breakpoint
+CREATE TYPE "public"."device_type" AS ENUM('single_device', 'multi_device');--> statement-breakpoint
+CREATE TYPE "public"."env_type" AS ENUM('development', 'staging', 'production');--> statement-breakpoint
+CREATE TYPE "public"."log_level" AS ENUM('debug', 'info', 'warn', 'error', 'fatal');--> statement-breakpoint
+CREATE TYPE "public"."member_status" AS ENUM('pending', 'active', 'inactive', 'rejected');--> statement-breakpoint
+CREATE TYPE "public"."transports" AS ENUM('usb', 'nfc', 'ble', 'internal');--> statement-breakpoint
+CREATE TYPE "public"."user_role" AS ENUM('admin', 'user', 'super_admin');--> statement-breakpoint
+CREATE TYPE "public"."webhook_event_type" AS ENUM('deployment_started', 'deployment_success', 'deployment_failed', 'billing_updated', 'team_invite', 'project_created');--> statement-breakpoint
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"provider" text NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE "api_key" (
 	"user_id" text,
 	"team_id" text,
 	"organization_id" text,
-	"scope" "api_key_scope" DEFAULT 'READ' NOT NULL,
+	"scope" "api_key_scope" DEFAULT 'read' NOT NULL,
 	"last_used_at" timestamp,
 	"expires_at" timestamp,
 	"revoked_at" timestamp,
@@ -73,7 +73,7 @@ CREATE TABLE "billing" (
 	"paid" boolean DEFAULT false NOT NULL,
 	"invoice_url" text,
 	"provider" text DEFAULT 'stripe',
-	"status" "billing_status" DEFAULT 'PENDING',
+	"status" "billing_status" DEFAULT 'pending',
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"due_at" timestamp,
@@ -84,7 +84,7 @@ CREATE TABLE "deployment" (
 	"id" text PRIMARY KEY NOT NULL,
 	"project_id" text NOT NULL,
 	"environment_id" text,
-	"status" "deployment_status" DEFAULT 'PENDING' NOT NULL,
+	"status" "deployment_status" DEFAULT 'pending' NOT NULL,
 	"commit_hash" text,
 	"commit_message" text,
 	"branch" text,
@@ -106,7 +106,7 @@ CREATE TABLE "deployment_log" (
 	"container_name" varchar(100),
 	"daemon" varchar(100),
 	"request_id" text,
-	"level" "log_level" DEFAULT 'INFO',
+	"level" "log_level" DEFAULT 'info',
 	"message" text NOT NULL,
 	"metadata" jsonb,
 	"created_at" timestamp DEFAULT now()
@@ -198,7 +198,7 @@ CREATE TABLE "project_environment" (
 	"id" text PRIMARY KEY NOT NULL,
 	"project_id" text NOT NULL,
 	"name" text NOT NULL,
-	"type" "env_type" DEFAULT 'DEVELOPMENT' NOT NULL,
+	"type" "env_type" DEFAULT 'development' NOT NULL,
 	"env_vars" jsonb NOT NULL,
 	"is_active" boolean DEFAULT true,
 	"deleted_at" timestamp,
@@ -239,7 +239,7 @@ CREATE TABLE "subscription" (
 	"reference_id" text NOT NULL,
 	"stripe_customer_id" text,
 	"stripe_subscription_id" text,
-	"status" "billing_status" DEFAULT 'PENDING',
+	"status" "billing_status" DEFAULT 'pending',
 	"period_start" timestamp,
 	"period_end" timestamp,
 	"cancel_at_period_end" boolean DEFAULT false,
@@ -267,9 +267,9 @@ CREATE TABLE "team_member" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"team_id" text NOT NULL,
-	"role" "user_role" DEFAULT 'USER',
+	"role" "user_role" DEFAULT 'user',
 	"invited_by_id" text,
-	"status" "member_status" DEFAULT 'PENDING' NOT NULL,
+	"status" "member_status" DEFAULT 'pending' NOT NULL,
 	"joined_at" timestamp,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
@@ -293,7 +293,7 @@ CREATE TABLE "user" (
 	"email_verified" boolean DEFAULT false,
 	"image" text,
 	"password" text,
-	"role" "user_role" DEFAULT 'USER',
+	"role" "user_role" DEFAULT 'user',
 	"stripe_customer_id" text,
 	"stripe_subscription_id" text,
 	"stripe_price_id" text,

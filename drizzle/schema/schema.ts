@@ -3,23 +3,23 @@ import { randomUUID } from "crypto";
 import { relations } from 'drizzle-orm';
 
 // ====================== ENUMS ======================
-export const userRoleEnum = pgEnum("user_role", ["admin", "user", "superadmin"]);
-export const deploymentStatusEnum = pgEnum("deployment_status", ["PENDING", "BUILDING", "DEPLOYING", "RUNNING", "SUCCESS", "FAILED", "CANCELLED"]);
-export const billingStatusEnum = pgEnum("billing_status", ["PENDING", "PAID", "FAILED", "REFUNDED"]);
-export const memberStatusEnum = pgEnum("member_status", ["PENDING", "ACTIVE", "INACTIVE", "REJECTED"]);
-export const envTypeEnum = pgEnum("env_type", ["DEVELOPMENT", "STAGING", "PRODUCTION"]);
-export const apiKeyScopeEnum = pgEnum("api_key_scope", ["READ", "WRITE", "ADMIN"]);
+export const userRoleEnum = pgEnum("user_role", ["admin", "user", "super_admin"]);
+export const deploymentStatusEnum = pgEnum("deployment_status", ["pending", "building", "deploying", "running", "success", "failed", "cancelled"]);
+export const billingStatusEnum = pgEnum("billing_status", ["pending", "paid", "failed", "refunded"]);
+export const memberStatusEnum = pgEnum("member_status", ["pending", "active", "inactive", "rejected"]);
+export const envTypeEnum = pgEnum("env_type", ["development", "staging", "production"]);
+export const apiKeyScopeEnum = pgEnum("api_key_scope", ["read", "write", "admin"]);
 export const webhookEventTypeEnum = pgEnum("webhook_event_type", [
-  "DEPLOYMENT_STARTED",
-  "DEPLOYMENT_SUCCESS",
-  "DEPLOYMENT_FAILED",
-  "BILLING_UPDATED",
-  "TEAM_INVITE",
-  "PROJECT_CREATED"
+  "deployment_started",
+  "deployment_success",
+  "deployment_failed",
+  "billing_updated",
+  "team_invite",
+  "project_created"
 ]);
-export const deviceTypeEnum = pgEnum("device_type", ["SINGLE_DEVICE", "MULTI_DEVICE"]);
-export const transportsEnum = pgEnum("transports", ["USB", "NFC", "BLE", "INTERNAL"]);
-export const logLevelEnum = pgEnum("log_level", ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"]);
+export const deviceTypeEnum = pgEnum("device_type", ["single_device", "multi_device"]);
+export const transportsEnum = pgEnum("transports", ["usb", "nfc", "ble", "internal"]);
+export const logLevelEnum = pgEnum("log_level", ["debug", "info", "warn", "error", "fatal"]);
 
 // ====================== TABLES ======================
 export const user = pgTable('user', {
@@ -31,7 +31,7 @@ export const user = pgTable('user', {
   emailVerified: boolean('email_verified').default(false),
   image: text('image'),
   password: text('password'),
-  role: userRoleEnum('role').default('USER'),
+  role: userRoleEnum('role').default('user'),
   stripeCustomerId: text('stripe_customer_id').unique(),
   stripeSubscriptionId: text('stripe_subscription_id').unique(),
   stripePriceId: text('stripe_price_id'),
@@ -151,9 +151,9 @@ export const teamMember = pgTable(
     id: text('id').primaryKey().$defaultFn(() => randomUUID()),
     userId: text('user_id').notNull().references(() => user.id),
     teamId: text('team_id').notNull().references(() => team.id),
-    role: userRoleEnum('role').default('USER'),
+    role: userRoleEnum('role').default('user'),
     invitedById: text('invited_by_id').references(() => user.id),
-    status: memberStatusEnum('status').notNull().default('PENDING'),
+    status: memberStatusEnum('status').notNull().default('pending'),
     joinedAt: timestamp('joined_at'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
@@ -184,7 +184,7 @@ export const projectEnvironment = pgTable("project_environment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   projectId: text("project_id").notNull().references(() => project.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  type: envTypeEnum("type").notNull().default("DEVELOPMENT"),
+  type: envTypeEnum("type").notNull().default("development"),
   envVars: jsonb("env_vars").notNull(),
   isActive: boolean("is_active").default(true),
   deletedAt: timestamp("deleted_at"),
@@ -198,7 +198,7 @@ export const deployment = pgTable("deployment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   projectId: text("project_id").notNull().references(() => project.id),
   environmentId: text("environment_id").references(() => projectEnvironment.id),
-  status: deploymentStatusEnum("status").notNull().default("PENDING"),
+  status: deploymentStatusEnum("status").notNull().default("pending"),
   commitHash: text("commit_hash"),
   commitMessage: text("commit_message"),
   branch: text("branch"),
@@ -223,7 +223,7 @@ export const deploymentLog = pgTable("deployment_log", {
   containerName: varchar("container_name", { length: 100 }),
   daemon: varchar("daemon", { length: 100 }),
   requestId: text("request_id"),
-  level: logLevelEnum("level").default("INFO"),
+  level: logLevelEnum("level").default("info"),
   message: text("message").notNull(),
   metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -281,7 +281,7 @@ export const subscription = pgTable("subscription", {
   referenceId: text("reference_id").notNull(),
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
-  status: billingStatusEnum("status").default("PENDING"),
+  status: billingStatusEnum("status").default("pending"),
   periodStart: timestamp("period_start"),
   periodEnd: timestamp("period_end"),
   cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
@@ -308,7 +308,7 @@ export const billing = pgTable("billing", {
   paid: boolean("paid").default(false).notNull(),
   invoiceUrl: text("invoice_url"),
   provider: text("provider").default("stripe"),
-  status: billingStatusEnum("status").default("PENDING"),
+  status: billingStatusEnum("status").default("pending"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   dueAt: timestamp("due_at"),
@@ -324,7 +324,7 @@ export const apiKey = pgTable("api_key", {
   userId: text("user_id").references(() => user.id),
   teamId: text("team_id").references(() => team.id),
   organizationId: text("organization_id").references(() => organization.id),
-  scope: apiKeyScopeEnum("scope").notNull().default("READ"),
+  scope: apiKeyScopeEnum("scope").notNull().default("read"),
   lastUsedAt: timestamp("last_used_at"),
   expiresAt: timestamp("expires_at"),
   revokedAt: timestamp("revoked_at"),

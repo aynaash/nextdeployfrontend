@@ -1,5 +1,5 @@
 {
-  "id": "59a3fac9-028d-424f-80b2-f26254ce6fa0",
+  "id": "1d8a5f64-ad8c-472d-a951-5c4ab2185513",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -175,7 +175,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'READ'"
+          "default": "'read'"
         },
         "last_used_at": {
           "name": "last_used_at",
@@ -569,7 +569,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'PENDING'"
+          "default": "'pending'"
         },
         "created_at": {
           "name": "created_at",
@@ -722,7 +722,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'PENDING'"
+          "default": "'pending'"
         },
         "commit_hash": {
           "name": "commit_hash",
@@ -930,7 +930,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'INFO'"
+          "default": "'info'"
         },
         "message": {
           "name": "message",
@@ -1657,7 +1657,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'DEVELOPMENT'"
+          "default": "'development'"
         },
         "env_vars": {
           "name": "env_vars",
@@ -1965,7 +1965,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'PENDING'"
+          "default": "'pending'"
         },
         "period_start": {
           "name": "period_start",
@@ -2243,7 +2243,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'USER'"
+          "default": "'user'"
         },
         "invited_by_id": {
           "name": "invited_by_id",
@@ -2257,7 +2257,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'PENDING'"
+          "default": "'pending'"
         },
         "joined_at": {
           "name": "joined_at",
@@ -2474,7 +2474,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'USER'"
+          "default": "'user'"
         },
         "stripe_customer_id": {
           "name": "stripe_customer_id",
@@ -3021,80 +3021,80 @@
       "name": "api_key_scope",
       "schema": "public",
       "values": [
-        "READ",
-        "WRITE",
-        "ADMIN"
+        "read",
+        "write",
+        "admin"
       ]
     },
     "public.billing_status": {
       "name": "billing_status",
       "schema": "public",
       "values": [
-        "PENDING",
-        "PAID",
-        "FAILED",
-        "REFUNDED"
+        "pending",
+        "paid",
+        "failed",
+        "refunded"
       ]
     },
     "public.deployment_status": {
       "name": "deployment_status",
       "schema": "public",
       "values": [
-        "PENDING",
-        "BUILDING",
-        "DEPLOYING",
-        "RUNNING",
-        "SUCCESS",
-        "FAILED",
-        "CANCELLED"
+        "pending",
+        "building",
+        "deploying",
+        "running",
+        "success",
+        "failed",
+        "cancelled"
       ]
     },
     "public.device_type": {
       "name": "device_type",
       "schema": "public",
       "values": [
-        "SINGLE_DEVICE",
-        "MULTI_DEVICE"
+        "single_device",
+        "multi_device"
       ]
     },
     "public.env_type": {
       "name": "env_type",
       "schema": "public",
       "values": [
-        "DEVELOPMENT",
-        "STAGING",
-        "PRODUCTION"
+        "development",
+        "staging",
+        "production"
       ]
     },
     "public.log_level": {
       "name": "log_level",
       "schema": "public",
       "values": [
-        "DEBUG",
-        "INFO",
-        "WARN",
-        "ERROR",
-        "FATAL"
+        "debug",
+        "info",
+        "warn",
+        "error",
+        "fatal"
       ]
     },
     "public.member_status": {
       "name": "member_status",
       "schema": "public",
       "values": [
-        "PENDING",
-        "ACTIVE",
-        "INACTIVE",
-        "REJECTED"
+        "pending",
+        "active",
+        "inactive",
+        "rejected"
       ]
     },
     "public.transports": {
       "name": "transports",
       "schema": "public",
       "values": [
-        "USB",
-        "NFC",
-        "BLE",
-        "INTERNAL"
+        "usb",
+        "nfc",
+        "ble",
+        "internal"
       ]
     },
     "public.user_role": {
@@ -3103,19 +3103,19 @@
       "values": [
         "admin",
         "user",
-        "superadmin"
+        "super_admin"
       ]
     },
     "public.webhook_event_type": {
       "name": "webhook_event_type",
       "schema": "public",
       "values": [
-        "DEPLOYMENT_STARTED",
-        "DEPLOYMENT_SUCCESS",
-        "DEPLOYMENT_FAILED",
-        "BILLING_UPDATED",
-        "TEAM_INVITE",
-        "PROJECT_CREATED"
+        "deployment_started",
+        "deployment_success",
+        "deployment_failed",
+        "billing_updated",
+        "team_invite",
+        "project_created"
       ]
     }
   },

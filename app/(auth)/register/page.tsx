@@ -40,6 +40,7 @@ const RegisterPage = () => {
           email: data.email,
           password: data.password,
           name: data.name,
+         role:"USER",
         },
         {
           fetchOptions: {
