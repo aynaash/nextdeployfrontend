@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession } from "../../auth-client.ts";
 
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";

@@ -6,7 +6,7 @@ CREATE TYPE "public"."env_type" AS ENUM('DEVELOPMENT', 'STAGING', 'PRODUCTION');
 CREATE TYPE "public"."log_level" AS ENUM('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL');--> statement-breakpoint
 CREATE TYPE "public"."member_status" AS ENUM('PENDING', 'ACTIVE', 'INACTIVE', 'REJECTED');--> statement-breakpoint
 CREATE TYPE "public"."transports" AS ENUM('USB', 'NFC', 'BLE', 'INTERNAL');--> statement-breakpoint
-CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'USER', 'SUPER_ADMIN');--> statement-breakpoint
+CREATE TYPE "public"."user_role" AS ENUM('admin', 'user', 'superadmin');--> statement-breakpoint
 CREATE TYPE "public"."webhook_event_type" AS ENUM('DEPLOYMENT_STARTED', 'DEPLOYMENT_SUCCESS', 'DEPLOYMENT_FAILED', 'BILLING_UPDATED', 'TEAM_INVITE', 'PROJECT_CREATED');--> statement-breakpoint
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
@@ -80,19 +80,6 @@ CREATE TABLE "billing" (
 	"paid_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "deployment_log" (
-	"id" text PRIMARY KEY NOT NULL,
-	"deployment_id" text NOT NULL,
-	"service_name" varchar(100),
-	"container_name" varchar(100),
-	"daemon" varchar(100),
-	"request_id" text,
-	"level" "log_level" DEFAULT 'INFO',
-	"message" text NOT NULL,
-	"metadata" jsonb,
-	"created_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
 CREATE TABLE "deployment" (
 	"id" text PRIMARY KEY NOT NULL,
 	"project_id" text NOT NULL,
@@ -110,6 +97,19 @@ CREATE TABLE "deployment" (
 	"updated_at" timestamp DEFAULT now(),
 	"started_at" timestamp,
 	"completed_at" timestamp
+);
+--> statement-breakpoint
+CREATE TABLE "deployment_log" (
+	"id" text PRIMARY KEY NOT NULL,
+	"deployment_id" text NOT NULL,
+	"service_name" varchar(100),
+	"container_name" varchar(100),
+	"daemon" varchar(100),
+	"request_id" text,
+	"level" "log_level" DEFAULT 'INFO',
+	"message" text NOT NULL,
+	"metadata" jsonb,
+	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "metric" (
@@ -176,18 +176,6 @@ CREATE TABLE "plan" (
 	CONSTRAINT "plan_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
-CREATE TABLE "project_environment" (
-	"id" text PRIMARY KEY NOT NULL,
-	"project_id" text NOT NULL,
-	"name" text NOT NULL,
-	"type" "env_type" DEFAULT 'DEVELOPMENT' NOT NULL,
-	"env_vars" jsonb NOT NULL,
-	"is_active" boolean DEFAULT true,
-	"deleted_at" timestamp,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
 CREATE TABLE "project" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -204,6 +192,18 @@ CREATE TABLE "project" (
 	"framework" text,
 	"production_branch" text DEFAULT 'main',
 	CONSTRAINT "project_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
+CREATE TABLE "project_environment" (
+	"id" text PRIMARY KEY NOT NULL,
+	"project_id" text NOT NULL,
+	"name" text NOT NULL,
+	"type" "env_type" DEFAULT 'DEVELOPMENT' NOT NULL,
+	"env_vars" jsonb NOT NULL,
+	"is_active" boolean DEFAULT true,
+	"deleted_at" timestamp,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "rate_limit" (
@@ -250,18 +250,6 @@ CREATE TABLE "subscription" (
 	"trial_end" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "team_member" (
-	"id" text PRIMARY KEY NOT NULL,
-	"user_id" text NOT NULL,
-	"team_id" text NOT NULL,
-	"role" "user_role" DEFAULT 'USER',
-	"invited_by_id" text,
-	"status" "member_status" DEFAULT 'PENDING' NOT NULL,
-	"joined_at" timestamp,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
 CREATE TABLE "team" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" varchar(100) NOT NULL,
@@ -275,6 +263,18 @@ CREATE TABLE "team" (
 	"avatar_url" text
 );
 --> statement-breakpoint
+CREATE TABLE "team_member" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"team_id" text NOT NULL,
+	"role" "user_role" DEFAULT 'USER',
+	"invited_by_id" text,
+	"status" "member_status" DEFAULT 'PENDING' NOT NULL,
+	"joined_at" timestamp,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE "two_factor" (
 	"id" text PRIMARY KEY NOT NULL,
 	"secret" text NOT NULL,
@@ -284,22 +284,13 @@ CREATE TABLE "two_factor" (
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "user_account" (
-	"id" text PRIMARY KEY NOT NULL,
-	"user_id" text NOT NULL,
-	"account_id" text NOT NULL,
-	"tenant_id" text,
-	"is_primary" boolean DEFAULT false,
-	"created_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
 CREATE TABLE "user" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"first_name" text,
 	"last_name" text,
 	"email" text NOT NULL,
-	"email_verified" timestamp,
+	"email_verified" boolean DEFAULT false,
 	"image" text,
 	"password" text,
 	"role" "user_role" DEFAULT 'USER',
@@ -320,6 +311,15 @@ CREATE TABLE "user" (
 	CONSTRAINT "user_stripe_subscription_id_unique" UNIQUE("stripe_subscription_id")
 );
 --> statement-breakpoint
+CREATE TABLE "user_account" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"account_id" text NOT NULL,
+	"tenant_id" text,
+	"is_primary" boolean DEFAULT false,
+	"created_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE "verification_token" (
 	"identifier" text NOT NULL,
 	"token" text NOT NULL,
@@ -327,6 +327,21 @@ CREATE TABLE "verification_token" (
 	"tenant_id" text,
 	CONSTRAINT "verification_token_identifier_token_pk" PRIMARY KEY("identifier","token"),
 	CONSTRAINT "verification_token_token_unique" UNIQUE("token")
+);
+--> statement-breakpoint
+CREATE TABLE "webhook" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"url" text NOT NULL,
+	"project_id" text,
+	"team_id" text,
+	"organization_id" text,
+	"secret" text,
+	"events" "webhook_event_type"[] NOT NULL,
+	"is_active" boolean DEFAULT true,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now(),
+	"last_triggered_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "webhook_event" (
@@ -345,21 +360,6 @@ CREATE TABLE "webhook_event" (
 	"processed_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "webhook" (
-	"id" text PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"url" text NOT NULL,
-	"project_id" text,
-	"team_id" text,
-	"organization_id" text,
-	"secret" text,
-	"events" "webhook_event_type"[] NOT NULL,
-	"is_active" boolean DEFAULT true,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now(),
-	"last_triggered_at" timestamp
-);
---> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "api_key" ADD CONSTRAINT "api_key_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "api_key" ADD CONSTRAINT "api_key_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -373,44 +373,44 @@ ALTER TABLE "billing" ADD CONSTRAINT "billing_team_id_team_id_fk" FOREIGN KEY ("
 ALTER TABLE "billing" ADD CONSTRAINT "billing_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "billing" ADD CONSTRAINT "billing_subscription_id_subscription_id_fk" FOREIGN KEY ("subscription_id") REFERENCES "public"."subscription"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "billing" ADD CONSTRAINT "billing_plan_id_plan_id_fk" FOREIGN KEY ("plan_id") REFERENCES "public"."plan"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "deployment_log" ADD CONSTRAINT "deployment_log_deployment_id_deployment_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployment"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "deployment" ADD CONSTRAINT "deployment_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "deployment" ADD CONSTRAINT "deployment_environment_id_project_environment_id_fk" FOREIGN KEY ("environment_id") REFERENCES "public"."project_environment"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "deployment" ADD CONSTRAINT "deployment_created_by_id_user_id_fk" FOREIGN KEY ("created_by_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "deployment_log" ADD CONSTRAINT "deployment_log_deployment_id_deployment_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployment"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "metric" ADD CONSTRAINT "metric_deployment_id_deployment_id_fk" FOREIGN KEY ("deployment_id") REFERENCES "public"."deployment"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "organization" ADD CONSTRAINT "organization_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "passkey" ADD CONSTRAINT "passkey_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "project_environment" ADD CONSTRAINT "project_environment_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "project" ADD CONSTRAINT "project_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "project" ADD CONSTRAINT "project_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "project" ADD CONSTRAINT "project_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "project_environment" ADD CONSTRAINT "project_environment_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_plan_id_plan_id_fk" FOREIGN KEY ("plan_id") REFERENCES "public"."plan"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "team" ADD CONSTRAINT "team_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "team" ADD CONSTRAINT "team_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "team_member" ADD CONSTRAINT "team_member_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "team_member" ADD CONSTRAINT "team_member_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "team_member" ADD CONSTRAINT "team_member_invited_by_id_user_id_fk" FOREIGN KEY ("invited_by_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "team" ADD CONSTRAINT "team_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "team" ADD CONSTRAINT "team_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "two_factor" ADD CONSTRAINT "two_factor_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_account" ADD CONSTRAINT "user_account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_account" ADD CONSTRAINT "user_account_account_id_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "webhook_event" ADD CONSTRAINT "webhook_event_webhook_id_webhook_id_fk" FOREIGN KEY ("webhook_id") REFERENCES "public"."webhook"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "webhook" ADD CONSTRAINT "webhook_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "webhook" ADD CONSTRAINT "webhook_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."team"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "webhook" ADD CONSTRAINT "webhook_organization_id_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "webhook_event" ADD CONSTRAINT "webhook_event_webhook_id_webhook_id_fk" FOREIGN KEY ("webhook_id") REFERENCES "public"."webhook"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "api_key_hash_idx" ON "api_key" USING btree ("key_hash");--> statement-breakpoint
 CREATE INDEX "auditlog_user_idx" ON "audit_log" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "auditlog_tenant_idx" ON "audit_log" USING btree ("tenant_id");--> statement-breakpoint
 CREATE INDEX "auditlog_resource_idx" ON "audit_log" USING btree ("resource_type","resource_id");--> statement-breakpoint
 CREATE INDEX "billing_user_status_idx" ON "billing" USING btree ("user_id","status");--> statement-breakpoint
+CREATE INDEX "deployment_project_status_idx" ON "deployment" USING btree ("project_id","status");--> statement-breakpoint
+CREATE INDEX "deployment_created_at_idx" ON "deployment" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "log_deployment_idx" ON "deployment_log" USING btree ("deployment_id");--> statement-breakpoint
 CREATE INDEX "log_created_at_idx" ON "deployment_log" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "log_request_id_idx" ON "deployment_log" USING btree ("request_id");--> statement-breakpoint
-CREATE INDEX "deployment_project_status_idx" ON "deployment" USING btree ("project_id","status");--> statement-breakpoint
-CREATE INDEX "deployment_created_at_idx" ON "deployment" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "metric_deployment_idx" ON "metric" USING btree ("deployment_id");--> statement-breakpoint
 CREATE INDEX "plan_price_idx" ON "plan" USING btree ("price");--> statement-breakpoint
 CREATE INDEX "project_env_idx" ON "project_environment" USING btree ("project_id","name");--> statement-breakpoint
@@ -418,7 +418,7 @@ CREATE INDEX "idx_rate_limits_identifier" ON "rate_limit" USING btree ("identifi
 CREATE INDEX "subscription_status_idx" ON "subscription" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "subscription_stripe_idx" ON "subscription" USING btree ("stripe_subscription_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "unique_user_team_index" ON "team_member" USING btree ("user_id","team_id");--> statement-breakpoint
+CREATE INDEX "webhook_url_idx" ON "webhook" USING btree ("url");--> statement-breakpoint
 CREATE INDEX "webhook_source_idx" ON "webhook_event" USING btree ("source");--> statement-breakpoint
 CREATE INDEX "webhook_request_idx" ON "webhook_event" USING btree ("unique_request_id");--> statement-breakpoint
-CREATE INDEX "webhook_processed_idx" ON "webhook_event" USING btree ("processed");--> statement-breakpoint
-CREATE INDEX "webhook_url_idx" ON "webhook" USING btree ("url");
+CREATE INDEX "webhook_processed_idx" ON "webhook_event" USING btree ("processed");

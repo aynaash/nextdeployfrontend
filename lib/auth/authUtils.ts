@@ -1,6 +1,6 @@
 
 import { toast } from "sonner";
-import { client } from "../../auth.ts";
+import { authClient as client } from "../../auth-client";
 // 📩 Send invitation email (for team/org use)
 export async function reactInvitationEmail(email: string) {
   try {
@@ -22,7 +22,7 @@ export async function reactResetPasswordEmail(email: string) {
 }
 
 // 🔁 Resend verification or magic link
-export async function resendEmail(email: string) {
+export async function resend(email: string) {
   try {
     await client.signIn.sendMagicLink({ email });
     toast.success("Verification link resent.");

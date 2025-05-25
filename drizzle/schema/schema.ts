@@ -1,9 +1,9 @@
 import { pgTable, text, timestamp, json, jsonb, boolean, integer, varchar, real, numeric, pgEnum, index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
-import { many, relations } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 
 // ====================== ENUMS ======================
-export const userRoleEnum = pgEnum("user_role", ["ADMIN", "USER", "SUPER_ADMIN"]);
+export const userRoleEnum = pgEnum("user_role", ["admin", "user", "superadmin"]);
 export const deploymentStatusEnum = pgEnum("deployment_status", ["PENDING", "BUILDING", "DEPLOYING", "RUNNING", "SUCCESS", "FAILED", "CANCELLED"]);
 export const billingStatusEnum = pgEnum("billing_status", ["PENDING", "PAID", "FAILED", "REFUNDED"]);
 export const memberStatusEnum = pgEnum("member_status", ["PENDING", "ACTIVE", "INACTIVE", "REJECTED"]);
@@ -22,35 +22,35 @@ export const transportsEnum = pgEnum("transports", ["USB", "NFC", "BLE", "INTERN
 export const logLevelEnum = pgEnum("log_level", ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"]);
 
 // ====================== TABLES ======================
-export const users = pgTable("user", {
-  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  name: text("name"),
-  firstName: text("first_name", { length: 100 }),
-  lastName: text("last_name", { length: 100 }),
-  email: text("email").unique().notNull(),
-  emailVerified: timestamp("email_verified"),
-  image: text("image"),
-  password: text("password"),
-  role: userRoleEnum("role").default("USER"),
-  stripeCustomerId: text("stripe_customer_id").unique(),
-  stripeSubscriptionId: text("stripe_subscription_id").unique(),
-  stripePriceId: text("stripe_price_id"),
-  stripeCurrentPeriodEnd: timestamp("stripe_current_period_end"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  tenantId: text("tenant_id"),
-  banned: boolean("banned").default(false),
-  banReason: text("ban_reason"),
-  twoFactorEnabled: boolean("two_factor_enabled").default(false),
-  lastLoginAt: timestamp("last_login_at"),
-  preferredLanguage: text("preferred_language").default("en"),
+export const user = pgTable('user', {
+  id: text('id').primaryKey().$defaultFn(() => randomUUID()),
+  name: text('name'),
+  firstName: text('first_name', { length: 100 }),
+  lastName: text('last_name', { length: 100 }),
+  email: text('email').unique().notNull(),
+  emailVerified: boolean('email_verified').default(false),
+  image: text('image'),
+  password: text('password'),
+  role: userRoleEnum('role').default('USER'),
+  stripeCustomerId: text('stripe_customer_id').unique(),
+  stripeSubscriptionId: text('stripe_subscription_id').unique(),
+  stripePriceId: text('stripe_price_id'),
+  stripeCurrentPeriodEnd: timestamp('stripe_current_period_end'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  tenantId: text('tenant_id'),
+  banned: boolean('banned').default(false),
+  banReason: text('ban_reason'),
+  twoFactorEnabled: boolean('two_factor_enabled').default(false),
+  lastLoginAt: timestamp('last_login_at'),
+  preferredLanguage: text('preferred_language').default('en'),
 });
-//======== Account ===========
-export const accounts = pgTable("account", {
+
+export const account = pgTable("account", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   provider: text("provider").notNull(),
   providerAccountId: text("provider_account_id").notNull(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
@@ -64,20 +64,20 @@ export const accounts = pgTable("account", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   tenantId: text("tenant_id"),
 });
-//========================User Account ============================
-export const userAccounts = pgTable("user_account", {
+
+export const userAccount = pgTable("user_account", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  userId: text("user_id").notNull().references(() => users.id),
-  accountId: text("account_id").notNull().references(() => accounts.id),
+  userId: text("user_id").notNull().references(() => user.id),
+  accountId: text("account_id").notNull().references(() => account.id),
   tenantId: text("tenant_id"),
   isPrimary: boolean("is_primary").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
-//====================Session ======================
-export const sessions = pgTable("session", {
+
+export const session = pgTable("session", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   sessionToken: text("session_token").notNull().unique(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   expires: timestamp("expires").notNull(),
   tenantId: text("tenant_id").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -87,8 +87,8 @@ export const sessions = pgTable("session", {
   activeOrganizationId: text("active_organization_id"),
   impersonatedBy: text("impersonated_by"),
 });
-//================Verification Token ============================
-export const verificationTokens = pgTable("verification_token", {
+
+export const verificationToken = pgTable("verification_token", {
   identifier: text("identifier").notNull(),
   token: text("token").notNull().unique(),
   expires: timestamp("expires").notNull(),
@@ -96,17 +96,17 @@ export const verificationTokens = pgTable("verification_token", {
 }, (vt) => ({
   compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
 }));
-//=====================twoFactor======================
+
 export const twoFactor = pgTable("two_factor", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   secret: text("secret").notNull(),
   backupCodes: json("backup_codes").notNull(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
-//==============Passkeys===================
-export const passkeys = pgTable("passkey", {
+
+export const passkey = pgTable("passkey", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name"),
   credentialID: text("credential_id").notNull().unique(),
@@ -115,12 +115,12 @@ export const passkeys = pgTable("passkey", {
   deviceType: deviceTypeEnum("device_type").notNull(),
   backedUp: boolean("backed_up").notNull(),
   transports: transportsEnum("transports").array(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
   lastUsedAt: timestamp("last_used_at"),
 });
-// ===============Organization =========================
-export const organizations = pgTable("organization", {
+
+export const organization = pgTable("organization", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
   slug: text("slug").unique().notNull(),
@@ -129,30 +129,30 @@ export const organizations = pgTable("organization", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   metadata: jsonb("metadata"),
   billingEmail: text("billing_email"),
-  ownerId: text("owner_id").references(() => users.id),
+  ownerId: text("owner_id").references(() => user.id),
 });
-//================Team ========================
-export const teams = pgTable("team", {
+
+export const team = pgTable("team", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: varchar("name", { length: 100 }).notNull(),
   description: text("description"),
-  ownerId: text("owner_id").notNull().references(() => users.id),
-  organizationId: text("organization_id").references(() => organizations.id),
+  ownerId: text("owner_id").notNull().references(() => user.id),
+  organizationId: text("organization_id").references(() => organization.id),
   isDeleted: boolean("is_deleted").default(false),
   tenantId: text("tenant_id").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   avatarUrl: text("avatar_url"),
 });
-//===============Team Members =================
-export const teamMembers = pgTable(
+
+export const teamMember = pgTable(
   'team_member',
   {
     id: text('id').primaryKey().$defaultFn(() => randomUUID()),
-    userId: text('user_id').notNull().references(() => users.id),
-    teamId: text('team_id').notNull().references(() => teams.id),
+    userId: text('user_id').notNull().references(() => user.id),
+    teamId: text('team_id').notNull().references(() => team.id),
     role: userRoleEnum('role').default('USER'),
-    invitedById: text('invited_by_id').references(() => users.id),
+    invitedById: text('invited_by_id').references(() => user.id),
     status: memberStatusEnum('status').notNull().default('PENDING'),
     joinedAt: timestamp('joined_at'),
     createdAt: timestamp('created_at').defaultNow(),
@@ -162,16 +162,16 @@ export const teamMembers = pgTable(
     uniqueIndex('unique_user_team_index').on(tm.userId, tm.teamId),
   ],
 );
-//==============Project =======================
-export const projects = pgTable("project", {
+
+export const project = pgTable("project", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
   description: text("description"),
   slug: text("slug").unique().notNull(),
   tenantId: text("tenant_id").notNull(),
-  ownerId: text("owner_id").notNull().references(() => users.id),
-  teamId: text("team_id").references(() => teams.id),
-  organizationId: text("organization_id").references(() => organizations.id),
+  ownerId: text("owner_id").notNull().references(() => user.id),
+  teamId: text("team_id").references(() => team.id),
+  organizationId: text("organization_id").references(() => organization.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   isActive: boolean("is_active").default(true),
@@ -179,10 +179,10 @@ export const projects = pgTable("project", {
   framework: text("framework"),
   productionBranch: text("production_branch").default("main"),
 });
-//=======================Project environment ===============
-export const projectEnvironments = pgTable("project_environment", {
+
+export const projectEnvironment = pgTable("project_environment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  projectId: text("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  projectId: text("project_id").notNull().references(() => project.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   type: envTypeEnum("type").notNull().default("DEVELOPMENT"),
   envVars: jsonb("env_vars").notNull(),
@@ -193,11 +193,11 @@ export const projectEnvironments = pgTable("project_environment", {
 }, (pe) => ({
   projectEnvIdx: index("project_env_idx").on(pe.projectId, pe.name),
 }));
-//===============Deployments =======================
-export const deployments = pgTable("deployment", {
+
+export const deployment = pgTable("deployment", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  projectId: text("project_id").notNull().references(() => projects.id),
-  environmentId: text("environment_id").references(() => projectEnvironments.id),
+  projectId: text("project_id").notNull().references(() => project.id),
+  environmentId: text("environment_id").references(() => projectEnvironment.id),
   status: deploymentStatusEnum("status").notNull().default("PENDING"),
   commitHash: text("commit_hash"),
   commitMessage: text("commit_message"),
@@ -206,7 +206,7 @@ export const deployments = pgTable("deployment", {
   buildLogs: text("build_logs"),
   deploymentUrl: text("deployment_url"),
   tenantId: text("tenant_id").notNull(),
-  createdById: text("created_by_id").references(() => users.id),
+  createdById: text("created_by_id").references(() => user.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   startedAt: timestamp("started_at"),
@@ -216,10 +216,9 @@ export const deployments = pgTable("deployment", {
   createdAtIdx: index("deployment_created_at_idx").on(d.createdAt),
 }));
 
-// ===========Deplyoyment log =======================
-export const deploymentLogs = pgTable("deployment_log", {
+export const deploymentLog = pgTable("deployment_log", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  deploymentId: text("deployment_id").notNull().references(() => deployments.id, { onDelete: "cascade" }),
+  deploymentId: text("deployment_id").notNull().references(() => deployment.id, { onDelete: "cascade" }),
   serviceName: varchar("service_name", { length: 100 }),
   containerName: varchar("container_name", { length: 100 }),
   daemon: varchar("daemon", { length: 100 }),
@@ -233,10 +232,10 @@ export const deploymentLogs = pgTable("deployment_log", {
   createdAtIdx: index("log_created_at_idx").on(dl.createdAt),
   requestIdIdx: index("log_request_id_idx").on(dl.requestId),
 }));
-//================Metric ====================
-export const metrics = pgTable("metric", {
+
+export const metric = pgTable("metric", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  deploymentId: text("deployment_id").notNull().references(() => deployments.id, { onDelete: "cascade" }),
+  deploymentId: text("deployment_id").notNull().references(() => deployment.id, { onDelete: "cascade" }),
   cpuUsage: real("cpu_usage").notNull(),
   memoryUsage: real("memory_usage").notNull(),
   diskUsage: real("disk_usage"),
@@ -250,8 +249,8 @@ export const metrics = pgTable("metric", {
 }, (m) => ({
   deploymentIdx: index("metric_deployment_idx").on(m.deploymentId),
 }));
-//==============Plan =======================
-export const plans = pgTable("plan", {
+
+export const plan = pgTable("plan", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull().unique(),
   description: text("description"),
@@ -272,13 +271,13 @@ export const plans = pgTable("plan", {
 }, (p) => ({
   priceIdx: index("plan_price_idx").on(p.price),
 }));
-// ================Subscription ================
-export const subscriptions = pgTable("subscription", {
+
+export const subscription = pgTable("subscription", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  planId: text("plan_id").notNull().references(() => plans.id),
-  userId: text("user_id").references(() => users.id),
-  teamId: text("team_id").references(() => teams.id),
-  organizationId: text("organization_id").references(() => organizations.id),
+  planId: text("plan_id").notNull().references(() => plan.id),
+  userId: text("user_id").references(() => user.id),
+  teamId: text("team_id").references(() => team.id),
+  organizationId: text("organization_id").references(() => organization.id),
   referenceId: text("reference_id").notNull(),
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
@@ -295,14 +294,14 @@ export const subscriptions = pgTable("subscription", {
   statusIdx: index("subscription_status_idx").on(s.status),
   stripeIdx: index("subscription_stripe_idx").on(s.stripeSubscriptionId),
 }));
-//=============Billing =====================
-export const billings = pgTable("billing", {
+
+export const billing = pgTable("billing", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  userId: text("user_id").notNull().references(() => users.id),
-  teamId: text("team_id").references(() => teams.id),
-  organizationId: text("organization_id").references(() => organizations.id),
-  subscriptionId: text("subscription_id").references(() => subscriptions.id),
-  planId: text("plan_id").notNull().references(() => plans.id),
+  userId: text("user_id").notNull().references(() => user.id),
+  teamId: text("team_id").references(() => team.id),
+  organizationId: text("organization_id").references(() => organization.id),
+  subscriptionId: text("subscription_id").references(() => subscription.id),
+  planId: text("plan_id").notNull().references(() => plan.id),
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
   currency: text("currency").default("USD").notNull(),
   billingPeriod: text("billing_period").default("monthly"),
@@ -317,14 +316,14 @@ export const billings = pgTable("billing", {
 }, (b) => ({
   userStatusIdx: index("billing_user_status_idx").on(b.userId, b.status),
 }));
-//===================ApiKeys =========================
-export const apiKeys = pgTable("api_key", {
+
+export const apiKey = pgTable("api_key", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   keyHash: text("key_hash").notNull(),
   name: varchar("name", { length: 100 }),
-  userId: text("user_id").references(() => users.id),
-  teamId: text("team_id").references(() => teams.id),
-  organizationId: text("organization_id").references(() => organizations.id),
+  userId: text("user_id").references(() => user.id),
+  teamId: text("team_id").references(() => team.id),
+  organizationId: text("organization_id").references(() => organization.id),
   scope: apiKeyScopeEnum("scope").notNull().default("READ"),
   lastUsedAt: timestamp("last_used_at"),
   expiresAt: timestamp("expires_at"),
@@ -335,14 +334,14 @@ export const apiKeys = pgTable("api_key", {
 }, (ak) => ({
   keyHashIdx: index("api_key_hash_idx").on(ak.keyHash),
 }));
-//====================WebHook =====================
-export const webhooks = pgTable("webhook", {
+
+export const webhook = pgTable("webhook", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
   url: text("url").notNull(),
-  projectId: text("project_id").references(() => projects.id),
-  teamId: text("team_id").references(() => teams.id),
-  organizationId: text("organization_id").references(() => organizations.id),
+  projectId: text("project_id").references(() => project.id),
+  teamId: text("team_id").references(() => team.id),
+  organizationId: text("organization_id").references(() => organization.id),
   secret: text("secret"),
   events: webhookEventTypeEnum("events").array().notNull(),
   isActive: boolean("is_active").default(true),
@@ -352,10 +351,10 @@ export const webhooks = pgTable("webhook", {
 }, (w) => ({
   urlIdx: index("webhook_url_idx").on(w.url),
 }));
-//=====================WebHook event =================
-export const webhookEvents = pgTable("webhook_event", {
+
+export const webhookEvent = pgTable("webhook_event", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  webhookId: text("webhook_id").references(() => webhooks.id),
+  webhookId: text("webhook_id").references(() => webhook.id),
   tenantId: text("tenant_id").notNull(),
   source: text("source").notNull(),
   eventType: webhookEventTypeEnum("event_type").notNull(),
@@ -372,13 +371,13 @@ export const webhookEvents = pgTable("webhook_event", {
   requestIdx: index("webhook_request_idx").on(we.uniqueRequestId),
   processedIdx: index("webhook_processed_idx").on(we.processed),
 }));
-//===========AuditLogs ============================
-export const auditLogs = pgTable("audit_log", {
+
+export const auditLog = pgTable("audit_log", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  teamId: text("team_id").references(() => teams.id),
-  organizationId: text("organization_id").references(() => organizations.id),
-  projectId: text("project_id").references(() => projects.id),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  teamId: text("team_id").references(() => team.id),
+  organizationId: text("organization_id").references(() => organization.id),
+  projectId: text("project_id").references(() => project.id),
   action: text("action").notNull(),
   resourceType: text("resource_type").notNull(),
   resourceId: text("resource_id"),
@@ -393,8 +392,8 @@ export const auditLogs = pgTable("audit_log", {
   tenantIdx: index("auditlog_tenant_idx").on(al.tenantId),
   resourceIdx: index("auditlog_resource_idx").on(al.resourceType, al.resourceId),
 }));
-//====================RateLimit ====================
-export const rateLimits = pgTable("rate_limit", {
+
+export const rateLimit = pgTable("rate_limit", {
   identifier: text("identifier").notNull().primaryKey(),
   tokens: integer("tokens").notNull(),
   lastRefill: timestamp("last_refill", { mode: "date" }).notNull(),
@@ -406,258 +405,257 @@ export const rateLimits = pgTable("rate_limit", {
 }));
 
 // ====================== RELATIONS ======================
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-  sessions: many(sessions),
-  teams: many(teamMembers),
-  ownedTeams: many(teams, { relationName: "teamOwner" }),
-  projects: many(projects),
-  teamMemberships:many(teamMembers, {relationName:"teamMemberUser"}),
-  invitedTeamMembers: many(teamMembers, {relationName:"teamMemberInvitedBy"}),
-  createdDeployments: many(deployments, { relationName: "deploymentCreator" }),
+export const userRelations = relations(user, ({ many }) => ({
+  accounts: many(account),
+  sessions: many(session),
   twoFactor: many(twoFactor),
-  passkeys: many(passkeys),
-  apiKeys: many(apiKeys),
-  auditLogs: many(auditLogs),
-  subscriptions: many(subscriptions),
-  billings: many(billings),
-  ownedOrganizations: many(organizations, { relationName: "organizationOwner" }),
+  passkeys: many(passkey),
+  teamMemberships: many(teamMember, { relationName: "teamMemberUser" }),
+  ownedTeams: many(team, { relationName: "teamOwner" }),
+  invitedMembers: many(teamMember, { relationName: "teamMemberInvitedBy" }),
+  ownedOrganizations: many(organization, { relationName: "organizationOwner" }),
+  projects: many(project),
+  deploymentsCreated: many(deployment, { relationName: "deploymentCreator" }),
+  apiKeys: many(apiKey),
+  auditLogs: many(auditLog),
+  subscriptions: many(subscription),
+  billings: many(billing),
 }));
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
   }),
 }));
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
   }),
 }));
 
 export const twoFactorRelations = relations(twoFactor, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [twoFactor.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
 
-export const passkeysRelations = relations(passkeys, ({ one }) => ({
-  user: one(users, {
-    fields: [passkeys.userId],
-    references: [users.id],
+export const passkeyRelations = relations(passkey, ({ one }) => ({
+  user: one(user, {
+    fields: [passkey.userId],
+    references: [user.id],
   }),
 }));
 
-export const organizationsRelations = relations(organizations, ({ many, one }) => ({
-  owner: one(users, {
-    fields: [organizations.ownerId],
-    references: [users.id],
+export const organizationRelations = relations(organization, ({ many, one }) => ({
+  owner: one(user, {
+    fields: [organization.ownerId],
+    references: [user.id],
     relationName: "organizationOwner"
   }),
-  teams: many(teams),
-  projects: many(projects),
-  subscriptions: many(subscriptions),
-  billings: many(billings),
-  apiKeys: many(apiKeys),
+  teams: many(team),
+  projects: many(project),
+  subscriptions: many(subscription),
+  billings: many(billing),
+  apiKeys: many(apiKey),
 }));
 
-export const teamsRelations = relations(teams, ({ many, one }) => ({
-  owner: one(users, {
-    fields: [teams.ownerId],
-    references: [users.id],
+export const teamRelations = relations(team, ({ many, one }) => ({
+  owner: one(user, {
+    fields: [team.ownerId],
+    references: [user.id],
     relationName: "teamOwner"
   }),
-  members: many(teamMembers),
-  projects: many(projects),
-  organization: one(organizations, {
-    fields: [teams.organizationId],
-    references: [organizations.id],
+  members: many(teamMember),
+  projects: many(project),
+  organization: one(organization, {
+    fields: [team.organizationId],
+    references: [organization.id],
   }),
-  apiKeys: many(apiKeys),
-  webhooks: many(webhooks),
-  subscriptions: many(subscriptions),
-  auditLogs: many(auditLogs),
+  apiKeys: many(apiKey),
+  webhooks: many(webhook),
+  subscriptions: many(subscription),
+  auditLogs: many(auditLog),
 }));
 
-export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
-  member: one(users, {
-    fields: [teamMembers.userId],
-    references: [users.id],
+export const teamMemberRelations = relations(teamMember, ({ one }) => ({
+  member: one(user, {
+    fields: [teamMember.userId],
+    references: [user.id],
     relationName: "teamMemberUser", 
   }),
-  team: one(teams, {
-    fields: [teamMembers.teamId],
-    references: [teams.id],
+  team: one(team, {
+    fields: [teamMember.teamId],
+    references: [team.id],
   }),
-  invitedBy: one(users, {
-    fields: [teamMembers.invitedById],
-    references: [users.id],
+  invitedBy: one(user, {
+    fields: [teamMember.invitedById],
+    references: [user.id],
     relationName: "teamMemberInvitedBy",
   }),
 }));
 
-export const projectsRelations = relations(projects, ({ many, one }) => ({
-  owner: one(users, {
-    fields: [projects.ownerId],
-    references: [users.id],
+export const projectRelations = relations(project, ({ many, one }) => ({
+  owner: one(user, {
+    fields: [project.ownerId],
+    references: [user.id],
   }),
-  team: one(teams, {
-    fields: [projects.teamId],
-    references: [teams.id],
+  team: one(team, {
+    fields: [project.teamId],
+    references: [team.id],
   }),
-  organization: one(organizations, {
-    fields: [projects.organizationId],
-    references: [organizations.id],
+  organization: one(organization, {
+    fields: [project.organizationId],
+    references: [organization.id],
   }),
-  deployments: many(deployments),
-  environments: many(projectEnvironments),
-  webhooks: many(webhooks),
+  deployments: many(deployment),
+  environments: many(projectEnvironment),
+  webhooks: many(webhook),
 }));
 
-export const projectEnvironmentsRelations = relations(projectEnvironments, ({ one }) => ({
-  project: one(projects, {
-    fields: [projectEnvironments.projectId],
-    references: [projects.id],
+export const projectEnvironmentRelations = relations(projectEnvironment, ({ one }) => ({
+  project: one(project, {
+    fields: [projectEnvironment.projectId],
+    references: [project.id],
   }),
 }));
 
-export const deploymentsRelations = relations(deployments, ({ one, many }) => ({
-  project: one(projects, {
-    fields: [deployments.projectId],
-    references: [projects.id],
+export const deploymentRelations = relations(deployment, ({ one, many }) => ({
+  project: one(project, {
+    fields: [deployment.projectId],
+    references: [project.id],
   }),
-  environment: one(projectEnvironments, {
-    fields: [deployments.environmentId],
-    references: [projectEnvironments.id],
+  environment: one(projectEnvironment, {
+    fields: [deployment.environmentId],
+    references: [projectEnvironment.id],
   }),
-  createdBy: one(users, {
-    fields: [deployments.createdById],
-    references: [users.id],
+  createdBy: one(user, {
+    fields: [deployment.createdById],
+    references: [user.id],
     relationName: "deploymentCreator"
   }),
-  logs: many(deploymentLogs),
-  metrics: many(metrics),
+  logs: many(deploymentLog),
+  metrics: many(metric),
 }));
 
-export const deploymentLogsRelations = relations(deploymentLogs, ({ one }) => ({
-  deployment: one(deployments, {
-    fields: [deploymentLogs.deploymentId],
-    references: [deployments.id],
-  }),
-}));
-
-export const metricsRelations = relations(metrics, ({ one }) => ({
-  deployment: one(deployments, {
-    fields: [metrics.deploymentId],
-    references: [deployments.id],
+export const deploymentLogRelations = relations(deploymentLog, ({ one }) => ({
+  deployment: one(deployment, {
+    fields: [deploymentLog.deploymentId],
+    references: [deployment.id],
   }),
 }));
 
-export const plansRelations = relations(plans, ({ many }) => ({
-  subscriptions: many(subscriptions),
-  billings: many(billings),
-}));
-
-export const subscriptionsRelations = relations(subscriptions, ({ one , many}) => ({
-  plan: one(plans, {
-    fields: [subscriptions.planId],
-    references: [plans.id],
-  }),
-  user: one(users, {
-    fields: [subscriptions.userId],
-    references: [users.id],
-  }),
-  team: one(teams, {
-    fields: [subscriptions.teamId],
-    references: [teams.id],
-  }),
-  organization: one(organizations, {
-    fields: [subscriptions.organizationId],
-    references: [organizations.id],
-  }),
-  billings: many(billings),
-}));
-
-export const billingsRelations = relations(billings, ({ one }) => ({
-  user: one(users, {
-    fields: [billings.userId],
-    references: [users.id],
-  }),
-  team: one(teams, {
-    fields: [billings.teamId],
-    references: [teams.id],
-  }),
-  organization: one(organizations, {
-    fields: [billings.organizationId],
-    references: [organizations.id],
-  }),
-  subscription: one(subscriptions, {
-    fields: [billings.subscriptionId],
-    references: [subscriptions.id],
-  }),
-  plan: one(plans, {
-    fields: [billings.planId],
-    references: [plans.id],
+export const metricRelations = relations(metric, ({ one }) => ({
+  deployment: one(deployment, {
+    fields: [metric.deploymentId],
+    references: [deployment.id],
   }),
 }));
 
-export const apiKeysRelations = relations(apiKeys, ({ one }) => ({
-  user: one(users, {
-    fields: [apiKeys.userId],
-    references: [users.id],
+export const planRelations = relations(plan, ({ many }) => ({
+  subscriptions: many(subscription),
+  billings: many(billing),
+}));
+
+export const subscriptionRelations = relations(subscription, ({ one, many }) => ({
+  plan: one(plan, {
+    fields: [subscription.planId],
+    references: [plan.id],
   }),
-  team: one(teams, {
-    fields: [apiKeys.teamId],
-    references: [teams.id],
+  user: one(user, {
+    fields: [subscription.userId],
+    references: [user.id],
   }),
-  organization: one(organizations, {
-    fields: [apiKeys.organizationId],
-    references: [organizations.id],
+  team: one(team, {
+    fields: [subscription.teamId],
+    references: [team.id],
+  }),
+  organization: one(organization, {
+    fields: [subscription.organizationId],
+    references: [organization.id],
+  }),
+  billings: many(billing),
+}));
+
+export const billingRelations = relations(billing, ({ one }) => ({
+  user: one(user, {
+    fields: [billing.userId],
+    references: [user.id],
+  }),
+  team: one(team, {
+    fields: [billing.teamId],
+    references: [team.id],
+  }),
+  organization: one(organization, {
+    fields: [billing.organizationId],
+    references: [organization.id],
+  }),
+  subscription: one(subscription, {
+    fields: [billing.subscriptionId],
+    references: [subscription.id],
+  }),
+  plan: one(plan, {
+    fields: [billing.planId],
+    references: [plan.id],
   }),
 }));
 
-export const webhooksRelations = relations(webhooks, ({ one, many }) => ({
-  project: one(projects, {
-    fields: [webhooks.projectId],
-    references: [projects.id],
+export const apiKeyRelations = relations(apiKey, ({ one }) => ({
+  user: one(user, {
+    fields: [apiKey.userId],
+    references: [user.id],
   }),
-  team: one(teams, {
-    fields: [webhooks.teamId],
-    references: [teams.id],
+  team: one(team, {
+    fields: [apiKey.teamId],
+    references: [team.id],
   }),
-  organization: one(organizations, {
-    fields: [webhooks.organizationId],
-    references: [organizations.id],
-  }),
-  events: many(webhookEvents),
-}));
-
-export const webhookEventsRelations = relations(webhookEvents, ({ one }) => ({
-  webhook: one(webhooks, {
-    fields: [webhookEvents.webhookId],
-    references: [webhooks.id],
+  organization: one(organization, {
+    fields: [apiKey.organizationId],
+    references: [organization.id],
   }),
 }));
 
-export const auditLogsRelations = relations(auditLogs, ({ one }) => ({
-  user: one(users, {
-    fields: [auditLogs.userId],
-    references: [users.id],
+export const webhookRelations = relations(webhook, ({ one, many }) => ({
+  project: one(project, {
+    fields: [webhook.projectId],
+    references: [project.id],
   }),
-  team: one(teams, {
-    fields: [auditLogs.teamId],
-    references: [teams.id],
+  team: one(team, {
+    fields: [webhook.teamId],
+    references: [team.id],
   }),
-  organization: one(organizations, {
-    fields: [auditLogs.organizationId],
-    references: [organizations.id],
+  organization: one(organization, {
+    fields: [webhook.organizationId],
+    references: [organization.id],
   }),
-  project: one(projects, {
-    fields: [auditLogs.projectId],
-    references: [projects.id],
+  events: many(webhookEvent),
+}));
+
+export const webhookEventRelations = relations(webhookEvent, ({ one }) => ({
+  webhook: one(webhook, {
+    fields: [webhookEvent.webhookId],
+    references: [webhook.id],
+  }),
+}));
+
+export const auditLogRelations = relations(auditLog, ({ one }) => ({
+  user: one(user, {
+    fields: [auditLog.userId],
+    references: [user.id],
+  }),
+  team: one(team, {
+    fields: [auditLog.teamId],
+    references: [team.id],
+  }),
+  organization: one(organization, {
+    fields: [auditLog.organizationId],
+    references: [organization.id],
+  }),
+  project: one(project, {
+    fields: [auditLog.projectId],
+    references: [project.id],
   }),
 }));

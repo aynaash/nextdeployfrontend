@@ -1,57 +1,61 @@
 import { NextResponse } from 'next/server';
-import { db } from '../../../lib/db.ts';
-import { users } from "../../../drizzle/schema.ts";
+import { db } from '@/lib/db';
+import { user } from "@/drizzle/schema/schema";
 import { eq } from 'drizzle-orm';
 
 export async function GET(request: Request) {
+  console.log('Incoming request to /api/users');
+  
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
-    
-    let query = db.select().from(users);
+    console.log('Request parameters:', { email });
+
+    console.log('Building query...');
+    let query = db.select().from(user);
     
     if (email) {
-      query = query.where(eq(users.email, email));
+      console.log('Adding email filter to query');
+      query = query.where(eq(user.email, email));
+    }
+
+    console.log('Executing query...');
+    const queryStart = Date.now();
+    
+    try {
+      const allUsers = await query;
+      console.log(`Query completed in ${Date.now() - queryStart}ms`);
+      console.log('Query results count:', allUsers.length);
+      
+      return NextResponse.json(allUsers);
+    } catch (queryError) {
+      console.error('Query execution failed:', {
+        error: queryError instanceof Error ? queryError.message : 'Unknown error',
+        stack: queryError instanceof Error ? queryError.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
+      
+      return NextResponse.json(
+        { 
+          error: 'Query execution failed',
+          details: queryError instanceof Error ? queryError.message : 'Unknown error'
+        },
+        { status: 500 }
+      );
     }
     
-    const allUsers = await query;
-    return NextResponse.json(allUsers);
+  } catch (error) {
+    console.error('Request handling failed:', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    });
     
-  } catch (error) {
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-
-    const { users: userData, accounts: accountData, sessions: sessionData,
-      verification_tokens: vtData, authenticators: authData, user_accounts: uaData } = body;
-
-    const [newUser] = await db.insert(users).values(userData).returning();
-    const [newAccount] = await db.insert(accounts).values(accountData).returning();
-    const [newSession] = await db.insert(sessions).values(sessionData).returning();
-    const [newVT] = await db.insert(verification_tokens).values(vtData).returning();
-    const [newAuth] = await db.insert(authenticators).values(authData).returning();
-    const [newUA] = await db.insert(user_accounts).values(uaData).returning();
-
-    return NextResponse.json({
-      user: newUser,
-      account: newAccount,
-      session: newSession,
-      verification_token: newVT,
-      authenticator: newAuth,
-      user_account: newUA
-    }, { status: 201 });
-
-  } catch (error) {
-    console.error('Error inserting data:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
