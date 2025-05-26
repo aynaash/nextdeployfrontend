@@ -5,15 +5,16 @@ import { constructMetadata } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
-
+import {auth} from "../../../../a"
 export const metadata = constructMetadata({
   title: "Orders – SaaS Starter",
   description: "Check and manage your latest orders.",
 });
 
 export default async function OrdersPage() {
-  // const user = await getCurrentUser();
-  // if (!user || user.role !== "ADMIN") redirect("/login");
+   const user = await getCurrentUser();
+  console.log("The user at order admin page is:", user)
+   if (!user || user.role !== "admin") redirect("/login");
 
   return (
     <>

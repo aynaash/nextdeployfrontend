@@ -10,15 +10,15 @@ CREATE TYPE "public"."user_role" AS ENUM('admin', 'user', 'super_admin');--> sta
 CREATE TYPE "public"."webhook_event_type" AS ENUM('deployment_started', 'deployment_success', 'deployment_failed', 'billing_updated', 'team_invite', 'project_created');--> statement-breakpoint
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
-	"provider" text NOT NULL,
-	"provider_account_id" text NOT NULL,
 	"user_id" text NOT NULL,
-	"access_token" text,
-	"refresh_token" text,
-	"id_token" text,
+	"accountId" text NOT NULL,
+	"providerId" text NOT NULL,
+	"accessToken" text,
+	"refreshToken" text,
 	"access_token_expires_at" timestamp,
 	"refresh_token_expires_at" timestamp,
 	"scope" text,
+	"id_token" text,
 	"token_type" text,
 	"session_state" text,
 	"password" text,
@@ -217,17 +217,17 @@ CREATE TABLE "rate_limit" (
 --> statement-breakpoint
 CREATE TABLE "session" (
 	"id" text PRIMARY KEY NOT NULL,
-	"session_token" text NOT NULL,
 	"user_id" text NOT NULL,
-	"expires" timestamp NOT NULL,
-	"tenant_id" text NOT NULL,
+	"token" text NOT NULL,
+	"expires_at" timestamp NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"ip_address" text,
 	"user_agent" text,
+	"tenant_id" text,
 	"active_organization_id" text,
 	"impersonated_by" text,
-	CONSTRAINT "session_session_token_unique" UNIQUE("session_token")
+	CONSTRAINT "session_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
 CREATE TABLE "subscription" (
@@ -287,19 +287,19 @@ CREATE TABLE "two_factor" (
 CREATE TABLE "user" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
+	"email" text NOT NULL,
+	"email_verified" boolean DEFAULT false NOT NULL,
+	"image" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"first_name" text,
 	"last_name" text,
-	"email" text NOT NULL,
-	"email_verified" boolean DEFAULT false,
-	"image" text,
 	"password" text,
 	"role" "user_role" DEFAULT 'user',
 	"stripe_customer_id" text,
 	"stripe_subscription_id" text,
 	"stripe_price_id" text,
 	"stripe_current_period_end" timestamp,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"tenant_id" text,
 	"banned" boolean DEFAULT false,
 	"ban_reason" text,
@@ -323,6 +323,7 @@ CREATE TABLE "user_account" (
 CREATE TABLE "verification_token" (
 	"identifier" text NOT NULL,
 	"token" text NOT NULL,
+	"value" text,
 	"expires" timestamp NOT NULL,
 	"tenant_id" text,
 	CONSTRAINT "verification_token_identifier_token_pk" PRIMARY KEY("identifier","token"),

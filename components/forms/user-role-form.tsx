@@ -1,15 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { updateUserRole, type FormData } from "@/actions/update-user-role";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, UserRole } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-
-import { userRoleSchema } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -29,38 +24,83 @@ import {
 import { SectionColumns } from "@/components/dashboard/section-columns";
 import { Icons } from "@/components/shared/icons";
 
-interface UserNameFormProps {
+// 1. Define UserRole enum and types
+enum UserRole {
+  USER = "user",
+  ADMIN = "admin",
+  SUPER_ADMIN = "super_admin",
+}
+
+const userRoleLabels: Record<UserRole, string> = {
+  [UserRole.USER]: "User",
+  [UserRole.ADMIN]: "Admin",
+  [UserRole.SUPER_ADMIN]: "Super Admin",
+};
+
+type User = {
+  id: string;
+  role: UserRole;
+};
+
+type FormData = {
+  role: UserRole;
+};
+
+// 2. Create validation schema
+const userRoleSchema = z.object({
+  role: z.nativeEnum(UserRole),
+});
+
+// 3. Mock update functions (replace with your actual implementations)
+const updateUserRole = async (userId: string, data: FormData) => {
+  // Your actual implementation here
+  return { status: "success" };
+};
+
+const useSession = () => {
+  // Your actual session implementation here
+  return {
+    update: async () => {},
+  };
+};
+
+// 4. Main component
+interface UserRoleFormProps {
   user: Pick<User, "id" | "role">;
 }
 
-export function UserRoleForm({ user }: UserNameFormProps) {
+export function UserRoleForm({ user }: UserRoleFormProps) {
   const { update } = useSession();
   const [updated, setUpdated] = useState(false);
   const [isPending, startTransition] = useTransition();
   const updateUserRoleWithId = updateUserRole.bind(null, user.id);
 
   const roles = Object.values(UserRole);
-  const [role, setRole] = useState(user.role);
+  const [role, setRole] = useState<UserRole>(user.role);
 
   const form = useForm<FormData>({
     resolver: zodResolver(userRoleSchema),
-    values: {
-      role: role,
+    defaultValues: {
+      role: user.role,
     },
   });
 
   const onSubmit = (data: z.infer<typeof userRoleSchema>) => {
     startTransition(async () => {
-      const { status } = await updateUserRoleWithId(data);
+      try {
+        const { status } = await updateUserRoleWithId(data);
 
-      if (status !== "success") {
-        toast.error("Something went wrong.", {
-          description: "Your role was not updated. Please try again.",
-        });
-      } else {
-        await update();
-        setUpdated(false);
-        toast.success("Your role has been updated.");
+        if (status !== "success") {
+          toast.error("Something went wrong.", {
+            description: "Your role was not updated. Please try again.",
+          });
+        } else {
+          await update();
+          setUpdated(false);
+          toast.success("Your role has been updated.");
+        }
+      } catch (error) {
+        toast.error("An unexpected error occurred.");
       }
     });
   };
@@ -80,13 +120,12 @@ export function UserRoleForm({ user }: UserNameFormProps) {
                 <FormItem className="w-full space-y-0">
                   <FormLabel className="sr-only">Role</FormLabel>
                   <Select
-                    // TODO:(FIX) Option value not update. Use useState for the moment
                     onValueChange={(value: UserRole) => {
                       setUpdated(user.role !== value);
                       setRole(value);
-                      // field.onChange;
+                      field.onChange(value);
                     }}
-                    name={field.name}
+                    value={field.value}
                     defaultValue={user.role}
                   >
                     <FormControl>
@@ -95,9 +134,9 @@ export function UserRoleForm({ user }: UserNameFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {roles.map((role) => (
-                        <SelectItem key={role} value={role.toString()}>
-                          {role}
+                      {roles.map((roleValue) => (
+                        <SelectItem key={roleValue} value={roleValue}>
+                          {userRoleLabels[roleValue]}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -108,7 +147,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
             />
             <Button
               type="submit"
-              variant={updated ? "default" : "disable"}
+              variant={updated ? "default" : "secondary"}
               disabled={isPending || !updated}
               className="w-[67px] shrink-0 px-0 sm:w-[130px]"
             >

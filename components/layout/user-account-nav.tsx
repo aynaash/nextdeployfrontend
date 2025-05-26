@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LayoutDashboard, Lock, LogOut, Settings } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "../../auth-client.ts";
 import { Drawer } from "vaul";
 
 import { useMediaQuery } from "@/hooks/use-media-query";

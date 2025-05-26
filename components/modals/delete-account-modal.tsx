@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "../../auth-client.ts";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";

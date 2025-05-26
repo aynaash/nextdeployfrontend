@@ -1,10 +1,8 @@
 "use client";
-
 import { useContext } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { useSession } from "../../auth-client.ts";
-
+import {authClient} from "../../auth-client.ts"
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
@@ -24,8 +22,7 @@ interface NavBarProps {
 
 export function NavBar({ scroll = false }: NavBarProps) {
   const scrolled = useScroll(50);
-  const { data: session, status } = useSession();
-  console.log("The session data from navbar looks like this:",session)
+  const { data: session, status } = authClient.useSession();
   const { setShowSignInModal } = useContext(ModalContext);
 
   const selectedLayout = useSelectedLayoutSegment();
@@ -100,7 +97,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
 
           {session ? (
             <Link
-              href={session.user.role === "ADMIN" ? "/admin" : "/dashboard"}
+              href={session.user.role === "admin" ? "/admin" : "/dashboard"}
               className="hidden md:block"
             >
               <Button

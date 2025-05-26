@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "../drizzle/index.ts";
-import { users } from "../drizzle/schema.ts";
+import { db } from "../lib/db.ts";
+import { user } from "../drizzle/schema/schema.ts";
 import { stripe } from "@/lib/stripe";
 import { pricingData } from "@/config/subscriptions";
 import { UserSubscriptionPlan } from "types";

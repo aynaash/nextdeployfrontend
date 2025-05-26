@@ -1,9 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useSession } from "../../auth-client.ts";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -31,114 +29,101 @@ const projects: ProjectType[] = [
     color: "bg-blue-500",
   },
 ];
-const selected: ProjectType = projects[1];
 
-export default function ProjectSwitcher({
-  large = false,
-}: {
-  large?: boolean;
-}) {
+export default function ProjectSwitcher({ large = false }: { large?: boolean }) {
   const { data: session, status } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectType>(projects[1]);
 
   if (!projects || status === "loading") {
     return <ProjectSwitcherPlaceholder />;
   }
 
   return (
-    <div>
-      <Popover open={openPopover} onOpenChange={setOpenPopover}>
-        <PopoverTrigger>
-          <Button
-            className="h-8 px-2"
-            variant={openPopover ? "secondary" : "ghost"}
-            onClick={() => setOpenPopover(!openPopover)}
-          >
-            <div className="flex items-center space-x-3 pr-2">
-              <div
-                className={cn(
-                  "size-3 shrink-0 rounded-full",
-                  selected.color,
-                )}
-              />
-              <div className="flex items-center space-x-3">
-                <span
-                  className={cn(
-                    "inline-block truncate text-sm font-medium xl:max-w-[120px]",
-                    large ? "w-full" : "max-w-[80px]",
-                  )}
-                >
-                  {selected.slug}
-                </span>
-              </div>
-            </div>
-            <ChevronsUpDown
-              className="size-4 text-muted-foreground"
-              aria-hidden="true"
+    <Popover open={openPopover} onOpenChange={setOpenPopover}>
+      <PopoverTrigger asChild>
+        <Button
+          variant={openPopover ? "secondary" : "ghost"}
+          className="h-8 px-2"
+          role="combobox"
+          aria-expanded={openPopover}
+        >
+          <div className="flex items-center space-x-3 pr-2">
+            <div
+              className={cn("size-3 shrink-0 rounded-full", selectedProject.color)}
             />
+            <div className="flex items-center space-x-3">
+              <span
+                className={cn(
+                  "inline-block truncate text-sm font-medium",
+                  large ? "w-full xl:max-w-[180px]" : "max-w-[120px]"
+                )}
+              >
+                {selectedProject.title}
+              </span>
+            </div>
+          </div>
+          <ChevronsUpDown className="size-4 text-muted-foreground" aria-hidden="true" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-[200px] p-2">
+        <div className="flex flex-col gap-1">
+          {projects.map((project) => (
+            <ProjectItem
+              key={project.slug}
+              project={project}
+              isSelected={selectedProject.slug === project.slug}
+              onSelect={() => {
+                setSelectedProject(project);
+                setOpenPopover(false);
+              }}
+            />
+          ))}
+          <Button
+            variant="outline"
+            className="relative h-9 justify-center gap-2 p-2"
+            onClick={() => {
+              setOpenPopover(false);
+              // Handle new project creation here
+            }}
+          >
+            <Plus size={18} className="absolute left-2.5" />
+            <span className="flex-1">New Project</span>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" className="max-w-60 p-2">
-          <ProjectList
-            selected={selected}
-            projects={projects}
-            setOpenPopover={setOpenPopover}
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 
-function ProjectList({
-  selected,
-  projects,
-  setOpenPopover,
+function ProjectItem({
+  project,
+  isSelected,
+  onSelect,
 }: {
-  selected: ProjectType;
-  projects: ProjectType[];
-  setOpenPopover: (open: boolean) => void;
+  project: ProjectType;
+  isSelected: boolean;
+  onSelect: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      {projects.map(({ slug, color }) => (
-        <Link
-          key={slug}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "relative flex h-9 items-center gap-3 p-3 text-muted-foreground hover:text-foreground",
-          )}
-          href="#"
-          onClick={() => setOpenPopover(false)}
-        >
-          <div className={cn("size-3 shrink-0 rounded-full", color)} />
-          <span
-            className={`flex-1 truncate text-sm ${
-              selected.slug === slug
-                ? "font-medium text-foreground"
-                : "font-normal"
-            }`}
-          >
-            {slug}
-          </span>
-          {selected.slug === slug && (
-            <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-foreground">
-              <Check size={18} aria-hidden="true" />
-            </span>
-          )}
-        </Link>
-      ))}
-      <Button
-        variant="outline"
-        className="relative flex h-9 items-center justify-center gap-2 p-2"
-        onClick={() => {
-          setOpenPopover(false);
-        }}
+    <Button
+      variant="ghost"
+      className="relative h-9 justify-start gap-3 p-3 text-muted-foreground hover:text-foreground"
+      onClick={onSelect}
+    >
+      <div className={cn("size-3 shrink-0 rounded-full", project.color)} />
+      <span
+        className={cn(
+          "flex-1 truncate text-sm",
+          isSelected && "font-medium text-foreground"
+        )}
       >
-        <Plus size={18} className="absolute left-2.5 top-2" />
-        <span className="flex-1 truncate text-center">New Project</span>
-      </Button>
-    </div>
+        {project.title}
+      </span>
+      {isSelected && (
+        <Check size={18} className="absolute right-3 text-foreground" />
+      )}
+    </Button>
   );
 }
 

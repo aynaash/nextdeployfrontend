@@ -22,49 +22,63 @@ export const transportsEnum = pgEnum("transports", ["usb", "nfc", "ble", "intern
 export const logLevelEnum = pgEnum("log_level", ["debug", "info", "warn", "error", "fatal"]);
 
 // ====================== TABLES ======================
-export const user = pgTable('user', {
-  id: text('id').primaryKey().$defaultFn(() => randomUUID()),
-  name: text('name'),
-  firstName: text('first_name', { length: 100 }),
-  lastName: text('last_name', { length: 100 }),
-  email: text('email').unique().notNull(),
-  emailVerified: boolean('email_verified').default(false),
-  image: text('image'),
-  password: text('password'),
-  role: userRoleEnum('role').default('user'),
-  stripeCustomerId: text('stripe_customer_id').unique(),
-  stripeSubscriptionId: text('stripe_subscription_id').unique(),
-  stripePriceId: text('stripe_price_id'),
-  stripeCurrentPeriodEnd: timestamp('stripe_current_period_end'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-  tenantId: text('tenant_id'),
-  banned: boolean('banned').default(false),
-  banReason: text('ban_reason'),
-  twoFactorEnabled: boolean('two_factor_enabled').default(false),
-  lastLoginAt: timestamp('last_login_at'),
-  preferredLanguage: text('preferred_language').default('en'),
-});
 
-export const account = pgTable("account", {
+export const user = pgTable("user", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  provider: text("provider").notNull(),
-  providerAccountId: text("provider_account_id").notNull(),
-  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-  accessToken: text("access_token"),
-  refreshToken: text("refresh_token"),
-  idToken: text("id_token"),
-  accessTokenExpiresAt: timestamp("access_token_expires_at"),
-  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  scope: text("scope"),
-  tokenType: text("token_type"),
-  sessionState: text("session_state"),
-  password: text("password"),
+
+  // Core BetterAuth fields
+  name: text("name"),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").notNull().default(false),
+  image: text("image"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
+  // Your additional fields
+  firstName: text("first_name", { length: 100 }),
+  lastName: text("last_name", { length: 100 }),
+  password: text("password"),
+  role: userRoleEnum("role").default("user"),
+
+  stripeCustomerId: text("stripe_customer_id").unique(),
+  stripeSubscriptionId: text("stripe_subscription_id").unique(),
+  stripePriceId: text("stripe_price_id"),
+  stripeCurrentPeriodEnd: timestamp("stripe_current_period_end"),
+
+  tenantId: text("tenant_id"),
+  banned: boolean("banned").default(false),
+  banReason: text("ban_reason"),
+  twoFactorEnabled: boolean("two_factor_enabled").default(false),
+  lastLoginAt: timestamp("last_login_at"),
+  preferredLanguage: text("preferred_language").default("en"),
+});
+export const account = pgTable("account", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+
+  accountId: text("accountId").notNull(),        // ✅ Required by BetterAuth
+  providerId: text("providerId").notNull(),      // ✅ Required by BetterAuth
+
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+
+  scope: text("scope"),
+  idToken: text("id_token"),
+  tokenType: text("token_type"),
+  sessionState: text("session_state"),
+
+  password: text("password"), // Used for email/password login
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
   tenantId: text("tenant_id"),
 });
-
 export const userAccount = pgTable("user_account", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   userId: text("user_id").notNull().references(() => user.id),
@@ -76,14 +90,20 @@ export const userAccount = pgTable("user_account", {
 
 export const session = pgTable("session", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-  sessionToken: text("session_token").notNull().unique(),
+
+  // Core BetterAuth required fields
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-  expires: timestamp("expires").notNull(),
-  tenantId: text("tenant_id").notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
+  // Optional metadata
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
+
+  // Custom business-specific extensions (optional, just keep them clean)
+  tenantId: text("tenant_id"), // optional; BetterAuth doesn't care
   activeOrganizationId: text("active_organization_id"),
   impersonatedBy: text("impersonated_by"),
 });
@@ -91,6 +111,7 @@ export const session = pgTable("session", {
 export const verificationToken = pgTable("verification_token", {
   identifier: text("identifier").notNull(),
   token: text("token").notNull().unique(),
+  value: text("value"),
   expires: timestamp("expires").notNull(),
   tenantId: text("tenant_id"),
 }, (vt) => ({

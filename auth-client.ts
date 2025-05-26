@@ -61,6 +61,7 @@ export const {
   organization,
   useListOrganizations,
   useActiveOrganization,
+  getSession,
 } = authClient;
 
 // Optional session change listener (useful for syncing global state)

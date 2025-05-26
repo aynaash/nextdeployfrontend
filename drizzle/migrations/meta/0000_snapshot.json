@@ -1,5 +1,5 @@
 {
-  "id": "1d8a5f64-ad8c-472d-a951-5c4ab2185513",
+  "id": "6d81a01f-4983-429d-80a8-28ab11fa46b4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,38 +14,32 @@
           "primaryKey": true,
           "notNull": true
         },
-        "provider": {
-          "name": "provider",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider_account_id": {
-          "name": "provider_account_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "user_id": {
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "access_token": {
-          "name": "access_token",
+        "accountId": {
+          "name": "accountId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerId": {
+          "name": "providerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accessToken": {
+          "name": "accessToken",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "refresh_token": {
-          "name": "refresh_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "id_token": {
-          "name": "id_token",
+        "refreshToken": {
+          "name": "refreshToken",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -64,6 +58,12 @@
         },
         "scope": {
           "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_token": {
+          "name": "id_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1814,27 +1814,21 @@
           "primaryKey": true,
           "notNull": true
         },
-        "session_token": {
-          "name": "session_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "user_id": {
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "expires": {
-          "name": "expires",
-          "type": "timestamp",
+        "token": {
+          "name": "token",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "tenant_id": {
-          "name": "tenant_id",
-          "type": "text",
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         },
@@ -1860,6 +1854,12 @@
         },
         "user_agent": {
           "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tenant_id": {
+          "name": "tenant_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1895,11 +1895,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "session_session_token_unique": {
-          "name": "session_session_token_unique",
+        "session_token_unique": {
+          "name": "session_token_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "session_token"
+            "token"
           ]
         }
       },
@@ -2431,18 +2431,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "first_name": {
-          "name": "first_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_name": {
-          "name": "last_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "email": {
           "name": "email",
           "type": "text",
@@ -2453,11 +2441,37 @@
           "name": "email_verified",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         },
         "image": {
           "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -2499,20 +2513,6 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         },
         "tenant_id": {
           "name": "tenant_id",
@@ -2677,6 +2677,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "expires": {
           "name": "expires",
