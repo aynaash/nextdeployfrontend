@@ -17,8 +17,8 @@ export async function getUserSubscriptionPlan(
       stripeCustomerId: users.stripeCustomerId,
       stripePriceId: users.stripePriceId,
     })
-    .from(users)
-    .where(eq(users.id, userId))
+    .from(user)
+    .where(eq(user.id, userId))
     .limit(1);
 
   if (!user) throw new Error("User not found");

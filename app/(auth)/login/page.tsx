@@ -192,7 +192,7 @@ const SignInPage = () => {
                 </div>
                 <div className="flex justify-end">
                   <Link
-                    href="/auth/reset-password"
+                    href="/reset-password"
                     className="text-sm text-emerald-400 hover:underline"
                   >
                     Forgot password?
@@ -209,7 +209,7 @@ const SignInPage = () => {
               </form>
               <div className="mt-4 text-center text-sm text-slate-400">
                 Don't have an account?{" "}
-                <Link href="/auth/signup" className="text-emerald-400 hover:underline">
+                <Link href="/register" className="text-emerald-400 hover:underline">
                   Sign up
                 </Link>
               </div>

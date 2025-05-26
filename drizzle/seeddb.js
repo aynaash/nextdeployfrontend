@@ -1,8 +1,9 @@
+
 import { drizzle as drizzleNode } from 'drizzle-orm/node-postgres';
 import { drizzle as drizzleNeon } from 'drizzle-orm/neon-http';
 import { Pool } from 'pg';
 import { neon } from '@neondatabase/serverless';
-import * as schema from '../drizzle/schema/schema';
+import * as schema from './schema/schema';
 import { isEdgeRuntime } from './runtime';
 
 // Type-safe exports

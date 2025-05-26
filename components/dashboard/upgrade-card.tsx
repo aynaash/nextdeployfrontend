@@ -13,7 +13,7 @@ export function UpgradeCard() {
       <CardHeader className="md:max-xl:px-4">
         <CardTitle>Upgrade to Pro</CardTitle>
         <CardDescription>
-          Unlock all features and get unlimited access to our support team.
+          Unlock all features and get a nice NextDeploy experience.
         </CardDescription>
       </CardHeader>
       <CardContent className="md:max-xl:px-4">

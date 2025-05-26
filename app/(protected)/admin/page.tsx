@@ -7,7 +7,7 @@ import InfoCard from "@/components/dashboard/info-card";
 import TransactionsList from "@/components/dashboard/transactions-list";
 
 export const metadata = constructMetadata({
-  title: "Admin – SaaS Starter",
+  title: "Admin – NextDeploy",
   description: "Admin page for only admin management.",
 });
 
@@ -19,7 +19,7 @@ export default async function AdminPage() {
     <>
       <DashboardHeader
         heading="Admin Panel"
-        text="Access only for users with ADMIN role."
+        text="Access only for users with admin role."
       />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">

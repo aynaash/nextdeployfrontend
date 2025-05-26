@@ -224,7 +224,7 @@ const RegisterPage = () => {
               </form>
               <div className="mt-4 text-center text-sm text-slate-400">
                 Already have an account?{" "}
-                <Link href="/auth/signin" className="text-emerald-400 hover:underline">
+                <Link href="/login" className="text-emerald-400 hover:underline">
                   Sign in
                 </Link>
               </div>

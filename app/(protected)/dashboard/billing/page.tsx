@@ -9,7 +9,7 @@ import { BillingInfo } from "@/components/pricing/billing-info";
 import { Icons } from "@/components/shared/icons";
 
 export const metadata = constructMetadata({
-  title: "Billing – SaaS Starter",
+  title: "Billing – NextDeploy",
   description: "Manage billing and your subscription plan.",
 });
 
@@ -17,8 +17,9 @@ export default async function BillingPage() {
   const user = await getCurrentUser();
 
   let userSubscriptionPlan;
-  if (user && user.id && user.role === "USER") {
-    userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
+  if (user && user.id && user.role === "user") {
+    //userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
+    console.log("User sub found")
   } else {
     redirect("/login");
   }

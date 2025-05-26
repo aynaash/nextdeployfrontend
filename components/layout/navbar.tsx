@@ -2,7 +2,7 @@
 import { useContext } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import {authClient} from "../../auth-client.ts"
+import { authClient } from "../../auth-client.ts";
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
@@ -15,6 +15,7 @@ import { ModalContext } from "@/components/modals/providers";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 import Logo from "../../components/logo.tsx";
+
 interface NavBarProps {
   scroll?: boolean;
   large?: boolean;
@@ -47,8 +48,8 @@ export function NavBar({ scroll = false }: NavBarProps) {
       >
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-1.5">
-        <Logo/>
-                      </Link>
+            <Logo />
+          </Link>
 
           {links && links.length > 0 ? (
             <nav className="hidden gap-6 md:flex">
@@ -73,7 +74,6 @@ export function NavBar({ scroll = false }: NavBarProps) {
         </div>
 
         <div className="flex items-center space-x-3">
-          {/* right header for docs */}
           {documentation ? (
             <div className="hidden flex-1 items-center space-x-4 sm:justify-end lg:flex">
               <div className="hidden lg:flex lg:grow-0">
@@ -95,7 +95,10 @@ export function NavBar({ scroll = false }: NavBarProps) {
             </div>
           ) : null}
 
-          {session ? (
+          {status === "loading" ? (
+            // Show skeleton while loading
+            <Skeleton className="hidden h-9 w-28 rounded-full lg:flex" />
+          ) : session ? (
             <Link
               href={session.user.role === "admin" ? "/admin" : "/dashboard"}
               className="hidden md:block"
@@ -109,7 +112,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
                 <span>Dashboard</span>
               </Button>
             </Link>
-          ) : status === "unauthenticated" ? (
+          ) : (
             <Button
               className="hidden gap-2 px-5 md:flex"
               variant="default"
@@ -120,8 +123,6 @@ export function NavBar({ scroll = false }: NavBarProps) {
               <span>Sign In</span>
               <Icons.arrowRight className="size-4" />
             </Button>
-          ) : (
-            <Skeleton className="hidden h-9 w-28 rounded-full lg:flex" />
           )}
         </div>
       </MaxWidthWrapper>

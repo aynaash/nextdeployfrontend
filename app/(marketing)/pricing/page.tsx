@@ -7,7 +7,6 @@ import { constructMetadata } from "@/lib/utils";
 import { ComparePlans } from "@/components/pricing/compare-plans";
 import { PricingCards } from "@/components/pricing/pricing-cards";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
-
 export const metadata = constructMetadata({
   title: "Pricing – NextDeploy",
   description: "Explore our subscription plans.",
@@ -15,14 +14,10 @@ export const metadata = constructMetadata({
 
 export default async function PricingPage() {
   // Get session from auth client
-  const { session, error } = await client.getSession();
-  if (error) console.error("Auth session error:", error);
-
   // Get user info - but don't block if not logged in
   const user = await getCurrentUser();
-
   // Admin redirect section (only if user is logged in and is admin)
-  if (user?.role === "ADMIN") {
+  if (user?.role === "admin") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
         <h1 className="text-5xl font-bold">Seriously?</h1>
