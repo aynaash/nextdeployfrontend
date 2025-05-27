@@ -1,4 +1,5 @@
-const betterauth = {
+const betterauth = 
+Auth api looks like this: {
   signInSocial: [AsyncFunction (anonymous)] {
     path: '/sign-in/social',
     options: {
