@@ -1,7 +1,5 @@
 const { withContentlayer } = require("next-contentlayer2");
 
-import("./env.mjs");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     webpack: (config, { webpack }) => {
@@ -11,7 +9,6 @@ const nextConfig = {
         return config;
     },
     reactStrictMode: true,
-    swcMinify: true,
     images: {
         remotePatterns: [
             {
@@ -27,9 +24,6 @@ const nextConfig = {
                 hostname: "randomuser.me",
             },
         ],
-    },
-    experimental: {
-        serverComponentsExternalPackages: ["@prisma/client"],
     },
 };
 

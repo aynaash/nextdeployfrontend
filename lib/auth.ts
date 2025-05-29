@@ -6,7 +6,6 @@ import { resend } from "../lib/auth/authUtils.ts";
 import { reactInvitationEmail, reactResetPasswordEmail } from "../lib/auth/authUtils";
 import { Stripe } from "stripe";
 import { stripe } from "@better-auth/stripe";
-
 // Plugins
 import {
   admin,
@@ -18,7 +17,6 @@ import {
   nextCookies,
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
-
 // Environment variables with validation
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
 console.log("BETTER_AUTH_URL:",BETTER_AUTH_URL)
@@ -34,7 +32,6 @@ console.log("STRIPE_WEBHOOK_SECRET:", STRIPE_WEBHOOK_SECRET)
 if (!BETTER_AUTH_URL || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET) {
   throw new Error("Missing required environment variables");
 }
-
 // Pricing IDs
 const PRICING_IDS = {
   professional: {

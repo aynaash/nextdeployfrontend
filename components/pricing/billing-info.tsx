@@ -1,24 +1,43 @@
 import Link from "next/link";
 import * as React from "react";
 
-import { CustomerPortalButton } from "@/components/forms/customer-portal-button";
-import { buttonVariants } from "@/components/ui/button";
+// import { CustomerPortalButton } from "@/components/forms/customer-portal-button";
+// import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn, formatDate } from "@/lib/utils";
-import { UserSubscriptionPlan } from "types";
+// import { cn, formatDate } from "@/lib/utils";
+// import { UserSubscriptionPlan } from "types";
 
-interface BillingInfoProps extends React.HTMLAttributes<HTMLFormElement> {
-  userSubscriptionPlan: UserSubscriptionPlan;
-}
+// interface BillingInfoProps extends React.HTMLAttributes<HTMLFormElement> {
+//   userSubscriptionPlan: UserSubscriptionPlan;
+// }
 
-export function BillingInfo({ userSubscriptionPlan }: BillingInfoProps) {
+export function BillingInfo() {
+  // TODO: Billing information will be added in the future
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Billing Information</CardTitle>
+        <CardDescription>
+          Billing management will be available soon.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">
+          We are currently working on our billing system. Check back later to view
+          and manage your subscription details.
+        </p>
+      </CardContent>
+    </Card>
+  );
+
+  /*
+  // Original code commented out for future use:
   const {
     title,
     description,
@@ -57,4 +76,5 @@ export function BillingInfo({ userSubscriptionPlan }: BillingInfoProps) {
       </CardFooter>
     </Card>
   );
+  */
 }

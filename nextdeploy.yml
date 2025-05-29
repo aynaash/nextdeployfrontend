@@ -1,5 +1,43 @@
-app_name: nextdeploy
-port: 3000
-deploy:
-  ssh_host: 
-  docker_compose_path: 
+version: "1.0"
+app:
+    name: hawo
+    port: 3000
+    environment: prod
+    domain: hawo.co
+repository:
+    url: git@github.com/user/git.com
+    branch: main
+    autoDeploy: true
+    webhookSecret: sjkdjksjkjk43034994jkfjerjkrerjk
+docker:
+    image: hersi/app
+    registry: docker.io
+    build:
+        context: .
+        dockerfile: Dockerfile
+        noCache: true
+        args:
+            NODE_ENV: production
+    push: true
+deployment:
+    server:
+        host: 122.23.3.4
+        user: hersi
+        sshKey: ~/.ssh/key
+        useSudo: true
+    container:
+        name: hersi
+        restart: always
+        ports:
+            - 80:3000
+database:
+    type: postgres
+    host: local
+    port: ""
+    username: hersi
+    password: "50307812112"
+    name: ehrsi
+monitoring:
+    enabled: true
+    type: grafana
+    endpoint: end.emd

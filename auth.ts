@@ -19,7 +19,6 @@ import {
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
 
-// Environment variables with validation
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
 const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
 const TEST_EMAIL = process.env.TEST_EMAIL;

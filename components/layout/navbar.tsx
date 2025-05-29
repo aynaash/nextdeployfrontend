@@ -1,7 +1,6 @@
 "use client";
-import { useContext } from "react";
 import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegment, useRouter } from "next/navigation";
 import { authClient } from "../../auth-client.ts";
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
@@ -11,7 +10,6 @@ import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DocsSearch } from "@/components/docs/search";
-import { ModalContext } from "@/components/modals/providers";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 import Logo from "../../components/logo.tsx";
@@ -24,7 +22,7 @@ interface NavBarProps {
 export function NavBar({ scroll = false }: NavBarProps) {
   const scrolled = useScroll(50);
   const { data: session, status } = authClient.useSession();
-  const { setShowSignInModal } = useContext(ModalContext);
+  const router = useRouter();
 
   const selectedLayout = useSelectedLayoutSegment();
   const documentation = selectedLayout === "docs";
@@ -96,7 +94,6 @@ export function NavBar({ scroll = false }: NavBarProps) {
           ) : null}
 
           {status === "loading" ? (
-            // Show skeleton while loading
             <Skeleton className="hidden h-9 w-28 rounded-full lg:flex" />
           ) : session ? (
             <Link
@@ -118,7 +115,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
               variant="default"
               size="sm"
               rounded="full"
-              onClick={() => setShowSignInModal(true)}
+              onClick={() => router.push("/login")}
             >
               <span>Sign In</span>
               <Icons.arrowRight className="size-4" />

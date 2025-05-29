@@ -1,0 +1,98 @@
+
+# nextdeploy.yml
+version: "1.0"
+
+app:
+  name: example-app
+  environment: production
+  domain: app.example.com
+  port: 3000
+
+repository:
+  url: git@github.com:username/example-app.git
+  branch: main
+  auto_deploy: true
+  webhook_secret: your_webhook_secret  # Optional if using webhook triggers
+
+docker:
+  build:
+    context: .
+    dockerfile: Dockerfile
+    args:
+      NODE_ENV: production
+    no_cache: false
+  image: username/example-app:latest
+  registry: ghcr.io  # or docker.io, or ECR/GCR if you support it
+  push: true  # Push after successful build
+
+deployment:
+  server:
+    host: 192.0.2.123
+    user: deploy
+    ssh_key: ~/.ssh/nextdeploy_rsa
+    use_sudo: false
+  container:
+    name: example-app
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "80:3000"
+    healthcheck:
+      path: /api/health
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+database:
+  type: postgres
+  host: 192.0.2.124
+  port: 5432
+  username: dbuser
+  password: secret
+  name: exampledb
+  migrate_on_deploy: true
+
+logging:
+  enabled: true
+  provider: nextdeploy  # internal daemon-based logger
+  stream_logs: true
+  log_path: /var/log/containers/example-app.log
+
+monitoring:
+  enabled: true
+  cpu_threshold: 80
+  memory_threshold: 75
+  disk_threshold: 90
+  alert:
+    email: ops@example.com
+    slack_webhook: https://hooks.slack.com/services/...
+    notify_on:
+      - crash
+      - healthcheck_failed
+      - high_cpu
+      - high_memory
+
+backup:
+  enabled: true
+  frequency: daily
+  retention_days: 7
+  storage:
+    provider: s3
+    bucket: nextdeploy-backups
+    region: us-east-1
+    access_key: YOUR_ACCESS_KEY
+    secret_key: YOUR_SECRET_KEY
+
+ssl:
+  enabled: true
+  provider: letsencrypt
+  email: admin@example.com
+  auto_renew: true
+
+webhook:
+  on_success:
+    - curl -X POST https://your-api.com/deploy/success
+  on_failure:
+    - curl -X POST https://your-api.com/deploy/failure
