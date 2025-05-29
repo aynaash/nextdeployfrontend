@@ -1,8 +1,8 @@
 import { db } from '@/lib/db';
-import { auditLogs } from '@/lib/schema';
+import { auditLogs } from "../../../drizzle/schema/schema.ts";
 import { eq, and, or, like, gte, lte } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { ApiError, handleApiError, successResponse } from '@/lib/api-utils';
+import { ApiError, handleApiError, successResponse } from ;
 import { requireAdmin } from '@/lib/auth';
 
 export async function GET(request: Request) {
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     const offset = parseInt(searchParams.get('offset') || '0');
     
     let whereClause = [];
-    
+     e
     if (action) {
       whereClause.push(like(auditLogs.action, `%${action}%`));
     }
