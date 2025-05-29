@@ -1,7 +1,6 @@
 import { pgTable, text, timestamp, json, jsonb, boolean, integer, varchar, real, numeric, pgEnum, index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 import { randomUUID } from "crypto";
 import { relations } from 'drizzle-orm';
-
 // ====================== ENUMS ======================
 export const userRoleEnum = pgEnum("user_role", ["admin", "user", "super_admin"]);
 export const deploymentStatusEnum = pgEnum("deployment_status", ["pending", "building", "deploying", "running", "success", "failed", "cancelled"]);

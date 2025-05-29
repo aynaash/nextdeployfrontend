@@ -1,6 +1,5 @@
-
 app_name: nextdeploy
 port: 3000
 deploy:
-  ssh_host: 94934934
+  ssh_host: 
   docker_compose_path: 

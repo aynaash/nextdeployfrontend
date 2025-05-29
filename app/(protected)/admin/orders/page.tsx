@@ -10,7 +10,7 @@ export const metadata = constructMetadata({
   title: "Orders – NextDeploy",
   description: "Check and manage your latest orders.",
 });
-
+// TODO: change this ui to fit for NextDeploy
 export default async function OrdersPage() {
    const user = await getCurrentUser();
   console.log("The user at order admin page is:", user)

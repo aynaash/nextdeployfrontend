@@ -11,7 +11,7 @@ export const metadata = constructMetadata({
   title: "Pricing – NextDeploy",
   description: "Explore our subscription plans.",
 });
-
+//TODO: Change this ui to one that just tell user that pricing support will be added in the future
 export default async function PricingPage() {
   // Get session from auth client
   // Get user info - but don't block if not logged in

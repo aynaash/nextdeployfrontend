@@ -1,16 +1,13 @@
-
 # ---------- STAGE 1: Build ----------
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy dependency files
 COPY package.json ./
 COPY yarn.lock ./
 
 RUN yarn install
 
-# Copy rest of the project files
 COPY . .
 
 RUN yarn run build
