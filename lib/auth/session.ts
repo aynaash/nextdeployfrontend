@@ -17,6 +17,6 @@ export const getCurrentUser = cache(async () => {
     return undefined;
   }
 
-  console.info("Authenticated user:", session.user);
+  console.info("Authenticated user at session.ts is:", session.user);
   return session.user;
 });

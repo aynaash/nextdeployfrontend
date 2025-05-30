@@ -1,47 +1,47 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { allPosts } from "@/.contentlayer/generated";
-import { BLOG_CATEGORIES } from "@/config/blog";
-import { constructMetadata, getBlurDataURL } from "@/lib/utils";
-import { BlogCard } from "@/components/content/blog-card";
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+import { allPosts } from "@/.contentlayer/generated"
+import { BLOG_CATEGORIES } from "@/config/blog"
+import { constructMetadata, getBlurDataURL } from "@/lib/utils"
+import { BlogCard } from "@/components/content/blog-card"
+
+type tParams = Promise<{ slug: string }>
 
 export async function generateStaticParams() {
   return BLOG_CATEGORIES.map((category) => ({
     slug: category.slug,
-  }));
+  }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: tParams
 }): Promise<Metadata | undefined> {
-  const category = BLOG_CATEGORIES.find(
-    (category) => category.slug === params.slug,
-  );
+  const { slug }: { slug: string } = await params
+  const category = BLOG_CATEGORIES.find((category) => category.slug === slug)
   if (!category) {
-    return;
+    return
   }
 
-  const { title, description } = category;
+  const { title, description } = category
 
   return constructMetadata({
     title: `${title} Posts – Next SaaS Starter`,
     description,
-  });
+  })
 }
 
 export default async function BlogCategory({
   params,
 }: {
-  params: {
-    slug: string;
-  };
+  params: tParams
 }) {
-  const category = BLOG_CATEGORIES.find((ctg) => ctg.slug === params.slug);
+  const { slug }: { slug: string } = await params
+  const category = BLOG_CATEGORIES.find((ctg) => ctg.slug === slug)
 
   if (!category) {
-    notFound();
+    notFound()
   }
 
   const articles = await Promise.all(
@@ -52,7 +52,7 @@ export default async function BlogCategory({
         ...post,
         blurDataURL: await getBlurDataURL(post.image),
       })),
-  );
+  )
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -60,5 +60,5 @@ export default async function BlogCategory({
         <BlogCard key={article._id} data={article} priority={idx <= 2} />
       ))}
     </div>
-  );
+  )
 }

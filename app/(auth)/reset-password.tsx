@@ -1,6 +1,5 @@
 
 "use client"
-
 import { Suspense } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -19,13 +18,13 @@ export default function ResetPasswordPage() {
         initial={{ x: -10, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="absolute top-4 left-4 md:top-8 md:left-8 z-10"
+        className="absolute left-4 top-4 z-10 md:left-8 md:top-8"
       >
         <Link
           href="/login"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "flex items-center gap-2 backdrop-blur-sm bg-white/10 text-white hover:bg-white/20",
+            "flex items-center gap-2 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
           )}
         >
           <ArrowLeft className="size-4" />
@@ -35,24 +34,28 @@ export default function ResetPasswordPage() {
 
       <div className="container flex h-screen items-center justify-center">
         <motion.div
-          className="w-full max-w-md bg-slate-900/80 text-white rounded-xl shadow-lg p-6 sm:p-8 backdrop-blur"
+          className="w-full max-w-md rounded-xl bg-slate-900/80 p-6 text-white shadow-lg backdrop-blur sm:p-8"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-          <div className="flex justify-center mb-6">
+          <div className="mb-6 flex justify-center">
             <Logo />
           </div>
 
-          <div className="text-center space-y-3 mb-6">
+          <div className="mb-6 space-y-3 text-center">
             <h1 className="text-3xl font-bold tracking-tight">Reset Password</h1>
             <p className="text-sm text-slate-400">
-              Enter your email address and we'll send you a link to reset your password
+              Enter your email address and we will ll send you a link to reset your password
             </p>
           </div>
 
           <Suspense
-            fallback={<div className="h-[150px] flex items-center justify-center animate-pulse">Loading...</div>}
+            fallback={
+              <div className="flex h-[150px] animate-pulse items-center justify-center">
+                Loading...
+              </div>
+            }
           >
             <ResetPasswordForm />
           </Suspense>

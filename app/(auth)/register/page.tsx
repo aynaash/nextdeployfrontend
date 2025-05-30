@@ -8,18 +8,19 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-import { authClient as client } from "../../../auth-client.ts";
+import { authClient as client } from "../../../auth-client";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { ArrowLeft, Check } from "lucide-react";
-import Logo from "../../../components/logo.tsx";
-import { cn } from "@/lib/utils";
+import Logo from "../../../components/logo";
+import { cn } from "../../../lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
 const RegisterSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   name: z.string().min(1, "Name is required"),
+ role: z.enum(["user", "admin"]),
 });
 
 type RegisterForm = z.infer<typeof RegisterSchema>;
@@ -63,6 +64,12 @@ const RegisterPage = () => {
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+      role: "user",
+    },
   });
   const router = useRouter();
 
@@ -76,7 +83,7 @@ const RegisterPage = () => {
           email: data.email,
           password: data.password,
           name: data.name,
-          role: "USER",
+          role: data?.role || "user", 
         },
         {
           fetchOptions: {},
@@ -106,13 +113,13 @@ const RegisterPage = () => {
         initial={{ x: -10, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="absolute top-4 left-4 md:top-8 md:left-8 z-10"
+        className="absolute left-4 top-4 z-10 md:left-8 md:top-8"
       >
         <Link
           href="/"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "flex items-center gap-2 backdrop-blur-sm bg-white/10 text-white hover:bg-white/20"
+            "flex items-center gap-2 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
           )}
         >
           <ArrowLeft className="size-4" />
@@ -123,7 +130,7 @@ const RegisterPage = () => {
       <div className="container grid h-screen items-center justify-center lg:grid-cols-2 lg:px-0">
         {/* Left Features */}
         <motion.div
-          className="hidden lg:flex h-full flex-col items-center justify-center p-8 bg-slate-950 relative overflow-hidden"
+          className="relative hidden h-full flex-col items-center justify-center overflow-hidden bg-slate-950 p-8 lg:flex"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ type: "spring", stiffness: 120, damping: 30 }}
@@ -131,21 +138,21 @@ const RegisterPage = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.2),transparent_50%),radial-gradient(circle_at_70%_70%,rgba(16,185,129,0.2),transparent_50%)]" />
 
           <div className="relative z-10 max-w-md space-y-6">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="mb-6 flex items-center gap-3">
               <Logo />
             </div>
 
-            <h2 className="text-3xl font-bold text-white leading-tight">
+            <h2 className="text-3xl font-bold leading-tight text-white">
               Streamline your <span className="text-emerald-400">deployment workflow</span>
             </h2>
 
             <div className="space-y-4">
               {features.map(([title, desc], i) => (
                 <div className="flex items-start gap-4" key={i}>
-                  <Check className="size-5 text-emerald-400 mt-1" />
+                  <Check className="mt-1 size-5 text-emerald-400" />
                   <div>
-                    <h4 className="text-white font-medium">{title}</h4>
-                    <p className="text-slate-300 text-sm mt-1">{desc}</p>
+                    <h4 className="font-medium text-white">{title}</h4>
+                    <p className="mt-1 text-sm text-slate-300">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -161,10 +168,10 @@ const RegisterPage = () => {
           variants={containerVariants}
         >
           <motion.div
-            className="w-full max-w-md bg-slate-900/80 text-white rounded-xl shadow-lg p-6 sm:p-8 backdrop-blur"
+            className="w-full max-w-md rounded-xl bg-slate-900/80 p-6 text-white shadow-lg backdrop-blur sm:p-8"
             variants={itemVariants}
           >
-            <motion.div className="text-center space-y-3 mb-6" variants={itemVariants}>
+            <motion.div className="mb-6 space-y-3 text-center" variants={itemVariants}>
               <h1 className="text-3xl font-bold tracking-tight">Create an account</h1>
               <p className="text-sm text-slate-400">Enter your details to get started</p>
             </motion.div>
@@ -179,7 +186,7 @@ const RegisterPage = () => {
                     {...register("name")}
                     placeholder="Enter your name"
                     disabled={isLoading}
-                    className="bg-slate-800 border-slate-700 text-white"
+                    className="border-slate-700 bg-slate-800 text-white"
                   />
                   {errors.name && (
                     <p className="text-sm text-red-400">{errors.name.message}</p>
@@ -193,7 +200,7 @@ const RegisterPage = () => {
                     {...register("email")}
                     placeholder="Enter your email"
                     disabled={isLoading}
-                    className="bg-slate-800 border-slate-700 text-white"
+                    className="border-slate-700 bg-slate-800 text-white"
                   />
                   {errors.email && (
                     <p className="text-sm text-red-400">{errors.email.message}</p>
@@ -207,7 +214,7 @@ const RegisterPage = () => {
                     {...register("password")}
                     placeholder="Enter your password"
                     disabled={isLoading}
-                    className="bg-slate-800 border-slate-700 text-white"
+                    className="border-slate-700 bg-slate-800 text-white"
                   />
                   {errors.password && (
                     <p className="text-sm text-red-400">{errors.password.message}</p>
@@ -216,7 +223,7 @@ const RegisterPage = () => {
                 <Button
                   type="submit"
                   variant="default"
-                  className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700"
+                  className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700"
                   disabled={isLoading}
                 >
                   {isLoading ? "Creating account..." : "Create account"}

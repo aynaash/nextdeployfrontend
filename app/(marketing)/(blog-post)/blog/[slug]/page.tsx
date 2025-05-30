@@ -1,78 +1,68 @@
-import { notFound } from "next/navigation";
-import { allPosts } from "@/.contentlayer/generated";
+import { notFound } from "next/navigation"
+import { allPosts } from "@/.contentlayer/generated"
 
-import { Mdx } from "@/components/content/mdx-components";
+import { Mdx } from "@/components/content/mdx-components"
 
-import "@/styles/mdx.css";
+import "@/styles/mdx.css"
 
-import { Metadata } from "next";
-import Link from "next/link";
+import type { Metadata } from "next"
+import Link from "next/link"
 
-import { BLOG_CATEGORIES } from "@/config/blog";
-import { getTableOfContents } from "@/lib/toc";
-import {
-  cn,
-  constructMetadata,
-  formatDate,
-  getBlurDataURL,
-  placeholderBlurhash,
-} from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import Author from "@/components/content/author";
-import BlurImage from "@/components/shared/blur-image";
-import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
-import { DashboardTableOfContents } from "@/components/shared/toc";
+import { BLOG_CATEGORIES } from "@/config/blog"
+import { getTableOfContents } from "@/lib/toc"
+import { cn, constructMetadata, formatDate, getBlurDataURL, placeholderBlurhash } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import Author from "@/components/content/author"
+import BlurImage from "@/components/shared/blur-image"
+import MaxWidthWrapper from "@/components/shared/max-width-wrapper"
+import { DashboardTableOfContents } from "@/components/shared/toc"
+
+type tParams = Promise<{ slug: string }>
 
 export async function generateStaticParams() {
   return allPosts.map((post) => ({
     slug: post.slugAsParams,
-  }));
+  }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: tParams
 }): Promise<Metadata | undefined> {
-  const post = allPosts.find((post) => post.slugAsParams === params.slug);
+  const { slug }: { slug: string } = await params
+  const post = allPosts.find((post) => post.slugAsParams === slug)
   if (!post) {
-    return;
+    return
   }
 
-  const { title, description, image } = post;
+  const { title, description, image } = post
 
   return constructMetadata({
-    title: `${title} – SaaS Starter`,
+    title: `${title} – SaaS Starter`,
     description: description,
     image,
-  });
+  })
 }
 
 export default async function PostPage({
   params,
 }: {
-  params: {
-    slug: string;
-  };
+  params: tParams
 }) {
-  const post = allPosts.find((post) => post.slugAsParams === params.slug);
+  const { slug }: { slug: string } = await params
+  const post = allPosts.find((post) => post.slugAsParams === slug)
 
   if (!post) {
-    notFound();
+    notFound()
   }
 
-  const category = BLOG_CATEGORIES.find(
-    (category) => category.slug === post.categories[0],
-  )!;
+  const category = BLOG_CATEGORIES.find((category) => category.slug === post.categories[0])!
 
   const relatedArticles =
-    (post.related &&
-      post.related.map(
-        (slug) => allPosts.find((post) => post.slugAsParams === slug)!,
-      )) ||
-    [];
+    (post.related && post.related.map((slug) => allPosts.find((post) => post.slugAsParams === slug)!)) || []
 
-  const toc = await getTableOfContents(post.body.raw);
+  const toc = await getTableOfContents(post.body.raw)
 
   const [thumbnailBlurhash, images] = await Promise.all([
     getBlurDataURL(post.image),
@@ -82,7 +72,7 @@ export default async function PostPage({
         blurDataURL: await getBlurDataURL(src),
       })),
     ),
-  ]);
+  ])
 
   return (
     <>
@@ -102,19 +92,12 @@ export default async function PostPage({
             >
               {category.title}
             </Link>
-            <time
-              dateTime={post.date}
-              className="text-sm font-medium text-muted-foreground"
-            >
+            <time dateTime={post.date} className="text-sm font-medium text-muted-foreground">
               {formatDate(post.date)}
             </time>
           </div>
-          <h1 className="font-heading text-3xl text-foreground sm:text-4xl">
-            {post.title}
-          </h1>
-          <p className="text-base text-muted-foreground md:text-lg">
-            {post.description}
-          </p>
+          <h1 className="font-heading text-3xl text-foreground sm:text-4xl">{post.title}</h1>
+          <p className="text-base text-muted-foreground md:text-lg">{post.description}</p>
           <div className="flex flex-nowrap items-center space-x-5 pt-1 md:space-x-8">
             {post.authors.map((author) => (
               <Author username={author} key={post._id + author} />
@@ -153,9 +136,7 @@ export default async function PostPage({
       <MaxWidthWrapper>
         {relatedArticles.length > 0 && (
           <div className="flex flex-col space-y-4 pb-16">
-            <p className="font-heading text-2xl text-foreground">
-              More Articles
-            </p>
+            <p className="font-heading text-2xl text-foreground">More Articles</p>
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:gap-6">
               {relatedArticles.map((post) => (
@@ -164,15 +145,9 @@ export default async function PostPage({
                   href={post.slug}
                   className="flex flex-col space-y-2 rounded-xl border p-5 transition-colors duration-300 hover:bg-muted/80"
                 >
-                  <h3 className="font-heading text-xl text-foreground">
-                    {post.title}
-                  </h3>
-                  <p className="line-clamp-2 text-[15px] text-muted-foreground">
-                    {post.description}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {formatDate(post.date)}
-                  </p>
+                  <h3 className="font-heading text-xl text-foreground">{post.title}</h3>
+                  <p className="line-clamp-2 text-[15px] text-muted-foreground">{post.description}</p>
+                  <p className="text-sm text-muted-foreground">{formatDate(post.date)}</p>
                 </Link>
               ))}
             </div>
@@ -180,5 +155,5 @@ export default async function PostPage({
         )}
       </MaxWidthWrapper>
     </>
-  );
+  )
 }

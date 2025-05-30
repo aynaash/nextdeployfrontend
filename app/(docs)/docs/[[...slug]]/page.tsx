@@ -1,71 +1,60 @@
-import { notFound } from "next/navigation";
-import { allDocs } from "@/.contentlayer/generated";
+import { notFound } from "next/navigation"
+import { allDocs } from "@/.contentlayer/generated"
+import { getTableOfContents } from "@/lib/toc"
+import { Mdx } from "@/components/content/mdx-components"
+import { DocsPageHeader } from "@/components/docs/page-header"
+import { DocsPager } from "@/components/docs/pager"
+import { DashboardTableOfContents } from "@/components/shared/toc"
+import "@/styles/mdx.css"
+import type { Metadata } from "next"
+import { constructMetadata, getBlurDataURL } from "@/lib/utils"
 
-import { getTableOfContents } from "@/lib/toc";
-import { Mdx } from "@/components/content/mdx-components";
-import { DocsPageHeader } from "@/components/docs/page-header";
-import { DocsPager } from "@/components/docs/pager";
-import { DashboardTableOfContents } from "@/components/shared/toc";
+type tParams = Promise<{ slug?: string[] }>
 
-import "@/styles/mdx.css";
-
-import { Metadata } from "next";
-
-import { constructMetadata, getBlurDataURL } from "@/lib/utils";
-
-interface DocPageProps {
-  params: {
-    slug: string[];
-  };
-}
-
-async function getDocFromParams(params) {
-  const slug = params.slug?.join("/") || "";
-  const doc = allDocs.find((doc) => doc.slugAsParams === slug);
-
-  if (!doc) return null;
-
-  return doc;
+async function getDocFromParams(slug?: string[]) {
+  const slugPath = slug?.join("/") || ""
+  const doc = allDocs.find((doc) => doc.slugAsParams === slugPath)
+  return doc ?? null
 }
 
 export async function generateMetadata({
   params,
-}: DocPageProps): Promise<Metadata> {
-  const doc = await getDocFromParams(params);
-
-  if (!doc) return {};
-
-  const { title, description } = doc;
-
+}: {
+  params: tParams
+}): Promise<Metadata> {
+  const { slug }: { slug?: string[] } = await params
+  const doc = await getDocFromParams(slug)
+  if (!doc) return {}
   return constructMetadata({
-    title: `${title} – SaaS Starter`,
-    description: description,
-  });
+    title: `${doc.title} – SaaS Starter`,
+    description: doc.description,
+  })
 }
 
-export async function generateStaticParams(): Promise<
-  DocPageProps["params"][]
-> {
+export async function generateStaticParams() {
   return allDocs.map((doc) => ({
     slug: doc.slugAsParams.split("/"),
-  }));
+  }))
 }
 
-export default async function DocPage({ params }: DocPageProps) {
-  const doc = await getDocFromParams(params);
+export default async function DocPage({
+  params,
+}: {
+  params: tParams
+}) {
+  const { slug }: { slug?: string[] } = await params
+  const doc = await getDocFromParams(slug)
+  if (!doc) notFound()
 
-  if (!doc) {
-    notFound();
-  }
-
-  const toc = await getTableOfContents(doc.body.raw);
-
-  const images = await Promise.all(
-    doc.images.map(async (src: string) => ({
-      src,
-      blurDataURL: await getBlurDataURL(src),
-    })),
-  );
+  const [toc, images] = await Promise.all([
+    getTableOfContents(doc.body.raw),
+    Promise.all(
+      doc.images.map(async (src: string) => ({
+        src,
+        blurDataURL: await getBlurDataURL(src),
+      })),
+    ),
+  ])
 
   return (
     <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
@@ -83,5 +72,5 @@ export default async function DocPage({ params }: DocPageProps) {
         </div>
       </div>
     </main>
-  );
+  )
 }

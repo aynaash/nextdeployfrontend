@@ -2,7 +2,7 @@
 export const NextDeployLogo = () => {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex size-12 items-center justify-center rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 shadow-md overflow-hidden">
+      <div className="flex size-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 shadow-md">
         <svg
           viewBox="0 0 550 100"
           xmlns="http://www.w3.org/2000/svg"
@@ -51,8 +51,8 @@ export const NextDeployLogo = () => {
       </div>
       <div className="flex flex-col">
         <span className="text-xl font-bold text-slate-800 dark:text-slate-100">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-yellow-500">Next</span>
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-blue-600">Deploy</span>
+          <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">Next</span>
+          <span className="bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-text text-transparent">Deploy</span>
         </span>
         <span className="text-xs text-slate-500 dark:text-slate-400">Ship fast and safe</span>
       </div>

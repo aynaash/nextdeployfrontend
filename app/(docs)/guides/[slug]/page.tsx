@@ -1,59 +1,61 @@
-import { allGuides } from "@/.contentlayer/generated";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { allGuides } from "@/.contentlayer/generated"
+import Link from "next/link"
+import { notFound } from "next/navigation"
 
-import { Mdx } from "@/components/content/mdx-components";
-import { DocsPageHeader } from "@/components/docs/page-header";
-import { Icons } from "@/components/shared/icons";
-import { DashboardTableOfContents } from "@/components/shared/toc";
-import { getTableOfContents } from "@/lib/toc";
+import { Mdx } from "@/components/content/mdx-components"
+import { DocsPageHeader } from "@/components/docs/page-header"
+import { Icons } from "@/components/shared/icons"
+import { DashboardTableOfContents } from "@/components/shared/toc"
+import { getTableOfContents } from "@/lib/toc"
 
-import "@/styles/mdx.css";
+import "@/styles/mdx.css"
 
-import { Metadata } from "next";
+import type { Metadata } from "next"
 
-import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
-import { buttonVariants } from "@/components/ui/button";
-import { cn, constructMetadata } from "@/lib/utils";
+import MaxWidthWrapper from "@/components/shared/max-width-wrapper"
+import { buttonVariants } from "@/components/ui/button"
+import { cn, constructMetadata } from "@/lib/utils"
+
+type tParams = Promise<{ slug: string }>
 
 export async function generateStaticParams() {
   return allGuides.map((guide) => ({
     slug: guide.slugAsParams,
-  }));
+  }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: tParams
 }): Promise<Metadata | undefined> {
-  const guide = allGuides.find((guide) => guide.slugAsParams === params.slug);
+  const { slug }: { slug: string } = await params
+  const guide = allGuides.find((guide) => guide.slugAsParams === slug)
   if (!guide) {
-    return;
+    return
   }
 
-  const { title, description } = guide;
+  const { title, description } = guide
 
   return constructMetadata({
-    title: `${title} – SaaS Starter`,
+    title: `${title} – SaaS Starter`,
     description: description,
-  });
+  })
 }
 
 export default async function GuidePage({
   params,
 }: {
-  params: {
-    slug: string;
-  };
+  params: tParams
 }) {
-  const guide = allGuides.find((guide) => guide.slugAsParams === params.slug);
+  const { slug }: { slug: string } = await params
+  const guide = allGuides.find((guide) => guide.slugAsParams === slug)
 
   if (!guide) {
-    notFound();
+    notFound()
   }
 
-  const toc = await getTableOfContents(guide.body.raw);
+  const toc = await getTableOfContents(guide.body.raw)
 
   return (
     <MaxWidthWrapper>
@@ -63,10 +65,7 @@ export default async function GuidePage({
           <Mdx code={guide.body.code} />
           <hr className="my-4" />
           <div className="flex justify-center py-6 lg:py-10">
-            <Link
-              href="/guides"
-              className={cn(buttonVariants({ variant: "ghost" }))}
-            >
+            <Link href="/guides" className={cn(buttonVariants({ variant: "ghost" }))}>
               <Icons.chevronLeft className="mr-2 size-4" />
               See all guides
             </Link>
@@ -79,5 +78,5 @@ export default async function GuidePage({
         </div>
       </div>
     </MaxWidthWrapper>
-  );
+  )
 }
