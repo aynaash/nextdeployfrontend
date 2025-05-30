@@ -42,11 +42,11 @@ export const authClient = createAuthClient({
     }),
   ],
   fetchOptions: {
-    onError(error) {
+    onError(error:{error?: { status?: number; message?: string }}) {
       if (error?.error?.status === 429) {
         toast.error("Too many requests. Please try again later.");
       } else {
-        toast.error(error?.message ?? "Something went wrong.");
+        toast.error(error?.error?.message ?? "Something went wrong.");
       }
     },
   },
