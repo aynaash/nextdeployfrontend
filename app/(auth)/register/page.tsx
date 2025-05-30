@@ -83,11 +83,7 @@ const RegisterPage = () => {
           email: data.email,
           password: data.password,
           name: data.name,
-          role: data?.role || "user", 
         },
-        {
-          fetchOptions: {},
-        }
       );
 
       console.log("Signup response:", signResponse);

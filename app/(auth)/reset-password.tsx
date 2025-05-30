@@ -5,7 +5,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowLeft } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { ResetPasswordForm } from "@/components/forms/reset-password-form"
 import Logo from "../../components/logo"
