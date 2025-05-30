@@ -1,11 +1,17 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { allPosts } from "@/.contentlayer/generated"
-import { BLOG_CATEGORIES } from "@/config/blog"
-import { constructMetadata, getBlurDataURL } from "@/lib/utils"
+import { allPosts } from "../../../../../.contentlayer/generated"
+import { BLOG_CATEGORIES } from "../../../../../config/blog"
+import { constructMetadata, getBlurDataURL } from "../../../../../lib/utils"
 import { BlogCard } from "@/components/content/blog-card"
 
-type tParams = Promise<{ slug: string }>
+// Extract the CategorySlug type from BLOG_CATEGORIES
+type CategorySlug = (typeof BLOG_CATEGORIES)[number]["slug"]
+
+// Type guard to verify valid category slugs
+function isValidCategory(slug: string): slug is CategorySlug {
+  return BLOG_CATEGORIES.some((category) => category.slug === slug)
+}
 
 export async function generateStaticParams() {
   return BLOG_CATEGORIES.map((category) => ({
@@ -16,37 +22,49 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: tParams
-}): Promise<Metadata | undefined> {
-  const { slug }: { slug: string } = await params
-  const category = BLOG_CATEGORIES.find((category) => category.slug === slug)
-  if (!category) {
-    return
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const resolvedParams = await params
+  const slug = resolvedParams.slug
+
+  if (!isValidCategory(slug)) {
+    return {}
   }
 
-  const { title, description } = category
+  const category = BLOG_CATEGORIES.find((c) => c.slug === slug)
+  if (!category) {
+    return {}
+  }
 
   return constructMetadata({
-    title: `${title} Posts – Next SaaS Starter`,
-    description,
+    title: `${category.title} Posts – NextDeploy`,
+    description: category.description,
   })
 }
 
-export default async function BlogCategory({
+export default async function BlogCategoryPage({
   params,
 }: {
-  params: tParams
+  params: Promise<{ slug: string }>
 }) {
-  const { slug }: { slug: string } = await params
-  const category = BLOG_CATEGORIES.find((ctg) => ctg.slug === slug)
+  const resolvedParams = await params
+  const slug = resolvedParams.slug
 
+  if (!isValidCategory(slug)) {
+    notFound()
+  }
+
+  const category = BLOG_CATEGORIES.find((c) => c.slug === slug)
   if (!category) {
     notFound()
   }
 
   const articles = await Promise.all(
     allPosts
-      .filter((post) => post.categories.includes(category.slug))
+      .filter((post) => {
+        // More explicit type-safe filtering
+        return post.categories.some((category: string) => category === slug)
+      })
       .sort((a, b) => b.date.localeCompare(a.date))
       .map(async (post) => ({
         ...post,

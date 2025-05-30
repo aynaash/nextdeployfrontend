@@ -1,4 +1,4 @@
-import { constructMetadata } from "@/lib/utils";
+import { constructMetadata } from "../../../../lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChartStacked } from "@/components/charts/area-chart-stacked";
 import { BarChartMixed } from "@/components/charts/bar-chart-mixed";

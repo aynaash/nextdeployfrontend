@@ -1,18 +1,17 @@
-import { redirect } from "next/navigation";
-
-import { getCurrentUser } from "@/lib/session";
-import { constructMetadata } from "@/lib/utils";
-import { DeleteAccountSection } from "@/components/dashboard/delete-account";
+import { getCurrentUser } from "../../../../lib/session";
+import { constructMetadata } from "../../../../lib/utils";
+import { Button } from "@/components/ui/button";
 import { DashboardHeader } from "@/components/dashboard/header";
-import { UserNameForm } from "@/components/forms/user-name-form";
-import { UserRoleForm } from "@/components/forms/user-role-form";
+import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { redirect } from "next/navigation";
+import type { User } from "../../../../lib/types";
 
 export const metadata = constructMetadata({
-  title: "Settings – NextDeploy",
-  description: "Configure your account and website settings.",
+  title: "Dashboard – NextDeploy",
+  description: "Create and manage content.",
 });
 
-export default async function SettingsPage() {
+export default async function DashboardPage() {
   const user = await getCurrentUser();
 
   if (!user?.id) redirect("/login");
@@ -20,14 +19,17 @@ export default async function SettingsPage() {
   return (
     <>
       <DashboardHeader
-        heading="Settings"
-        text="Manage account and website settings."
+        heading="Dashboard"
+        text={`Current Role: ${user?.role || 'user'} — Change your role in settings.`}
       />
-      <div className="divide-y divide-muted pb-10">
-        <UserNameForm user={{ id: user.id, name: user.name || "" }} />
-        <UserRoleForm user={{ id: user.id, role: user.role }} />
-        <DeleteAccountSection />
-      </div>
+      <EmptyPlaceholder>
+        <EmptyPlaceholder.Icon name="post" />
+        <EmptyPlaceholder.Title>No content created</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Description>
+          You don&apos;t have any content yet. Start creating content.
+        </EmptyPlaceholder.Description>
+        <Button>Add Content</Button>
+      </EmptyPlaceholder>
     </>
   );
 }

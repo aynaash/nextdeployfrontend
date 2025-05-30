@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 
-import { getCurrentUser } from "@/lib/session";
-import { constructMetadata } from "@/lib/utils";
+import { getCurrentUser } from "../../../../lib/session";
+import { constructMetadata } from "../../../../lib/utils";
 import { Button } from "@/components/ui/button";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
-import {auth} from "../../../../auth-client"
 export const metadata = constructMetadata({
   title: "Orders – NextDeploy",
   description: "Check and manage your latest orders.",
@@ -14,7 +13,7 @@ export const metadata = constructMetadata({
 export default async function OrdersPage() {
    const user = await getCurrentUser();
   console.log("The user at order admin page is:", user)
-   if (!user || user.role !== "admin") redirect("/login");
+   if (!user) redirect("/login");
 
   return (
     <>

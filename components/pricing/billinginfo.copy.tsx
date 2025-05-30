@@ -1,6 +1,7 @@
+
 import Link from "next/link";
 import * as React from "react";
-import {UserSubscriptionPlan} from "../../lib/types"
+
 // import { CustomerPortalButton } from "@/components/forms/customer-portal-button";
 // import { buttonVariants } from "@/components/ui/button";
 import {
@@ -17,10 +18,7 @@ import {
 //   userSubscriptionPlan: UserSubscriptionPlan;
 // }
 
-interface BillingInfoProps {
-  userSubscriptionPlan?: UserSubscriptionPlan; // Optional prop for future use
-}
-export function BillingInfo(props: BillingInfoProps) {
+export function BillingInfo() {
   // TODO: Billing information will be added in the future
   return (
     <Card>

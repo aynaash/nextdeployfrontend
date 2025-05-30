@@ -1,6 +1,6 @@
-import { allPosts } from "@/.contentlayer/generated";
+import { allPosts } from "../../../.contentlayer/generated";
 
-import { constructMetadata, getBlurDataURL } from "@/lib/utils";
+import { constructMetadata, getBlurDataURL } from "../../../lib/utils";2
 import { BlogPosts } from "@/components/content/blog-posts";
 
 export const metadata = constructMetadata({

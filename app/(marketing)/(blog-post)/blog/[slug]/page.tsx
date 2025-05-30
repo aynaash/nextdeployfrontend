@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { allPosts } from "@/.contentlayer/generated"
+import { allPosts } from "../../../../../.contentlayer/generated";
 
 import { Mdx } from "@/components/content/mdx-components"
 
@@ -8,9 +8,9 @@ import "@/styles/mdx.css"
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { BLOG_CATEGORIES } from "@/config/blog"
-import { getTableOfContents } from "@/lib/toc"
-import { cn, constructMetadata, formatDate, getBlurDataURL, placeholderBlurhash } from "@/lib/utils"
+import { BLOG_CATEGORIES } from "../../../../../config/blog"
+import { getTableOfContents } from "../../../../../lib/toc";
+import { cn, constructMetadata, formatDate, getBlurDataURL, placeholderBlurhash } from "../../../../../lib/utils";
 import { buttonVariants } from "@/components/ui/button"
 import Author from "@/components/content/author"
 import BlurImage from "@/components/shared/blur-image"

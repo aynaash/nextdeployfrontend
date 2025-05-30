@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
-
-import { getCurrentUser } from "@/lib/session";
-import { getUserSubscriptionPlan } from "@/lib/subscription";
-import { constructMetadata } from "@/lib/utils";
+import { mockUserSubscriptionPlan } from "../../../../lib/mockData"
+import { getCurrentUser } from "../../../../lib/session";
+import { getUserSubscriptionPlan } from "../../../../lib/subscription";
+import { constructMetadata } from "../../../../lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { BillingInfo } from "@/components/pricing/billing-info";
 import { Icons } from "@/components/shared/icons";
-
+import { UserSubscriptionPlan } from "../../../../lib/types";
 export const metadata = constructMetadata({
   title: "Billing – NextDeploy",
   description: "Manage billing and your subscription plan.",
@@ -16,9 +16,10 @@ export const metadata = constructMetadata({
 export default async function BillingPage() {
   const user = await getCurrentUser();
 
-  let userSubscriptionPlan;
-  if (user && user.id && user.role === "user") {
-    //userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
+let userSubscriptionPlan;
+  if (user) {
+   // userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
+    userSubscriptionPlan = mockUserSubscriptionPlan; 
     console.log("User sub found")
   } else {
     redirect("/login");

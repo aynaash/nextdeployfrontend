@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { allPages } from "@/.contentlayer/generated"
+import { allPages } from "../../../.contentlayer/generated";
 
 import { Mdx } from "@/components/content/mdx-components"
 
@@ -7,7 +7,7 @@ import "@/styles/mdx.css"
 
 import type { Metadata } from "next"
 
-import { constructMetadata, getBlurDataURL } from "@/lib/utils"
+import { constructMetadata, getBlurDataURL } from "../../../lib/utils";
 
 type tParams = Promise<{ slug: string }>
 
