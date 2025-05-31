@@ -44,7 +44,7 @@ const PRICING_IDS = {
 
 export const auth = betterAuth({
   appName: "NextDeploy",
-  baseUrl: BETTER_AUTH_URL,
+  baseURL: BETTER_AUTH_URL,
   
   // Database configuration
   database: adapter,
@@ -84,15 +84,16 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       try {
-        await resend.emails.send({
-          from: FROM_EMAIL,
-          to: user.email,
-          subject: "Reset your NextDeploy password",
-          react: reactResetPasswordEmail({
-            username: user.email,
-            resetLink: url,
-          }),
-        });
+        // await resend.emails.send({
+        //   from: FROM_EMAIL,
+        //   to: user.email,
+        //   subject: "Reset your NextDeploy password",
+        //   react: reactResetPasswordEmail({
+        //     username: user.email,
+        //     resetLink: url,
+        //   }),
+        // });
+        console.log("Sent the reset password email")
       } catch (error) {
         console.error("Failed to send password reset email:", error);
         throw error;
@@ -110,7 +111,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      redirectUrl: `${BETTER_AUTH_URL}/api/auth/callback/google`,
+      redirectURI: `${BETTER_AUTH_URL}/api/auth/callback/google`,
       prompt: "select_account",
     },
   },
@@ -132,12 +133,13 @@ export const auth = betterAuth({
     twoFactor({
       otpOptions: {
         sendOTP: async ({ user, otp }) => {
-          await resend.emails.send({
-            from: FROM_EMAIL,
-            to: user.email,
-            subject: "Your NextDeploy OTP Code",
-            html: `Your verification code is: <strong>${otp}</strong>`,
-          });
+          // await resend.emails.send({
+          //   from: FROM_EMAIL,
+          //   to: user.email,
+          //   subject: "Your NextDeploy OTP Code",
+          //   html: `Your verification code is: <strong>${otp}</strong>`,
+         /*  }); */
+        console.log("Sent the OTP email")
         },
       },
     }),
@@ -146,18 +148,19 @@ export const auth = betterAuth({
     // Organization features
     organization({
       sendInvitationEmail: async (data) => {
-        await resend.emails.send({
-          from: FROM_EMAIL,
-          to: data.email,
-          subject: `Invitation to join ${data.organization.name} on NextDeploy`,
-          react: reactInvitationEmail({
-            username: data.email,
-            invitedByUsername: data.inviter.user.name || data.inviter.user.email,
-            invitedByEmail: data.inviter.user.email,
-            teamName: data.organization.name,
-            inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${data.id}`,
-          }),
-        });
+        // await resend.emails.send({
+        //   from: FROM_EMAIL,
+        //   to: data.email,
+        //   subject: `Invitation to join ${data.organization.name} on NextDeploy`,
+        //   react: reactInvitationEmail({
+        //     username: data.email,
+        //     invitedByUsername: data.inviter.user.name || data.inviter.user.email,
+        //     invitedByEmail: data.inviter.user.email,
+        //     teamName: data.organization.name,
+        //     inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${data.id}`,
+        //   }),
+        // });
+        console.log("Sent the invitation email")
       },
     }),
 

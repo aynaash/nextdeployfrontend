@@ -1,25 +1,35 @@
 import Link from "next/link"
-import { Doc } from "contentlayer/generated"
-
-import { docsConfig } from "@/config/docs"
-import { cn } from "@/lib/utils"
+import { Doc } from "../../.contentlayer/generated"
+import { docsConfig } from "../../config/docs"
+import { cn } from "../../lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/shared/icons"
+
+// ---- TYPES ----
+interface SidebarNavItem {
+  title: string
+  href?: string
+  items?: SidebarNavItem[]
+}
 
 interface DocsPagerProps {
   doc: Doc
 }
 
+interface FlattenedLink {
+  title: string
+  href: string
+}
+
+// ---- COMPONENT ----
 export function DocsPager({ doc }: DocsPagerProps) {
   const pager = getPagerForDoc(doc)
 
-  if (!pager) {
-    return null
-  }
+  if (!pager) return null
 
   return (
     <div className="flex flex-row items-center justify-between">
-      {pager?.prev && ( 
+      {pager.prev && (
         <Link
           href={pager.prev.href}
           className={cn(buttonVariants({ variant: "outline" }))}
@@ -28,7 +38,7 @@ export function DocsPager({ doc }: DocsPagerProps) {
           {pager.prev.title}
         </Link>
       )}
-      {pager?.next && (
+      {pager.next && (
         <Link
           href={pager.next.href}
           className={cn(buttonVariants({ variant: "outline" }), "ml-auto")}
@@ -41,24 +51,32 @@ export function DocsPager({ doc }: DocsPagerProps) {
   )
 }
 
-export function getPagerForDoc(doc: Doc) {
-  const flattenedLinks = [null, ...flatten(docsConfig.sidebarNav), null]
-  const activeIndex = flattenedLinks.findIndex(
-    (link) => doc.slug === link?.href
-  )
-  const prev = activeIndex !== 0 ? flattenedLinks[activeIndex - 1] : null
-  const next =
-    activeIndex !== flattenedLinks.length - 1
-      ? flattenedLinks[activeIndex + 1]
-      : null
+// ---- LOGIC ----
+function getPagerForDoc(doc: Doc): { prev: FlattenedLink | null; next: FlattenedLink | null } | null {
+  const links = flattenSidebarNav(docsConfig.sidebarNav)
+  const activeIndex = links.findIndex((link) => doc.slug === link.href)
+
+  if (activeIndex === -1) return null
+
   return {
-    prev,
-    next,
+    prev: activeIndex > 0 ? links[activeIndex - 1] : null,
+    next: activeIndex < links.length - 1 ? links[activeIndex + 1] : null,
   }
 }
 
-export function flatten(links: { items?}[]) {
-  return links.reduce((flat, link) => {
-    return flat.concat(link.items ? flatten(link.items) : link)
-  }, [])
+// ---- FLATTENING ----
+function flattenSidebarNav(items: SidebarNavItem[]): FlattenedLink[] {
+  const flat: FlattenedLink[] = []
+
+  for (const item of items) {
+    if (item.href) {
+      flat.push({ title: item.title, href: item.href })
+    }
+
+    if (item.items) {
+      flat.push(...flattenSidebarNav(item.items))
+    }
+  }
+
+  return flat
 }

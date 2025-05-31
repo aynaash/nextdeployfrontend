@@ -53,3 +53,4 @@ export const BLOG_AUTHORS = {
     twitter: "johnsmith_dev",
   },
 };
+export type AuthorUsername = keyof typeof BLOG_AUTHORS;

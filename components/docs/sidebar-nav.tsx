@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,7 +7,7 @@ import { docsConfig } from "@/config/docs";
 import { cn } from "@/lib/utils";
 
 export interface DocsSidebarNavProps {
-  setOpen?: (boolean) => void;
+  setOpen?: (open: boolean) => void;
 }
 
 export function DocsSidebarNav({ setOpen }: DocsSidebarNavProps) {
@@ -38,7 +37,7 @@ export function DocsSidebarNav({ setOpen }: DocsSidebarNavProps) {
 interface DocsSidebarNavItemsProps {
   items: NavItem[];
   pathname: string | null;
-  setOpen?: (boolean) => void;
+  setOpen?: (open: boolean) => void;
 }
 
 export function DocsSidebarNavItems({

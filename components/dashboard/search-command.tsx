@@ -1,10 +1,7 @@
 "use client";
-
 import React from "react";
 import { useRouter } from "next/navigation";
-import { SidebarNavItem } from "@/types";
-
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -15,6 +12,16 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Icons } from "@/components/shared/icons";
+
+// Define the type directly in the file
+interface SidebarNavItem {
+  title: string;
+  href?: string;
+  disabled?: boolean;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+  items?: SidebarNavItem[];
+}
 
 export function SearchCommand({ links }: { links: SidebarNavItem[] }) {
   const [open, setOpen] = React.useState(false);
@@ -60,7 +67,7 @@ export function SearchCommand({ links }: { links: SidebarNavItem[] }) {
           <CommandEmpty>No results found.</CommandEmpty>
           {links.map((section) => (
             <CommandGroup key={section.title} heading={section.title}>
-              {section.items.map((item) => {
+              {section.items?.map((item) => {
                 const Icon = Icons[item.icon || "arrowRight"];
                 return (
                   <CommandItem

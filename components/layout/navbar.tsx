@@ -16,42 +16,57 @@ import Logo from "../../components/logo.tsx";
 
 interface NavBarProps {
   scroll?: boolean;
-  large?: boolean;
+}
+
+interface NavItem {
+  title: string;
+  href: string;
+  disabled?: boolean;
 }
 
 export function NavBar({ scroll = false }: NavBarProps) {
   const scrolled = useScroll(50);
-  const { data: session, status } = authClient.useSession();
+  const { data: session } = authClient.useSession();
   const router = useRouter();
-
   const selectedLayout = useSelectedLayoutSegment();
-  const documentation = selectedLayout === "docs";
 
-  const configMap = {
+  const isDocsLayout = selectedLayout === "docs";
+  
+  // Define all possible layout configurations
+  const layoutConfigs = {
     docs: docsConfig.mainNav,
+    // Add other layout configurations here as needed
+  } as const;
+
+  // Safely get the appropriate nav items
+  const getNavItems = () => {
+    if (!selectedLayout) return marketingConfig.mainNav;
+    
+    const config = layoutConfigs[selectedLayout as keyof typeof layoutConfigs];
+    return config || marketingConfig.mainNav;
   };
 
-  const links =
-    (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav;
+  const navItems = getNavItems();
 
   return (
     <header
-      className={`sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all ${
+      className={cn(
+        "sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all",
         scroll ? (scrolled ? "border-b" : "bg-transparent") : "border-b"
-      }`}
+      )}
     >
       <MaxWidthWrapper
         className="flex h-14 items-center justify-between py-4"
-        large={documentation}
+        large={isDocsLayout}
       >
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-1.5">
             <Logo />
           </Link>
 
-          {links && links.length > 0 ? (
+          {navItems.length > 0 && (
             <nav className="hidden gap-6 md:flex">
-              {links.map((item, index) => (
+              {navItems.map((item, index) => (
                 <Link
                   key={index}
                   href={item.disabled ? "#" : item.href}
@@ -61,18 +76,18 @@ export function NavBar({ scroll = false }: NavBarProps) {
                     item.href.startsWith(`/${selectedLayout}`)
                       ? "text-foreground"
                       : "text-foreground/60",
-                    item.disabled && "cursor-not-allowed opacity-80",
+                    item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >
                   {item.title}
                 </Link>
               ))}
             </nav>
-          ) : null}
+          )}
         </div>
 
         <div className="flex items-center space-x-3">
-          {documentation ? (
+          {isDocsLayout && (
             <div className="hidden flex-1 items-center space-x-4 sm:justify-end lg:flex">
               <div className="hidden lg:flex lg:grow-0">
                 <DocsSearch />
@@ -91,11 +106,20 @@ export function NavBar({ scroll = false }: NavBarProps) {
                 </Link>
               </div>
             </div>
-          ) : null}
+          )}
 
-          {status === "loading" ? (
-            <Skeleton className="hidden h-9 w-28 rounded-full lg:flex" />
-          ) : session ? (
+          {!session ? (
+            <Button
+              className="hidden gap-2 px-5 md:flex"
+              variant="default"
+              size="sm"
+              rounded="full"
+              onClick={() => router.push("/login")}
+            >
+              <span>Sign In</span>
+              <Icons.arrowRight className="size-4" />
+            </Button>
+          ) : (
             <Link
               href={session.user.role === "admin" ? "/admin" : "/dashboard"}
               className="hidden md:block"
@@ -109,17 +133,6 @@ export function NavBar({ scroll = false }: NavBarProps) {
                 <span>Dashboard</span>
               </Button>
             </Link>
-          ) : (
-            <Button
-              className="hidden gap-2 px-5 md:flex"
-              variant="default"
-              size="sm"
-              rounded="full"
-              onClick={() => router.push("/login")}
-            >
-              <span>Sign In</span>
-              <Icons.arrowRight className="size-4" />
-            </Button>
           )}
         </div>
       </MaxWidthWrapper>

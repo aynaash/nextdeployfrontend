@@ -1,5 +1,5 @@
 
-import { SidebarNavItem } from "types";
+import { SidebarNavItem } from "../types/index";
 const UserRole = [
   "admin",
   "user",

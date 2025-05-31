@@ -8,7 +8,7 @@ import "@/styles/mdx.css"
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { BLOG_CATEGORIES } from "../../../../../config/blog"
+import { BLOG_CATEGORIES, BLOG_AUTHORS, AuthorUsername } from "../../../../../config/blog"
 import { getTableOfContents } from "../../../../../lib/toc";
 import { cn, constructMetadata, formatDate, getBlurDataURL, placeholderBlurhash } from "../../../../../lib/utils";
 import { buttonVariants } from "@/components/ui/button"
@@ -99,9 +99,13 @@ export default async function PostPage({
           <h1 className="font-heading text-3xl text-foreground sm:text-4xl">{post.title}</h1>
           <p className="text-base text-muted-foreground md:text-lg">{post.description}</p>
           <div className="flex flex-nowrap items-center space-x-5 pt-1 md:space-x-8">
-            {post.authors.map((author) => (
-              <Author username={author} key={post._id + author} />
-            ))}
+           
+
+{post.authors
+  .filter((author): author is AuthorUsername => author in BLOG_AUTHORS)
+  .map((author) => (
+    <Author username={author} key={post._id + author} />
+))}
           </div>
         </div>
       </MaxWidthWrapper>

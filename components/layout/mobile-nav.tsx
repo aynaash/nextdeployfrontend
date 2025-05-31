@@ -1,40 +1,52 @@
-"use client"
-
+"use client";
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import {useSession } from "../../auth-client.ts"
+import { useSession } from "../../auth-client"
 import { docsConfig } from "@/config/docs"
 import { marketingConfig } from "@/config/marketing"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { DocsSidebarNav } from "@/components/docs/sidebar-nav"
 import { Icons } from "@/components/shared/icons"
-
+import { NavItem } from "../../types/index"
 import { ModeToggle } from "./mode-toggle"
+
+ 
+type ConfigMap = {
+  docs: NavItem[]
+  // Add other layout segments here if needed
+}
 
 export function NavMobile() {
   const { data: session } = useSession()
-  const [open, setOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const selectedLayout = useSelectedLayoutSegment()
-  const documentation = selectedLayout === "docs"
+  const isDocsLayout = selectedLayout === "docs"
 
-  const configMap = {
+  const configMap: ConfigMap = {
     docs: docsConfig.mainNav,
   }
 
-  const links = (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav
+  const getNavLinks = (): NavItem[] => {
+    if (!selectedLayout) return marketingConfig.mainNav
+    if (selectedLayout in configMap) {
+      return configMap[selectedLayout as keyof ConfigMap]
+    }
+    return marketingConfig.mainNav
+  }
 
-  // prevent body scroll when modal is open
+  const links = getNavLinks()
+
+  // Prevent body scroll when modal is open
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden"
-    } else {
+    document.body.style.overflow = isOpen ? "hidden" : "auto"
+    return () => {
       document.body.style.overflow = "auto"
     }
-  }, [open])
+  }, [isOpen])
 
   // Animation variants
   const menuVariants = {
@@ -77,26 +89,76 @@ export function NavMobile() {
     },
   }
 
-  const iconVariants = {
-    closed: { rotate: 0 },
-    open: { rotate: 180 },
+  const renderAuthLinks = () => {
+    if (session) {
+      return (
+        <>
+          {session.user.role === "ADMIN" && (
+            <motion.li className="py-3" variants={itemVariants}>
+              <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full font-medium capitalize"
+                >
+                  Admin
+                </Link>
+              </motion.div>
+            </motion.li>
+          )}
+          <motion.li className="py-3" variants={itemVariants}>
+            <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                href="/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="flex w-full font-medium capitalize"
+              >
+                Dashboard
+              </Link>
+            </motion.div>
+          </motion.li>
+        </>
+      )
+    }
+    return (
+      <>
+        <motion.li className="py-3" variants={itemVariants}>
+          <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
+            <Link href="/login" onClick={() => setIsOpen(false)} className="flex w-full font-medium capitalize">
+              Login
+            </Link>
+          </motion.div>
+        </motion.li>
+        <motion.li className="py-3" variants={itemVariants}>
+          <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
+            <Link
+              href="/register"
+              onClick={() => setIsOpen(false)}
+              className="flex w-full font-medium capitalize"
+            >
+              Sign up
+            </Link>
+          </motion.div>
+        </motion.li>
+      </>
+    )
   }
 
   return (
     <>
       <motion.button
-        onClick={() => setOpen(!open)}
+        onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "fixed right-2 top-2.5 z-50 rounded-full p-2 transition-colors duration-200 hover:bg-muted focus:outline-none active:bg-muted md:hidden",
-          open && "hover:bg-muted active:bg-muted",
+          isOpen && "hover:bg-muted active:bg-muted",
         )}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         initial="closed"
-        animate={open ? "open" : "closed"}
+        animate={isOpen ? "open" : "closed"}
       >
         <AnimatePresence mode="wait">
-          {open ? (
+          {isOpen ? (
             <motion.div
               key="close"
               initial={{ opacity: 0, rotate: -90 }}
@@ -121,7 +183,7 @@ export function NavMobile() {
       </motion.button>
 
       <AnimatePresence>
-        {open && (
+        {isOpen && (
           <motion.nav
             className="fixed inset-0 z-20 w-full overflow-auto bg-background px-5 py-16 lg:hidden"
             initial="closed"
@@ -130,76 +192,24 @@ export function NavMobile() {
             variants={menuVariants}
           >
             <motion.ul className="grid divide-y divide-muted" variants={itemVariants}>
-              {links &&
-                links.length > 0 &&
-                links.map(({ title, href }, index) => (
-                  <motion.li key={href} className="py-3" variants={itemVariants} custom={index}>
-                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                      <Link href={href} onClick={() => setOpen(false)} className="flex w-full font-medium capitalize">
-                        {title}
-                      </Link>
-                    </motion.div>
-                  </motion.li>
-                ))}
+              {links.map(({ title, href }, index) => (
+                <motion.li key={href} className="py-3" variants={itemVariants} custom={index}>
+                  <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
+                    <Link href={href} onClick={() => setIsOpen(false)} className="flex w-full font-medium capitalize">
+                      {title}
+                    </Link>
+                  </motion.div>
+                </motion.li>
+              ))}
 
-              {session ? (
-                <>
-                  {session.user.role === "ADMIN" ? (
-                    <motion.li className="py-3" variants={itemVariants}>
-                      <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                        <Link
-                          href="/admin"
-                          onClick={() => setOpen(false)}
-                          className="flex w-full font-medium capitalize"
-                        >
-                          Admin
-                        </Link>
-                      </motion.div>
-                    </motion.li>
-                  ) : null}
-
-                  <motion.li className="py-3" variants={itemVariants}>
-                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setOpen(false)}
-                        className="flex w-full font-medium capitalize"
-                      >
-                        Dashboard
-                      </Link>
-                    </motion.div>
-                  </motion.li>
-                </>
-              ) : (
-                <>
-                  <motion.li className="py-3" variants={itemVariants}>
-                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                      <Link href="/login" onClick={() => setOpen(false)} className="flex w-full font-medium capitalize">
-                        Login
-                      </Link>
-                    </motion.div>
-                  </motion.li>
-
-                  <motion.li className="py-3" variants={itemVariants}>
-                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                      <Link
-                        href="/register"
-                        onClick={() => setOpen(false)}
-                        className="flex w-full font-medium capitalize"
-                      >
-                        Sign up
-                      </Link>
-                    </motion.div>
-                  </motion.li>
-                </>
-              )}
+              {renderAuthLinks()}
             </motion.ul>
 
-            {documentation ? (
+            {isDocsLayout && (
               <motion.div className="mt-8 block md:hidden" variants={itemVariants}>
-                <DocsSidebarNav setOpen={setOpen} />
+                <DocsSidebarNav setOpen={setIsOpen} />
               </motion.div>
-            ) : null}
+            )}
 
             <motion.div className="mt-5 flex items-center justify-end space-x-4" variants={itemVariants}>
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>

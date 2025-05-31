@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
-import { useSession } from "../../auth-client.ts";
+import { useSession } from "../../auth-client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Popover,
@@ -31,7 +31,7 @@ const projects: ProjectType[] = [
 ];
 
 export default function ProjectSwitcher({ large = false }: { large?: boolean }) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectType>(projects[1]);
 

@@ -1,10 +1,15 @@
-import Link from "next/link";
-import { Post } from "contentlayer/generated";
-
-import { cn, formatDate, placeholderBlurhash } from "@/lib/utils";
+import { Post } from "../../.contentlayer/generated";
+import { cn, formatDate, placeholderBlurhash } from "../../lib/utils";
+import { BLOG_AUTHORS } from "../../config/blog";
 import BlurImage from "@/components/shared/blur-image";
-
 import Author from "./author";
+import Link from "next/link";
+
+type AuthorUsername = keyof typeof BLOG_AUTHORS;
+
+function isAuthorUsername(author: string): author is AuthorUsername {
+  return author in BLOG_AUTHORS;
+}
 
 export function BlogCard({
   data,
@@ -23,7 +28,7 @@ export function BlogCard({
         "group relative",
         horizontale
           ? "grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6"
-          : "flex flex-col space-y-2",
+          : "flex flex-col space-y-2"
       )}
     >
       {data.image && (
@@ -33,7 +38,7 @@ export function BlogCard({
             blurDataURL={data.blurDataURL ?? placeholderBlurhash}
             className={cn(
               "size-full object-cover object-center",
-              horizontale ? "lg:h-72" : null,
+              horizontale ? "lg:h-72" : null
             )}
             width={800}
             height={400}
@@ -44,10 +49,11 @@ export function BlogCard({
           />
         </div>
       )}
+
       <div
         className={cn(
           "flex flex-1 flex-col",
-          horizontale ? "justify-center" : "justify-between",
+          horizontale ? "justify-center" : "justify-between"
         )}
       >
         <div className="w-full">
@@ -60,11 +66,18 @@ export function BlogCard({
             </p>
           )}
         </div>
+
         <div className="mt-4 flex items-center space-x-3">
           <div className="flex items-center -space-x-2">
-            {data.authors.map((author) => (
-              <Author username={author} key={data._id + author} imageOnly />
-            ))}
+            {data.authors
+              .filter(isAuthorUsername)
+              .map((author) => (
+                <Author
+                  username={author}
+                  key={data._id + author}
+                  imageOnly
+                />
+              ))}
           </div>
 
           {data.date && (
@@ -74,6 +87,7 @@ export function BlogCard({
           )}
         </div>
       </div>
+
       <Link href={data.slug} className="absolute inset-0">
         <span className="sr-only">View Article</span>
       </Link>

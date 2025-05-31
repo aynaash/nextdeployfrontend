@@ -1,11 +1,7 @@
 "use client";
 
-import { useTransition } from "react";
-import { generateUserStripe } from "@/actions/generate-user-stripe";
 import { SubscriptionPlan, UserSubscriptionPlan } from "@/types";
-
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/shared/icons";
 
 interface BillingFormButtonProps {
   offer: SubscriptionPlan;
@@ -18,34 +14,54 @@ export function BillingFormButton({
   offer,
   subscriptionPlan,
 }: BillingFormButtonProps) {
-  let [isPending, startTransition] = useTransition();
-  const generateUserStripeSession = generateUserStripe.bind(
-    null,
-    offer.stripeIds[year ? "yearly" : "monthly"],
-  );
-
-  const stripeSessionAction = () =>
-    startTransition(async () => await generateUserStripeSession());
-
-  const userOffer =
-    subscriptionPlan.stripePriceId ===
-    offer.stripeIds[year ? "yearly" : "monthly"];
-
+  // Temporary UI before billing is implemented
   return (
     <Button
-      variant={userOffer ? "default" : "outline"}
+      variant="outline"
       rounded="full"
-      className="w-full"
-      disabled={isPending}
-      onClick={stripeSessionAction}
+      className="w-full cursor-not-allowed opacity-70"
+      disabled
     >
-      {isPending ? (
-        <>
-          <Icons.spinner className="mr-2 size-4 animate-spin" /> Loading...
-        </>
-      ) : (
-        <>{userOffer ? "Manage Subscription" : "Upgrade"}</>
-      )}
+      Billing coming soon
     </Button>
   );
 }
+
+/* 
+// Dynamic billing logic - commented out for now
+
+import { useTransition } from "react";
+import { generateUserStripe } from "@/actions/generate-user-stripe";
+import { Icons } from "@/components/shared/icons";
+
+let [isPending, startTransition] = useTransition();
+const generateUserStripeSession = generateUserStripe.bind(
+  null,
+  offer.stripeIds[year ? "yearly" : "monthly"],
+);
+
+const stripeSessionAction = () =>
+  startTransition(async () => await generateUserStripeSession());
+
+const userOffer =
+  subscriptionPlan.stripePriceId ===
+  offer.stripeIds[year ? "yearly" : "monthly"];
+
+return (
+  <Button
+    variant={userOffer ? "default" : "outline"}
+    rounded="full"
+    className="w-full"
+    disabled={isPending}
+    onClick={stripeSessionAction}
+  >
+    {isPending ? (
+      <>
+        <Icons.spinner className="mr-2 size-4 animate-spin" /> Loading...
+      </>
+    ) : (
+      <>{userOffer ? "Manage Subscription" : "Upgrade"}</>
+    )}
+  </Button>
+);
+*/

@@ -7,8 +7,8 @@ import { useState } from "react";
 import { Drawer } from "vaul";
 
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
-import { BLOG_CATEGORIES } from "@/config/blog";
-import { cn } from "@/lib/utils";
+import { BLOG_CATEGORIES } from "../../config/blog";
+import { cn } from "../../lib/utils";
 
 export function BlogHeaderLayout() {
   const [open, setOpen] = useState(false);

@@ -2,19 +2,19 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "components/*"
-      ],
-      "@/*": [
-        "/*"
-      ]
+      "@/*": ["./*"],
+      "@/components/*": ["components/*"],
+      // Add more paths as needed
+      "@/actions/*": ["actions/*"],
+      "@/app/*": ["app/*"],
+      "@/lib/*": ["lib/*"],
+      "@/hooks/*": ["hooks/*"],
     },
+    "allowSyntheticDefaultImports": true,
+   "allowUmdGlobalAccess": true,
+ "allowImportingTsExtensions": true,
     "strict": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "noEmit": true,
@@ -40,7 +40,5 @@
     ".contentlayer/generated",
     "contentlayer.config.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
