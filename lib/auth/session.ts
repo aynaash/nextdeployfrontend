@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 
 export const getCurrentUser = cache(async () => {
   const requestHeaders = headers();
-  console.log("Request headers at session.ts:", requestHeaders);
 
   const session = await auth.api.getSession({
     headers: requestHeaders,

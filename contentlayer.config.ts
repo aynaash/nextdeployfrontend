@@ -1,9 +1,15 @@
-// contentlayer.config.ts
+/**
+ * Contentlayer configuration for MDX content processing
+ * @file config/contentlayer.ts
+ * @description Defines document types, fields, and MDX processing pipeline
+ */
 
+import type { Element } from 'hast';
 import {
   ComputedFields,
   defineDocumentType,
   makeSource,
+  type FieldDef,
 } from "contentlayer2/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
@@ -11,7 +17,12 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { visit } from "unist-util-visit";
 
-// 🔐 Define your author whitelist
+// --- Constants and Type Definitions --- //
+
+/**
+ * Whitelist of allowed authors with their metadata
+ * @constant {Object} BLOG_AUTHORS
+ */
 const BLOG_AUTHORS = {
   shadcn: { name: "ShadCN", avatar: "/authors/shadcn.png" },
   mickasmt: { name: "Mick Asmt", avatar: "/authors/mickasmt.png" },
@@ -21,6 +32,12 @@ const BLOG_AUTHORS = {
 
 type AuthorUsername = keyof typeof BLOG_AUTHORS;
 
+// --- Shared Configuration --- //
+
+/**
+ * Default computed fields for all document types
+ * @constant {ComputedFields} defaultComputedFields
+ */
 const defaultComputedFields: ComputedFields = {
   slug: {
     type: "string",
@@ -37,13 +54,22 @@ const defaultComputedFields: ComputedFields = {
   },
 };
 
-const commonFields = {
+/**
+ * Common fields shared across multiple document types
+ * @constant {Record<string, FieldDef>} commonFields
+ */
+const commonFields: Record<string, FieldDef> = {
   title: { type: "string", required: true },
   description: { type: "string" },
   published: { type: "boolean", default: true },
 };
 
-// 🧠 Merge + Normalize Post
+// --- Document Type Definitions --- //
+
+/**
+ * Blog Post document type configuration
+ * @type {import('contentlayer2/source-files').DocumentTypeDef}
+ */
 export const Post = defineDocumentType(() => ({
   name: "Post",
   filePathPattern: `blog/**/*.mdx`,
@@ -56,13 +82,6 @@ export const Post = defineDocumentType(() => ({
       type: "list",
       of: { type: "string" },
       required: true,
-      resolve: (post) => {
-        const raw = post.authors;
-        // Defensive: allow single string or list
-        if (Array.isArray(raw)) return raw;
-        if (typeof raw === "string") return [raw];
-        return [];
-      },
     },
     categories: {
       type: "list",
@@ -95,15 +114,22 @@ export const Post = defineDocumentType(() => ({
   },
 }));
 
-// 🧾 Other types
+/**
+ * Documentation document type configuration
+ * @type {import('contentlayer2/source-files').DocumentTypeDef}
+ */
 export const Doc = defineDocumentType(() => ({
   name: "Doc",
   filePathPattern: `docs/**/*.mdx`,
   contentType: "mdx",
-  fields: { ...commonFields },
+  fields: commonFields,
   computedFields: defaultComputedFields,
 }));
 
+/**
+ * Guide document type configuration
+ * @type {import('contentlayer2/source-files').DocumentTypeDef}
+ */
 export const Guide = defineDocumentType(() => ({
   name: "Guide",
   filePathPattern: `guides/**/*.mdx`,
@@ -116,56 +142,79 @@ export const Guide = defineDocumentType(() => ({
   computedFields: defaultComputedFields,
 }));
 
+/**
+ * Page document type configuration
+ * @type {import('contentlayer2/source-files').DocumentTypeDef}
+ */
 export const Page = defineDocumentType(() => ({
   name: "Page",
   filePathPattern: `pages/**/*.mdx`,
   contentType: "mdx",
-  fields: { ...commonFields },
+  fields: commonFields,
   computedFields: defaultComputedFields,
 }));
 
+// --- MDX Processing Configuration --- //
+
+/**
+ * Rehype plugin to extract raw code from pre elements
+ */
+const extractCodeFromPre = () => (tree: any) => {
+  visit(tree, (node) => {
+    if (node?.type === "element" && node?.tagName === "pre") {
+      const [codeEl] = node.children;
+      if (codeEl?.tagName !== "code") return;
+      node.__rawString__ = codeEl.children?.[0].value;
+    }
+  });
+};
+
+/**
+ * Rehype plugin to attach raw code string to pretty code figures
+ */
+const attachRawStringToFigures = () => (tree: any) => {
+  visit(tree, (node) => {
+    if (
+      node?.type === "element" &&
+      node?.tagName === "figure" &&
+      "data-rehype-pretty-code-figure" in node.properties
+    ) {
+      const pre = node.children.at(-1);
+      if (pre?.tagName === "pre") {
+        pre.properties["__rawString__"] = node.__rawString__;
+      }
+    }
+  });
+};
+
+// --- Contentlayer Source Configuration --- //
+
+/**
+ * Contentlayer source configuration
+ * @type {import('contentlayer2/source-files').MakeSourceOptions}
+ */
 export default makeSource({
   contentDirPath: "./content",
   documentTypes: [Page, Doc, Guide, Post],
   mdx: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
-      rehypeSlug,
-      () => (tree) => {
-        visit(tree, (node) => {
-          if (node?.type === "element" && node?.tagName === "pre") {
-            const [codeEl] = node.children;
-            if (codeEl?.tagName !== "code") return;
-            node.__rawString__ = codeEl.children?.[0].value;
-          }
-        });
-      },
+      rehypeSlug, // Add IDs to headings
+      extractCodeFromPre,
       [
         rehypePrettyCode,
         {
           theme: "github-dark",
           keepBackground: false,
-          onVisitLine(node) {
+          onVisitLine(node: Element) {
+            // Prevent empty lines from collapsing
             if (node.children.length === 0) {
               node.children = [{ type: "text", value: " " }];
             }
           },
         },
       ],
-      () => (tree) => {
-        visit(tree, (node) => {
-          if (
-            node?.type === "element" &&
-            node?.tagName === "figure" &&
-            "data-rehype-pretty-code-figure" in node.properties
-          ) {
-            const pre = node.children.at(-1);
-            if (pre?.tagName === "pre") {
-              pre.properties["__rawString__"] = node.__rawString__;
-            }
-          }
-        });
-      },
+      attachRawStringToFigures,
       [
         rehypeAutolinkHeadings,
         {

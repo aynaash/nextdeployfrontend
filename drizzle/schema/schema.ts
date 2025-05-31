@@ -34,8 +34,8 @@ export const user = pgTable("user", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
   // Your additional fields
-  firstName: text("first_name", { length: 100 }),
-  lastName: text("last_name", { length: 100 }),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
   password: text("password"),
   role: userRoleEnum("role").default("user"),
 

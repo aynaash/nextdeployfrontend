@@ -1,10 +1,12 @@
 
 import { SidebarNavItem } from "../types/index";
-const UserRole = [
-  "admin",
-  "user",
-  "superadmin"
-]
+
+const UserRole = {
+  admin: "admin",
+  user: "user",
+  superadmin: "superadmin"
+} as const;
+
 export const sidebarLinks: SidebarNavItem[] = [
   {
     title: "MENU",
