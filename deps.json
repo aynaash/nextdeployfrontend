@@ -1,0 +1,1370 @@
+├─ @auth/drizzle-adapter@npm:1.9.1
+│  ├─ Version: 1.9.1
+│  │ 
+│  └─ Dependencies
+│     └─ @auth/core@npm:0.39.1 → npm:0.39.1 [1d0ea]
+│
+├─ @better-auth/stripe@npm:1.2.8
+│  ├─ Version: 1.2.8
+│  │ 
+│  └─ Dependencies
+│     ├─ better-auth@npm:^1.2.8 → npm:1.2.8
+│     └─ zod@npm:^3.24.1 → npm:3.25.42
+│
+├─ @commitlint/cli@npm:19.8.1
+│  ├─ Version: 19.8.1
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ commitlint
+│  │ 
+│  └─ Dependencies
+│     ├─ @commitlint/format@npm:^19.8.1 → npm:19.8.1
+│     ├─ @commitlint/lint@npm:^19.8.1 → npm:19.8.1
+│     ├─ @commitlint/load@npm:^19.8.1 → npm:19.8.1
+│     ├─ @commitlint/read@npm:^19.8.1 → npm:19.8.1
+│     ├─ @commitlint/types@npm:^19.8.1 → npm:19.8.1
+│     ├─ tinyexec@npm:^1.0.0 → npm:1.0.1
+│     └─ yargs@npm:^17.0.0 → npm:17.7.2
+│
+├─ @commitlint/config-conventional@npm:19.8.1
+│  ├─ Version: 19.8.1
+│  │ 
+│  └─ Dependencies
+│     ├─ @commitlint/types@npm:^19.8.1 → npm:19.8.1
+│     └─ conventional-changelog-conventionalcommits@npm:^7.0.2 → npm:7.0.2
+│
+├─ @hookform/resolvers@npm:5.0.1
+│  ├─ Instances: 1
+│  ├─ Version: 5.0.1
+│  │ 
+│  └─ Dependencies
+│     └─ @standard-schema/utils@npm:^0.3.0 → npm:0.3.0
+│
+├─ @ianvs/prettier-plugin-sort-imports@npm:4.4.2
+│  ├─ Instances: 1
+│  ├─ Version: 4.4.2
+│  │ 
+│  └─ Dependencies
+│     ├─ @babel/generator@npm:^7.26.2 → npm:7.27.3
+│     ├─ @babel/parser@npm:^7.26.2 → npm:7.27.3
+│     ├─ @babel/traverse@npm:^7.25.9 → npm:7.27.3
+│     ├─ @babel/types@npm:^7.26.0 → npm:7.27.3
+│     └─ semver@npm:^7.5.2 → npm:7.7.2
+│
+├─ @neondatabase/serverless@npm:1.0.0
+│  ├─ Version: 1.0.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/node@npm:^22.10.2 → npm:22.15.27
+│     └─ @types/pg@npm:^8.8.0 → npm:8.15.2
+│
+├─ @radix-ui/react-accessible-icon@npm:1.1.7
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.7
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-visually-hidden@npm:1.2.3 → npm:1.2.3
+│
+├─ @radix-ui/react-accordion@npm:1.2.11
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.11
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-collapsible@npm:1.1.11 → npm:1.1.11
+│     ├─ @radix-ui/react-collection@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-alert-dialog@npm:1.1.14
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.14
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-dialog@npm:1.1.14 → npm:1.1.14
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     └─ @radix-ui/react-slot@npm:1.2.3 → npm:1.2.3
+│
+├─ @radix-ui/react-aspect-ratio@npm:1.1.7
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.7
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│
+├─ @radix-ui/react-avatar@npm:1.1.10
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.10
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-callback-ref@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-is-hydrated@npm:0.1.0 → npm:0.1.0
+│     └─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-checkbox@npm:1.3.2
+│  ├─ Instances: 1
+│  ├─ Version: 1.3.2
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-previous@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-use-size@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-collapsible@npm:1.1.11
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.11
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     └─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-context-menu@npm:2.2.15
+│  ├─ Instances: 1
+│  ├─ Version: 2.2.15
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-menu@npm:2.1.15 → npm:2.1.15
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-callback-ref@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-dialog@npm:1.1.14
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.14
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-focus-guards@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-focus-scope@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-portal@npm:1.1.9 → npm:1.1.9
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-slot@npm:1.2.3 → npm:1.2.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ aria-hidden@npm:^1.2.4 → npm:1.2.6
+│     └─ react-remove-scroll@npm:^2.6.3 → npm:2.7.0
+│
+├─ @radix-ui/react-dropdown-menu@npm:2.1.15
+│  ├─ Instances: 1
+│  ├─ Version: 2.1.15
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-menu@npm:2.1.15 → npm:2.1.15
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-hover-card@npm:1.1.14
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.14
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-popper@npm:1.2.7 → npm:1.2.7
+│     ├─ @radix-ui/react-portal@npm:1.1.9 → npm:1.1.9
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-label@npm:2.1.7
+│  ├─ Instances: 1
+│  ├─ Version: 2.1.7
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│
+├─ @radix-ui/react-menubar@npm:1.1.15
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.15
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-collection@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-menu@npm:2.1.15 → npm:2.1.15
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-roving-focus@npm:1.1.10 → npm:1.1.10
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-navigation-menu@npm:1.2.13
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.13
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-collection@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-callback-ref@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-previous@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-visually-hidden@npm:1.2.3 → npm:1.2.3
+│
+├─ @radix-ui/react-popover@npm:1.1.14
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.14
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-focus-guards@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-focus-scope@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-popper@npm:1.2.7 → npm:1.2.7
+│     ├─ @radix-ui/react-portal@npm:1.1.9 → npm:1.1.9
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-slot@npm:1.2.3 → npm:1.2.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ aria-hidden@npm:^1.2.4 → npm:1.2.6
+│     └─ react-remove-scroll@npm:^2.6.3 → npm:2.7.0
+│
+├─ @radix-ui/react-primitive@npm:2.1.3
+│  ├─ Instances: 1
+│  ├─ Version: 2.1.3
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-slot@npm:1.2.3 → npm:1.2.3
+│
+├─ @radix-ui/react-progress@npm:1.1.7
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.7
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     └─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│
+├─ @radix-ui/react-radio-group@npm:1.3.7
+│  ├─ Instances: 1
+│  ├─ Version: 1.3.7
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-roving-focus@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-previous@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-use-size@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-scroll-area@npm:1.2.9
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.9
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/number@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-callback-ref@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-select@npm:2.2.5
+│  ├─ Instances: 1
+│  ├─ Version: 2.2.5
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/number@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-collection@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-focus-guards@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-focus-scope@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-popper@npm:1.2.7 → npm:1.2.7
+│     ├─ @radix-ui/react-portal@npm:1.1.9 → npm:1.1.9
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-slot@npm:1.2.3 → npm:1.2.3
+│     ├─ @radix-ui/react-use-callback-ref@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-previous@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-visually-hidden@npm:1.2.3 → npm:1.2.3
+│     ├─ aria-hidden@npm:^1.2.4 → npm:1.2.6
+│     └─ react-remove-scroll@npm:^2.6.3 → npm:2.7.0
+│
+├─ @radix-ui/react-separator@npm:1.1.7
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.7
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│
+├─ @radix-ui/react-slider@npm:1.3.5
+│  ├─ Instances: 1
+│  ├─ Version: 1.3.5
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/number@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-collection@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-previous@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-use-size@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-slot@npm:1.2.3
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.3
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│
+├─ @radix-ui/react-switch@npm:1.2.5
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.5
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-previous@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-use-size@npm:1.1.1 → npm:1.1.1
+│
+├─ @radix-ui/react-tabs@npm:1.1.12
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.12
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-roving-focus@npm:1.1.10 → npm:1.1.10
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-toast@npm:1.2.14
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.14
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-collection@npm:1.1.7 → npm:1.1.7
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-portal@npm:1.1.9 → npm:1.1.9
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-use-callback-ref@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     ├─ @radix-ui/react-use-layout-effect@npm:1.1.1 → npm:1.1.1
+│     └─ @radix-ui/react-visually-hidden@npm:1.2.3 → npm:1.2.3
+│
+├─ @radix-ui/react-toggle-group@npm:1.1.10
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.10
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-direction@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-roving-focus@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-toggle@npm:1.1.9 → npm:1.1.9
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-toggle@npm:1.1.9
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.9
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     └─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│
+├─ @radix-ui/react-tooltip@npm:1.2.7
+│  ├─ Instances: 1
+│  ├─ Version: 1.2.7
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/primitive@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-compose-refs@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-context@npm:1.1.2 → npm:1.1.2
+│     ├─ @radix-ui/react-dismissable-layer@npm:1.1.10 → npm:1.1.10
+│     ├─ @radix-ui/react-id@npm:1.1.1 → npm:1.1.1
+│     ├─ @radix-ui/react-popper@npm:1.2.7 → npm:1.2.7
+│     ├─ @radix-ui/react-portal@npm:1.1.9 → npm:1.1.9
+│     ├─ @radix-ui/react-presence@npm:1.1.4 → npm:1.1.4
+│     ├─ @radix-ui/react-primitive@npm:2.1.3 → npm:2.1.3
+│     ├─ @radix-ui/react-slot@npm:1.2.3 → npm:1.2.3
+│     ├─ @radix-ui/react-use-controllable-state@npm:1.2.2 → npm:1.2.2
+│     └─ @radix-ui/react-visually-hidden@npm:1.2.3 → npm:1.2.3
+│
+├─ @react-email/button@npm:0.0.15
+│  ├─ Instances: 1
+│  └─ Version: 0.0.15
+│
+├─ @react-email/components@npm:0.0.21
+│  ├─ Instances: 1
+│  ├─ Version: 0.0.21
+│  │ 
+│  └─ Dependencies
+│     ├─ @react-email/body@npm:0.0.8 → npm:0.0.8
+│     ├─ @react-email/button@npm:0.0.15 → npm:0.0.15
+│     ├─ @react-email/code-block@npm:0.0.5 → npm:0.0.5
+│     ├─ @react-email/code-inline@npm:0.0.2 → npm:0.0.2
+│     ├─ @react-email/column@npm:0.0.10 → npm:0.0.10
+│     ├─ @react-email/container@npm:0.0.12 → npm:0.0.12
+│     ├─ @react-email/font@npm:0.0.6 → npm:0.0.6
+│     ├─ @react-email/head@npm:0.0.9 → npm:0.0.9
+│     ├─ @react-email/heading@npm:0.0.12 → npm:0.0.12
+│     ├─ @react-email/hr@npm:0.0.8 → npm:0.0.8
+│     ├─ @react-email/html@npm:0.0.8 → npm:0.0.8
+│     ├─ @react-email/img@npm:0.0.8 → npm:0.0.8
+│     ├─ @react-email/link@npm:0.0.8 → npm:0.0.8
+│     ├─ @react-email/markdown@npm:0.0.10 → npm:0.0.10
+│     ├─ @react-email/preview@npm:0.0.9 → npm:0.0.9
+│     ├─ @react-email/render@npm:0.0.16 → npm:0.0.16
+│     ├─ @react-email/row@npm:0.0.8 → npm:0.0.8
+│     ├─ @react-email/section@npm:0.0.12 → npm:0.0.12
+│     ├─ @react-email/tailwind@npm:0.0.18 → npm:0.0.18
+│     └─ @react-email/text@npm:0.0.8 → npm:0.0.8
+│
+├─ @react-email/html@npm:0.0.8
+│  ├─ Instances: 1
+│  └─ Version: 0.0.8
+│
+├─ @t3-oss/env-nextjs@npm:0.11.1
+│  ├─ Instances: 1
+│  ├─ Version: 0.11.1
+│  │ 
+│  └─ Dependencies
+│     └─ @t3-oss/env-core@npm:0.11.1 → npm:0.11.1
+│
+├─ @tailwindcss/line-clamp@npm:0.4.4
+│  ├─ Instances: 1
+│  └─ Version: 0.4.4
+│
+├─ @tailwindcss/typography@npm:0.5.16
+│  ├─ Instances: 1
+│  ├─ Version: 0.5.16
+│  │ 
+│  └─ Dependencies
+│     ├─ lodash.castarray@npm:^4.4.0 → npm:4.4.0
+│     ├─ lodash.isplainobject@npm:^4.0.6 → npm:4.0.6
+│     ├─ lodash.merge@npm:^4.6.2 → npm:4.6.2
+│     └─ postcss-selector-parser@npm:6.0.10 → npm:6.0.10
+│
+├─ @types/async-retry@npm:1.4.9
+│  ├─ Version: 1.4.9
+│  │ 
+│  └─ Dependencies
+│     └─ @types/retry@npm:* → npm:0.12.5
+│
+├─ @types/node@npm:20.17.55
+│  ├─ Version: 20.17.55
+│  │ 
+│  └─ Dependencies
+│     └─ undici-types@npm:~6.19.2 → npm:6.19.8
+│
+├─ @types/pg@npm:8.15.2
+│  ├─ Version: 8.15.2
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/node@npm:* → npm:22.15.27
+│     ├─ pg-protocol@npm:* → npm:1.10.0
+│     └─ pg-types@npm:^4.0.1 → npm:4.0.2
+│
+├─ @types/react-dom@npm:18.3.0
+│  ├─ Version: 18.3.0
+│  │ 
+│  └─ Dependencies
+│     └─ @types/react@npm:* → npm:19.1.6
+│
+├─ @types/react@npm:18.3.3
+│  ├─ Version: 18.3.3
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/prop-types@npm:* → npm:15.7.14
+│     └─ csstype@npm:^3.0.2 → npm:3.1.3
+│
+├─ @types/ws@npm:8.18.1
+│  ├─ Version: 8.18.1
+│  │ 
+│  └─ Dependencies
+│     └─ @types/node@npm:* → npm:22.15.27
+│
+├─ @typescript-eslint/parser@npm:7.18.0
+│  ├─ Instances: 1
+│  ├─ Version: 7.18.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @typescript-eslint/scope-manager@npm:7.18.0 → npm:7.18.0
+│     ├─ @typescript-eslint/types@npm:7.18.0 → npm:7.18.0
+│     ├─ @typescript-eslint/typescript-estree@npm:7.18.0 → npm:7.18.0
+│     ├─ @typescript-eslint/visitor-keys@npm:7.18.0 → npm:7.18.0
+│     └─ debug@npm:^4.3.4 → npm:4.4.1
+│
+├─ @vercel/analytics@npm:1.5.0
+│  ├─ Instances: 1
+│  └─ Version: 1.5.0
+│
+├─ @vercel/og@npm:0.6.8
+│  ├─ Version: 0.6.8
+│  │ 
+│  └─ Dependencies
+│     ├─ @resvg/resvg-wasm@npm:2.4.0 → npm:2.4.0
+│     ├─ satori@npm:0.12.2 → npm:0.12.2
+│     └─ yoga-wasm-web@npm:0.3.3 → npm:0.3.3
+│
+├─ @vercel/postgres@npm:0.10.0
+│  ├─ Version: 0.10.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @neondatabase/serverless@npm:^0.9.3 → npm:0.9.5
+│     ├─ bufferutil@npm:^4.0.8 → npm:4.0.9
+│     └─ ws@npm:^8.17.1 → npm:8.18.2 [0786b]
+│
+├─ NextDeploy@workspace:.
+│  ├─ Version: 0.0.1
+│  │ 
+│  └─ Dependencies
+│     ├─ @auth/drizzle-adapter@npm:^1.9.1 → npm:1.9.1
+│     ├─ @better-auth/stripe@npm:^1.2.8 → npm:1.2.8
+│     ├─ @commitlint/cli@npm:^19.3.0 → npm:19.8.1
+│     ├─ @commitlint/config-conventional@npm:^19.2.2 → npm:19.8.1
+│     ├─ @hookform/resolvers@npm:^5.0.1 → npm:5.0.1 [49f92]
+│     ├─ @ianvs/prettier-plugin-sort-imports@npm:^4.3.1 → npm:4.4.2 [49f92]
+│     ├─ @neondatabase/serverless@npm:^1.0.0 → npm:1.0.0
+│     ├─ @radix-ui/react-accessible-icon@npm:^1.1.0 → npm:1.1.7 [49f92]
+│     ├─ @radix-ui/react-accordion@npm:^1.2.0 → npm:1.2.11 [49f92]
+│     ├─ @radix-ui/react-alert-dialog@npm:^1.1.1 → npm:1.1.14 [49f92]
+│     ├─ @radix-ui/react-aspect-ratio@npm:^1.1.0 → npm:1.1.7 [49f92]
+│     ├─ @radix-ui/react-avatar@npm:^1.1.0 → npm:1.1.10 [49f92]
+│     ├─ @radix-ui/react-checkbox@npm:^1.1.1 → npm:1.3.2 [49f92]
+│     ├─ @radix-ui/react-collapsible@npm:^1.1.0 → npm:1.1.11 [49f92]
+│     ├─ @radix-ui/react-context-menu@npm:^2.2.1 → npm:2.2.15 [49f92]
+│     ├─ @radix-ui/react-dialog@npm:^1.1.1 → npm:1.1.14 [49f92]
+│     ├─ @radix-ui/react-dropdown-menu@npm:^2.1.1 → npm:2.1.15 [49f92]
+│     ├─ @radix-ui/react-hover-card@npm:^1.1.1 → npm:1.1.14 [49f92]
+│     ├─ @radix-ui/react-label@npm:^2.1.7 → npm:2.1.7 [49f92]
+│     ├─ @radix-ui/react-menubar@npm:^1.1.1 → npm:1.1.15 [49f92]
+│     ├─ @radix-ui/react-navigation-menu@npm:^1.2.0 → npm:1.2.13 [49f92]
+│     ├─ @radix-ui/react-popover@npm:^1.1.1 → npm:1.1.14 [49f92]
+│     ├─ @radix-ui/react-primitive@npm:^2.1.3 → npm:2.1.3 [49f92]
+│     ├─ @radix-ui/react-progress@npm:^1.1.0 → npm:1.1.7 [49f92]
+│     ├─ @radix-ui/react-radio-group@npm:^1.2.0 → npm:1.3.7 [49f92]
+│     ├─ @radix-ui/react-scroll-area@npm:^1.1.0 → npm:1.2.9 [49f92]
+│     ├─ @radix-ui/react-select@npm:^2.1.1 → npm:2.2.5 [49f92]
+│     ├─ @radix-ui/react-separator@npm:^1.1.0 → npm:1.1.7 [49f92]
+│     ├─ @radix-ui/react-slider@npm:^1.2.0 → npm:1.3.5 [49f92]
+│     ├─ @radix-ui/react-slot@npm:^1.2.3 → npm:1.2.3 [49f92]
+│     ├─ @radix-ui/react-switch@npm:^1.1.0 → npm:1.2.5 [49f92]
+│     ├─ @radix-ui/react-tabs@npm:^1.1.0 → npm:1.1.12 [49f92]
+│     ├─ @radix-ui/react-toast@npm:^1.2.1 → npm:1.2.14 [49f92]
+│     ├─ @radix-ui/react-toggle-group@npm:^1.1.0 → npm:1.1.10 [49f92]
+│     ├─ @radix-ui/react-toggle@npm:^1.1.0 → npm:1.1.9 [49f92]
+│     ├─ @radix-ui/react-tooltip@npm:^1.1.2 → npm:1.2.7 [49f92]
+│     ├─ @react-email/button@npm:0.0.15 → npm:0.0.15 [49f92]
+│     ├─ @react-email/components@npm:0.0.21 → npm:0.0.21 [49f92]
+│     ├─ @react-email/html@npm:0.0.8 → npm:0.0.8 [49f92]
+│     ├─ @t3-oss/env-nextjs@npm:^0.11.0 → npm:0.11.1 [49f92]
+│     ├─ @tailwindcss/line-clamp@npm:^0.4.4 → npm:0.4.4 [49f92]
+│     ├─ @tailwindcss/typography@npm:^0.5.13 → npm:0.5.16 [49f92]
+│     ├─ @types/async-retry@npm:^1 → npm:1.4.9
+│     ├─ @types/node@npm:^20.14.11 → npm:20.17.55
+│     ├─ @types/pg@npm:^8 → npm:8.15.2
+│     ├─ @types/react-dom@npm:18.3.0 → npm:18.3.0
+│     ├─ @types/react@npm:18.3.3 → npm:18.3.3
+│     ├─ @types/ws@npm:^8.18.1 → npm:8.18.1
+│     ├─ @typescript-eslint/parser@npm:^7.17.0 → npm:7.18.0 [49f92]
+│     ├─ @vercel/analytics@npm:^1.3.1 → npm:1.5.0 [49f92]
+│     ├─ @vercel/og@npm:^0.6.2 → npm:0.6.8
+│     ├─ @vercel/postgres@npm:^0.10.0 → npm:0.10.0
+│     ├─ async-retry@npm:^1.3.3 → npm:1.3.3
+│     ├─ autoprefixer@npm:^10.4.19 → npm:10.4.21 [49f92]
+│     ├─ better-auth@npm:1.2.8 → npm:1.2.8
+│     ├─ class-variance-authority@npm:^0.7.1 → npm:0.7.1
+│     ├─ clsx@npm:^2.1.1 → npm:2.1.1
+│     ├─ cmdk@npm:^1.0.0 → npm:1.1.1 [49f92]
+│     ├─ concurrently@npm:^8.2.2 → npm:8.2.2
+│     ├─ contentlayer2@npm:^0.5.0 → npm:0.5.8
+│     ├─ date-fns@npm:^3.6.0 → npm:3.6.0
+│     ├─ dotenv@npm:^16.5.0 → npm:16.5.0
+│     ├─ drizzle-kit@npm:^0.31.1 → npm:0.31.1
+│     ├─ drizzle-orm@npm:^0.43.1 → npm:0.43.1 [49f92]
+│     ├─ eslint-config-next@npm:14.2.5 → npm:14.2.5 [49f92]
+│     ├─ eslint-config-prettier@npm:^9.1.0 → npm:9.1.0 [49f92]
+│     ├─ eslint-plugin-react@npm:^7.35.0 → npm:7.37.5 [49f92]
+│     ├─ eslint-plugin-tailwindcss@npm:^3.17.4 → npm:3.18.0 [49f92]
+│     ├─ eslint@npm:^8.57.0 → npm:8.57.1
+│     ├─ g@npm:^2.0.1 → npm:2.0.1
+│     ├─ hast@npm:^1.0.0 → npm:1.0.0
+│     ├─ husky@npm:^9.1.1 → npm:9.1.7
+│     ├─ lucide-react@npm:^0.414.0 → npm:0.414.0 [49f92]
+│     ├─ mdast-util-toc@npm:^7.1.0 → npm:7.1.0
+│     ├─ motion@npm:^12.11.3 → npm:12.15.0 [49f92]
+│     ├─ ms@npm:^2.1.3 → npm:2.1.3
+│     ├─ next-contentlayer2@npm:^0.5.0 → npm:0.5.8 [49f92]
+│     ├─ next-themes@npm:^0.3.0 → npm:0.3.0 [49f92]
+│     ├─ next@npm:15.1.8 → npm:15.1.8 [49f92]
+│     ├─ node-postgres@npm:^0.6.2 → npm:0.6.2
+│     ├─ otplib@npm:^12.0.1 → npm:12.0.1
+│     ├─ pg@npm:^8.16.0 → npm:8.16.0 [49f92]
+│     ├─ postcss@npm:^8.4.39 → npm:8.5.4
+│     ├─ postgres@npm:^3.4.7 → npm:3.4.7
+│     ├─ prettier-plugin-tailwindcss@npm:^0.6.5 → npm:0.6.11 [49f92]
+│     ├─ prettier@npm:^3.3.3 → npm:3.5.3
+│     ├─ pretty-quick@npm:^4.0.0 → npm:4.1.1 [49f92]
+│     ├─ prop-types@npm:^15.8.1 → npm:15.8.1
+│     ├─ react-day-picker@npm:^8.10.1 → npm:8.10.1 [49f92]
+│     ├─ react-dom@npm:18.3.1 → npm:18.3.1 [49f92]
+│     ├─ react-email@npm:2.1.5 → npm:2.1.5
+│     ├─ react-hook-form@npm:^7.56.4 → npm:7.56.4 [49f92]
+│     ├─ react-textarea-autosize@npm:^8.5.3 → npm:8.5.9 [49f92]
+│     ├─ react@npm:18.3.1 → npm:18.3.1
+│     ├─ recharts@npm:^2.12.7 → npm:2.15.3 [49f92]
+│     ├─ rehype-autolink-headings@npm:^7.1.0 → npm:7.1.0
+│     ├─ rehype-pretty-code@npm:^0.13.2 → npm:0.13.2 [49f92]
+│     ├─ rehype-slug@npm:^6.0.0 → npm:6.0.0
+│     ├─ rehype@npm:^13.0.1 → npm:13.0.2
+│     ├─ remark-gfm@npm:^4.0.0 → npm:4.0.1
+│     ├─ remark@npm:^15.0.1 → npm:15.0.1
+│     ├─ resend@npm:^3.5.0 → npm:3.5.0
+│     ├─ sharp@npm:^0.33.4 → npm:0.33.5
+│     ├─ shiki@npm:^1.11.0 → npm:1.29.2
+│     ├─ sonner@npm:^1.5.0 → npm:1.7.4 [49f92]
+│     ├─ stripe@npm:^15.12.0 → npm:15.12.0
+│     ├─ tailwind-merge@npm:^2.4.0 → npm:2.6.0
+│     ├─ tailwindcss-animate@npm:^1.0.7 → npm:1.0.7 [49f92]
+│     ├─ tailwindcss@npm:^3.4.6 → npm:3.4.17
+│     ├─ ts-node@npm:^10.9.2 → npm:10.9.2 [49f92]
+│     ├─ tsx@npm:^4.19.4 → npm:4.19.4
+│     ├─ typescript@patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript> → patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>::version=5.5.3&hash=379a07
+│     ├─ unist-util-visit@npm:^5.0.0 → npm:5.0.0
+│     ├─ vaul@npm:^0.9.1 → npm:0.9.9 [49f92]
+│     ├─ ws@npm:^8.18.2 → npm:8.18.2 [49f92]
+│     └─ zod@npm:^3.25.28 → npm:3.25.42
+│
+├─ async-retry@npm:1.3.3
+│  ├─ Version: 1.3.3
+│  │ 
+│  └─ Dependencies
+│     └─ retry@npm:0.13.1 → npm:0.13.1
+│
+├─ autoprefixer@npm:10.4.21
+│  ├─ Instances: 1
+│  ├─ Version: 10.4.21
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ autoprefixer
+│  │ 
+│  └─ Dependencies
+│     ├─ browserslist@npm:^4.24.4 → npm:4.25.0
+│     ├─ caniuse-lite@npm:^1.0.30001702 → npm:1.0.30001720
+│     ├─ fraction.js@npm:^4.3.7 → npm:4.3.7
+│     ├─ normalize-range@npm:^0.1.2 → npm:0.1.2
+│     ├─ picocolors@npm:^1.1.1 → npm:1.1.1
+│     └─ postcss-value-parser@npm:^4.2.0 → npm:4.2.0
+│
+├─ better-auth@npm:1.2.8
+│  ├─ Version: 1.2.8
+│  │ 
+│  └─ Dependencies
+│     ├─ @better-auth/utils@npm:0.2.5 → npm:0.2.5
+│     ├─ @better-fetch/fetch@npm:^1.1.18 → npm:1.1.18
+│     ├─ @noble/ciphers@npm:^0.6.0 → npm:0.6.0
+│     ├─ @noble/hashes@npm:^1.6.1 → npm:1.8.0
+│     ├─ @simplewebauthn/browser@npm:^13.0.0 → npm:13.1.0
+│     ├─ @simplewebauthn/server@npm:^13.0.0 → npm:13.1.1
+│     ├─ better-call@npm:^1.0.8 → npm:1.0.9
+│     ├─ defu@npm:^6.1.4 → npm:6.1.4
+│     ├─ jose@npm:^5.9.6 → npm:5.10.0
+│     ├─ kysely@npm:^0.28.1 → npm:0.28.2
+│     ├─ nanostores@npm:^0.11.3 → npm:0.11.4
+│     └─ zod@npm:^3.24.1 → npm:3.25.42
+│
+├─ class-variance-authority@npm:0.7.1
+│  ├─ Version: 0.7.1
+│  │ 
+│  └─ Dependencies
+│     └─ clsx@npm:^2.1.1 → npm:2.1.1
+│
+├─ clsx@npm:2.1.1
+│  └─ Version: 2.1.1
+│
+├─ cmdk@npm:1.1.1
+│  ├─ Instances: 1
+│  ├─ Version: 1.1.1
+│  │ 
+│  └─ Dependencies
+│     ├─ @radix-ui/react-compose-refs@npm:^1.1.1 → npm:1.1.2
+│     ├─ @radix-ui/react-dialog@npm:^1.1.6 → npm:1.1.14
+│     ├─ @radix-ui/react-id@npm:^1.1.0 → npm:1.1.1
+│     └─ @radix-ui/react-primitive@npm:^2.0.2 → npm:2.1.3
+│
+├─ concurrently@npm:8.2.2
+│  ├─ Version: 8.2.2
+│  │ 
+│  ├─ Exported Binaries
+│  │  ├─ conc
+│  │  └─ concurrently
+│  │ 
+│  └─ Dependencies
+│     ├─ chalk@npm:^4.1.2 → npm:4.1.2
+│     ├─ date-fns@npm:^2.30.0 → npm:2.30.0
+│     ├─ lodash@npm:^4.17.21 → npm:4.17.21
+│     ├─ rxjs@npm:^7.8.1 → npm:7.8.2
+│     ├─ shell-quote@npm:^1.8.1 → npm:1.8.2
+│     ├─ spawn-command@npm:0.0.2 → npm:0.0.2
+│     ├─ supports-color@npm:^8.1.1 → npm:8.1.1
+│     ├─ tree-kill@npm:^1.2.2 → npm:1.2.2
+│     └─ yargs@npm:^17.7.2 → npm:17.7.2
+│
+├─ contentlayer2@npm:0.5.8
+│  ├─ Version: 0.5.8
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ contentlayer2
+│  │ 
+│  └─ Dependencies
+│     ├─ @contentlayer2/cli@npm:0.5.8 → npm:0.5.8
+│     ├─ @contentlayer2/client@npm:0.5.8 → npm:0.5.8
+│     ├─ @contentlayer2/core@npm:0.5.8 → npm:0.5.8 [7cbf9]
+│     ├─ @contentlayer2/source-files@npm:0.5.8 → npm:0.5.8
+│     ├─ @contentlayer2/source-remote-files@npm:0.5.8 → npm:0.5.8
+│     └─ @contentlayer2/utils@npm:0.5.8 → npm:0.5.8 [7cbf9]
+│
+├─ date-fns@npm:3.6.0
+│  └─ Version: 3.6.0
+│
+├─ dotenv@npm:16.5.0
+│  └─ Version: 16.5.0
+│
+├─ drizzle-kit@npm:0.31.1
+│  ├─ Version: 0.31.1
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ drizzle-kit
+│  │ 
+│  └─ Dependencies
+│     ├─ @drizzle-team/brocli@npm:^0.10.2 → npm:0.10.2
+│     ├─ @esbuild-kit/esm-loader@npm:^2.5.5 → npm:2.6.5
+│     ├─ esbuild-register@npm:^3.5.0 → npm:3.6.0 [86538]
+│     └─ esbuild@npm:^0.25.2 → npm:0.25.5
+│
+├─ drizzle-orm@npm:0.43.1
+│  ├─ Instances: 1
+│  └─ Version: 0.43.1
+│
+├─ eslint-config-next@npm:14.2.5
+│  ├─ Instances: 1
+│  ├─ Version: 14.2.5
+│  │ 
+│  └─ Dependencies
+│     ├─ @next/eslint-plugin-next@npm:14.2.5 → npm:14.2.5
+│     ├─ @rushstack/eslint-patch@npm:^1.3.3 → npm:1.11.0
+│     ├─ @typescript-eslint/parser@npm:^5.4.2 || ^6.0.0 || 7.0.0 - 7.2.0 → npm:7.2.0
+│     ├─ eslint-import-resolver-node@npm:^0.3.6 → npm:0.3.9
+│     ├─ eslint-import-resolver-typescript@npm:^3.5.2 → npm:3.10.1
+│     ├─ eslint-plugin-import@npm:^2.28.1 → npm:2.31.0
+│     ├─ eslint-plugin-jsx-a11y@npm:^6.7.1 → npm:6.10.2
+│     ├─ eslint-plugin-react-hooks@npm:^4.5.0 || 5.0.0-canary-7118f5dd7-20230705 → npm:5.0.0-canary-7118f5dd7-20230705
+│     └─ eslint-plugin-react@npm:^7.33.2 → npm:7.37.5
+│
+├─ eslint-config-prettier@npm:9.1.0
+│  ├─ Instances: 1
+│  ├─ Version: 9.1.0
+│  │ 
+│  └─ Exported Binaries
+│     └─ eslint-config-prettier
+│
+├─ eslint-plugin-react@npm:7.37.5
+│  ├─ Instances: 1
+│  ├─ Version: 7.37.5
+│  │ 
+│  └─ Dependencies
+│     ├─ array-includes@npm:^3.1.8 → npm:3.1.8
+│     ├─ array.prototype.findlast@npm:^1.2.5 → npm:1.2.5
+│     ├─ array.prototype.flatmap@npm:^1.3.3 → npm:1.3.3
+│     ├─ array.prototype.tosorted@npm:^1.1.4 → npm:1.1.4
+│     ├─ doctrine@npm:^2.1.0 → npm:2.1.0
+│     ├─ es-iterator-helpers@npm:^1.2.1 → npm:1.2.1
+│     ├─ estraverse@npm:^5.3.0 → npm:5.3.0
+│     ├─ hasown@npm:^2.0.2 → npm:2.0.2
+│     ├─ jsx-ast-utils@npm:^2.4.1 || ^3.0.0 → npm:3.3.5
+│     ├─ minimatch@npm:^3.1.2 → npm:3.1.2
+│     ├─ object.entries@npm:^1.1.9 → npm:1.1.9
+│     ├─ object.fromentries@npm:^2.0.8 → npm:2.0.8
+│     ├─ object.values@npm:^1.2.1 → npm:1.2.1
+│     ├─ prop-types@npm:^15.8.1 → npm:15.8.1
+│     ├─ resolve@patch:resolve@npm%3A^2.0.0-next.5#optional!builtin<compat/resolve> → patch:resolve@npm%3A2.0.0-next.5#optional!builtin<compat/resolve>::version=2.0.0-next.5&hash=c3c19d
+│     ├─ semver@npm:^6.3.1 → npm:6.3.1
+│     ├─ string.prototype.matchall@npm:^4.0.12 → npm:4.0.12
+│     └─ string.prototype.repeat@npm:^1.0.0 → npm:1.0.0
+│
+├─ eslint-plugin-tailwindcss@npm:3.18.0
+│  ├─ Instances: 1
+│  ├─ Version: 3.18.0
+│  │ 
+│  └─ Dependencies
+│     ├─ fast-glob@npm:^3.2.5 → npm:3.3.3
+│     └─ postcss@npm:^8.4.4 → npm:8.5.4
+│
+├─ eslint@npm:8.57.1
+│  ├─ Version: 8.57.1
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ eslint
+│  │ 
+│  └─ Dependencies
+│     ├─ @eslint-community/eslint-utils@npm:^4.2.0 → npm:4.7.0 [dd202]
+│     ├─ @eslint-community/regexpp@npm:^4.6.1 → npm:4.12.1
+│     ├─ @eslint/eslintrc@npm:^2.1.4 → npm:2.1.4
+│     ├─ @eslint/js@npm:8.57.1 → npm:8.57.1
+│     ├─ @humanwhocodes/config-array@npm:^0.13.0 → npm:0.13.0
+│     ├─ @humanwhocodes/module-importer@npm:^1.0.1 → npm:1.0.1
+│     ├─ @nodelib/fs.walk@npm:^1.2.8 → npm:1.2.8
+│     ├─ @ungap/structured-clone@npm:^1.2.0 → npm:1.3.0
+│     ├─ ajv@npm:^6.12.4 → npm:6.12.6
+│     ├─ chalk@npm:^4.0.0 → npm:4.1.2
+│     ├─ cross-spawn@npm:^7.0.2 → npm:7.0.6
+│     ├─ debug@npm:^4.3.2 → npm:4.4.1 [643ed]
+│     ├─ doctrine@npm:^3.0.0 → npm:3.0.0
+│     ├─ escape-string-regexp@npm:^4.0.0 → npm:4.0.0
+│     ├─ eslint-scope@npm:^7.2.2 → npm:7.2.2
+│     ├─ eslint-visitor-keys@npm:^3.4.3 → npm:3.4.3
+│     ├─ espree@npm:^9.6.1 → npm:9.6.1
+│     ├─ esquery@npm:^1.4.2 → npm:1.6.0
+│     ├─ esutils@npm:^2.0.2 → npm:2.0.3
+│     ├─ fast-deep-equal@npm:^3.1.3 → npm:3.1.3
+│     ├─ file-entry-cache@npm:^6.0.1 → npm:6.0.1
+│     ├─ find-up@npm:^5.0.0 → npm:5.0.0
+│     ├─ glob-parent@npm:^6.0.2 → npm:6.0.2
+│     ├─ globals@npm:^13.19.0 → npm:13.24.0
+│     ├─ graphemer@npm:^1.4.0 → npm:1.4.0
+│     ├─ ignore@npm:^5.2.0 → npm:5.3.2
+│     ├─ imurmurhash@npm:^0.1.4 → npm:0.1.4
+│     ├─ is-glob@npm:^4.0.0 → npm:4.0.3
+│     ├─ is-path-inside@npm:^3.0.3 → npm:3.0.3
+│     ├─ js-yaml@npm:^4.1.0 → npm:4.1.0
+│     ├─ json-stable-stringify-without-jsonify@npm:^1.0.1 → npm:1.0.1
+│     ├─ levn@npm:^0.4.1 → npm:0.4.1
+│     ├─ lodash.merge@npm:^4.6.2 → npm:4.6.2
+│     ├─ minimatch@npm:^3.1.2 → npm:3.1.2
+│     ├─ natural-compare@npm:^1.4.0 → npm:1.4.0
+│     ├─ optionator@npm:^0.9.3 → npm:0.9.4
+│     ├─ strip-ansi@npm:^6.0.1 → npm:6.0.1
+│     └─ text-table@npm:^0.2.0 → npm:0.2.0
+│
+├─ g@npm:2.0.1
+│  └─ Version: 2.0.1
+│
+├─ hast@npm:1.0.0
+│  └─ Version: 1.0.0
+│
+├─ husky@npm:9.1.7
+│  ├─ Version: 9.1.7
+│  │ 
+│  └─ Exported Binaries
+│     └─ husky
+│
+├─ lucide-react@npm:0.414.0
+│  ├─ Instances: 1
+│  └─ Version: 0.414.0
+│
+├─ mdast-util-toc@npm:7.1.0
+│  ├─ Version: 7.1.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/mdast@npm:^4.0.0 → npm:4.0.4
+│     ├─ @types/ungap__structured-clone@npm:^1.0.0 → npm:1.2.0
+│     ├─ @ungap/structured-clone@npm:^1.0.0 → npm:1.3.0
+│     ├─ github-slugger@npm:^2.0.0 → npm:2.0.0
+│     ├─ mdast-util-to-string@npm:^4.0.0 → npm:4.0.0
+│     ├─ unist-util-is@npm:^6.0.0 → npm:6.0.0
+│     └─ unist-util-visit@npm:^5.0.0 → npm:5.0.0
+│
+├─ motion@npm:12.15.0
+│  ├─ Instances: 1
+│  ├─ Version: 12.15.0
+│  │ 
+│  └─ Dependencies
+│     ├─ framer-motion@npm:^12.15.0 → npm:12.15.0
+│     └─ tslib@npm:^2.4.0 → npm:2.8.1
+│
+├─ ms@npm:2.1.3
+│  └─ Version: 2.1.3
+│
+├─ next-contentlayer2@npm:0.5.8
+│  ├─ Instances: 1
+│  ├─ Version: 0.5.8
+│  │ 
+│  └─ Dependencies
+│     ├─ @contentlayer2/core@npm:0.5.8 → npm:0.5.8
+│     └─ @contentlayer2/utils@npm:0.5.8 → npm:0.5.8
+│
+├─ next-themes@npm:0.3.0
+│  ├─ Instances: 1
+│  └─ Version: 0.3.0
+│
+├─ next@npm:15.1.8
+│  ├─ Instances: 1
+│  ├─ Version: 15.1.8
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ next
+│  │ 
+│  └─ Dependencies
+│     ├─ @next/env@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-darwin-arm64@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-darwin-x64@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-linux-arm64-gnu@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-linux-arm64-musl@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-linux-x64-gnu@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-linux-x64-musl@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-win32-arm64-msvc@npm:15.1.8 → npm:15.1.8
+│     ├─ @next/swc-win32-x64-msvc@npm:15.1.8 → npm:15.1.8
+│     ├─ @swc/counter@npm:0.1.3 → npm:0.1.3
+│     ├─ @swc/helpers@npm:0.5.15 → npm:0.5.15
+│     ├─ busboy@npm:1.6.0 → npm:1.6.0
+│     ├─ caniuse-lite@npm:^1.0.30001579 → npm:1.0.30001720
+│     ├─ postcss@npm:8.4.31 → npm:8.4.31
+│     ├─ sharp@npm:^0.33.5 → npm:0.33.5
+│     └─ styled-jsx@npm:5.1.6 → npm:5.1.6
+│
+├─ node-postgres@npm:0.6.2
+│  └─ Version: 0.6.2
+│
+├─ otplib@npm:12.0.1
+│  ├─ Version: 12.0.1
+│  │ 
+│  └─ Dependencies
+│     ├─ @otplib/core@npm:^12.0.1 → npm:12.0.1
+│     ├─ @otplib/preset-default@npm:^12.0.1 → npm:12.0.1
+│     └─ @otplib/preset-v11@npm:^12.0.1 → npm:12.0.1
+│
+├─ pg@npm:8.16.0
+│  ├─ Instances: 1
+│  ├─ Version: 8.16.0
+│  │ 
+│  └─ Dependencies
+│     ├─ pg-cloudflare@npm:^1.2.5 → npm:1.2.5
+│     ├─ pg-connection-string@npm:^2.9.0 → npm:2.9.0
+│     ├─ pg-pool@npm:^3.10.0 → npm:3.10.0
+│     ├─ pg-protocol@npm:^1.10.0 → npm:1.10.0
+│     ├─ pg-types@npm:2.2.0 → npm:2.2.0
+│     └─ pgpass@npm:1.0.5 → npm:1.0.5
+│
+├─ postcss@npm:8.5.4
+│  ├─ Version: 8.5.4
+│  │ 
+│  └─ Dependencies
+│     ├─ nanoid@npm:^3.3.11 → npm:3.3.11
+│     ├─ picocolors@npm:^1.1.1 → npm:1.1.1
+│     └─ source-map-js@npm:^1.2.1 → npm:1.2.1
+│
+├─ postgres@npm:3.4.7
+│  └─ Version: 3.4.7
+│
+├─ prettier-plugin-tailwindcss@npm:0.6.11
+│  ├─ Instances: 1
+│  └─ Version: 0.6.11
+│
+├─ prettier@npm:3.5.3
+│  ├─ Version: 3.5.3
+│  │ 
+│  └─ Exported Binaries
+│     └─ prettier
+│
+├─ pretty-quick@npm:4.1.1
+│  ├─ Instances: 1
+│  ├─ Version: 4.1.1
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ pretty-quick
+│  │ 
+│  └─ Dependencies
+│     ├─ find-up@npm:^5.0.0 → npm:5.0.0
+│     ├─ ignore@npm:^7.0.3 → npm:7.0.4
+│     ├─ mri@npm:^1.2.0 → npm:1.2.0
+│     ├─ picocolors@npm:^1.1.1 → npm:1.1.1
+│     ├─ picomatch@npm:^4.0.2 → npm:4.0.2
+│     ├─ tinyexec@npm:^0.3.2 → npm:0.3.2
+│     └─ tslib@npm:^2.8.1 → npm:2.8.1
+│
+├─ prop-types@npm:15.8.1
+│  ├─ Version: 15.8.1
+│  │ 
+│  └─ Dependencies
+│     ├─ loose-envify@npm:^1.4.0 → npm:1.4.0
+│     ├─ object-assign@npm:^4.1.1 → npm:4.1.1
+│     └─ react-is@npm:^16.13.1 → npm:16.13.1
+│
+├─ react-day-picker@npm:8.10.1
+│  ├─ Instances: 1
+│  └─ Version: 8.10.1
+│
+├─ react-dom@npm:18.3.1
+│  ├─ Instances: 1
+│  ├─ Version: 18.3.1
+│  │ 
+│  └─ Dependencies
+│     ├─ loose-envify@npm:^1.1.0 → npm:1.4.0
+│     └─ scheduler@npm:^0.23.2 → npm:0.23.2
+│
+├─ react-email@npm:2.1.5
+│  ├─ Version: 2.1.5
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ email
+│  │ 
+│  └─ Dependencies
+│     ├─ @babel/core@npm:7.24.5 → npm:7.24.5
+│     ├─ @babel/parser@npm:7.24.5 → npm:7.24.5
+│     ├─ @radix-ui/colors@npm:1.0.1 → npm:1.0.1
+│     ├─ @radix-ui/react-collapsible@npm:1.1.0 → npm:1.1.0 [083d5]
+│     ├─ @radix-ui/react-popover@npm:1.1.1 → npm:1.1.1 [083d5]
+│     ├─ @radix-ui/react-slot@npm:1.1.0 → npm:1.1.0 [083d5]
+│     ├─ @radix-ui/react-toggle-group@npm:1.1.0 → npm:1.1.0 [083d5]
+│     ├─ @radix-ui/react-tooltip@npm:1.1.1 → npm:1.1.1 [083d5]
+│     ├─ @swc/core@npm:1.3.101 → npm:1.3.101 [083d5]
+│     ├─ @types/react-dom@npm:^18.2.0 → npm:18.3.7 [083d5]
+│     ├─ @types/react@npm:18.2.47 → npm:18.2.47
+│     ├─ @types/webpack@npm:5.28.5 → npm:5.28.5
+│     ├─ autoprefixer@npm:10.4.14 → npm:10.4.14 [083d5]
+│     ├─ chalk@npm:4.1.2 → npm:4.1.2
+│     ├─ chokidar@npm:3.5.3 → npm:3.5.3
+│     ├─ clsx@npm:2.1.0 → npm:2.1.0
+│     ├─ commander@npm:11.1.0 → npm:11.1.0
+│     ├─ debounce@npm:2.0.0 → npm:2.0.0
+│     ├─ esbuild@npm:0.19.11 → npm:0.19.11
+│     ├─ eslint-config-prettier@npm:9.0.0 → npm:9.0.0 [083d5]
+│     ├─ eslint-config-turbo@npm:1.10.12 → npm:1.10.12 [083d5]
+│     ├─ framer-motion@npm:10.17.4 → npm:10.17.4 [083d5]
+│     ├─ glob@npm:10.3.4 → npm:10.3.4
+│     ├─ log-symbols@npm:4.1.0 → npm:4.1.0
+│     ├─ mime-types@npm:2.1.35 → npm:2.1.35
+│     ├─ next@npm:14.1.4 → npm:14.1.4 [083d5]
+│     ├─ normalize-path@npm:3.0.0 → npm:3.0.0
+│     ├─ ora@npm:5.4.1 → npm:5.4.1
+│     ├─ postcss@npm:8.4.38 → npm:8.4.38
+│     ├─ prism-react-renderer@npm:2.1.0 → npm:2.1.0 [083d5]
+│     ├─ react-dom@npm:^18.2.0 → npm:18.3.1 [083d5]
+│     ├─ react@npm:^18.2.0 → npm:18.3.1
+│     ├─ socket.io-client@npm:4.7.3 → npm:4.7.3
+│     ├─ socket.io@npm:4.7.3 → npm:4.7.3
+│     ├─ sonner@npm:1.3.1 → npm:1.3.1 [083d5]
+│     ├─ source-map-js@npm:1.0.2 → npm:1.0.2
+│     ├─ stacktrace-parser@npm:0.1.10 → npm:0.1.10
+│     ├─ tailwind-merge@npm:2.2.0 → npm:2.2.0
+│     ├─ tailwindcss@npm:3.4.0 → npm:3.4.0
+│     └─ typescript@patch:typescript@npm%3A5.1.6#optional!builtin<compat/typescript> → patch:typescript@npm%3A5.1.6#optional!builtin<compat/typescript>::version=5.1.6&hash=5da071
+│
+├─ react-hook-form@npm:7.56.4
+│  ├─ Instances: 1
+│  └─ Version: 7.56.4
+│
+├─ react-textarea-autosize@npm:8.5.9
+│  ├─ Instances: 1
+│  ├─ Version: 8.5.9
+│  │ 
+│  └─ Dependencies
+│     ├─ @babel/runtime@npm:^7.20.13 → npm:7.27.3
+│     ├─ use-composed-ref@npm:^1.3.0 → npm:1.4.0
+│     └─ use-latest@npm:^1.2.1 → npm:1.3.0
+│
+├─ react@npm:18.3.1
+│  ├─ Version: 18.3.1
+│  │ 
+│  └─ Dependencies
+│     └─ loose-envify@npm:^1.1.0 → npm:1.4.0
+│
+├─ recharts@npm:2.15.3
+│  ├─ Instances: 1
+│  ├─ Version: 2.15.3
+│  │ 
+│  └─ Dependencies
+│     ├─ clsx@npm:^2.0.0 → npm:2.1.1
+│     ├─ eventemitter3@npm:^4.0.1 → npm:4.0.7
+│     ├─ lodash@npm:^4.17.21 → npm:4.17.21
+│     ├─ react-is@npm:^18.3.1 → npm:18.3.1
+│     ├─ react-smooth@npm:^4.0.4 → npm:4.0.4
+│     ├─ recharts-scale@npm:^0.4.4 → npm:0.4.5
+│     ├─ tiny-invariant@npm:^1.3.1 → npm:1.3.3
+│     └─ victory-vendor@npm:^36.6.8 → npm:36.9.2
+│
+├─ rehype-autolink-headings@npm:7.1.0
+│  ├─ Version: 7.1.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/hast@npm:^3.0.0 → npm:3.0.4
+│     ├─ @ungap/structured-clone@npm:^1.0.0 → npm:1.3.0
+│     ├─ hast-util-heading-rank@npm:^3.0.0 → npm:3.0.0
+│     ├─ hast-util-is-element@npm:^3.0.0 → npm:3.0.0
+│     ├─ unified@npm:^11.0.0 → npm:11.0.5
+│     └─ unist-util-visit@npm:^5.0.0 → npm:5.0.0
+│
+├─ rehype-pretty-code@npm:0.13.2
+│  ├─ Instances: 1
+│  ├─ Version: 0.13.2
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/hast@npm:^3.0.4 → npm:3.0.4
+│     ├─ hast-util-to-string@npm:^3.0.0 → npm:3.0.1
+│     ├─ parse-numeric-range@npm:^1.3.0 → npm:1.3.0
+│     ├─ rehype-parse@npm:^9.0.0 → npm:9.0.1
+│     ├─ unified@npm:^11.0.4 → npm:11.0.5
+│     └─ unist-util-visit@npm:^5.0.0 → npm:5.0.0
+│
+├─ rehype-slug@npm:6.0.0
+│  ├─ Version: 6.0.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/hast@npm:^3.0.0 → npm:3.0.4
+│     ├─ github-slugger@npm:^2.0.0 → npm:2.0.0
+│     ├─ hast-util-heading-rank@npm:^3.0.0 → npm:3.0.0
+│     ├─ hast-util-to-string@npm:^3.0.0 → npm:3.0.1
+│     └─ unist-util-visit@npm:^5.0.0 → npm:5.0.0
+│
+├─ rehype@npm:13.0.2
+│  ├─ Version: 13.0.2
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/hast@npm:^3.0.0 → npm:3.0.4
+│     ├─ rehype-parse@npm:^9.0.0 → npm:9.0.1
+│     ├─ rehype-stringify@npm:^10.0.0 → npm:10.0.1
+│     └─ unified@npm:^11.0.0 → npm:11.0.5
+│
+├─ remark-gfm@npm:4.0.1
+│  ├─ Version: 4.0.1
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/mdast@npm:^4.0.0 → npm:4.0.4
+│     ├─ mdast-util-gfm@npm:^3.0.0 → npm:3.1.0
+│     ├─ micromark-extension-gfm@npm:^3.0.0 → npm:3.0.0
+│     ├─ remark-parse@npm:^11.0.0 → npm:11.0.0
+│     ├─ remark-stringify@npm:^11.0.0 → npm:11.0.0
+│     └─ unified@npm:^11.0.0 → npm:11.0.5
+│
+├─ remark@npm:15.0.1
+│  ├─ Version: 15.0.1
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/mdast@npm:^4.0.0 → npm:4.0.4
+│     ├─ remark-parse@npm:^11.0.0 → npm:11.0.0
+│     ├─ remark-stringify@npm:^11.0.0 → npm:11.0.0
+│     └─ unified@npm:^11.0.0 → npm:11.0.5
+│
+├─ resend@npm:3.5.0
+│  ├─ Version: 3.5.0
+│  │ 
+│  └─ Dependencies
+│     └─ @react-email/render@npm:0.0.16 → npm:0.0.16 [9f2ec]
+│
+├─ sharp@npm:0.33.5
+│  ├─ Version: 0.33.5
+│  │ 
+│  └─ Dependencies
+│     ├─ @img/sharp-darwin-arm64@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-darwin-x64@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-libvips-darwin-arm64@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-libvips-darwin-x64@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-libvips-linux-arm64@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-libvips-linux-arm@npm:1.0.5 → npm:1.0.5
+│     ├─ @img/sharp-libvips-linux-s390x@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-libvips-linux-x64@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-libvips-linuxmusl-arm64@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-libvips-linuxmusl-x64@npm:1.0.4 → npm:1.0.4
+│     ├─ @img/sharp-linux-arm64@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-linux-arm@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-linux-s390x@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-linux-x64@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-linuxmusl-arm64@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-linuxmusl-x64@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-wasm32@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-win32-ia32@npm:0.33.5 → npm:0.33.5
+│     ├─ @img/sharp-win32-x64@npm:0.33.5 → npm:0.33.5
+│     ├─ color@npm:^4.2.3 → npm:4.2.3
+│     ├─ detect-libc@npm:^2.0.3 → npm:2.0.4
+│     └─ semver@npm:^7.6.3 → npm:7.7.2
+│
+├─ shiki@npm:1.29.2
+│  ├─ Version: 1.29.2
+│  │ 
+│  └─ Dependencies
+│     ├─ @shikijs/core@npm:1.29.2 → npm:1.29.2
+│     ├─ @shikijs/engine-javascript@npm:1.29.2 → npm:1.29.2
+│     ├─ @shikijs/engine-oniguruma@npm:1.29.2 → npm:1.29.2
+│     ├─ @shikijs/langs@npm:1.29.2 → npm:1.29.2
+│     ├─ @shikijs/themes@npm:1.29.2 → npm:1.29.2
+│     ├─ @shikijs/types@npm:1.29.2 → npm:1.29.2
+│     ├─ @shikijs/vscode-textmate@npm:^10.0.1 → npm:10.0.2
+│     └─ @types/hast@npm:^3.0.4 → npm:3.0.4
+│
+├─ sonner@npm:1.7.4
+│  ├─ Instances: 1
+│  └─ Version: 1.7.4
+│
+├─ stripe@npm:15.12.0
+│  ├─ Version: 15.12.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/node@npm:>=8.1.0 → npm:22.15.27
+│     └─ qs@npm:^6.11.0 → npm:6.14.0
+│
+├─ tailwind-merge@npm:2.6.0
+│  └─ Version: 2.6.0
+│
+├─ tailwindcss-animate@npm:1.0.7
+│  ├─ Instances: 1
+│  └─ Version: 1.0.7
+│
+├─ tailwindcss@npm:3.4.17
+│  ├─ Version: 3.4.17
+│  │ 
+│  ├─ Exported Binaries
+│  │  ├─ tailwind
+│  │  └─ tailwindcss
+│  │ 
+│  └─ Dependencies
+│     ├─ @alloc/quick-lru@npm:^5.2.0 → npm:5.2.0
+│     ├─ arg@npm:^5.0.2 → npm:5.0.2
+│     ├─ chokidar@npm:^3.6.0 → npm:3.6.0
+│     ├─ didyoumean@npm:^1.2.2 → npm:1.2.2
+│     ├─ dlv@npm:^1.1.3 → npm:1.1.3
+│     ├─ fast-glob@npm:^3.3.2 → npm:3.3.3
+│     ├─ glob-parent@npm:^6.0.2 → npm:6.0.2
+│     ├─ is-glob@npm:^4.0.3 → npm:4.0.3
+│     ├─ jiti@npm:^1.21.6 → npm:1.21.7
+│     ├─ lilconfig@npm:^3.1.3 → npm:3.1.3
+│     ├─ micromatch@npm:^4.0.8 → npm:4.0.8
+│     ├─ normalize-path@npm:^3.0.0 → npm:3.0.0
+│     ├─ object-hash@npm:^3.0.0 → npm:3.0.0
+│     ├─ picocolors@npm:^1.1.1 → npm:1.1.1
+│     ├─ postcss-import@npm:^15.1.0 → npm:15.1.0 [e59fb]
+│     ├─ postcss-js@npm:^4.0.1 → npm:4.0.1 [e59fb]
+│     ├─ postcss-load-config@npm:^4.0.2 → npm:4.0.2 [e59fb]
+│     ├─ postcss-nested@npm:^6.2.0 → npm:6.2.0 [e59fb]
+│     ├─ postcss-selector-parser@npm:^6.1.2 → npm:6.1.2
+│     ├─ postcss@npm:^8.4.47 → npm:8.5.4
+│     ├─ resolve@patch:resolve@npm%3A^1.22.8#optional!builtin<compat/resolve> → patch:resolve@npm%3A1.22.10#optional!builtin<compat/resolve>::version=1.22.10&hash=c3c19d
+│     └─ sucrase@npm:^3.35.0 → npm:3.35.0
+│
+├─ ts-node@npm:10.9.2
+│  ├─ Instances: 1
+│  ├─ Version: 10.9.2
+│  │ 
+│  ├─ Exported Binaries
+│  │  ├─ ts-node
+│  │  ├─ ts-node-cwd
+│  │  ├─ ts-node-esm
+│  │  ├─ ts-node-script
+│  │  ├─ ts-node-transpile-only
+│  │  └─ ts-script
+│  │ 
+│  └─ Dependencies
+│     ├─ @cspotcode/source-map-support@npm:^0.8.0 → npm:0.8.1
+│     ├─ @tsconfig/node10@npm:^1.0.7 → npm:1.0.11
+│     ├─ @tsconfig/node12@npm:^1.0.7 → npm:1.0.11
+│     ├─ @tsconfig/node14@npm:^1.0.0 → npm:1.0.3
+│     ├─ @tsconfig/node16@npm:^1.0.2 → npm:1.0.4
+│     ├─ acorn-walk@npm:^8.1.1 → npm:8.3.4
+│     ├─ acorn@npm:^8.4.1 → npm:8.14.1
+│     ├─ arg@npm:^4.1.0 → npm:4.1.3
+│     ├─ create-require@npm:^1.1.0 → npm:1.1.1
+│     ├─ diff@npm:^4.0.1 → npm:4.0.2
+│     ├─ make-error@npm:^1.1.1 → npm:1.3.6
+│     ├─ v8-compile-cache-lib@npm:^3.0.1 → npm:3.0.1
+│     └─ yn@npm:3.1.1 → npm:3.1.1
+│
+├─ tsx@npm:4.19.4
+│  ├─ Version: 4.19.4
+│  │ 
+│  ├─ Exported Binaries
+│  │  └─ tsx
+│  │ 
+│  └─ Dependencies
+│     ├─ esbuild@npm:~0.25.0 → npm:0.25.5
+│     ├─ fsevents@patch:fsevents@npm%3A~2.3.3#optional!builtin<compat/fsevents> → patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1
+│     └─ get-tsconfig@npm:^4.7.5 → npm:4.10.1
+│
+├─ typescript@patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>::version=5.5.3&hash=379a07
+│  ├─ Version: 5.5.3
+│  │ 
+│  └─ Exported Binaries
+│     ├─ tsc
+│     └─ tsserver
+│
+├─ unist-util-visit@npm:5.0.0
+│  ├─ Version: 5.0.0
+│  │ 
+│  └─ Dependencies
+│     ├─ @types/unist@npm:^3.0.0 → npm:3.0.3
+│     ├─ unist-util-is@npm:^6.0.0 → npm:6.0.0
+│     └─ unist-util-visit-parents@npm:^6.0.0 → npm:6.0.1
+│
+├─ vaul@npm:0.9.9
+│  ├─ Instances: 1
+│  ├─ Version: 0.9.9
+│  │ 
+│  └─ Dependencies
+│     └─ @radix-ui/react-dialog@npm:^1.1.1 → npm:1.1.14
+│
+├─ ws@npm:8.18.2
+│  ├─ Instances: 1
+│  └─ Version: 8.18.2
+│
+└─ zod@npm:3.25.42
+   └─ Version: 3.25.42

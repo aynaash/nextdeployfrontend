@@ -35,7 +35,7 @@ export default function ProjectSwitcher({ large = false }: { large?: boolean }) 
   const [openPopover, setOpenPopover] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectType>(projects[1]);
 
-  if (!projects || status === "loading") {
+  if (!projects) {
     return <ProjectSwitcherPlaceholder />;
   }
 

@@ -2,8 +2,8 @@
 import { db } from "./lib/db";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth, type BetterAuthOptions } from "better-auth";
-import { resend } from "./lib/auth/authUtils";
-import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
+// import { resend } from "./lib/auth/authUtils";
+// import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
 import { Stripe } from "stripe";
 import { stripe } from "@better-auth/stripe";
 import * as schema from "./drizzle/schema/schema"
