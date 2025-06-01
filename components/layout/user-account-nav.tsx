@@ -43,8 +43,8 @@ export function UserAccountNav() {
           <button>
             <UserAvatar
               user={{ 
-                name: user.name || undefined, 
-                image: user.image || undefined 
+                name: user.name, 
+               image: typeof user.image === "string" ? user.image : null,
               }}
               className="size-9 border"
             />
@@ -60,8 +60,8 @@ export function UserAccountNav() {
             <div className="flex items-center justify-start gap-2 p-2">
               <UserAvatar
                 user={{ 
-                  name: user.name || undefined, 
-                  image: user.image || undefined 
+                  name: user.name,
+                  image: typeof user.image === "string" ? user.image : null,
                 }}
                 className="size-10 border"
               />
@@ -133,8 +133,8 @@ export function UserAccountNav() {
         <button>
           <UserAvatar
             user={{ 
-              name: user.name || undefined, 
-              image: user.image || undefined 
+              name: user.name,
+              image: typeof user.image === "string" ? user.image : null,
             }}
             className="size-8 border"
           />
@@ -144,8 +144,8 @@ export function UserAccountNav() {
         <div className="flex items-center gap-2 p-2">
           <UserAvatar
             user={{ 
-              name: user.name || undefined, 
-              image: user.image || undefined 
+              name: user.name,
+              image: typeof user.image === "string" ? user.image : null,
             }}
             className="size-8 border"
           />

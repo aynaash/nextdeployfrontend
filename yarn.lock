@@ -5706,7 +5706,7 @@ __metadata:
     unist-util-visit: "npm:^5.0.0"
     vaul: "npm:^0.9.1"
     ws: "npm:^8.18.2"
-    zod: "npm:^3.25.28"
+    zod: "npm:^3.25.45"
   languageName: unknown
   linkType: soft
 
@@ -15502,10 +15502,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.22.4, zod@npm:^3.24.1, zod@npm:^3.25.28":
+"zod@npm:^3.22.4, zod@npm:^3.24.1":
   version: 3.25.42
   resolution: "zod@npm:3.25.42"
   checksum: 10c0/daa04d3bd5d87318790def440c074a154e29a5c900aefc6605c078df5878cdc9b465091c1ad117478e1f907242b8983d69bf2c11fcf354772b18d7103b94383a
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.25.45":
+  version: 3.25.45
+  resolution: "zod@npm:3.25.45"
+  checksum: 10c0/bb57907708fd4b2cffc66ab2eb8e267ace6e8a05098880ec7b1be37d91e92e668476b333a1068c5f5a67dfde53c3569c14bc29e4027e95034988fe20a71cd411
   languageName: node
   linkType: hard
 

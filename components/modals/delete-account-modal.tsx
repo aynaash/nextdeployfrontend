@@ -14,12 +14,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { UserAvatar } from "@/components/shared/user-avatar";
-
 interface DeleteAccountModalProps {
   showDeleteAccountModal: boolean;
   setShowDeleteAccountModal: Dispatch<SetStateAction<boolean>>;
 }
-
+interface User {
+  name: string;
+  image: string | null;
+}
 function DeleteAccountModal({
   showDeleteAccountModal,
   setShowDeleteAccountModal,
@@ -27,9 +29,10 @@ function DeleteAccountModal({
   const { data: session } = useSession();
   const [deleting, setDeleting] = useState(false);
 
-  const user = useMemo(() => ({
-    name: session?.user?.name ?? undefined,
-    image: session?.user?.image ?? undefined,
+  const user: User = useMemo(() => ({
+    name: session?.user?.name || "User",
+    image: typeof session?.user.image === "string" ? session?.user?.image : null,
+
   }), [session?.user]);
 
   const deleteAccount = async () => {

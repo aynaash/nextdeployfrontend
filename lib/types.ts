@@ -25,23 +25,23 @@ interface BaseEntity {
 
 // User types
 export interface User extends BaseEntity {
-  name?: string;
+  name: string;
   email: string;
   emailVerified: boolean;
-  image?: string;
+  image?: string | null |undefined;
   firstName?: string;
   lastName?: string;
   password?: string;
-  role: UserRole;
-  stripeCustomerId?: string;
-  stripeSubscriptionId?: string;
-  stripePriceId?: string;
-  stripeCurrentPeriodEnd?: Date;
-  banned: boolean;
-  banReason?: string;
-  twoFactorEnabled: boolean;
+  role?: UserRole;
+  stripeCustomerId?:  string | null | undefined; 
+  stripeSubscriptionId?: string | null | undefined;
+  stripePriceId?: string | null | undefined;
+  stripeCurrentPeriodEnd?: Date | null | undefined;
+  banned: boolean | null;
+  banReason?: string | null;
+  twoFactorEnabled: boolean | null;
   lastLoginAt?: Date;
-  preferredLanguage: string;
+  preferredLanguage?: string | null;
 }
 
 export interface Account extends BaseEntity {
