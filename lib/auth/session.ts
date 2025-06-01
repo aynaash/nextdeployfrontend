@@ -1,38 +1,29 @@
 import { auth } from "../../auth";
-import { headers } from "next/headers";
+import { headers as nextHeaders } from "next/headers";
 import { User, UserRole } from "../../lib/types";
 
 const VALID_ROLES: UserRole[] = ["admin", "user", "super_admin"];
 
 export async function getCurrentUser(): Promise<User | undefined> {
   try {
-    const rawHeaders = await headers();
+    const rawHeaders = await nextHeaders();
 
     if (!rawHeaders || typeof rawHeaders.get !== "function") {
       console.warn("Headers object is malformed or missing");
       return undefined;
     }
 
-    const cookie = rawHeaders.get("cookie") ?? "";
+    // Clone headers into a real Headers instance
+    const realHeaders = new Headers();
 
-    const sanitizedHeaders: Record<string, string> = {
-      cookie,
-      ...Object.fromEntries(
-        Array.from(rawHeaders.entries()).filter(
-          ([key]) => key.toLowerCase() !== "cookie"
-        )
-      ),
-    };
-
-    const session = await auth.api.getSession({ headers: sanitizedHeaders });
-
-    if (!session) {
-      console.warn("No session returned from auth provider");
-      return undefined;
+    for (const [key, value] of rawHeaders.entries()) {
+      realHeaders.append(key, value);
     }
 
-    if (!session.user || typeof session.user !== "object") {
-      console.warn("Session returned without a valid user");
+    const session = await auth.api.getSession({ headers: realHeaders });
+
+    if (!session?.user || typeof session.user !== "object") {
+      console.warn("No valid user in session");
       return undefined;
     }
 
