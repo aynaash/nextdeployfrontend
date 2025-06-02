@@ -1,8 +1,10 @@
-import { User } from "../lib/types";
+import type { User, UserRole } from "../lib/types";
 import type { Icon } from "lucide-react";
-
 import { Icons } from "@/components/shared/icons";
 
+/**
+ * Site configuration
+ */
 export type SiteConfig = {
   name: string;
   description: string;
@@ -15,6 +17,9 @@ export type SiteConfig = {
   };
 };
 
+/**
+ * Navigation items
+ */
 export type NavItem = {
   title: string;
   href: string;
@@ -26,11 +31,6 @@ export type NavItem = {
 };
 
 export type MainNavItem = NavItem;
-
-export type MarketingConfig = {
-  mainNav: MainNavItem[];
-};
-
 export type SidebarNavItem = {
   title: string;
   items: NavItem[];
@@ -38,13 +38,22 @@ export type SidebarNavItem = {
   icon?: keyof typeof Icons;
 };
 
+/**
+ * Documentation configuration
+ */
 export type DocsConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
 };
 
-// subcriptions
+/**
+ * Subscription plans configuration
+ */
+export const PLAN_NAMES = ["free", "pro", "enterprise"] as const;
+export type PlanName = typeof PLAN_NAMES[number];
+
 export type SubscriptionPlan = {
+  name: PlanName;
   title: string;
   description: string;
   benefits: string[];
@@ -57,6 +66,8 @@ export type SubscriptionPlan = {
     monthly: string | null;
     yearly: string | null;
   };
+  featured?: boolean;
+  recommended?: boolean;
 };
 
 export type UserSubscriptionPlan = SubscriptionPlan &
@@ -65,38 +76,56 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     isPaid: boolean;
     interval: "month" | "year" | null;
     isCanceled?: boolean;
+    hasActiveSubscription?: boolean;
   };
 
-// compare plans
-export type ColumnType = string | boolean | null;
-export type PlansRow = { feature: string; tooltip?: string } & {
-  [key in (typeof plansColumns)[number]]: ColumnType;
-};
+/**
+ * Plans comparison table types
+ */
+export type FeatureComparison = {
+  feature: string;
+  tooltip?: string;
+  highlight?: boolean;
+} & Record<PlanName, string | boolean | null>;
 
-// landing sections
+/**
+ * Landing page content types
+ */
 export type InfoList = {
   icon: keyof typeof Icons;
   title: string;
   description: string;
 };
 
-export type InfoLdg = {
+export type LandingInfoSection = {
   title: string;
   image: string;
   description: string;
   list: InfoList[];
 };
 
-export type FeatureLdg = {
+export type LandingFeature = {
   title: string;
   description: string;
   link: string;
   icon: keyof typeof Icons;
+  comingSoon?: boolean;
 };
 
-export type TestimonialType = {
+export type Testimonial = {
   name: string;
   job: string;
   image: string;
   review: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+};
+
+/**
+ * Marketing configuration
+ */
+export type MarketingConfig = {
+  mainNav: MainNavItem[];
+  features: LandingFeature[];
+  testimonials: Testimonial[];
+  pricingComparison: FeatureComparison[];
 };

@@ -25,6 +25,7 @@ export async function getCurrentUser(): Promise<User | undefined> {
     const sanitizedUser: User = {
       ...user,
       role,
+      banned: user.banned ?? false,
       image: user.image ?? undefined,
       twoFactorEnabled: user.twoFactorEnabled ?? false,
     };
