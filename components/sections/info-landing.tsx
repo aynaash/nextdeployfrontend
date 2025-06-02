@@ -1,9 +1,19 @@
 import Image from "next/image";
-import { InfoLdg } from "@/types";
 
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
+
+interface InfoLdg {
+  title: string;
+  description: string;
+  image: string;
+  list: Array<{
+    title: string;
+    description: string;
+    icon?: keyof typeof Icons;
+  }>;
+}
 
 interface InfoLandingProps {
   data: InfoLdg;

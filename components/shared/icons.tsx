@@ -14,6 +14,7 @@ import {
   Home,
   Image,
   Laptop,
+  Rocket,
   LayoutPanelLeft,
   LineChart,
   Loader2,
@@ -36,6 +37,7 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  rocket: Rocket,
   add: Plus,
   arrowRight: ArrowRight,
   arrowUpRight: ArrowUpRight,
