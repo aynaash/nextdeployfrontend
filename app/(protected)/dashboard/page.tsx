@@ -15,7 +15,7 @@ type User = {
   image?: string | null;
   role?: string; // Make role optional since it might not exist in all user objects
 };
-
+export const dynamic = 'force-dynamic';
 export const metadata = constructMetadata({
   title: "Dashboard – NextDeploy",
   description: "Create and manage content.",

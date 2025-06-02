@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { NextDeployLogo } from "@/components/logo";
 import { Loader2 } from "lucide-react";
 
+//TODO: fix error Failed to retrieve session: Dynamic server usage: 
 type UserRole = "admin" | "user" | null;
 
 interface User {

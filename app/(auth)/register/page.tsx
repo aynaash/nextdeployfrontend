@@ -23,6 +23,7 @@ const RegisterSchema = z.object({
  role: z.enum(["user", "admin"]),
 });
 
+export const dynamic = 'force-dynamic';
 type RegisterForm = z.infer<typeof RegisterSchema>;
 
 const features = [
