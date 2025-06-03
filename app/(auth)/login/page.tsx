@@ -1,22 +1,32 @@
 "use client"
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import Link from "next/link";
-import { authClient as client } from "../../../auth-client";
-import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { ArrowLeft, Check } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  Sparkles,
+} from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+import { authClient as client } from "../../../auth-client";
 import Logo from "../../../components/logo";
 import { cn } from "../../../lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+
 const SignInSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
   password: z.string().min(1, "Password is required"),
@@ -25,13 +35,22 @@ const SignInSchema = z.object({
 type SignInForm = z.infer<typeof SignInSchema>;
 
 const features = [
-  ["Continuous Deployment", "Automated builds and deployments from GitHub with zero configuration."],
-  ["Infrastructure as Code", "Manage infrastructure with version-controlled declarative files."],
+  [
+    "Continuous Deployment",
+    "Automated builds and deployments from GitHub with zero configuration.",
+  ],
+  [
+    "Infrastructure as Code",
+    "Manage infrastructure with version-controlled declarative files.",
+  ],
   ["Monitoring & Alerts", "Real-time system metrics, logs, and health checks."],
   ["GitHub Webhooks", "Trigger deployments directly from your repos."],
   ["SSH Key Auth", "Secure deployments using private keys and VPS access."],
   ["Daemon Logs", "Log streaming and container health tracking."],
-  ["Multitenancy Support", "Works for individuals and dev teams with scoped resources."],
+  [
+    "Multitenancy Support",
+    "Works for individuals and dev teams with scoped resources.",
+  ],
 ];
 
 const containerVariants = {
@@ -40,23 +59,38 @@ const containerVariants = {
     opacity: 1,
     transition: {
       when: "beforeChildren",
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { y: 30, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 300, damping: 30 },
+    transition: { type: "spring", stiffness: 400, damping: 25 },
   },
+};
+
+const featureVariants = {
+  hidden: { x: -20, opacity: 0 },
+  visible: (i: number) => ({
+    x: 0,
+    opacity: 1,
+    transition: {
+      delay: i * 0.1,
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+    },
+  }),
 };
 
 const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -89,19 +123,26 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -right-40 -top-40 size-80 animate-pulse rounded-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 size-80 animate-pulse rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-3xl delay-1000" />
+        <div className="absolute left-1/2 top-1/2 size-96 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-gradient-to-r from-violet-500/10 to-pink-500/10 blur-3xl delay-500" />
+      </div>
+
       {/* Back Navigation */}
       <motion.div
-        initial={{ x: -10, opacity: 0 }}
+        initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="absolute left-4 top-4 z-10 md:left-8 md:top-8"
+        transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.2 }}
+        className="absolute left-4 top-4 z-20 md:left-8 md:top-8"
       >
         <Link
           href="/"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "flex items-center gap-2 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+            "flex items-center gap-2 border border-white/10 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-white/10",
           )}
         >
           <ArrowLeft className="size-4" />
@@ -109,34 +150,67 @@ const SignInPage = () => {
         </Link>
       </motion.div>
 
-      <div className="container grid h-screen items-center justify-center lg:grid-cols-2 lg:px-0">
+      <div className="container relative z-10 grid h-screen items-center justify-center lg:grid-cols-2 lg:px-0">
         {/* Left Features Panel */}
         <motion.div
-          className="relative hidden h-full flex-col items-center justify-center overflow-hidden bg-slate-950 p-8 lg:flex"
-          initial={{ opacity: 0, x: -20 }}
+          className="relative hidden h-full flex-col items-center justify-center overflow-hidden p-8 lg:flex"
+          initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 30 }}
+          transition={{
+            type: "spring",
+            stiffness: 120,
+            damping: 30,
+            delay: 0.3,
+          }}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.2),transparent_50%),radial-gradient(circle_at_70%_70%,rgba(16,185,129,0.2),transparent_50%)]" />
-
-          <div className="relative z-10 max-w-md space-y-6">
-            <div className="mb-6 flex items-center gap-3">
+          <div className="relative z-10 max-w-lg space-y-8">
+            <motion.div
+              className="mb-8 flex items-center gap-3"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
+            >
               <Logo />
-            </div>
+            </motion.div>
 
-            <h2 className="text-3xl font-bold leading-tight text-white">
-              Streamline your <span className="text-emerald-400">deployment workflow</span>
-            </h2>
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6, type: "spring", stiffness: 300 }}
+            >
+              <h2 className="mb-4 text-4xl font-bold leading-tight text-white">
+                Streamline your{" "}
+                <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                  deployment workflow
+                </span>
+              </h2>
+              <p className="text-lg text-slate-300">
+                Deploy with confidence using our modern infrastructure platform
+              </p>
+            </motion.div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               {features.map(([title, desc], i) => (
-                <div className="flex items-start gap-4" key={i}>
-                  <Check className="mt-1 size-5 text-emerald-400" />
-                  <div>
-                    <h4 className="font-medium text-white">{title}</h4>
-                    <p className="mt-1 text-sm text-slate-300">{desc}</p>
+                <motion.div
+                  className="group flex items-start gap-4"
+                  key={i}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  variants={featureVariants}
+                >
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-transform duration-300 group-hover:scale-110">
+                    <Check className="size-4 text-white" />
                   </div>
-                </div>
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-white transition-colors duration-300 group-hover:text-emerald-300">
+                      {title}
+                    </h4>
+                    <p className="text-sm leading-relaxed text-slate-400">
+                      {desc}
+                    </p>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -150,67 +224,135 @@ const SignInPage = () => {
           variants={containerVariants}
         >
           <motion.div
-            className="w-full max-w-md rounded-xl bg-slate-900/80 p-6 text-white shadow-lg backdrop-blur sm:p-8"
+            className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl"
             variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <motion.div className="mb-6 space-y-3 text-center" variants={itemVariants}>
-              <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
-              <p className="text-sm text-slate-400">Sign in to continue to your account</p>
+            <motion.div
+              className="mb-8 space-y-3 text-center"
+              variants={itemVariants}
+            >
+              <div className="mb-4 flex items-center justify-center">
+                <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500">
+                  <Sparkles className="size-6 text-white" />
+                </div>
+              </div>
+              <h1 className="text-3xl font-bold tracking-tight text-white">
+                Welcome back
+              </h1>
+              <p className="text-slate-400">
+                Sign in to continue to your account
+              </p>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    placeholder="Enter your email"
-                    disabled={isLoading}
-                    className="border-slate-700 bg-slate-800 text-white"
-                  />
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <motion.div className="space-y-2" variants={itemVariants}>
+                  <Label htmlFor="email" className="font-medium text-white">
+                    Email
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      {...register("email")}
+                      placeholder="Enter your email"
+                      disabled={isLoading}
+                      className="border-white/20 bg-white/5 px-10 text-white transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    />
+                  </div>
                   {errors.email && (
-                    <p className="text-sm text-red-400">{errors.email.message}</p>
+                    <motion.p
+                      className="text-sm text-red-400"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      {errors.email.message}
+                    </motion.p>
                   )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    {...register("password")}
-                    placeholder="Enter your password"
-                    disabled={isLoading}
-                    className="border-slate-700 bg-slate-800 text-white"
-                  />
+                </motion.div>
+
+                <motion.div className="space-y-2" variants={itemVariants}>
+                  <Label htmlFor="password" className="font-medium text-white">
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="Enter your password"
+                      disabled={isLoading}
+                      className="border-white/20 bg-white/5 px-10 text-white transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-200 hover:text-white"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="size-5" />
+                      ) : (
+                        <Eye className="size-5" />
+                      )}
+                    </button>
+                  </div>
                   {errors.password && (
-                    <p className="text-sm text-red-400">{errors.password.message}</p>
+                    <motion.p
+                      className="text-sm text-red-400"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      {errors.password.message}
+                    </motion.p>
                   )}
-                </div>
-                <div className="flex justify-end">
+                </motion.div>
+
+                <motion.div
+                  className="flex justify-end"
+                  variants={itemVariants}
+                >
                   <Link
                     href="/reset-password"
-                    className="text-sm text-emerald-400 hover:underline"
+                    className="text-sm text-emerald-400 transition-colors duration-200 hover:text-emerald-300 hover:underline"
                   >
                     Forgot password?
                   </Link>
-                </div>
-                <Button
-                  type="submit"
-                  variant="default"
-                  className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing in..." : "Sign In"}
-                </Button>
+                </motion.div>
+
+                <motion.div variants={itemVariants}>
+                  <Button
+                    type="submit"
+                    className="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 py-3 font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-emerald-700 hover:to-cyan-700 disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                        Signing in...
+                      </div>
+                    ) : (
+                      "Sign In"
+                    )}
+                  </Button>
+                </motion.div>
               </form>
-              <div className="mt-4 text-center text-sm text-slate-400">
+
+              <motion.div
+                className="mt-6 text-center text-sm text-slate-400"
+                variants={itemVariants}
+              >
                 Don&apos;t have an account?{" "}
-                <Link href="/register" className="text-emerald-400 hover:underline">
+                <Link
+                  href="/register"
+                  className="font-medium text-emerald-400 transition-colors duration-200 hover:text-emerald-300 hover:underline"
+                >
                   Sign up
                 </Link>
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -220,3 +362,4 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
+

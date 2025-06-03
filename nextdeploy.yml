@@ -1,43 +1,44 @@
 version: "1.0"
 app:
-    name: hawo
-    port: 3000
+    name: nextdeploy
+    port: 300
     environment: prod
-    domain: hawo.co
+    domain: nextdeploy.one
+    secrets:
+        provider: aws
+        project: nextdeploy
+        config: ""
 repository:
-    url: git@github.com/user/git.com
+    url: git@github.com/aynash.git
     branch: main
     autoDeploy: true
-    webhookSecret: sjkdjksjkjk43034994jkfjerjkrerjk
 docker:
-    image: hersi/app
-    registry: docker.io
+    image: nextdepoy
     build:
         context: .
         dockerfile: Dockerfile
         noCache: true
-        args:
-            NODE_ENV: production
+        args: {}
     push: true
 deployment:
     server:
-        host: 122.23.3.4
+        host: 12.23.23.34
         user: hersi
-        sshKey: ~/.ssh/key
-        useSudo: true
+        sshKey: ~/.ssh/key.rd
+        useSudo: false
     container:
-        name: hersi
+        name: nextdeploy
         restart: always
-        ports:
-            - 80:3000
+        ports: []
 database:
     type: postgres
-    host: local
-    port: ""
+    host: nextdeploy
+    port: "3000"
     username: hersi
-    password: "50307812112"
-    name: ehrsi
+    password: "50307813117"
+    name: nextdeploy
 monitoring:
     enabled: true
     type: grafana
-    endpoint: end.emd
+    endpoint: ""
+secrets: null

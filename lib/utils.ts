@@ -3,11 +3,11 @@ import { clsx, type ClassValue } from "clsx";
 import ms from "ms";
 import { twMerge } from "tailwind-merge";
 import { z, type ZodSchema } from "zod";
-import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
+const env = process.env
 export class ApiError extends Error {
   status: number;
   

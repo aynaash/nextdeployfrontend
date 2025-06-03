@@ -1,10 +1,9 @@
+import type React from "react";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth/session";
-import { NextDeployLogo } from "@/components/logo";
-import { Loader2 } from "lucide-react";
-
-//TODO: fix error Failed to retrieve session: Dynamic server usage: 
+import { auth } from "@/auth";
+import { getCurrentUser } from "@/lib/session";
 type UserRole = "admin" | "user" | null;
 
 interface User {
@@ -26,16 +25,15 @@ interface AuthLayoutProps {
 
 // ----------- Layout Component -----------
 export default async function AuthLayout({ children }: AuthLayoutProps) {
-  const { user, error } = await getUserSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (error) return <AuthErrorScreen error={error} />;
+  const user = session?.user ? transformUser(session.user) : null;
+
 
   if (!user) {
-    return (
-      <AuthContainer>
-        <Suspense fallback={<AuthLoadingScreen />}>{children}</Suspense>
-      </AuthContainer>
-    );
+    return <Suspense fallback={<AuthLoadingScreen />}>{children}</Suspense>;
   }
 
   // Role-based redirect
@@ -45,16 +43,78 @@ export default async function AuthLayout({ children }: AuthLayoutProps) {
     case "user":
       redirect("/dashboard");
     default:
-      return (
-        <AuthContainer>
-          <Suspense fallback={<AuthLoadingScreen />}>{children}</Suspense>
-        </AuthContainer>
-      );
+      return <Suspense fallback={<AuthLoadingScreen />}>{children}</Suspense>;
   }
 }
 
+// ----------- UI Components -----------
+
+function AuthLoadingScreen() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+      <div className="flex flex-col items-center justify-center space-y-4 py-12">
+        <div className="size-12 animate-spin rounded-full border-4 border-emerald-500/30 border-t-emerald-500" />
+        <p className="text-slate-300">Loading authentication...</p>
+      </div>
+    </div>
+  );
+}
+
+function AuthErrorScreen({ error }: { error: Error | null }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-4">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
+        <div className="flex flex-col items-center justify-center space-y-6 text-center">
+          <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-pink-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="size-8 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-white">
+              Authentication Error
+            </h2>
+            <p className="text-slate-400">
+              {error?.message ||
+                "We encountered an issue during authentication."}
+            </p>
+          </div>
+          <div className="flex w-full gap-4">
+            <button
+              onClick={() => window.location.reload()}
+              className="flex-1 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 px-4 py-3 font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-emerald-700 hover:to-cyan-700"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => (window.location.href = "/")}
+              className="flex-1 rounded-xl border border-white/20 bg-white/10 px-4 py-3 font-semibold text-white transition-all duration-300 hover:border-white/30 hover:bg-white/20"
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ----------- Session Utils -----------
-async function getUserSession(): Promise<{ user: User | null; error: Error | null }> {
+async function getUserSession(): Promise<{
+  user: User | null;
+  error: Error | null;
+}> {
   try {
     const user = await getCurrentUser();
     return {
@@ -65,7 +125,8 @@ async function getUserSession(): Promise<{ user: User | null; error: Error | nul
     console.error("Authentication error:", err);
     return {
       user: null,
-      error: err instanceof Error ? err : new Error("Unknown authentication error"),
+      error:
+        err instanceof Error ? err : new Error("Unknown authentication error"),
     };
   }
 }
@@ -85,72 +146,4 @@ function transformUser(user: any): User {
   };
 }
 
-// ----------- UI Components -----------
 
-function AuthContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="relative flex h-screen flex-col items-center justify-center px-4">
-        <header className="absolute left-0 top-0 w-full px-4 py-6">
-          <NextDeployLogo/>
-        </header>
-
-        <main className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">{children}</main>
-
-        <footer className="absolute bottom-0 w-full py-4 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} NextDeploy. All rights reserved.
-        </footer>
-      </div>
-    </div>
-  );
-}
-
-function AuthLoadingScreen() {
-  return (
-    <div className="flex flex-col items-center justify-center space-y-4 py-12">
-      <Loader2 className="size-8 animate-spin text-indigo-600" />
-      <p className="text-gray-600">Loading authentication...</p>
-    </div>
-  );
-}
-
-function AuthErrorScreen({ error }: { error: Error | null }) {
-  return (
-    <AuthContainer>
-      <div className="flex flex-col items-center justify-center space-y-4 py-12 text-center">
-        <div className="rounded-full bg-red-100 p-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="size-8 text-red-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
-        </div>
-        <h2 className="text-2xl font-bold text-gray-800">Authentication Error</h2>
-        <p className="text-gray-600">{error?.message || "We encountered an issue during authentication."}</p>
-        <div className="flex gap-4">
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-4 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Try Again
-          </button>
-          <button
-            onClick={() => redirect("/")}
-            className="mt-4 rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          >
-            Go Home
-          </button>
-        </div>
-      </div>
-    </AuthContainer>
-  );
-}
