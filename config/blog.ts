@@ -1,4 +1,3 @@
-// Blog categories tailored for NextDeploy (deployment-focused content)
 export const BLOG_CATEGORIES: {
   title: string;
   slug: "news" | "education" | "tutorial" | "case-studies";

@@ -18,13 +18,13 @@ import {
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
 
-const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
+const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL!;
 const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
-const TEST_EMAIL = process.env.TEST_EMAIL;
-const STRIPE_KEY = process.env.STRIPE_API_KEY;
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+const TEST_EMAIL = process.env.TEST_EMAIL!;
+const STRIPE_KEY = process.env.STRIPE_API_KEY!;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
 if (!BETTER_AUTH_URL || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET) {
-  throw new Error("Missing required environment variables");
+  console.warn("Missing environment variables for BetterAuth setup.");
 }
 const adapter = drizzleAdapter(db, {
   provider: "pg",

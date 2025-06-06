@@ -23,7 +23,8 @@
 //     ],
 //     prices: {
 //       monthly: 0,
-//       yearly: 0,
+//       yearly: 0,// Blog categories tailored for NextDeploy (deployment-focused content)
+
 //     },
 //     stripeIds: {
 //       monthly: null, // Use actual Stripe IDs if needed

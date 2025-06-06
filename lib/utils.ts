@@ -7,7 +7,6 @@ import { siteConfig } from "@/config/site";
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
-const env = process.env
 export class ApiError extends Error {
   status: number;
   
@@ -144,9 +143,9 @@ export function formatDate(input: string | number): string {
     year: "numeric",
   });
 }
-
+const url = process.env.NEXT_PUBLIC_APP_URL || "http:localhost:3000"
 export function absoluteUrl(path: string) {
-  return `${env.NEXT_PUBLIC_APP_URL}${path}`;
+  return `${url}${path}`;
 }
 
 // Utils from precedent.dev

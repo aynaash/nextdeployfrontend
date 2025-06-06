@@ -1,6 +1,6 @@
 import { SidebarNavItem, SiteConfig } from "types";
 
-const site_url = process.env.NEXT_PUBLIC_APP_URL || "https://nextdeploy.one";
+const site_url = process.env.NEXT_PUBLIC_APP_URL! || "https://nextdeploy.one";
 export const siteConfig: SiteConfig = {
   name: "NextDeploy",
   description:

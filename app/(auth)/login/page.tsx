@@ -16,24 +16,22 @@ import {
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { authClient as client } from "../../../auth-client";
 import Logo from "../../../components/logo";
 import { cn } from "../../../lib/utils";
 
+
+//TODO: ---Fix :::::
 export const dynamic = "force-dynamic";
 
 const SignInSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
   password: z.string().min(1, "Password is required"),
 });
-
 type SignInForm = z.infer<typeof SignInSchema>;
-
 const features = [
   [
     "Continuous Deployment",
@@ -52,7 +50,6 @@ const features = [
     "Works for individuals and dev teams with scoped resources.",
   ],
 ];
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {

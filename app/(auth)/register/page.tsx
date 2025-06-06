@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 
 import { authClient as client } from "../../../auth-client";
 import Logo from "../../../components/logo";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../lib/utils"; 
 
 const RegisterSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -126,7 +126,7 @@ const RegisterPage = () => {
         toast.error(signResponse.error.message);
       } else {
         toast.success("Registered successfully!");
-        router.replace("/");
+        router.replace("/dashboard");
       }
     } catch (error: any) {
       console.error("Registration error:", error);

@@ -13,7 +13,7 @@ import { stripeClient } from "@better-auth/stripe/client";
 import { toast } from "sonner";
 
 // Safely read Google One Tap Client ID
-const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID! || "";
 if (!googleClientId) {
   console.warn("⚠️ NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
 }
@@ -30,7 +30,7 @@ export const authClient = createAuthClient({
     adminClient(),
     multiSessionClient(),
     oneTapClient({
-      clientId: googleClientId ?? "", // Fallback to empty string
+      clientId: googleClientId ?? "", 
       promptOptions: {
         maxAttempts: 1,
       },

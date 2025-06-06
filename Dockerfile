@@ -14,7 +14,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 # Run the build during the build phase
 #ARG DOPPLER_TOKEN
-RUN  yarn build
+RUN  npm run build
 # ---------- STAGE 2: Runtime ----------
 FROM node:20-slim
 
