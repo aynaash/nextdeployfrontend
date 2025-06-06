@@ -22,6 +22,7 @@ export default async function AdminLayout({ children }: ProtectedLayoutProps) {
   
   try {
     user = await getCurrentUser() as User;
+    console.log("The user attempting to access admin layout:", user);
   } catch (error) {
     console.error("Failed to fetch user:", error);
     redirect("/login?error=session_error");

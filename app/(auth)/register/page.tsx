@@ -124,9 +124,10 @@ const RegisterPage = () => {
 
       if (signResponse.error) {
         toast.error(signResponse.error.message);
+        router.push("/login?error=registration_failed");
       } else {
         toast.success("Registered successfully!");
-        router.replace("/dashboard");
+        router.push("/dashboard");
       }
     } catch (error: any) {
       console.error("Registration error:", error);
@@ -140,9 +141,9 @@ const RegisterPage = () => {
     <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -right-40 -top-40 h-80 w-80 animate-pulse rounded-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 animate-pulse rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-3xl delay-1000" />
-        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform animate-pulse rounded-full bg-gradient-to-r from-violet-500/10 to-pink-500/10 blur-3xl delay-500" />
+        <div className="absolute -right-40 -top-40 size-80 animate-pulse rounded-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 size-80 animate-pulse rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-3xl delay-1000" />
+        <div className="absolute left-1/2 top-1/2 size-96 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-gradient-to-r from-violet-500/10 to-pink-500/10 blur-3xl delay-500" />
       </div>
 
       {/* Back Navigation */}
@@ -216,7 +217,7 @@ const RegisterPage = () => {
                   animate="visible"
                   variants={featureVariants}
                 >
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-transform duration-300 group-hover:scale-110">
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-transform duration-300 group-hover:scale-110">
                     <Check className="size-4 text-white" />
                   </div>
                   <div className="space-y-1">
@@ -251,8 +252,8 @@ const RegisterPage = () => {
               variants={itemVariants}
             >
               <div className="mb-4 flex items-center justify-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500">
-                  <Sparkles className="h-6 w-6 text-white" />
+                <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500">
+                  <Sparkles className="size-6 text-white" />
                 </div>
               </div>
               <h1 className="text-3xl font-bold tracking-tight text-white">
@@ -270,7 +271,7 @@ const RegisterPage = () => {
                     Name
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <User className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="name"
                       type="text"
@@ -296,7 +297,7 @@ const RegisterPage = () => {
                     Email
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <Mail className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="email"
                       type="email"
@@ -322,24 +323,24 @@ const RegisterPage = () => {
                     Password
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <Lock className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
                       {...register("password")}
                       placeholder="Enter your password"
                       disabled={isLoading}
-                      className="border-white/20 bg-white/5 pl-10 pr-10 text-white transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-emerald-500/20"
+                      className="border-white/20 bg-white/5 px-10 text-white transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-emerald-500/20"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 transform text-slate-400 transition-colors duration-200 hover:text-white"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-200 hover:text-white"
                     >
                       {showPassword ? (
-                        <EyeOff className="h-5 w-5" />
+                        <EyeOff className="size-5" />
                       ) : (
-                        <Eye className="h-5 w-5" />
+                        <Eye className="size-5" />
                       )}
                     </button>
                   </div>
@@ -357,12 +358,12 @@ const RegisterPage = () => {
                 <motion.div variants={itemVariants}>
                   <Button
                     type="submit"
-                    className="w-full transform rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 py-3 font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-emerald-700 hover:to-cyan-700 disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 py-3 font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-emerald-700 hover:to-cyan-700 disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={isLoading}
                   >
                     {isLoading ? (
                       <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                        <div className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                         Creating account...
                       </div>
                     ) : (

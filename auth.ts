@@ -4,9 +4,10 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 // import { resend } from "./lib/auth/authUtils";
 // import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
-import { Stripe } from "stripe";
-import { stripe } from "@better-auth/stripe";
+// import { Stripe } from "stripe";
+// import { stripe } from "@better-auth/stripe";
 import * as schema from "./drizzle/schema/schema"
+
 // Plugins
 import {
   admin,
@@ -18,34 +19,35 @@ import {
 } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
 
-const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL!;
+const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
 const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
-const TEST_EMAIL = process.env.TEST_EMAIL!;
-const STRIPE_KEY = process.env.STRIPE_API_KEY!;
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
-if (!BETTER_AUTH_URL || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET) {
+const TEST_EMAIL = process.env.TEST_EMAIL;
+// const STRIPE_KEY = process.env.STRIPE_API_KEY!;
+// const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+if (!BETTER_AUTH_URL /* || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET */) {
   console.warn("Missing environment variables for BetterAuth setup.");
 }
+
 const adapter = drizzleAdapter(db, {
   provider: "pg",
   schema,
 });
-// Pricing IDs
-const PRICING_IDS = {
-  professional: {
-    default: "price_live_PRO",
-    annual: "price_live_PRO_ANNUAL",
-  },
-  starter: {
-    default: "price_live_STARTER",
-    annual: "price_live_STARTER_ANNUAL",
-  },
-};
+
+// const PRICING_IDS = {
+//   professional: {
+//     default: "price_live_PRO",
+//     annual: "price_live_PRO_ANNUAL",
+//   },
+//   starter: {
+//     default: "price_live_STARTER",
+//     annual: "price_live_STARTER_ANNUAL",
+//   },
+// };
 
 export const auth = betterAuth({
   appName: "NextDeploy",
   baseURL: BETTER_AUTH_URL,
-  
+
   // Database configuration
   database: adapter,
 
@@ -65,13 +67,13 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       try {
-        console.log("Sent the verification email")
-        //await resend.emails.send({
-         // from: FROM_EMAIL,
-          //to: user.email,
-          //subject: "Verify your NextDeploy account",
-         // html: `<a href="${url}">Click here to verify your email</a>`,
-       // });
+        console.log("Sent the verification email");
+        // await resend.emails.send({
+        //   from: FROM_EMAIL,
+        //   to: user.email,
+        //   subject: "Verify your NextDeploy account",
+        //   html: `<a href="${url}">Click here to verify your email</a>`,
+        // });
       } catch (error) {
         console.error("Failed to send verification email:", error);
         throw error;
@@ -93,7 +95,7 @@ export const auth = betterAuth({
         //     resetLink: url,
         //   }),
         // });
-        console.log("Sent the reset password email")
+        console.log("Sent the reset password email");
       } catch (error) {
         console.error("Failed to send password reset email:", error);
         throw error;
@@ -138,8 +140,8 @@ export const auth = betterAuth({
           //   to: user.email,
           //   subject: "Your NextDeploy OTP Code",
           //   html: `Your verification code is: <strong>${otp}</strong>`,
-         /*  }); */
-        console.log("Sent the OTP email")
+          // });
+          console.log("Sent the OTP email");
         },
       },
     }),
@@ -160,7 +162,7 @@ export const auth = betterAuth({
         //     inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${data.id}`,
         //   }),
         // });
-        console.log("Sent the invitation email")
+        console.log("Sent the invitation email");
       },
     }),
 
@@ -172,31 +174,31 @@ export const auth = betterAuth({
     // Multi-session support
     multiSession(),
 
-    // Stripe integration
-    stripe({
-      stripeClient: new Stripe(STRIPE_KEY),
-      stripeWebhookSecret: STRIPE_WEBHOOK_SECRET,
-      subscription: {
-        enabled: true,
-        plans: [
-          {
-            name: "Starter",
-            priceId: PRICING_IDS.starter.default,
-            annualDiscountPriceId: PRICING_IDS.starter.annual,
-            freeTrial: { days: 7 },
-          },
-          {
-            name: "Professional",
-            priceId: PRICING_IDS.professional.default,
-            annualDiscountPriceId: PRICING_IDS.professional.annual,
-          },
-          {
-            name: "Enterprise",
-            customPricing: true,
-          },
-        ],
-      },
-    }),
+    // Stripe integration (disabled)
+    // stripe({
+    //   stripeClient: new Stripe(STRIPE_KEY),
+    //   stripeWebhookSecret: STRIPE_WEBHOOK_SECRET || "",
+    //   subscription: {
+    //     enabled: true,
+    //     plans: [
+    //       {
+    //         name: "Starter",
+    //         priceId: PRICING_IDS.starter.default,
+    //         annualDiscountPriceId: PRICING_IDS.starter.annual,
+    //         freeTrial: { days: 7 },
+    //       },
+    //       {
+    //         name: "Professional",
+    //         priceId: PRICING_IDS.professional.default,
+    //         annualDiscountPriceId: PRICING_IDS.professional.annual,
+    //       },
+    //       {
+    //         name: "Enterprise",
+    //         customPricing: true,
+    //       },
+    //     ],
+    //   },
+    // }),
   ],
 
   // Security
