@@ -127,7 +127,7 @@ const RegisterPage = () => {
         router.push("/login?error=registration_failed");
       } else {
         toast.success("Registered successfully!");
-        router.push("/dashboard");
+        router.replace("/dashboard");
       }
     } catch (error: any) {
       console.error("Registration error:", error);

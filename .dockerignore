@@ -1,0 +1,26 @@
+# NextDeploy Dockerignore: auto-generated file
+
+# Node modules and build directories
+node_modules
+.next
+dist
+
+# Environment files
+.env*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+
+# OS generated files
+.DS_Store
+Thumbs.db

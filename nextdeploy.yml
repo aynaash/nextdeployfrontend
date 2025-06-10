@@ -1,44 +1,47 @@
 version: "1.0"
 app:
     name: nextdeploy
-    port: 300
+    port: 3000
     environment: prod
     domain: nextdeploy.one
     secrets:
-        provider: aws
-        project: nextdeploy
-        config: ""
+        provider: doppler
+        project: The name of your project
+        config: prod
 repository:
-    url: git@github.com/aynash.git
+    url: git@githuh.com/aynaash/nextdeploy.one
     branch: main
     autoDeploy: true
+    webhookSecret: jkadjsdjk34344
 docker:
-    image: nextdepoy
+    image: ghcr.io/hersi/nextdeploy
+    registry: ghcr.io
     build:
         context: .
         dockerfile: Dockerfile
-        noCache: true
-        args: {}
+        noCache: false
     push: true
 deployment:
     server:
-        host: 12.23.23.34
+        host: 90.90.00
         user: hersi
-        sshKey: ~/.ssh/key.rd
-        useSudo: false
+        sshKey: ~/.ssh/id_rsa
+        useSudo: true
     container:
-        name: nextdeploy
+        name: hersi
         restart: always
-        ports: []
+        ports:
+            - 80:80
 database:
-    type: postgres
-    host: nextdeploy
-    port: "3000"
+    type: posgres
+    host: hersi
+    port: 5432
     username: hersi
-    password: "50307813117"
-    name: nextdeploy
+    password: "503089"
+    name: hersi
 monitoring:
     enabled: true
     type: grafana
     endpoint: ""
-secrets: null
+secrets:
+    provider: ""
