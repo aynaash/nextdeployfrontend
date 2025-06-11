@@ -5,6 +5,9 @@ import { neon } from '@neondatabase/serverless';
 import * as schema from '../drizzle/schema/schema';
 import { isEdgeRuntime } from './runtime';
 
+// Track if we've already cleaned up
+let cleanupCalled = false;
+
 // Type-safe exports
 let db: ReturnType<typeof drizzleNode> | ReturnType<typeof drizzleNeon>;
 let rawClient: Pool | ReturnType<typeof neon>;
@@ -33,11 +36,24 @@ if (isEdgeRuntime()) {
     logger: process.env.NODE_ENV === 'development'
   });
 
-  // Connection cleanup
-  const cleanup = () => pool.end().catch(console.error);
-  process.on('exit', cleanup);
-  process.on('SIGINT', cleanup);
-  process.on('SIGTERM', cleanup);
+  // Safe connection cleanup
+  const cleanup = async () => {
+    if (cleanupCalled) return;
+    cleanupCalled = true;
+    
+    try {
+      await pool.end();
+    } catch (err) {
+      console.error('Error closing database pool:', err);
+    }
+  };
+
+  // Only register cleanup handlers once
+  if (process.env.NODE_ENV !== 'production') {
+    process.on('exit', cleanup);
+    process.on('SIGINT', cleanup);
+    process.on('SIGTERM', cleanup);
+  }
 }
 
 export { db, rawClient };
