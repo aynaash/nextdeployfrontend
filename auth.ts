@@ -43,10 +43,22 @@ const adapter = drizzleAdapter(db, {
 //     annual: "price_live_STARTER_ANNUAL",
 //   },
 // };
+const devOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
 
+const prodOrigins = [
+  "https://nextdeploy.one",
+  "https://www.nextdeploy.one",
+];
 export const auth = betterAuth({
   appName: "NextDeploy",
   baseURL: BETTER_AUTH_URL,
+  trustedOrigins: [
+    ...(process.env.NODE_ENV === "development" ? devOrigins : []),
+    ...prodOrigins,
+  ],
 
   // Database configuration
   database: adapter,
@@ -202,8 +214,8 @@ export const auth = betterAuth({
   ],
 
   // Security
-  trustedOrigins: [
-    BETTER_AUTH_URL,
-    process.env.NEXT_PUBLIC_APP_URL,
-  ].filter(Boolean) as string[],
+  // trustedOrigins: [
+  //   BETTER_AUTH_URL,
+  //   process.env.NEXT_PUBLIC_APP_URL,
+  // ].filter(Boolean) as string[],
 } satisfies BetterAuthOptions);
