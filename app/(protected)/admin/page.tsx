@@ -10,7 +10,7 @@ export const metadata = constructMetadata({
   title: "Admin – NextDeploy",
   description: "Admin page for only admin management.",
 });
-
+export const dynamic = 'force-dynamic';
 export default async function AdminPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");

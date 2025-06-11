@@ -53,6 +53,7 @@ export async function middleware(request: NextRequest) {
 // 🎯 Helper to detect if file is static (skip logging/auth/etc)
 function isStaticFile(req: NextRequest): boolean {
   return [
+    '/not-found',
     '/_next/static',
     '/_next/image',
     '/favicon.ico',

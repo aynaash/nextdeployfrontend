@@ -67,4 +67,6 @@ export const {
 // Optional session change listener (useful for syncing global state)
 authClient.$store.listen("$sessionSignal", async () => {
   // Optionally trigger data refresh here
+  console.log("Session changed, you can refresh data here if needed");
+
 });

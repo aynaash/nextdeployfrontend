@@ -15,7 +15,7 @@ export const metadata = constructMetadata({
   title: "Charts – NextDeploy",
   description: "This data collected from website by our daemons",
 });
-
+export const dynamic = 'force-dynamic';
 export default function ChartsPage() {
   return (
     <>

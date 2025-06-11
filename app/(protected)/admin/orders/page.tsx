@@ -10,6 +10,7 @@ export const metadata = constructMetadata({
   description: "Check and manage your latest orders.",
 });
 // TODO: change this ui to fit for NextDeploy
+export const dynamic = 'force-dynamic';
 export default async function OrdersPage() {
    const user = await getCurrentUser();
   console.log("The user at order admin page is:", user)

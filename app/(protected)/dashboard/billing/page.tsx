@@ -24,7 +24,7 @@ export const metadata = constructMetadata({
   title: "Billing – NextDeploy",
   description: "Manage billing and your subscription plan.",
 });
-
+export const dynamic = 'force-dynamic';
 export default async function BillingPage() {
   // Get the currently logged-in user
   const user = await getCurrentUser();
