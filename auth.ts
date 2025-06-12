@@ -54,22 +54,18 @@ const devOrigins = [
   "https://www.nextdeploy.one",
 
 ];
+let baseURL;
+if (process.env.NODE_ENV === "development") {
+  baseUrl = "http://localhost:3000";
+}else {
+  baseURL = "https://nextdeploy.one";
+}
 
 //FIX: remove the localhost origins in production later
-const prodOrigins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "https://nextdeploy.one",
-  "https://www.nextdeploy.one",
-];
 export const auth = betterAuth({
   appName: "NextDeploy",
-  baseURL: sanitizeBetterAuthUrl,
-  trustedOrigins: [
-    ...(process.env.NODE_ENV === "development" ? devOrigins : []),
-    ...prodOrigins,
-  ],
-
+  //baseURL: sanitizeBetterAuthUrl,
+  baseURL: baseURL,
   // Database configuration
   database: adapter,
 
@@ -222,7 +218,7 @@ export const auth = betterAuth({
     //   },
     // }),
   ],
-
+trustedOrigins: ["http://localhost:3000", "https://nextdeploy.on"],
   // Security
   // trustedOrigins: [
   //   BETTER_AUTH_URL,
