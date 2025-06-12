@@ -7,6 +7,7 @@ import { betterAuth, type BetterAuthOptions } from "better-auth";
 // import { Stripe } from "stripe";
 // import { stripe } from "@better-auth/stripe";
 import * as schema from "./drizzle/schema/schema"
+import {sanitizeUrl} from "./lib/utils"
 
 // Plugins
 import {
@@ -20,9 +21,10 @@ import {
 import { passkey } from "better-auth/plugins/passkey";
 
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
-const sanitizeBetterAuthUrl = sanitizeUrl(BETTER_AUTH_URL);
+const sanitizeBetterAuthUrl = sanitizeUrl(BETTER_AUTH_URL || "");
+console.log("BetterAuth URL:", sanitizeBetterAuthUrl);
 
-const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
+const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@nextdeploy.one";
 const TEST_EMAIL = process.env.TEST_EMAIL;
 // const STRIPE_KEY = process.env.STRIPE_API_KEY!;
 // const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -48,9 +50,15 @@ const adapter = drizzleAdapter(db, {
 const devOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+   "https://nextdeploy.one",
+  "https://www.nextdeploy.one",
+
 ];
 
+//FIX: remove the localhost origins in production later
 const prodOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
   "https://nextdeploy.one",
   "https://www.nextdeploy.one",
 ];
@@ -221,12 +229,4 @@ export const auth = betterAuth({
   //   process.env.NEXT_PUBLIC_APP_URL,
   // ].filter(Boolean) as string[],
 } satisfies BetterAuthOptions);
-function sanitizeUrl(url: string): string {
-  const cleanUrl = url
-    .trim()
-    .replace(/^['"]+|['"]+$/g, "")
-    .replace(/^\/+|\/+$/g, "");
-
-  return cleanUrl;
-}
 

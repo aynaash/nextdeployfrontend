@@ -1,6 +1,7 @@
 import { SidebarNavItem, SiteConfig } from "types";
-
-const site_url = process.env.BETTER_AUTH_URL || "https://nextdeploy.one";
+import {sanitizeUrl} from "../lib/utils";
+const uncleanurl = process.env.BETTER_AUTH_URL || "https://nextdeploy.one";
+const site_url = sanitizeUrl(uncleanurl);  
 export const siteConfig: SiteConfig = {
   name: "NextDeploy",
   description:
