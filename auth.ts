@@ -56,9 +56,9 @@ const devOrigins = [
 ];
 let baseURL;
 if (process.env.NODE_ENV === "development") {
-  baseUrl = "http://localhost:3000";
+  baseURL = "http://localhost:3000/";
 }else {
-  baseURL = "https://nextdeploy.one";
+  baseURL = "https://nextdeploy.one/";
 }
 
 //FIX: remove the localhost origins in production later
