@@ -20,6 +20,8 @@ import {
 import { passkey } from "better-auth/plugins/passkey";
 
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
+const sanitizeBetterAuthUrl = sanitizeUrl(BETTER_AUTH_URL);
+
 const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@yourdomain.com";
 const TEST_EMAIL = process.env.TEST_EMAIL;
 // const STRIPE_KEY = process.env.STRIPE_API_KEY!;
@@ -54,7 +56,7 @@ const prodOrigins = [
 ];
 export const auth = betterAuth({
   appName: "NextDeploy",
-  baseURL: BETTER_AUTH_URL,
+  baseURL: sanitizeBetterAuthUrl,
   trustedOrigins: [
     ...(process.env.NODE_ENV === "development" ? devOrigins : []),
     ...prodOrigins,
@@ -219,3 +221,12 @@ export const auth = betterAuth({
   //   process.env.NEXT_PUBLIC_APP_URL,
   // ].filter(Boolean) as string[],
 } satisfies BetterAuthOptions);
+function sanitizeUrl(url: string): string {
+  const cleanUrl = url
+    .trim()
+    .replace(/^['"]+|['"]+$/g, "")
+    .replace(/^\/+|\/+$/g, "");
+
+  return cleanUrl;
+}
+
