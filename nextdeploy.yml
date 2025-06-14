@@ -11,19 +11,19 @@ version: "1.0"  # Config file versioning for forward compatibility with future N
 # APP METADATA
 # -----
 app:
-  name: nextdeploy  # Unique app name used for container naming and logging
+  name: example-app  # Unique app name used for container naming and logging
   environment: production  # Can be: development | staging | production. Affects env variables & caching.
-  domain: nextdeploy.one # Public domain where your app will be accessible
+  domain: app.example.com  # Public domain where your app will be accessible
   port: 3000  # Internal app port (e.g., what your Node/Go server listens on)
 
 # -----
 # GIT REPOSITORY SETTINGS
 # -----
 repository:
-  url: git@github.com:aynaash/nextdeployfrontend.git  # SSH or HTTPS Git URL; used to clone the app
+  url: git@github.com:username/example-app.git  # SSH or HTTPS Git URL; used to clone the app
   branch: main  # Which branch to deploy from (e.g., "main", "develop")
   auto_deploy: true  # Automatically deploy on webhook trigger (e.g., from GitHub Actions)
-  webhook_secret: ojksjnkioio34io34pio343p4opo4po4  # Used to validate that a deploy webhook came from a trusted source
+  webhook_secret: your_webhook_secret  # Used to validate that a deploy webhook came from a trusted source
 
 # -----
 # DOCKER BUILD CONFIGURATION
@@ -36,10 +36,10 @@ docker:
       NODE_ENV: production  # Build-time environment variables (e.g., optimization flags)
     no_cache: false  # Set to true to force a fresh rebuild (useful for clearing old layers)
   image: hersiyussuf/nextdeploy # Full image tag pushed to registry
-  registry: docker.io  # Supported: ghcr.io (GitHub), docker.io, ECR (AWS), GCR (Google)
-  Username: hersiyussuf  # Username for the registry (if required)
-  password:   # Password or token for registry authentication
+  registry: docker.io # Supported: ghcr.io (GitHub), docker.io, ECR (AWS), GCR (Google)
   push: true  # Automatically push image after successful build
+  username: hersiyussuf  # Username for private registries (if required)
+  password: dckr_pat_H8xP4EPpj4_zKE91zKnInqXh010  # Password for private registries (if required)
 
 # Example:
 #   - Docker builds image with NODE_ENV=production
@@ -56,7 +56,7 @@ deployment:
     use_sudo: false  # Set true if deployment user needs sudo for Docker/system commands
 
   container:
-    name: nextdeploy  # Docker container name (must be unique per server)
+    name: example-app  # Docker container name (must be unique per server)
     restart: always  # Automatically restart container on failure or reboot
     env_file: .env  # Relative path to your app's environment variables file
     volumes:
@@ -76,16 +76,10 @@ database:
   type: postgres  # Supported: postgres | mysql
   host: 192.0.2.124  # IP of your database server (managed or self-hosted)
   port: 5432
-  username: nextdeploy
+  username: dbuser
   password: secret
-  name: nextdeploy_db  # Database name to connect to
+  name: exampledb
   migrate_on_deploy: true  # Run database migrations automatically after deployment
-  ssl: true  # Use SSL for database connections (recommended for production)
-  connection_pool:
-    max_connections: 100  # Max number of concurrent connections to the database
-    idle_timeout: 30s  # Close idle connections after 30 seconds
-    connection_lifetime: 1h  # Max lifetime of a connection before it is closed
-  databaseurl: postgres://nextdeploy:secret@192.0.
 
 # Example: 
 #   - Use Amazon RDS or DigitalOcean Managed PostgreSQL as the database host.
@@ -98,7 +92,7 @@ logging:
   enabled: true  # Enable logging system
   provider: nextdeploy  # Use NextDeploy's internal logging daemon (alternatively: syslog, logtail, etc.)
   stream_logs: true  # Send live container logs to dashboard (tail -f equivalent)
-  log_path: /var/log/containers/nextdeploy.log  # Path on server where logs are persisted
+  log_path: /var/log/containers/example-app.log  # Path on server where logs are persisted
 
 # -----
 # MONITORING & ALERTING
@@ -144,8 +138,8 @@ backup:
 # -----
 ssl:
   enabled: true  # Enable HTTPS
-  provider: cady  # Automatically issue and renew free SSL certs
-  email: caynaashow@gmail.com # For receiving expiry/renewal notices
+  provider: letsencrypt  # Automatically issue and renew free SSL certs
+  email: admin@example.com  # For receiving expiry/renewal notices
   auto_renew: true  # Automatically renew certificates every 60–90 days
 
 # Example:
