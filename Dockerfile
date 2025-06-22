@@ -1,79 +1,76 @@
-# Stage 1: Builder - Install dependencies and build the app
-FROM node:20-alpine AS builder
-
-# 1. Update and install system dependencies in a single layer
-# 2. Include only essential build tools
-RUN apk update --no-cache && \
-    apk upgrade --no-cache && \
-    apk add --no-cache --virtual .build-deps \
-    libc6-compat \
-    git \
-    python3 \
-    make \
-    g++ \
-    && corepack enable \
-    && yarn set version stable
-
+# ─────────────────────────────────────────────
+# Stage 1 — Dependency Installation
+# ─────────────────────────────────────────────
+FROM node:20-alpine AS deps
 WORKDIR /app
 
-# Configure Yarn for optimal performance
-RUN echo 'nodeLinker: "node-modules"\n\
-enableGlobalCache: true\n\
-compressionLevel: 0\n\
-httpTimeout: 600000' > .yarnrc.yml
+# Install only essential system dependencies
+RUN apk add --no-cache libc6-compat
 
-# Copy package files first for better caching
+# Enable Corepack and pin exact Yarn version
+RUN corepack enable
+RUN yarn set version 4.9.1
+
+# Copy only files needed for dependency installation
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn/ .yarn/
 
-# Install dependencies with cache mount
-RUN --mount=type=cache,target=/root/.yarn/berry/cache \
-    yarn install --immutable --inline-builds
+# Install dependencies
+RUN yarn install --immutable
 
-# Copy remaining files
-COPY . .
-
-# Build environment
-ARG NEXT_PUBLIC_APP_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
-
-# Build and prune dev dependencies
-RUN yarn build && \
-    yarn cache clean && \
-    apk del .build-deps && \
-    rm -rf /var/cache/apk/*
-
-# Stage 2: Production Runner
-FROM node:20-alpine
+# ─────────────────────────────────────────────
+# Stage 2 — Builder
+# ─────────────────────────────────────────────
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Production environment
+# First enable Corepack and set Yarn version (same as deps stage)
+RUN corepack enable
+RUN yarn set version 4.9.1
+
+# Copy installed dependencies from previous stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/.yarn ./.yarn
+COPY --from=deps /app/.yarnrc.yml .
+
+# Copy all source files
+COPY . .
+
+# Environment for production build
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build the application
+RUN yarn build
+
+# Prune dev dependencies for production
+RUN yarn workspaces focus --production
+
+# ─────────────────────────────────────────────
+# Stage 3 — Runtime
+# ─────────────────────────────────────────────
+FROM node:20-alpine AS runner
+WORKDIR /app
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
 
-# Create non-root user and required directories
-RUN addgroup -S -g 1001 nodejs && \
-    adduser -S -u 1001 -G nodejs nextjs && \
-    mkdir -p /app/.next/cache && \
-    chown nextjs:nodejs /app/.next/cache
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -u 1001 -S -G nodejs nextjs
 
-# Copy built assets from builder
+# Copy production dependencies and build artifacts
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-# Configure health check
+# Minimal health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
-  CMD wget -q -O /dev/null http://localhost:3000/api/health || exit 1
+  CMD wget -qO- http://localhost:3000 >/dev/null || exit 1
 
-# Runtime configuration
 USER nextjs
 EXPOSE 3000
-VOLUME /app/.next/cache
 
-# Use node directly (no need for process manager in simple cases)
 CMD ["node", "server.js"]
