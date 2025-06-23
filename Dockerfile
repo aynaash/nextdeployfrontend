@@ -1,76 +1,73 @@
 # ─────────────────────────────────────────────
-# Stage 1 — Dependency Installation
+# Stage 1 — Builder
 # ─────────────────────────────────────────────
-FROM node:20-alpine AS deps
+FROM node:20-alpine AS builder
+
 WORKDIR /app
 
-# Install only essential system dependencies
-RUN apk add --no-cache libc6-compat
+# Install system deps: required for some packages (like sharp), and git
 
-# Enable Corepack and pin exact Yarn version
-RUN corepack enable
-RUN yarn set version 4.9.1
+# Enable and set exact Yarn version for reproducibility
+RUN corepack enable && corepack prepare yarn@4.9.1 --activate
 
-# Copy only files needed for dependency installation
+# Configure Yarn for speed and node_modules mode
+RUN echo 'nodeLinker: "node-modules"\n\
+enableGlobalCache: true\n\
+compressionLevel: 0\n\
+httpTimeout: 600000' > .yarnrc.yml
+
+# Copy dependency files first for cache efficiency
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn/ .yarn/
 
-# Install dependencies
+# Install dependencies (use immutable for strict lockfile validation)
 RUN yarn install --immutable
 
-# ─────────────────────────────────────────────
-# Stage 2 — Builder
-# ─────────────────────────────────────────────
-FROM node:20-alpine AS builder
-WORKDIR /app
-
-# First enable Corepack and set Yarn version (same as deps stage)
-RUN corepack enable
-RUN yarn set version 4.9.1
-
-# Copy installed dependencies from previous stage
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/.yarn ./.yarn
-COPY --from=deps /app/.yarnrc.yml .
-
-# Copy all source files
+# Copy the full source after deps installed
 COPY . .
 
 # Environment for production build
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build the application
-RUN yarn build
-
-# Prune dev dependencies for production
-RUN yarn workspaces focus --production
+# Build app
+RUN yarn build && yarn cache clean
 
 # ─────────────────────────────────────────────
-# Stage 3 — Runtime
+# Stage 2 — Runtime
 # ─────────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:20-alpine
+
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -u 1001 -S -G nodejs nextjs
+# Add non-root user
+RUN addgroup -S -g 1001 nodejs && \
+    adduser -S -u 1001 -G nodejs nextjs
 
-# Copy production dependencies and build artifacts
+# Copy built output
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 
-# Minimal health check
+# Remove this line as it's not needed in standalone mode:
+# COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Remove the server.js copy line unless you specifically need it
+# COPY --from=builder --chown=nextjs:nodejs /app/server.js ./server.js
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
-  CMD wget -qO- http://localhost:3000 >/dev/null || exit 1
+  CMD curl -f http://localhost:3000/api/health || exit 1
 
 USER nextjs
 EXPOSE 3000
 
+# For standalone mode, the server is already in the .next/standalone directory
 CMD ["node", "server.js"]

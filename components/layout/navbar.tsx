@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useSelectedLayoutSegment, useRouter } from "next/navigation";
-import { authClient } from "../../auth-client.ts";
+// import { useSelectedLayoutSegment, useRouter } from "next/navigation";
+// import { authClient } from "../../auth-client.ts";
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { useScroll } from "@/hooks/use-scroll";
+// import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DocsSearch } from "@/components/docs/search";
@@ -25,12 +25,12 @@ interface NavItem {
 }
 
 export function NavBar({ scroll = false }: NavBarProps) {
-  const scrolled = useScroll(50);
-  const { data: session } = authClient.useSession();
-  const router = useRouter();
-  const selectedLayout = useSelectedLayoutSegment();
+  // const scrolled = useScroll(50);
+  // const { data: session } = authClient.useSession();
+  // const router = useRouter();
+  // const selectedLayout = useSelectedLayoutSegment();
 
-  const isDocsLayout = selectedLayout === "docs";
+  // const isDocsLayout = selectedLayout === "docs";
   
   // Define all possible layout configurations
   const layoutConfigs = {
@@ -40,10 +40,11 @@ export function NavBar({ scroll = false }: NavBarProps) {
 
   // Safely get the appropriate nav items
   const getNavItems = () => {
-    if (!selectedLayout) return marketingConfig.mainNav;
+    // if (!selectedLayout) return marketingConfig.mainNav;
     
-    const config = layoutConfigs[selectedLayout as keyof typeof layoutConfigs];
-    return config || marketingConfig.mainNav;
+    // const config = layoutConfigs[selectedLayout as keyof typeof layoutConfigs];
+    // return config || marketingConfig.mainNav;
+    return marketingConfig.mainNav; // Fallback to marketing config
   };
 
   const navItems = getNavItems();
@@ -52,12 +53,13 @@ export function NavBar({ scroll = false }: NavBarProps) {
     <header
       className={cn(
         "sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all",
-        scroll ? (scrolled ? "border-b" : "bg-transparent") : "border-b"
+        scroll ? /* (scrolled ? "border-b" : "bg-transparent") */ "border-b" : "border-b"
       )}
     >
       <MaxWidthWrapper
         className="flex h-14 items-center justify-between py-4"
-        large={isDocsLayout}
+        // large={isDocsLayout}
+        large={false}
       >
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-1.5">
@@ -73,9 +75,10 @@ export function NavBar({ scroll = false }: NavBarProps) {
                   prefetch={true}
                   className={cn(
                     "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
-                    item.href.startsWith(`/${selectedLayout}`)
-                      ? "text-foreground"
-                      : "text-foreground/60",
+                    // item.href.startsWith(`/${selectedLayout}`)
+                    //   ? "text-foreground"
+                    //   : "text-foreground/60",
+                    "text-foreground/60",
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >
@@ -87,7 +90,8 @@ export function NavBar({ scroll = false }: NavBarProps) {
         </div>
 
         <div className="flex items-center space-x-3">
-          {isDocsLayout && (
+          {/* {isDocsLayout && ( */}
+          {false && ( // Disabled docs layout features
             <div className="hidden flex-1 items-center space-x-4 sm:justify-end lg:flex">
               <div className="hidden lg:flex lg:grow-0">
                 <DocsSearch />
@@ -108,20 +112,23 @@ export function NavBar({ scroll = false }: NavBarProps) {
             </div>
           )}
 
-          {!session ? (
+          {/* {!session ? ( */}
+          {true ? ( // Always show sign in button
             <Button
               className="hidden gap-2 px-5 md:flex"
               variant="default"
               size="sm"
               rounded="full"
-              onClick={() => router.push("/login")}
+              // onClick={() => router.push("/login")}
+              onClick={() => window.location.href = "/login"}
             >
               <span>Sign In</span>
               <Icons.arrowRight className="size-4" />
             </Button>
           ) : (
             <Link
-              href={session.user.role === "admin" ? "/admin" : "/dashboard"}
+              // href={session.user.role === "admin" ? "/admin" : "/dashboard"}
+              href="/dashboard"
               className="hidden md:block"
             >
               <Button

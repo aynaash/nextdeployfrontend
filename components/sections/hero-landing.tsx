@@ -16,7 +16,7 @@ export default function HeroLanding() {
 
       <div className="container relative z-10 flex max-w-5xl flex-col items-center gap-8 text-center">
         <Link
-          href="https://twitter.com/HersiYussuf"
+          href="https://x.com/HersiYussuf"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm", rounded: "full" }),
             "border-muted-foreground/20 bg-background/80 px-4 backdrop-blur-sm transition-all duration-300 hover:bg-background/90",
@@ -44,11 +44,12 @@ export default function HeroLanding() {
           engine
         </p>
 
-        <div
+         <div
           className="animate-fade-in-up flex flex-wrap justify-center gap-3 md:gap-4"
           style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
         >
-          <Link
+          {/* Commented out signup button */}
+          {/* <Link
             href="/register"
             prefetch={true}
             className={cn(
@@ -58,7 +59,7 @@ export default function HeroLanding() {
           >
             <span>Sign Up Free</span>
             <ArrowRight className="size-4" />
-          </Link>
+          </Link> */}
           <Link
             href="/docs"
             className={cn(

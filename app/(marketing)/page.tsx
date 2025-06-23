@@ -13,12 +13,8 @@ export default function IndexPage() {
       <HeroLanding />
       <PreviewLanding />
       <Powered />
-      <BentoGrid />
       <InfoLanding data={infos[0]} reverse={true} />
-      {/* This component requires session data*/}
-   {/* <InfoLanding data={infos[1]} /> */}
 
-      <Features />
     </>
   );
 }
