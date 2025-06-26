@@ -61,10 +61,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 # COPY --from=builder --chown=nextjs:nodejs /app/server.js ./server.js
 
 # Install curl for health checks
-RUN apk add --no-cache curl
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
-  CMD curl -f http://localhost:3000/api/health || exit 1
 
 USER nextjs
 EXPOSE 3000

@@ -29,7 +29,7 @@ export default function HeroLanding() {
         </Link>
 
         <h1 className="animate-fade-in text-balance font-urban text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-[66px]">
-          Kick off with a bang with{" "}
+          Kick off with a bang a simple{" "}
           <span className="text-gradient_indigo-purple relative font-extrabold">
             automated next js deployment
             <span className="absolute inset-x-0 bottom-0 h-1 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 opacity-70"></span>
