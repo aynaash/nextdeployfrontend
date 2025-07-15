@@ -424,6 +424,36 @@ export const rateLimit = pgTable("rate_limit", {
   identifierIdx: index("idx_rate_limits_identifier").on(rl.identifier),
 }));
 
+export const secretAccessLog = pgTable("secret_access_log", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  secretId: text("secret_id").notNull().references(() => secret.id),
+  userId: text("user_id").references(() => user.id),
+  accessType: text("access_type").notNull(), // "read", "write", "delete"
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  accessedAt: timestamp("accessed_at").defaultNow(),
+});
+export const secretVersion = pgTable("secret_version", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  secretId: text("secret_id").notNull().references(() => secret.id, { onDelete: "cascade" }),
+  encryptedValue: text("encrypted_value").notNull(),
+  version: integer("version").notNull(),
+  createdById: text("created_by_id").references(() => user.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+export const secret = pgTable("secret", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  projectEnvironmentId: text("project_environment_id").notNull().references(() => projectEnvironment.id, { onDelete: "cascade" }),
+  key: text("key").notNull(),
+  encryptedValue: text("encrypted_value").notNull(),
+  version: integer("version").default(1),
+  createdById: text("created_by_id").references(() => user.id),
+  tenantId: text("tenant_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (s) => ({
+  projectEnvKeyIdx: uniqueIndex("unique_env_key").on(s.projectEnvironmentId, s.key),
+}));
 // ====================== RELATIONS ======================
 export const userRelations = relations(user, ({ many }) => ({
   accounts: many(account),
