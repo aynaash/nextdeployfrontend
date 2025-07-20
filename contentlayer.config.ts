@@ -24,10 +24,7 @@ import { visit } from "unist-util-visit";
  * @constant {Object} BLOG_AUTHORS
  */
 const BLOG_AUTHORS = {
-  shadcn: { name: "ShadCN", avatar: "/authors/shadcn.png" },
-  mickasmt: { name: "Mick Asmt", avatar: "/authors/mickasmt.png" },
-  janeDoe: { name: "Jane Doe", avatar: "/authors/jane.png" },
-  johnSmith: { name: "John Smith", avatar: "/authors/john.png" },
+  yussuf: { name: "yussuf", avatar: "/authors/yussuf.png" },
 } as const;
 
 type AuthorUsername = keyof typeof BLOG_AUTHORS;

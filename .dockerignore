@@ -24,3 +24,16 @@ yarn-error.log*
 # OS generated files
 .DS_Store
 Thumbs.db
+# NextDeploy Dockerignore: auto-generated file
+
+# Node modules and build directories
+
+# Environment files
+
+# Logs
+
+# Git
+
+# IDE
+
+# OS generated files

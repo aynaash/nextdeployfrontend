@@ -40,10 +40,10 @@ docker:
 # ==================================================
 servers:
   - name: production # Unique ID (used for logs, filtering, routing)
-    host: 16.171.5.219
+    host: 51.20.134.163
     username: ubuntu
-    ssh_key: ~/.ssh/hersidev.pem
-    key_path: "/home/elitebook/.ssh/hersidev.pem"
+    ssh_key: ~/.ssh/nextdeploy-key.pem
+    key_path: "/home/elitebook/.ssh/nextdeploy-key.pem"
     use_sudo: false
 
     container:
@@ -61,10 +61,10 @@ servers:
         retries: 3
 
 # ✅ Teaching:
-# Move this out of `docker` because:
+# Move this out of docker because:
 # 1. Docker is the build + push concern.
 # 2. Servers are runtime infra concerns.
-# 3. Daemons like `ship`, `failover`, and `monitor` depend on accurate server declarations.
+# 3. Daemons like ship, failover, and monitor depend on accurate server declarations.
 
 # ==================================================
 # DATABASE CONFIGURATION
@@ -108,7 +108,7 @@ monitoring:
       - high_memory
 
 # Teaching:
-# This will integrate with the monitor daemon. Future version: consider `window_duration`, `cooldown_period`, `alert_frequency`.
+# This will integrate with the monitor daemon. Future version: consider window_duration, cooldown_period, alert_frequency.
 
 # ==================================================
 # BACKUP CONFIGURATION
