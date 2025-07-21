@@ -52,7 +52,7 @@ export default function GuidesPage() {
                   </p>
                 )}
               </div>
-              <Link href={guide.slug} className="absolute inset-0">
+              <Link href={guide.slug} className="absolute inset-0" legacyBehavior>
                 <span className="sr-only">View</span>
               </Link>
             </article>

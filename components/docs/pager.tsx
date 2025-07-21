@@ -33,7 +33,7 @@ export function DocsPager({ doc }: DocsPagerProps) {
         <Link
           href={pager.prev.href}
           className={cn(buttonVariants({ variant: "outline" }))}
-        >
+          legacyBehavior>
           <Icons.chevronLeft className="mr-2 size-4" />
           {pager.prev.title}
         </Link>
@@ -42,13 +42,13 @@ export function DocsPager({ doc }: DocsPagerProps) {
         <Link
           href={pager.next.href}
           className={cn(buttonVariants({ variant: "outline" }), "ml-auto")}
-        >
+          legacyBehavior>
           {pager.next.title}
           <Icons.chevronRight className="ml-2 size-4" />
         </Link>
       )}
     </div>
-  )
+  );
 }
 
 // ---- LOGIC ----

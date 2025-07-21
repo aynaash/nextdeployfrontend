@@ -145,7 +145,6 @@ const RegisterPage = () => {
         <div className="absolute -bottom-40 -left-40 size-80 animate-pulse rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-3xl delay-1000" />
         <div className="absolute left-1/2 top-1/2 size-96 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-gradient-to-r from-violet-500/10 to-pink-500/10 blur-3xl delay-500" />
       </div>
-
       {/* Back Navigation */}
       <motion.div
         initial={{ x: -20, opacity: 0 }}
@@ -162,12 +161,11 @@ const RegisterPage = () => {
             buttonVariants({ variant: "ghost" }),
             "flex items-center gap-2 border border-white/10 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-white/10",
           )}
-        >
+          legacyBehavior>
           <ArrowLeft className="size-4" />
           Back to Home
         </Link>
       </motion.div>
-
       <div className="container relative z-10 grid h-screen items-center justify-center lg:grid-cols-2 lg:px-0">
         {/* Left Features Panel */}
         <motion.div

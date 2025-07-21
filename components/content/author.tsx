@@ -46,7 +46,7 @@ export default async function Author({ username, imageOnly }: AuthorProps) {
       className="group flex w-max items-center space-x-2.5"
       target="_blank"
       rel="noopener noreferrer"
-    >
+      legacyBehavior>
       <BlurImage
         src={author.image}
         alt={author.name}

@@ -110,58 +110,54 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                     )}
                     {section.items.map((item) => {
                       const Icon = Icons[item.icon || "arrowRight"];
-                      return (
-                        item.href && (
-                          <Fragment key={`link-fragment-${item.title}`}>
-                            {isSidebarExpanded ? (
+                      return (item.href && (<Fragment key={`link-fragment-${item.title}`}>
+                        {isSidebarExpanded ? (
+                          <Link
+                            key={`link-${item.title}`}
+                            href={item.disabled ? "#" : item.href}
+                            className={cn(
+                              "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                              path === item.href
+                                ? "bg-muted"
+                                : "text-muted-foreground hover:text-accent-foreground",
+                              item.disabled &&
+                                "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                            )}
+                            legacyBehavior>
+                            <Icon className="size-5" />
+                            {item.title}
+                            {item.badge && (
+                              <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                                {item.badge}
+                              </Badge>
+                            )}
+                          </Link>
+                        ) : (
+                          <Tooltip key={`tooltip-${item.title}`}>
+                            <TooltipTrigger asChild>
                               <Link
-                                key={`link-${item.title}`}
+                                key={`link-tooltip-${item.title}`}
                                 href={item.disabled ? "#" : item.href}
                                 className={cn(
-                                  "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                                  "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
                                   path === item.href
                                     ? "bg-muted"
                                     : "text-muted-foreground hover:text-accent-foreground",
                                   item.disabled &&
                                     "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
                                 )}
-                              >
-                                <Icon className="size-5" />
-                                {item.title}
-                                {item.badge && (
-                                  <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                    {item.badge}
-                                  </Badge>
-                                )}
+                                legacyBehavior>
+                                <span className="flex size-full items-center justify-center">
+                                  <Icon className="size-5" />
+                                </span>
                               </Link>
-                            ) : (
-                              <Tooltip key={`tooltip-${item.title}`}>
-                                <TooltipTrigger asChild>
-                                  <Link
-                                    key={`link-tooltip-${item.title}`}
-                                    href={item.disabled ? "#" : item.href}
-                                    className={cn(
-                                      "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
-                                      path === item.href
-                                        ? "bg-muted"
-                                        : "text-muted-foreground hover:text-accent-foreground",
-                                      item.disabled &&
-                                        "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                    )}
-                                  >
-                                    <span className="flex size-full items-center justify-center">
-                                      <Icon className="size-5" />
-                                    </span>
-                                  </Link>
-                                </TooltipTrigger>
-                                <TooltipContent side="right">
-                                  {item.title}
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </Fragment>
-                        )
-                      );
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                              {item.title}
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                      </Fragment>));
                     })}
                   </section>
                 ))}
@@ -203,7 +199,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                 <Link
                   href="#"
                   className="flex items-center gap-2 text-lg font-semibold"
-                >
+                  legacyBehavior>
                   <Icons.logo className="size-6" />
                   <span className="font-urban text-xl font-bold">
                     {siteConfig.name}
@@ -223,35 +219,31 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
 
                     {section.items.map((item) => {
                       const Icon = Icons[item.icon || "arrowRight"];
-                      return (
-                        item.href && (
-                          <Fragment key={`link-fragment-${item.title}`}>
-                            <Link
-                              key={`link-${item.title}`}
-                              onClick={() => {
-                                if (!item.disabled) setOpen(false);
-                              }}
-                              href={item.disabled ? "#" : item.href}
-                              className={cn(
-                                "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
-                                path === item.href
-                                  ? "bg-muted"
-                                  : "text-muted-foreground hover:text-accent-foreground",
-                                item.disabled &&
-                                  "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                              )}
-                            >
-                              <Icon className="size-5" />
-                              {item.title}
-                              {item.badge && (
-                                <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                  {item.badge}
-                                </Badge>
-                              )}
-                            </Link>
-                          </Fragment>
-                        )
-                      );
+                      return (item.href && (<Fragment key={`link-fragment-${item.title}`}>
+                        <Link
+                          key={`link-${item.title}`}
+                          onClick={() => {
+                            if (!item.disabled) setOpen(false);
+                          }}
+                          href={item.disabled ? "#" : item.href}
+                          className={cn(
+                            "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                            path === item.href
+                              ? "bg-muted"
+                              : "text-muted-foreground hover:text-accent-foreground",
+                            item.disabled &&
+                              "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                          )}
+                          legacyBehavior>
+                          <Icon className="size-5" />
+                          {item.title}
+                          {item.badge && (
+                            <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                              {item.badge}
+                            </Badge>
+                          )}
+                        </Link>
+                      </Fragment>));
                     })}
                   </section>
                 ))}

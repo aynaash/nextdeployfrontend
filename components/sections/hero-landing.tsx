@@ -9,11 +9,9 @@ export default function HeroLanding() {
     <section className="relative overflow-hidden py-20 sm:py-24 lg:py-28">
       {/* Background pattern */}
       <div className="bg-grid-pattern absolute inset-0 z-0 opacity-[0.03]"></div>
-
       {/* Gradient orbs */}
       <div className="absolute -left-20 -top-24 z-0 size-72 rounded-full bg-purple-500/20 blur-3xl"></div>
       <div className="absolute -bottom-24 -right-20 z-0 size-72 rounded-full bg-indigo-500/20 blur-3xl"></div>
-
       <div className="container relative z-10 flex max-w-5xl flex-col items-center gap-8 text-center">
         <Link
           href="https://x.com/HersiYussuf"
@@ -22,7 +20,7 @@ export default function HeroLanding() {
             "border-muted-foreground/20 bg-background/80 px-4 backdrop-blur-sm transition-all duration-300 hover:bg-background/90",
           )}
           target="_blank"
-        >
+          legacyBehavior>
           <span className="mr-3">🚀</span>
           <span className="hidden md:flex">Introducing&nbsp;</span> NextDeploy
           <Icons.twitter className="ml-2 size-3.5" />
@@ -70,7 +68,7 @@ export default function HeroLanding() {
               }),
               "border-muted-foreground/20 bg-background/80 px-8 backdrop-blur-sm transition-all duration-300 hover:bg-background/90",
             )}
-          >
+            legacyBehavior>
             <Terminal className="mr-2 size-4" />
             <span>See Docs</span>
           </Link>
@@ -96,5 +94,5 @@ export default function HeroLanding() {
         </div>
       </div>
     </section>
-  )
+  );
 }

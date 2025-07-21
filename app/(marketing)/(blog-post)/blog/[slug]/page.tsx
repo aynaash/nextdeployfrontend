@@ -89,7 +89,7 @@ export default async function PostPage({
                 }),
                 "h-8",
               )}
-            >
+              legacyBehavior>
               {category.title}
             </Link>
             <time dateTime={post.date} className="text-sm font-medium text-muted-foreground">
@@ -109,7 +109,6 @@ export default async function PostPage({
           </div>
         </div>
       </MaxWidthWrapper>
-
       <div className="relative">
         <div className="absolute top-52 w-full border-t" />
 
@@ -136,7 +135,6 @@ export default async function PostPage({
           </div>
         </MaxWidthWrapper>
       </div>
-
       <MaxWidthWrapper>
         {relatedArticles.length > 0 && (
           <div className="flex flex-col space-y-4 pb-16">
@@ -148,7 +146,7 @@ export default async function PostPage({
                   key={post.slug}
                   href={post.slug}
                   className="flex flex-col space-y-2 rounded-xl border p-5 transition-colors duration-300 hover:bg-muted/80"
-                >
+                  legacyBehavior>
                   <h3 className="font-heading text-xl text-foreground">{post.title}</h3>
                   <p className="line-clamp-2 text-[15px] text-muted-foreground">{post.description}</p>
                   <p className="text-sm text-muted-foreground">{formatDate(post.date)}</p>
@@ -159,5 +157,5 @@ export default async function PostPage({
         )}
       </MaxWidthWrapper>
     </>
-  )
+  );
 }

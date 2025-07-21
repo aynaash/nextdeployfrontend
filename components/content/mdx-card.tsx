@@ -29,10 +29,10 @@ export function MdxCard({
         </div>
       </div>
       {href && (
-        <Link href={disabled ? "#" : href} className="absolute inset-0">
+        <Link href={disabled ? "#" : href} className="absolute inset-0" legacyBehavior>
           <span className="sr-only">View</span>
         </Link>
       )}
     </div>
-  )
+  );
 }

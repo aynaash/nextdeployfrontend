@@ -71,5 +71,5 @@ function FeatureCard({ title, description, icon, href }: FeatureCardProps) {
     </div>
   );
 
-  return href ? <Link href={href}>{content}</Link> : content;
+  return href ? <Link href={href} legacyBehavior>{content}</Link> : content;
 }

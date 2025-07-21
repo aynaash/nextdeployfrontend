@@ -112,7 +112,7 @@ const CategoryLink = ({
   clickAction?: () => void;
 }) => {
   return (
-    <Link href={href} onClick={clickAction}>
+    <Link href={href} onClick={clickAction} legacyBehavior>
       {mobile ? (
         <li className="rounded-lg text-foreground hover:bg-muted">
           <div className="flex items-center justify-between px-3 py-2 text-sm">

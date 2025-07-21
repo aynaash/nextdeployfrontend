@@ -1,56 +1,127 @@
-// import { WebSocketServer } from 'ws';
-// import { NextApiRequest, NextApiResponse } from 'next';
-// import { db } from '@/lib/db';
-// import { verifyToken } from '@/lib/auth';
-//
-// // Keep track of connected clients
-// const clients = new Map<string, WebSocket>();
-//
-// export default function handler(req: NextApiRequest, res: NextApiResponse) {
-//   if (!res.socket.server.wss) {
-//     const wss = new WebSocketServer({ noServer: true });
-//     
-//     wss.on('connection', (ws, request) => {
-//       const token = request.url?.split('token=')[1];
-//       const userId = verifyToken(token);
-//       
-//       if (!userId) {
-//         ws.close(1008, 'Unauthorized');
-//         return;
-//       }
-//       
-//       clients.set(userId, ws);
-//       
-//       ws.on('close', () => {
-//         clients.delete(userId);
-//       });
-//       
-//       ws.on('message', (message) => {
-//         // Handle incoming messages if needed
-//       });
-//     });
-//     
-//     res.socket.server.wss = wss;
-//   }
-//   
-//   // Handle upgrade requests
-//   res.socket.server.on('upgrade', (req, socket, head) => {
-//     res.socket.server.wss.handleUpgrade(req, socket, head, (ws) => {
-//       res.socket.server.wss.emit('connection', ws, req);
-//     });
-//   });
-//   
-//   res.end();
-// }
-//
-// export function broadcastToUser(userId: string, event: string, data: any) {
-//   const ws = clients.get(userId);
-//   if (ws && ws.readyState === ws.OPEN) {
-//     ws.send(JSON.stringify({ event, data }));
-//   }
-// }
-//
-// export function broadcastToTeam(teamId: string, event: string, data: any) {
-//   // In a real app, you would get team members from DB
-//   // and send to each member's WebSocket connection
-// }
+import { NextApiRequest, NextApiResponse } from 'next';
+import { WebSocketServer } from 'ws';
+import { verifyMessage } from '../../../lib/crypto';
+
+interface AgentConnection {
+  socket: WebSocket;
+  agentId: string;
+  lastSeen: Date;
+}
+
+const agentConnections = new Map<string, AgentConnection>();
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (!res.socket.server.wss) {
+    const wss = new WebSocketServer({ noServer: true });
+    res.socket.server.wss = wss;
+
+    wss.on('connection', (ws, req) => {
+      const agentId = req.headers['x-agent-id'] as string;
+      
+      if (!agentId || !verifyAgent(agentId)) {
+        ws.close();
+        return;
+      }
+
+      const connection: AgentConnection = {
+        socket: ws,
+        agentId,
+        lastSeen: new Date()
+      };
+
+      agentConnections.set(agentId, connection);
+
+      ws.on('message', (message) => {
+        try {
+          const msg = JSON.parse(message.toString());
+          
+          if (!verifyMessage(msg)) {
+            ws.close();
+            return;
+          }
+
+          connection.lastSeen = new Date();
+          processMessage(msg);
+        } catch (err) {
+          console.error('Message processing error:', err);
+        }
+      });
+
+      ws.on('close', () => {
+        agentConnections.delete(agentId);
+        broadcastAgentStatus(agentId, 'offline');
+      });
+
+      // Send initial configuration
+      ws.send(JSON.stringify({
+        type: 'config',
+        heartbeatInterval: 30000,
+        logBatchSize: 10
+      }));
+
+      broadcastAgentStatus(agentId, 'online');
+    });
+  }
+
+  res.socket.server.wss.handleUpgrade(req, req.socket, Buffer.alloc(0), (ws) => {
+    res.socket.server.wss.emit('connection', ws, req);
+  });
+}
+
+function verifyAgent(agentId: string): boolean {
+  // Implement actual agent verification against database
+  return true;
+}
+
+function processMessage(msg: any) {
+  switch (msg.type) {
+    case 'heartbeat':
+      updateAgentStatus(msg.agentId, 'online');
+      break;
+    case 'log':
+      broadcastLogs(msg);
+      break;
+    case 'metrics':
+      broadcastMetrics(msg);
+      break;
+  }
+}
+
+function broadcastAgentStatus(agentId: string, status: string) {
+  const wss = getWebSocketServer();
+  if (!wss) return;
+
+  const message = JSON.stringify({
+    type: 'agent_status',
+    agentId,
+    status,
+    timestamp: new Date()
+  });
+
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+}
+
+function broadcastLogs(logData: any) {
+  const wss = getWebSocketServer();
+  if (!wss) return;
+
+  const message = JSON.stringify({
+    type: 'log',
+    ...logData
+  });
+
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+}
+
+function getWebSocketServer(): WebSocketServer | null {
+  // Implementation depends on your setup
+  return null;
+}

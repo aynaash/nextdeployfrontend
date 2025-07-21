@@ -30,7 +30,7 @@ export default function TransactionsList() {
           </CardDescription>
         </div>
         <Button size="sm" className="ml-auto shrink-0 gap-1 px-4">
-          <Link href="#" className="flex items-center gap-2">
+          <Link href="#" className="flex items-center gap-2" legacyBehavior>
             <span>View All</span>
             <ArrowUpRight className="hidden size-4 sm:block" />
           </Link>

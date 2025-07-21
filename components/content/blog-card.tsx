@@ -49,7 +49,6 @@ export function BlogCard({
           />
         </div>
       )}
-
       <div
         className={cn(
           "flex flex-1 flex-col",
@@ -87,8 +86,7 @@ export function BlogCard({
           )}
         </div>
       </div>
-
-      <Link href={data.slug} className="absolute inset-0">
+      <Link href={data.slug} className="absolute inset-0" legacyBehavior>
         <span className="sr-only">View Article</span>
       </Link>
     </article>

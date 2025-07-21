@@ -65,7 +65,10 @@ export default async function GuidePage({
           <Mdx code={guide.body.code} />
           <hr className="my-4" />
           <div className="flex justify-center py-6 lg:py-10">
-            <Link href="/guides" className={cn(buttonVariants({ variant: "ghost" }))}>
+            <Link
+              href="/guides"
+              className={cn(buttonVariants({ variant: "ghost" }))}
+              legacyBehavior>
               <Icons.chevronLeft className="mr-2 size-4" />
               See all guides
             </Link>
@@ -78,5 +81,5 @@ export default async function GuidePage({
         </div>
       </div>
     </MaxWidthWrapper>
-  )
+  );
 }

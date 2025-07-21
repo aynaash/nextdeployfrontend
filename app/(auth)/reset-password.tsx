@@ -26,12 +26,11 @@ export default function ResetPasswordPage() {
             buttonVariants({ variant: "ghost" }),
             "flex items-center gap-2 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
           )}
-        >
+          legacyBehavior>
           <ArrowLeft className="size-4" />
           Back to Login
         </Link>
       </motion.div>
-
       <div className="container flex h-screen items-center justify-center">
         <motion.div
           className="w-full max-w-md rounded-xl bg-slate-900/80 p-6 text-white shadow-lg backdrop-blur sm:p-8"
@@ -71,5 +70,5 @@ export default function ResetPasswordPage() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

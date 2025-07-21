@@ -21,7 +21,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                   <Link
                     href={link.href}
                     className="text-sm text-muted-foreground transition-colors hover:text-primary"
-                  >
+                    legacyBehavior>
                     {link.title}
                   </Link>
                 </li>
@@ -34,7 +34,6 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
           <NewsletterForm />
         </div>
       </div>
-
       <div className="border-t py-4">
         <div className="container flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-4">
@@ -42,7 +41,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               href={siteConfig.links.github}
               target="_blank"
               rel="noreferrer"
-            >
+              legacyBehavior>
               <Icons.gitHub className="size-5 text-muted-foreground hover:text-foreground" />
             </Link>
             <ModeToggle />

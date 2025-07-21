@@ -82,7 +82,7 @@ export function UserAccountNav() {
                     href="/admin"
                     onClick={() => setOpen(false)}
                     className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-foreground hover:bg-muted"
-                  >
+                    legacyBehavior>
                     <Lock className="size-4" />
                     <p className="text-sm">Admin</p>
                   </Link>
@@ -94,7 +94,7 @@ export function UserAccountNav() {
                   href="/dashboard"
                   onClick={() => setOpen(false)}
                   className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-foreground hover:bg-muted"
-                >
+                  legacyBehavior>
                   <LayoutDashboard className="size-4" />
                   <p className="text-sm">Dashboard</p>
                 </Link>
@@ -105,7 +105,7 @@ export function UserAccountNav() {
                   href="/dashboard/settings"
                   onClick={() => setOpen(false)}
                   className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-foreground hover:bg-muted"
-                >
+                  legacyBehavior>
                   <Settings className="size-4" />
                   <p className="text-sm">Settings</p>
                 </Link>
@@ -163,7 +163,7 @@ export function UserAccountNav() {
         {user.role === "ADMIN" && (
           <>
             <DropdownMenuItem asChild>
-              <Link href="/admin" className="flex items-center gap-2">
+              <Link href="/admin" className="flex items-center gap-2" legacyBehavior>
                 <Lock className="size-4" />
                 <span>Admin</span>
               </Link>
@@ -173,14 +173,17 @@ export function UserAccountNav() {
         )}
 
         <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex items-center gap-2" legacyBehavior>
             <LayoutDashboard className="size-4" />
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/settings" className="flex items-center gap-2">
+          <Link
+            href="/dashboard/settings"
+            className="flex items-center gap-2"
+            legacyBehavior>
             <Settings className="size-4" />
             <span>Settings</span>
           </Link>
