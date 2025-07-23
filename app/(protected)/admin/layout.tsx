@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../../lib/session";
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '../../../lib/session';
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -14,28 +14,28 @@ type User = {
   createdAt: Date;
   updatedAt: Date;
   image?: string | null;
-  role: "user" | "admin" | "moderator"; // Explicit roles
+  role: 'user' | 'admin' | 'moderator'; // Explicit roles
 };
 
 export default async function AdminLayout({ children }: ProtectedLayoutProps) {
   let user: User | null = null;
-  
+
   try {
-    user = await getCurrentUser() as User;
-    console.log("The user attempting to access admin layout:", user);
+    user = (await getCurrentUser()) as User;
+    console.log('The user attempting to access admin layout:', user);
   } catch (error) {
-    console.error("Failed to fetch user:", error);
-    redirect("/login?error=session_error");
+    console.error('Failed to fetch user:', error);
+    redirect('/login?error=session_error');
   }
 
   if (!user) {
-    redirect("/login");
+    redirect('/login');
   }
 
-  if (user.role !== "admin") {
+  if (user.role !== 'admin') {
     // Consider logging unauthorized access attempts
     console.warn(`Unauthorized access attempt by user ${user.id}`);
-    redirect("/unauthorized");
+    redirect('/unauthorized');
   }
 
   return <>{children}</>;

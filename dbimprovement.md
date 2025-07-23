@@ -1,4 +1,3 @@
-
 Here's a structured breakdown and review of your current **NextDeploy database schema**, with specific improvement suggestions for each table. This schema is already well-structured for a multi-tenant SaaS platform, but there are enterprise-level enhancements you can make for **performance**, **scalability**, **security**, and **data consistency**.
 
 ---
@@ -32,9 +31,9 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `owner_id` (user who created the team).
-* Add soft delete flag (`is_deleted` boolean).
-* Add `tenant_id` if you're treating orgs as tenants.
+- Add `owner_id` (user who created the team).
+- Add soft delete flag (`is_deleted` boolean).
+- Add `tenant_id` if you're treating orgs as tenants.
 
 ---
 
@@ -42,8 +41,8 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `invited_by_user_id` for tracking invites.
-* Add `status` ENUM: `invited`, `joined`, `removed`, `pending`.
+- Add `invited_by_user_id` for tracking invites.
+- Add `status` ENUM: `invited`, `joined`, `removed`, `pending`.
 
 ---
 
@@ -51,9 +50,9 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `last_used_at` timestamp.
-* Store `key` hashed + salt using `bcrypt` or `argon2`.
-* Add `scope` field (`read`, `write`, `admin`) as an ENUM or array.
+- Add `last_used_at` timestamp.
+- Store `key` hashed + salt using `bcrypt` or `argon2`.
+- Add `scope` field (`read`, `write`, `admin`) as an ENUM or array.
 
 ---
 
@@ -61,9 +60,9 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `service_name`, `container_name`, or `daemon` to support microservice debugging.
-* Add `request_id` (if tied to a user request).
-* Partition the table by date (`created_at`) for high log volume.
+- Add `service_name`, `container_name`, or `daemon` to support microservice debugging.
+- Add `request_id` (if tied to a user request).
+- Partition the table by date (`created_at`) for high log volume.
 
 ---
 
@@ -71,8 +70,8 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Normalize if needed: separate `deployment_resources` if there are more metrics types.
-* Add `disk_usage`, `network_in/out`, `uptime` etc.
+- Normalize if needed: separate `deployment_resources` if there are more metrics types.
+- Add `disk_usage`, `network_in/out`, `uptime` etc.
 
 ---
 
@@ -80,9 +79,9 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `max_projects`, `max_deployments`, and `max_team_members` fields for enforcement.
-* Add `is_trial`, `trial_days`.
-* Add `description` and `feature_list` as JSON for marketing use.
+- Add `max_projects`, `max_deployments`, and `max_team_members` fields for enforcement.
+- Add `is_trial`, `trial_days`.
+- Add `description` and `feature_list` as JSON for marketing use.
 
 ---
 
@@ -90,9 +89,9 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `type` ENUM (`development`, `staging`, `production`).
-* Add `is_active`, `deleted_at` (soft delete).
-* Encrypt `env_vars` using field-level encryption if it contains secrets.
+- Add `type` ENUM (`development`, `staging`, `production`).
+- Add `is_active`, `deleted_at` (soft delete).
+- Encrypt `env_vars` using field-level encryption if it contains secrets.
 
 ---
 
@@ -100,17 +99,17 @@ CREATE TABLE "teams" (
 
 **Suggestions**:
 
-* Add `unique_request_id` to support idempotency.
-* Add `event_type`, `processed_at`, and `response_status`.
+- Add `unique_request_id` to support idempotency.
+- Add `event_type`, `processed_at`, and `response_status`.
 
 ---
 
 ## 🔄 General Schema Practices
 
-* **Use UUIDs** for all primary keys (`uuid_generate_v7()` in Postgres 16+ is ideal).
-* **Always timestamp your records**: `created_at`, `updated_at`, `deleted_at`.
-* **Avoid NULL booleans**, use defaults and `NOT NULL`.
-* **Create enums** instead of raw strings where you have a fixed set of possible values.
+- **Use UUIDs** for all primary keys (`uuid_generate_v7()` in Postgres 16+ is ideal).
+- **Always timestamp your records**: `created_at`, `updated_at`, `deleted_at`.
+- **Avoid NULL booleans**, use defaults and `NOT NULL`.
+- **Create enums** instead of raw strings where you have a fixed set of possible values.
 
 ---
 
@@ -161,14 +160,13 @@ Install `gitsigns.nvim`, then use:
 
 ## 📚 Learn In-Depth
 
-* [PostgreSQL Schema Design Best Practices](https://supabase.com/blog/database-schema-best-practices)
-* [Drizzle ORM Migrations Guide](https://orm.drizzle.team/docs/migrations)
-* [JSONB Performance in Postgres](https://www.crunchydata.com/blog/postgresql-jsonb-type-performance-use-cases)
+- [PostgreSQL Schema Design Best Practices](https://supabase.com/blog/database-schema-best-practices)
+- [Drizzle ORM Migrations Guide](https://orm.drizzle.team/docs/migrations)
+- [JSONB Performance in Postgres](https://www.crunchydata.com/blog/postgresql-jsonb-type-performance-use-cases)
 
 ---
 
 If you upload more Drizzle model files (e.g., `projects.ts`, `deployments.ts`), I can further normalize the full schema to match enterprise standards. Would you like a **ERD (Entity Relationship Diagram)** or migration split strategy next?
-
 
 To add **shadow tables** (also known as **audit tables**) to your **NextDeploy SaaS schema** using `Drizzle ORM`, follow this **algorithmic implementation strategy**.
 
@@ -185,11 +183,10 @@ This improves **data lineage**, **rollback capabilities**, **compliance** (GDPR/
 ## 🧠 What You’ll Implement
 
 1. For each core table (e.g. `deployments`), create a matching table: `deployments_audit`.
-2. This table stores the full row + metadata: action (`insert`, `update`, `delete`), user\_id, timestamp, and diff.
+2. This table stores the full row + metadata: action (`insert`, `update`, `delete`), user_id, timestamp, and diff.
 3. Insert into it via:
-
-   * App logic (via Drizzle middleware/hooks)
-   * OR Postgres trigger functions (more secure and accurate)
+   - App logic (via Drizzle middleware/hooks)
+   - OR Postgres trigger functions (more secure and accurate)
 
 ---
 
@@ -305,9 +302,9 @@ Modern SaaS companies using shadow tables often combine them with **temporal tab
 
 ## 📚 In-Depth Resources
 
-* [Temporal Data with PostgreSQL](https://www.2ndquadrant.com/en/blog/temporal-tables-postgresql/)
-* [Audit Logging with Postgres Triggers](https://pganalyze.com/blog/postgresql-audit-log)
-* [GitHub - Drizzle ORM Recipes](https://orm.drizzle.team/docs/migrations)
+- [Temporal Data with PostgreSQL](https://www.2ndquadrant.com/en/blog/temporal-tables-postgresql/)
+- [Audit Logging with Postgres Triggers](https://pganalyze.com/blog/postgresql-audit-log)
+- [GitHub - Drizzle ORM Recipes](https://orm.drizzle.team/docs/migrations)
 
 ---
 
@@ -416,7 +413,7 @@ Object.defineProperty(user, 'role', {
   writable: false,
 });
 console.log(user.role); // 'admin'
-user.role = 'user';     // ignored
+user.role = 'user'; // ignored
 ```
 
 🔎 This allows fine-grained control over object properties: `enumerable`, `writable`, `configurable`.
@@ -449,9 +446,9 @@ Companies like **Segment**, **Stripe**, and **Figma** treat all business logic c
 
 ## 📚 In-Depth Audit Resources
 
-* [Audit Trail Patterns in SaaS](https://martinfowler.com/articles/record-playback.html)
-* [PostgreSQL Triggers for Audit Logs](https://www.cybertec-postgresql.com/en/audit-trigger-postgresql/)
-* [Deep JSON diff libraries](https://github.com/flitbit/diff)
+- [Audit Trail Patterns in SaaS](https://martinfowler.com/articles/record-playback.html)
+- [PostgreSQL Triggers for Audit Logs](https://www.cybertec-postgresql.com/en/audit-trigger-postgresql/)
+- [Deep JSON diff libraries](https://github.com/flitbit/diff)
 
 ---
 
@@ -462,8 +459,8 @@ Absolutely great checkpoint, Yussuf. Let’s **systematically audit** whether yo
 
 ## ✅ 1. MVP Functional Checklist vs Database Tables
 
-| Feature/Service            | Covered by Table                          | Notes / Improvements                                                                                       |
-| -------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Feature/Service            | Covered by Table                           | Notes / Improvements                                                                                       |
+| -------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
 | **Projects**               | ✅ `projects`                              | Add project-level `type` (monorepo, frontend-only, etc.), `slug`, and `region`.                            |
 | **Deployments**            | ✅ `deployments`                           | Add `status_history`, `restart_count`, and `rollback_id`.                                                  |
 | **Teams / Orgs**           | ✅ `organizations` + `organizationMembers` | Good, maybe add `invitation_status` to `members`.                                                          |
@@ -475,8 +472,8 @@ Absolutely great checkpoint, Yussuf. Let’s **systematically audit** whether yo
 | **Metrics / Health**       | ❌                                         | For real-time metrics, consider a `metrics_snapshots` table or use time-series store like **TimescaleDB**. |
 | **Billing / Plans**        | ❌                                         | Add `subscriptions`, `plans`, `usage_records`. Stripe or LemonSqueezy integration.                         |
 | **Domains / DNS**          | ❌                                         | Add `domains` table with `domain_name`, `verified`, `project_id`.                                          |
-| **Builds / Logs**          | Partially                                 | You may need a `build_logs` table or log stream indexer (if using Loki/Vector).                            |
-| **NextDeploy YAML Config** | ✅ via `projects` or `deployments`         | Embed `config_snapshot` in deployments. ✅                                                                  |
+| **Builds / Logs**          | Partially                                  | You may need a `build_logs` table or log stream indexer (if using Loki/Vector).                            |
+| **NextDeploy YAML Config** | ✅ via `projects` or `deployments`         | Embed `config_snapshot` in deployments. ✅                                                                 |
 
 ---
 
@@ -521,15 +518,15 @@ export const subscriptions = pgTable('subscriptions', {
 
 ## 🎯 Final MVP Table Coverage Status
 
-| Area             | Coverage Status                                      | Required Tables              |
-| ---------------- | ---------------------------------------------------- | ---------------------------- |
+| Area             | Coverage Status                                       | Required Tables              |
+| ---------------- | ----------------------------------------------------- | ---------------------------- |
 | Core Deployments | ✅ Complete (with `deployments`, `projects`, `audit`) | –                            |
 | Auth + Teams     | ✅ Complete                                           | –                            |
 | Secrets & APIs   | ✅ Complete                                           | –                            |
-| Metrics          | 🔶 Partial                                           | `metrics_snapshots` optional |
+| Metrics          | 🔶 Partial                                            | `metrics_snapshots` optional |
 | Billing          | ❌ Missing                                            | `plans`, `subscriptions`     |
 | DNS & Domains    | ❌ Missing                                            | `domains`                    |
-| Logs             | 🔶 Needs structure                                   | `build_logs` or Loki indexer |
+| Logs             | 🔶 Needs structure                                    | `build_logs` or Loki indexer |
 | Webhooks         | ❌ Missing                                            | `webhooks`                   |
 
 ---
@@ -538,16 +535,16 @@ export const subscriptions = pgTable('subscriptions', {
 
 You can ship MVP with:
 
-* ✅ What you have now
-* 🔶 Webhooks & logs **as optional**
-* ❌ Billing/DNS as **future milestone**
+- ✅ What you have now
+- 🔶 Webhooks & logs **as optional**
+- ❌ Billing/DNS as **future milestone**
 
 ---
 
 ## 🧠 JavaScript Deep Knowledge: `Object.getOwnPropertyDescriptors`
 
 ```js
-const obj = { name: "nextdeploy" };
+const obj = { name: 'nextdeploy' };
 const descriptors = Object.getOwnPropertyDescriptors(obj);
 console.log(descriptors);
 ```
@@ -583,20 +580,20 @@ Install `vim-dadbod-ui` with:
 
 Your current DB **does cover the core MVP** of NextDeploy (multi-tenant, SaaS, secure deployments) — but to go **production-grade**, add:
 
-* `webhooks`
-* `subscriptions`
-* `domains`
-* structured logs or link to external logging stack (Loki, Bunyan, etc.)
+- `webhooks`
+- `subscriptions`
+- `domains`
+- structured logs or link to external logging stack (Loki, Bunyan, etc.)
 
 Would you like a full Drizzle-compatible schema for these missing ones?
- ffpa
+ffpa
 Excellent — here’s a **production-ready extension** to your current Drizzle ORM schema for **NextDeploy MVP completion**. These cover:
 
-* ✅ **Webhooks**
-* ✅ **Subscriptions & Plans**
-* ✅ **Domains**
-* ✅ **Build Logs (structured)**
-* ✅ Bonus: **Metric Snapshots**
+- ✅ **Webhooks**
+- ✅ **Subscriptions & Plans**
+- ✅ **Domains**
+- ✅ **Build Logs (structured)**
+- ✅ Bonus: **Metric Snapshots**
 
 All are multitenant-compatible and follow Drizzle/Postgres idioms.
 
@@ -606,25 +603,29 @@ All are multitenant-compatible and follow Drizzle/Postgres idioms.
 
 ```ts
 // webhooks.ts
-export const webhooks = pgTable("webhooks", {
-  id: text("id").primaryKey(),
-  projectId: text("project_id").notNull().references(() => projects.id),
-  url: text("url").notNull(),
-  event: text("event").notNull(), // e.g. "deployment_succeeded"
-  secret: text("secret"),
-  createdAt: timestamp("created_at").defaultNow(),
+export const webhooks = pgTable('webhooks', {
+  id: text('id').primaryKey(),
+  projectId: text('project_id')
+    .notNull()
+    .references(() => projects.id),
+  url: text('url').notNull(),
+  event: text('event').notNull(), // e.g. "deployment_succeeded"
+  secret: text('secret'),
+  createdAt: timestamp('created_at').defaultNow(),
 });
 ```
 
 Optional event logging:
 
 ```ts
-export const webhookEvents = pgTable("webhook_events", {
-  id: text("id").primaryKey(),
-  webhookId: text("webhook_id").notNull().references(() => webhooks.id),
-  status: text("status"), // success/failure
-  responseCode: integer("response_code"),
-  sentAt: timestamp("sent_at").defaultNow(),
+export const webhookEvents = pgTable('webhook_events', {
+  id: text('id').primaryKey(),
+  webhookId: text('webhook_id')
+    .notNull()
+    .references(() => webhooks.id),
+  status: text('status'), // success/failure
+  responseCode: integer('response_code'),
+  sentAt: timestamp('sent_at').defaultNow(),
 });
 ```
 
@@ -633,22 +634,24 @@ export const webhookEvents = pgTable("webhook_events", {
 ## 💳 2. `plans` and `subscriptions`
 
 ```ts
-export const plans = pgTable("plans", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(), // e.g. Starter, Pro, Team
-  monthlyPrice: integer("monthly_price"),
-  limits: json("limits"), // { deployments: 100, teamMembers: 10 }
-  isActive: boolean("is_active").default(true),
+export const plans = pgTable('plans', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(), // e.g. Starter, Pro, Team
+  monthlyPrice: integer('monthly_price'),
+  limits: json('limits'), // { deployments: 100, teamMembers: 10 }
+  isActive: boolean('is_active').default(true),
 });
 
-export const subscriptions = pgTable("subscriptions", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").references(() => users.id),
-  organizationId: text("organization_id").references(() => organizations.id),
-  planId: text("plan_id").notNull().references(() => plans.id),
-  status: text("status").default("active"),
-  startedAt: timestamp("started_at").defaultNow(),
-  endsAt: timestamp("ends_at"),
+export const subscriptions = pgTable('subscriptions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').references(() => users.id),
+  organizationId: text('organization_id').references(() => organizations.id),
+  planId: text('plan_id')
+    .notNull()
+    .references(() => plans.id),
+  status: text('status').default('active'),
+  startedAt: timestamp('started_at').defaultNow(),
+  endsAt: timestamp('ends_at'),
 });
 ```
 
@@ -657,13 +660,15 @@ export const subscriptions = pgTable("subscriptions", {
 ## 🌐 3. `domains`
 
 ```ts
-export const domains = pgTable("domains", {
-  id: text("id").primaryKey(),
-  projectId: text("project_id").notNull().references(() => projects.id),
-  domainName: text("domain_name").notNull().unique(),
-  isVerified: boolean("is_verified").default(false),
-  verificationToken: text("verification_token"),
-  createdAt: timestamp("created_at").defaultNow(),
+export const domains = pgTable('domains', {
+  id: text('id').primaryKey(),
+  projectId: text('project_id')
+    .notNull()
+    .references(() => projects.id),
+  domainName: text('domain_name').notNull().unique(),
+  isVerified: boolean('is_verified').default(false),
+  verificationToken: text('verification_token'),
+  createdAt: timestamp('created_at').defaultNow(),
 });
 ```
 
@@ -674,13 +679,15 @@ export const domains = pgTable("domains", {
 You can decouple logs from deployments for stream indexing:
 
 ```ts
-export const buildLogs = pgTable("build_logs", {
-  id: text("id").primaryKey(),
-  deploymentId: text("deployment_id").notNull().references(() => deployments.id),
-  source: text("source").notNull(), // "build", "deploy", "runtime"
-  message: text("message"),
-  level: text("level").default("info"), // info, warn, error
-  timestamp: timestamp("timestamp").defaultNow(),
+export const buildLogs = pgTable('build_logs', {
+  id: text('id').primaryKey(),
+  deploymentId: text('deployment_id')
+    .notNull()
+    .references(() => deployments.id),
+  source: text('source').notNull(), // "build", "deploy", "runtime"
+  message: text('message'),
+  level: text('level').default('info'), // info, warn, error
+  timestamp: timestamp('timestamp').defaultNow(),
 });
 ```
 
@@ -693,13 +700,15 @@ You can offload this to **Grafana Loki** or **Vector.dev** later via async deliv
 To monitor CPU, Memory, Disk for each deployment:
 
 ```ts
-export const metricSnapshots = pgTable("metric_snapshots", {
-  id: text("id").primaryKey(),
-  deploymentId: text("deployment_id").notNull().references(() => deployments.id),
-  cpuUsage: numeric("cpu_usage"),
-  memoryUsage: numeric("memory_usage"),
-  diskUsage: numeric("disk_usage"),
-  timestamp: timestamp("timestamp").defaultNow(),
+export const metricSnapshots = pgTable('metric_snapshots', {
+  id: text('id').primaryKey(),
+  deploymentId: text('deployment_id')
+    .notNull()
+    .references(() => deployments.id),
+  cpuUsage: numeric('cpu_usage'),
+  memoryUsage: numeric('memory_usage'),
+  diskUsage: numeric('disk_usage'),
+  timestamp: timestamp('timestamp').defaultNow(),
 });
 ```
 
@@ -721,27 +730,29 @@ All are **Drizzle ORM-ready** and fit your architecture cleanly.
 
 ## 📚 In-Depth Learning Links
 
-* [PostgreSQL Schema Design Best Practices](https://www.prisma.io/dataguide/postgresql/schema-design)
-* [Stripe Subscription Models for SaaS](https://stripe.com/docs/billing/subscriptions/overview)
-* [Loki Logging Architecture](https://grafana.com/docs/loki/latest/)
-* [Drizzle ORM Docs](https://orm.drizzle.team/docs/overview)
+- [PostgreSQL Schema Design Best Practices](https://www.prisma.io/dataguide/postgresql/schema-design)
+- [Stripe Subscription Models for SaaS](https://stripe.com/docs/billing/subscriptions/overview)
+- [Loki Logging Architecture](https://grafana.com/docs/loki/latest/)
+- [Drizzle ORM Docs](https://orm.drizzle.team/docs/overview)
 
 ---
 
 ## 🧠 JavaScript Power Skill: `.bind()` vs `.call()` vs `.apply()`
 
 ```js
-const fn = function (a, b) { return a + b + this.c }
-const obj = { c: 10 }
+const fn = function (a, b) {
+  return a + b + this.c;
+};
+const obj = { c: 10 };
 
-fn.call(obj, 1, 2)    // 13
-fn.apply(obj, [1, 2]) // 13
-fn.bind(obj)(1, 2)    // 13
+fn.call(obj, 1, 2); // 13
+fn.apply(obj, [1, 2]); // 13
+fn.bind(obj)(1, 2); // 13
 ```
 
-* `.call()` = immediate execution
-* `.apply()` = like call, but args as array
-* `.bind()` = returns a new bound function
+- `.call()` = immediate execution
+- `.apply()` = like call, but args as array
+- `.bind()` = returns a new bound function
 
 📚 [MDN - Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind)
 
@@ -772,29 +783,29 @@ Great — I've added a production-ready schema extension for your MVP in the doc
 
 ### 1. **Domain Management** (`domains`)
 
-* Associates domains with a project.
-* Tracks verification and token for DNS-based checks.
-* Enables use-cases like custom domains for deployments.
+- Associates domains with a project.
+- Tracks verification and token for DNS-based checks.
+- Enables use-cases like custom domains for deployments.
 
 ### 2. **Webhooks & Events**
 
-* `webhooks`: Each project can register multiple webhooks.
-* `webhook_events`: Tracks delivery attempts and responses per webhook.
+- `webhooks`: Each project can register multiple webhooks.
+- `webhook_events`: Tracks delivery attempts and responses per webhook.
 
 ### 3. **Plans & Subscriptions**
 
-* `plans`: Centralized SaaS pricing model (monthly only for now).
-* `subscriptions`: Connects users/teams to a plan with expiration & status.
-* Adds room for limits (e.g., max containers, bandwidth, etc.).
+- `plans`: Centralized SaaS pricing model (monthly only for now).
+- `subscriptions`: Connects users/teams to a plan with expiration & status.
+- Adds room for limits (e.g., max containers, bandwidth, etc.).
 
 ### 4. **Enhanced Logs**
 
-* `build_logs`: Differentiated from deployment logs — tracks build pipelines (CI logs).
-* `deployment_logs`: Already existed, but should be complemented by this.
+- `build_logs`: Differentiated from deployment logs — tracks build pipelines (CI logs).
+- `deployment_logs`: Already existed, but should be complemented by this.
 
 ### 5. **Metrics Snapshots**
 
-* Tracks CPU, memory, and disk usage over time — better for charts and alerts.
+- Tracks CPU, memory, and disk usage over time — better for charts and alerts.
 
 ---
 
@@ -809,9 +820,9 @@ Great — I've added a production-ready schema extension for your MVP in the doc
 
 ## 📚 Learn the Concepts (for In-depth Understanding)
 
-* [PostgreSQL JSONB vs JSON](https://www.postgresql.org/docs/current/datatype-json.html)
-* [Drizzle ORM Relations](https://orm.drizzle.team/docs/relations)
-* [Multi-tenancy Best Practices](https://martinfowler.com/bliki/MultiTenant.html)
+- [PostgreSQL JSONB vs JSON](https://www.postgresql.org/docs/current/datatype-json.html)
+- [Drizzle ORM Relations](https://orm.drizzle.team/docs/relations)
+- [Multi-tenancy Best Practices](https://martinfowler.com/bliki/MultiTenant.html)
 
 ---
 
@@ -849,20 +860,18 @@ Calling `App.version` works — but not `App.start()`.
 
 ### Command 2: Visual Block Replace
 
-* Use `Ctrl-v` to select a column block.
-* Press `r` then type the replacement character.
+- Use `Ctrl-v` to select a column block.
+- Press `r` then type the replacement character.
 
 ---
 
 Let me know if you want to:
 
-* Add analytics for usage.
-* Manage logs in S3.
-* Set up API rate limits or service quotas.
+- Add analytics for usage.
+- Manage logs in S3.
+- Set up API rate limits or service quotas.
 
 Next steps? You can now implement this schema with Drizzle ORM or SQLC and begin wiring it to the backend daemons.
-
-
 
 Perfect. Since you're building **NextDeploy** as a full-blown enterprise SaaS with CLI + dashboard + daemons, here’s a structured breakdown to **lock your MVP schema** so it’s production-grade and extensible:
 
@@ -888,7 +897,7 @@ When deploying containers:
 
 ```js
 const deployAll = async (services) => {
-  const results = await Promise.all(services.map(service => deploy(service)));
+  const results = await Promise.all(services.map((service) => deploy(service)));
   return results;
 };
 ```
@@ -929,25 +938,25 @@ Great for copying env variables, tokens, etc.
 
 ### 2. Initialize Go services to:
 
-* Run migrations (use `goose`)
-* Handle project creation → domain → environment → deploy flow
-* Generate API key & test auth
+- Run migrations (use `goose`)
+- Handle project creation → domain → environment → deploy flow
+- Generate API key & test auth
 
 ### 3. Wire CLI (`nextdeploy init`, `deploy`, `logs`) to backend
 
 ### 4. Create admin dashboard for:
 
-* User & team management
-* API keys, subscriptions, deployments
-* Metrics and logs
+- User & team management
+- API keys, subscriptions, deployments
+- Metrics and logs
 
 ---
 
 If you want, I can now:
 
-* Generate a **Drizzle model file** from this schema.
-* Help scaffold Go structs from SQL for use with `sqlc`.
-* Plan the `nextdeploy.yml` structure for user configuration.
+- Generate a **Drizzle model file** from this schema.
+- Help scaffold Go structs from SQL for use with `sqlc`.
+- Plan the `nextdeploy.yml` structure for user configuration.
 
 Just say the word — we’re nearly production-ready 🚀
 Awesome. Here’s the final structured **NextDeploy MVP schema with enhancements**, ready to use in Drizzle, `sqlc`, or any ORM you prefer.
@@ -1171,10 +1180,10 @@ Lists all current mappings — perfect for plugin debugging.
 
 ## ✅ You Are Now Ready To:
 
-* Scaffold Go models using [`sqlc`](https://sqlc.dev)
-* Auto-generate Drizzle models (if needed)
-* Write API endpoints & CLI commands tied to this schema
-* Track usage, deployments, and observability metrics
+- Scaffold Go models using [`sqlc`](https://sqlc.dev)
+- Auto-generate Drizzle models (if needed)
+- Write API endpoints & CLI commands tied to this schema
+- Track usage, deployments, and observability metrics
 
 ---
 

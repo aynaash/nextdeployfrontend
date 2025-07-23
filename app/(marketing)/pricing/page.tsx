@@ -1,43 +1,43 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 // import { client } from "../../../auth-client.ts";
 // import { getCurrentUser } from "@/lib/session";
 // import { getUserSubscriptionPlan } from "@/lib/subscription";
-import { constructMetadata } from "../../../lib/utils";
+import { constructMetadata } from '../../../lib/utils';
 // import { ComparePlans } from "@/components/pricing/compare-plans";
 // import { PricingCards } from "@/components/pricing/pricing-cards";
 // import { PricingFaq } from "@/components/pricing/pricing-faq";
 
 export const metadata = constructMetadata({
-  title: "Pricing – NextDeploy",
-  description: "Explore our subscription plans.",
+  title: 'Pricing – NextDeploy',
+  description: 'Explore our subscription plans.',
 });
 
 export default async function PricingPage() {
   // TODO: Pricing support will be added in the future
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-8 p-4 text-center">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold">Pricing Coming Soon</h1>
-        <p className="text-lg text-muted-foreground">
+    <div className='flex min-h-screen flex-col items-center justify-center gap-8 p-4 text-center'>
+      <div className='space-y-4'>
+        <h1 className='text-4xl font-bold'>Pricing Coming Soon</h1>
+        <p className='text-lg text-muted-foreground'>
           We are working on our subscription plans and pricing options.
         </p>
-        <p className="text-muted-foreground">
+        <p className='text-muted-foreground'>
           Check back later or contact us for more information.
         </p>
       </div>
-      
+
       <Image
-        src="/_static/illustrations/call-waiting.svg"
-        alt="Coming soon"
+        src='/_static/illustrations/call-waiting.svg'
+        alt='Coming soon'
         width={400}
         height={400}
-        className="pointer-events-none dark:invert"
+        className='pointer-events-none dark:invert'
       />
-      
+
       <Link
-        href="/"
-        className="text-muted-foreground underline underline-offset-4 hover:text-purple-500"
+        href='/'
+        className='text-muted-foreground underline underline-offset-4 hover:text-purple-500'
       >
         Return to Home
       </Link>

@@ -3,16 +3,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
+      "contentlayer/generated": ["./.contentlayer/generated"],
       "@/components/*": ["components/*"],
       // Add more paths as needed
       "@/actions/*": ["actions/*"],
       "@/app/*": ["app/*"],
       "@/lib/*": ["lib/*"],
-      "@/hooks/*": ["hooks/*"],
+      "@/hooks/*": ["hooks/*"]
     },
     "allowSyntheticDefaultImports": true,
-   "allowUmdGlobalAccess": true,
- "allowImportingTsExtensions": true,
+    "allowUmdGlobalAccess": true,
+    "allowImportingTsExtensions": true,
     "strict": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

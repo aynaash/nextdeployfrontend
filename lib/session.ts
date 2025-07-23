@@ -1,8 +1,8 @@
-import { auth } from "../auth";
-import { headers } from "next/headers";
-import { User, UserRole } from "../lib/types";
+import { auth } from '../auth';
+import { headers } from 'next/headers';
+import { User, UserRole } from '../lib/types';
 
-const validRoles: UserRole[] = ["admin", "user", "super_admin"];
+const validRoles: UserRole[] = ['admin', 'user', 'super_admin'];
 
 export async function getCurrentUser(): Promise<User | undefined> {
   try {
@@ -10,17 +10,17 @@ export async function getCurrentUser(): Promise<User | undefined> {
     const session = await auth.api.getSession({ headers: rawHeaders });
 
     if (!session?.user) {
-      console.warn("Session not found or user missing");
+      console.warn('Session not found or user missing');
       return undefined;
     }
 
     const { user } = session;
 
     const roleCandidate = user.role;
-    const role: UserRole = 
-      typeof roleCandidate === "string" && validRoles.includes(roleCandidate as UserRole)
+    const role: UserRole =
+      typeof roleCandidate === 'string' && validRoles.includes(roleCandidate as UserRole)
         ? (roleCandidate as UserRole)
-        : "user";  // default fallback
+        : 'user'; // default fallback
 
     const sanitizedUser: User = {
       ...user,
@@ -32,7 +32,7 @@ export async function getCurrentUser(): Promise<User | undefined> {
 
     return sanitizedUser;
   } catch (error) {
-    console.error("Failed to retrieve session:", error instanceof Error ? error.message : error);
+    console.error('Failed to retrieve session:', error instanceof Error ? error.message : error);
     return undefined;
   }
 }
@@ -45,7 +45,7 @@ export async function getCurrentUser(): Promise<User | undefined> {
 // export const getCurrentUser = cache(async (): Promise<User | undefined> => {
 //   const requestHeaders = new Headers();
 //   const nextHeaders = headers();
-//   
+//
 //   // Copy all headers from nextHeaders to the standard Headers object
 //   nextHeaders.forEach((value, key) => {
 //     requestHeaders.set(key, value);

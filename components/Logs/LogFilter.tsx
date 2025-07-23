@@ -1,4 +1,4 @@
-
+'use client';
 import { useState } from 'react';
 
 interface LogFilterProps {
@@ -23,18 +23,18 @@ export default function LogFilter({ agents, onFilterChange }: LogFilterProps) {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className='mb-4 rounded-lg bg-white p-4 shadow-sm'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Agent</label>
+          <label className='block text-sm font-medium text-gray-700'>Agent</label>
           <select
-            name="agentId"
+            name='agentId'
             value={filters.agentId}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
           >
-            <option value="">All Agents</option>
-            {agents.map(agent => (
+            <option value=''>All Agents</option>
+            {agents.map((agent) => (
               <option key={agent.id} value={agent.id}>
                 {agent.name}
               </option>
@@ -43,29 +43,29 @@ export default function LogFilter({ agents, onFilterChange }: LogFilterProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Log Level</label>
+          <label className='block text-sm font-medium text-gray-700'>Log Level</label>
           <select
-            name="level"
+            name='level'
             value={filters.level}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
           >
-            <option value="all">All Levels</option>
-            <option value="info">Info</option>
-            <option value="warning">Warning</option>
-            <option value="error">Error</option>
+            <option value='all'>All Levels</option>
+            <option value='info'>Info</option>
+            <option value='warning'>Warning</option>
+            <option value='error'>Error</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Search</label>
+          <label className='block text-sm font-medium text-gray-700'>Search</label>
           <input
-            type="text"
-            name="search"
+            type='text'
+            name='search'
             value={filters.search}
             onChange={handleChange}
-            placeholder="Search logs..."
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            placeholder='Search logs...'
+            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
           />
         </div>
       </div>

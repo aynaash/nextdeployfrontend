@@ -11,7 +11,7 @@
 // ) {
 //   try {
 //     const user = await requireAuth();
-//     
+//
 //     // Verify user has access to the project
 //     const [project] = await db.select()
 //       .from(projects)
@@ -32,18 +32,18 @@
 //         )
 //       )
 //       .limit(1);
-//     
+//
 //     if (!project) {
 //       throw new ApiError('Project not found or access denied', 404);
 //     }
-//     
+//
 //     const deploymentsList = await db.select()
 //       .from(deployments)
 //       .where(eq(deployments.projectId, params.projectId))
 //       .orderBy(deployments.createdAt);
-//     
+//
 //     return successResponse(deploymentsList);
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }
@@ -56,7 +56,7 @@
 //   try {
 //     const user = await requireAuth();
 //     const { imageUrl, environmentId } = await request.json();
-//     
+//
 //     // Verify user has access to the project
 //     const [project] = await db.select()
 //       .from(projects)
@@ -77,11 +77,11 @@
 //         )
 //       )
 //       .limit(1);
-//     
+//
 //     if (!project) {
 //       throw new ApiError('Project not found or access denied', 404);
 //     }
-//     
+//
 //     // Verify environment exists and belongs to project
 //     if (environmentId) {
 //       const [environment] = await db.select()
@@ -93,12 +93,12 @@
 //           )
 //         )
 //         .limit(1);
-//       
+//
 //       if (!environment) {
 //         throw new ApiError('Environment not found', 404);
 //       }
 //     }
-//     
+//
 //     const [newDeployment] = await db.insert(deployments)
 //       .values({
 //         projectId: params.projectId,
@@ -110,11 +110,11 @@
 //         updatedAt: new Date()
 //       })
 //       .returning();
-//     
+//
 //     // In a real app, you would trigger the deployment process here
-//     
+//
 //     return createdResponse(newDeployment);
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }

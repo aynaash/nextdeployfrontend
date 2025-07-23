@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useEffect, useState, useCallback } from 'react';
 
 export function useWebSocket() {
@@ -33,10 +33,10 @@ export function useWebSocket() {
 
       switch (data.type) {
         case 'agent_status':
-          setAgents(prev => updateAgentStatus(prev, data));
+          setAgents((prev) => updateAgentStatus(prev, data));
           break;
         case 'log':
-          setLogs(prev => [...prev.slice(-1000), data]); // Keep last 1000 logs
+          setLogs((prev) => [...prev.slice(-1000), data]); // Keep last 1000 logs
           break;
         case 'metrics':
           // Handle metrics update
@@ -56,19 +56,22 @@ export function useWebSocket() {
     return cleanup;
   }, [connect]);
 
-  const sendCommand = useCallback((command: any) => {
-    if (socket && isConnected) {
-      socket.send(JSON.stringify(command));
-    }
-  }, [socket, isConnected]);
+  const sendCommand = useCallback(
+    (command: any) => {
+      if (socket && isConnected) {
+        socket.send(JSON.stringify(command));
+      }
+    },
+    [socket, isConnected]
+  );
 
   return { isConnected, agents, logs, sendCommand };
 }
 
 function updateAgentStatus(agents: any[], update: any): any[] {
-  const existing = agents.find(a => a.id === update.agentId);
+  const existing = agents.find((a) => a.id === update.agentId);
   if (existing) {
-    return agents.map(a => a.id === update.agentId ? { ...a, ...update } : a);
+    return agents.map((a) => (a.id === update.agentId ? { ...a, ...update } : a));
   }
   return [...agents, { id: update.agentId, ...update }];
 }

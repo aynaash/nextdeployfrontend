@@ -1,39 +1,31 @@
-
-import { db } from "./lib/db";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { db } from './lib/db';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { betterAuth, type BetterAuthOptions } from 'better-auth';
 // import { resend } from "./lib/auth/authUtils";
 // import { reactInvitationEmail, reactResetPasswordEmail } from "./lib/auth/authUtils";
 // import { Stripe } from "stripe";
 // import { stripe } from "@better-auth/stripe";
-import * as schema from "./drizzle/schema/schema"
-import {sanitizeUrl} from "./lib/utils"
+import * as schema from './drizzle/schema/schema';
+import { sanitizeUrl } from './lib/utils';
 
 // Plugins
-import {
-  admin,
-  bearer,
-  multiSession,
-  organization,
-  twoFactor,
-  openAPI,
-} from "better-auth/plugins";
-import { passkey } from "better-auth/plugins/passkey";
+import { admin, bearer, multiSession, organization, twoFactor, openAPI } from 'better-auth/plugins';
+import { passkey } from 'better-auth/plugins/passkey';
 
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
-const sanitizeBetterAuthUrl = sanitizeUrl(BETTER_AUTH_URL || "");
-console.log("BetterAuth URL:", sanitizeBetterAuthUrl);
+const sanitizeBetterAuthUrl = sanitizeUrl(BETTER_AUTH_URL || '');
+console.log('BetterAuth URL:', sanitizeBetterAuthUrl);
 
-const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || "no-reply@nextdeploy.one";
+const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || 'no-reply@nextdeploy.one';
 const TEST_EMAIL = process.env.TEST_EMAIL;
 // const STRIPE_KEY = process.env.STRIPE_API_KEY!;
 // const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 if (!BETTER_AUTH_URL /* || !STRIPE_KEY || !STRIPE_WEBHOOK_SECRET */) {
-  console.warn("Missing environment variables for BetterAuth setup.");
+  console.warn('Missing environment variables for BetterAuth setup.');
 }
 
 const adapter = drizzleAdapter(db, {
-  provider: "pg",
+  provider: 'pg',
   schema,
 });
 
@@ -48,22 +40,21 @@ const adapter = drizzleAdapter(db, {
 //   },
 // };
 const devOrigins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-   "https://nextdeploy.one",
-  "https://www.nextdeploy.one",
-
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://nextdeploy.one',
+  'https://www.nextdeploy.one',
 ];
 let baseURL;
-if (process.env.NODE_ENV === "development") {
-  baseURL = "http://localhost:3000/";
-}else {
-  baseURL = "https://nextdeploy.one/";
+if (process.env.NODE_ENV === 'development') {
+  baseURL = 'http://localhost:3000/';
+} else {
+  baseURL = 'https://nextdeploy.one/';
 }
 
 //FIX: remove the localhost origins in production later
 export const auth = betterAuth({
-  appName: "NextDeploy",
+  appName: 'NextDeploy',
   //baseURL: sanitizeBetterAuthUrl,
   baseURL: baseURL,
   // Database configuration
@@ -85,7 +76,7 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       try {
-        console.log("Sent the verification email");
+        console.log('Sent the verification email');
         // await resend.emails.send({
         //   from: FROM_EMAIL,
         //   to: user.email,
@@ -93,7 +84,7 @@ export const auth = betterAuth({
         //   html: `<a href="${url}">Click here to verify your email</a>`,
         // });
       } catch (error) {
-        console.error("Failed to send verification email:", error);
+        console.error('Failed to send verification email:', error);
         throw error;
       }
     },
@@ -113,9 +104,9 @@ export const auth = betterAuth({
         //     resetLink: url,
         //   }),
         // });
-        console.log("Sent the reset password email");
+        console.log('Sent the reset password email');
       } catch (error) {
-        console.error("Failed to send password reset email:", error);
+        console.error('Failed to send password reset email:', error);
         throw error;
       }
     },
@@ -132,14 +123,14 @@ export const auth = betterAuth({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       redirectURI: `${BETTER_AUTH_URL}/api/auth/callback/google`,
-      prompt: "select_account",
+      prompt: 'select_account',
     },
   },
 
   // Account linking
   account: {
     accountLinking: {
-      trustedProviders: ["google", "github"],
+      trustedProviders: ['google', 'github'],
     },
   },
 
@@ -159,7 +150,7 @@ export const auth = betterAuth({
           //   subject: "Your NextDeploy OTP Code",
           //   html: `Your verification code is: <strong>${otp}</strong>`,
           // });
-          console.log("Sent the OTP email");
+          console.log('Sent the OTP email');
         },
       },
     }),
@@ -180,13 +171,13 @@ export const auth = betterAuth({
         //     inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${data.id}`,
         //   }),
         // });
-        console.log("Sent the invitation email");
+        console.log('Sent the invitation email');
       },
     }),
 
     // Admin features
     admin({
-      adminUserIds: process.env.ADMIN_USER_IDS?.split(",") || [],
+      adminUserIds: process.env.ADMIN_USER_IDS?.split(',') || [],
     }),
 
     // Multi-session support
@@ -218,11 +209,10 @@ export const auth = betterAuth({
     //   },
     // }),
   ],
-trustedOrigins: ["http://localhost:3000", "https://nextdeploy.on"],
+  trustedOrigins: ['http://localhost:3000', 'https://nextdeploy.on'],
   // Security
   // trustedOrigins: [
   //   BETTER_AUTH_URL,
   //   process.env.NEXT_PUBLIC_APP_URL,
   // ].filter(Boolean) as string[],
 } satisfies BetterAuthOptions);
-

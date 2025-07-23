@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { SubscriptionPlan, UserSubscriptionPlan } from "@/types";
-import { Button } from "@/components/ui/button";
+import { SubscriptionPlan, UserSubscriptionPlan } from '@/types';
+import { Button } from '@/components/ui/button';
 
 interface BillingFormButtonProps {
   offer: SubscriptionPlan;
@@ -9,17 +9,13 @@ interface BillingFormButtonProps {
   year: boolean;
 }
 
-export function BillingFormButton({
-  year,
-  offer,
-  subscriptionPlan,
-}: BillingFormButtonProps) {
+export function BillingFormButton({ year, offer, subscriptionPlan }: BillingFormButtonProps) {
   // Temporary UI before billing is implemented
   return (
     <Button
-      variant="outline"
-      rounded="full"
-      className="w-full cursor-not-allowed opacity-70"
+      variant='outline'
+      rounded='full'
+      className='w-full cursor-not-allowed opacity-70'
       disabled
     >
       Billing coming soon

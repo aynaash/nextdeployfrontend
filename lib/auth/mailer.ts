@@ -17,7 +17,7 @@
 //
 // export async function sendVerificationEmail(email: string, token: string) {
 //   const verificationUrl = `${process.env.NEXTAUTH_URL}/auth/verify-email?token=${token}`;
-//   
+//
 //   return sendEmail({
 //     to: email,
 //     subject: "Verify your email address",
@@ -27,7 +27,7 @@
 //
 // export async function sendPasswordResetEmail(email: string, token: string) {
 //   const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}`;
-//   
+//
 //   return sendEmail({
 //     to: email,
 //     subject: "Reset your password",

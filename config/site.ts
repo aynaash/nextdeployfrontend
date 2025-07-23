@@ -1,45 +1,45 @@
-import { SidebarNavItem, SiteConfig } from "types";
-import {sanitizeUrl} from "../lib/utils";
-const uncleanurl = process.env.BETTER_AUTH_URL || "https://nextdeploy.one";
-const site_url = sanitizeUrl(uncleanurl);  
+import { SidebarNavItem, SiteConfig } from 'types';
+import { sanitizeUrl } from '../lib/utils';
+const uncleanurl = process.env.BETTER_AUTH_URL || 'https://nextdeploy.one';
+const site_url = sanitizeUrl(uncleanurl);
 export const siteConfig: SiteConfig = {
-  name: "NextDeploy",
+  name: 'NextDeploy',
   description:
-    "NextDeploy is the developer-first platform to securely deploy any Dockerized app in seconds. Powered by Go, SSH, and automation-first workflows, it gives you full control of your DevOps pipeline across any VPS.",
+    'NextDeploy is the developer-first platform to securely deploy any Dockerized app in seconds. Powered by Go, SSH, and automation-first workflows, it gives you full control of your DevOps pipeline across any VPS.',
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
   links: {
-    twitter: "https://twitter.com/nextdeploy",
-    github: "https://github.com/aynaash",
+    twitter: 'https://twitter.com/nextdeploy',
+    github: 'https://github.com/aynaash',
   },
-  mailSupport: "nextdeploy@nextdeploy.one",
+  mailSupport: 'nextdeploy@nextdeploy.one',
 };
 export const footerLinks: SidebarNavItem[] = [
   {
-    title: "Company",
+    title: 'Company',
     items: [
-      { title: "About", href: "/about" },
-      { title: "Partners", href: "/partners" },
-      { title: "Terms", href: "/terms" },
-      { title: "Privacy", href: "/privacy" },
+      { title: 'About', href: '/about' },
+      { title: 'Partners', href: '/partners' },
+      { title: 'Terms', href: '/terms' },
+      { title: 'Privacy', href: '/privacy' },
     ],
   },
   {
-    title: "Platform",
+    title: 'Platform',
     items: [
-      { title: "Security", href: "/features/security" },
-      { title: "Rollback", href: "/features/rollback" },
-      { title: "Monitoring", href: "/features/monitoring" },
-      { title: "Changelog", href: "/changelog" },
+      { title: 'Security', href: '/features/security' },
+      { title: 'Rollback', href: '/features/rollback' },
+      { title: 'Monitoring', href: '/features/monitoring' },
+      { title: 'Changelog', href: '/changelog' },
     ],
   },
   {
-    title: "Docs",
+    title: 'Docs',
     items: [
-      { title: "Getting Started", href: "/docs" },
-      { title: "CLI Reference", href: "/docs/cli" },
-      { title: "Config Reference", href: "/docs/nextdeploy-yml" },
-      { title: "Custom Daemons", href: "/docs/daemons" },
+      { title: 'Getting Started', href: '/docs' },
+      { title: 'CLI Reference', href: '/docs/cli' },
+      { title: 'Config Reference', href: '/docs/nextdeploy-yml' },
+      { title: 'Custom Daemons', href: '/docs/daemons' },
     ],
   },
 ];

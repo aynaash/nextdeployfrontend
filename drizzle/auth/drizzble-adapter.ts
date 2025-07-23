@@ -17,7 +17,7 @@
 //         image: user.image,
 //         role: user.role || "USER", // default role
 //       }).returning();
-//       
+//
 //       return {
 //         id: newUser.id,
 //         name: newUser.name,
@@ -49,7 +49,7 @@
 //             eq(accounts.provider, provider)
 //           )
 //         );
-//       
+//
 //       return result?.user || null;
 //     },
 //
@@ -59,7 +59,7 @@
 //         .set(user)
 //         .where(eq(users.id, user.id))
 //         .returning();
-//       
+//
 //       return {
 //         id: updatedUser.id,
 //         name: updatedUser.name,
@@ -107,7 +107,7 @@
 //         sessionToken: session.sessionToken,
 //         expires: session.expires,
 //       }).returning();
-//       
+//
 //       return newSession;
 //     },
 //
@@ -120,9 +120,9 @@
 //         .from(sessions)
 //         .innerJoin(users, eq(sessions.userId, users.id))
 //         .where(eq(sessions.sessionToken, sessionToken));
-//       
+//
 //       if (!result) return null;
-//       
+//
 //       return {
 //         session: result.session,
 //         user: result.user,
@@ -138,7 +138,7 @@
 //         })
 //         .where(eq(sessions.sessionToken, session.sessionToken))
 //         .returning();
-//       
+//
 //       return updatedSession;
 //     },
 //

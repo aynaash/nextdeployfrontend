@@ -1,6 +1,6 @@
-import type { User, UserRole } from "../lib/types";
-import type { Icon } from "lucide-react";
-import { Icons } from "@/components/shared/icons";
+import type { User, UserRole } from '../lib/types';
+import type { Icon } from 'lucide-react';
+import { Icons } from '@/components/shared/icons';
 
 // Reusable base types
 type IconName = keyof typeof Icons;
@@ -54,8 +54,8 @@ export type DocsConfig = {
 /**
  * Subscription Plans
  */
-export const PLAN_NAMES = ["free", "pro", "enterprise"] as const;
-export type PlanName = typeof PLAN_NAMES[number];
+export const PLAN_NAMES = ['free', 'pro', 'enterprise'] as const;
+export type PlanName = (typeof PLAN_NAMES)[number];
 
 export type StripeIds = {
   monthly: string | null;
@@ -78,10 +78,10 @@ export type SubscriptionPlan = {
 };
 
 export type UserSubscriptionPlan = SubscriptionPlan &
-  Pick<User, "stripeCustomerId" | "stripeSubscriptionId" | "stripePriceId"> & {
+  Pick<User, 'stripeCustomerId' | 'stripeSubscriptionId' | 'stripePriceId'> & {
     stripeCurrentPeriodEnd: number;
     isPaid: boolean;
-    interval: "month" | "year" | null;
+    interval: 'month' | 'year' | null;
     isCanceled?: boolean;
     hasActiveSubscription?: boolean;
   };

@@ -1,46 +1,44 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { SectionColumns } from "@/components/dashboard/section-columns";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { SectionColumns } from '@/components/dashboard/section-columns';
 
-import { User } from "../../lib/types";
+import { User } from '../../lib/types';
 interface UserNameFormProps {
-  user: Pick<User, "id" | "name">;
+  user: Pick<User, 'id' | 'name'>;
 }
 
 export function UserNameForm({ user }: UserNameFormProps) {
   return (
     <form>
       <SectionColumns
-        title="Your Name"
-        description="Please enter a display name you are comfortable with."
+        title='Your Name'
+        description='Please enter a display name you are comfortable with.'
       >
-        <div className="flex w-full items-center gap-2">
-          <Label className="sr-only" htmlFor="name">
+        <div className='flex w-full items-center gap-2'>
+          <Label className='sr-only' htmlFor='name'>
             Name
           </Label>
           <Input
-            id="name"
-            className="flex-1 cursor-not-allowed opacity-70"
+            id='name'
+            className='flex-1 cursor-not-allowed opacity-70'
             size={32}
-            value={user?.name || ""}
+            value={user?.name || ''}
             disabled
           />
           <Button
-            type="button"
-            variant="outline"
+            type='button'
+            variant='outline'
             disabled
-            className="w-[67px] shrink-0 cursor-not-allowed px-0 opacity-70 sm:w-[130px]"
+            className='w-[67px] shrink-0 cursor-not-allowed px-0 opacity-70 sm:w-[130px]'
           >
             Coming Soon
           </Button>
         </div>
-        <div className="flex flex-col justify-between p-1">
-          <p className="text-[13px] text-muted-foreground">
-            Max 32 characters
-          </p>
+        <div className='flex flex-col justify-between p-1'>
+          <p className='text-[13px] text-muted-foreground'>Max 32 characters</p>
         </div>
       </SectionColumns>
     </form>

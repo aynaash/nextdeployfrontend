@@ -50,7 +50,7 @@ export async function fetchAuditLogs(params: AuditLogsParams = {}): Promise<Audi
     const toParam = params.to instanceof Date ? params.to.toISOString() : params.to;
 
     const queryParams = new URLSearchParams();
-    
+
     if (params.action) queryParams.append('action', params.action);
     if (params.entityType) queryParams.append('entityType', params.entityType);
     if (params.userId) queryParams.append('userId', params.userId);
@@ -193,18 +193,18 @@ If you're using TypeScript, you might want to extend the types to match your exa
 
 ```typescript
 // types/audit-logs.ts
-export type AuditLogAction = 
-  | 'create' 
-  | 'update' 
-  | 'delete' 
-  | 'login' 
+export type AuditLogAction =
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'login'
   | 'logout'
   // Add other action types as needed
   | string;
 
-export type AuditLogEntityType = 
-  | 'user' 
-  | 'team' 
+export type AuditLogEntityType =
+  | 'user'
+  | 'team'
   | 'project'
   // Add other entity types as needed
   | string;

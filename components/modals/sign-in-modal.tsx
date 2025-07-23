@@ -39,7 +39,7 @@
 //   const handleGoogleAuth = async () => {
 //     console.log('Initiating Google auth flow...')
 //     console.log(`Current mode: ${isSignUp ? 'Sign Up' : 'Sign In'}`)
-//     
+//
 //     setLoadingProvider("google")
 //     setError("")
 //     setSuccess("")
@@ -73,7 +73,7 @@
 //   const handleGitHubAuth = async () => {
 //     console.log('Initiating GitHub auth flow...')
 //     console.log(`Current mode: ${isSignUp ? 'Sign Up' : 'Sign In'}`)
-//     
+//
 //     setLoadingProvider("github")
 //     setError("")
 //     setSuccess("")

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -14,17 +14,19 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-md">
-      <div className="p-4 border-b">
-        <h1 className="text-xl font-bold">NextDeploy</h1>
+    <div className='w-64 bg-white shadow-md'>
+      <div className='border-b p-4'>
+        <h1 className='text-xl font-bold'>NextDeploy</h1>
       </div>
-      <nav className="p-4">
-        <ul className="space-y-2">
+      <nav className='p-4'>
+        <ul className='space-y-2'>
           {navItems.map((item) => (
             <li key={item.name}>
               <Link href={item.href}>
-                <Button className={`flex items-center p-2 rounded-lg ${router.pathname === item.href ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}>
-                  <span className="mr-3">{item.icon}</span>
+                <Button
+                  className={`flex items-center rounded-lg p-2 ${router.pathname === item.href ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+                >
+                  <span className='mr-3'>{item.icon}</span>
                   {item.name}
                 </Button>
               </Link>
@@ -35,4 +37,3 @@ export default function Sidebar() {
     </div>
   );
 }
-

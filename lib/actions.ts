@@ -112,7 +112,7 @@
 //   // =============================================
 //   // PHASE 1: INPUT VALIDATION AND CONVERSION
 //   // =============================================
-//   
+//
 //   // Debug initial input
 //   console.debug("[SignUp] Raw input received:", {
 //     type: typeof formInput,
@@ -124,16 +124,16 @@
 //   // Check if input exists
 //   if (!formInput) {
 //     console.error("[SignUp] No input data provided");
-//     return { 
+//     return {
 //       success: false,
-//       errorMessage: "No form data submitted" }; 
+//       errorMessage: "No form data submitted" };
 //   }
 //
 //   // Convert to FormData-like object
 //   const formData = tryConvertToFormData(formInput);
 //   if (!formData) {
 //     console.error("[SignUp] Unsupported input type:", formInput);
-//     return { 
+//     return {
 // success: false,
 //       errorMessage: "Invalid form submission format" };
 //   }
@@ -184,23 +184,23 @@
 //
 //   try {
 //     console.debug("[SignUp] Attempting user creation");
-//     
+//
 //     // In a real app, you would call your auth provider here
 //     // await authProvider.createUser(userData);
-//      
-//     
+//
+//
 //     // Simulate successful creation
 //     console.info("[SignUp] User created successfully:", {
 //       email: userData.email,
 //       userId: userData.id
 //     });
-//     
+//
 //     //redirect("/");
 //     return { success: true };
-//     
+//
 //   } catch (error) {
 //     console.error("[SignUp] Creation failed:", serializeError(error));
-//     
+//
 //     return handleCreationError(error);
 //   }
 // }
@@ -215,7 +215,7 @@
 //     if (input instanceof FormData) return input;
 //     if ('entries' in input || 'get' in input) return input as FormDataLike;
 //   }
-//   
+//
 //   // Handle plain objects
 //   if (typeof input === 'object' && input !== null) {
 //     return {
@@ -227,14 +227,14 @@
 //       get: (key: string) => (input as Record<string, unknown>)[key]
 //     };
 //   }
-//   
+//
 //   return null;
 // }
 //
 // function extractFormValues(formData: FormDataLike): Record<string, string> | null {
 //   const result: Record<string, string> = {};
 //   let success = false;
-//   
+//
 //   // Method 1: entries()
 //   if (typeof formData.entries === 'function') {
 //     try {
@@ -248,7 +248,7 @@
 //       console.warn("[SignUp] entries() method failed:", error);
 //     }
 //   }
-//   
+//
 //   // Method 2: keys() + get()
 //   if (!success && typeof formData.keys === 'function' && typeof formData.get === 'function') {
 //     try {
@@ -263,7 +263,7 @@
 //       console.warn("[SignUp] keys()+get() method failed:", error);
 //     }
 //   }
-//   
+//
 //   // Method 3: Direct get()
 //   if (!success && typeof formData.get === 'function') {
 //     try {
@@ -279,7 +279,7 @@
 //       console.warn("[SignUp] get() method failed:", error);
 //     }
 //   }
-//   
+//
 //   return success ? result : null;
 // }
 //
@@ -293,7 +293,7 @@
 //       apiError: process.env.NODE_ENV === 'development' ? error : undefined
 //     };
 //   }
-//   
+//
 //   // Generic error handling
 //   return {
 //     errorMessage: "An unexpected error occurred during registration",

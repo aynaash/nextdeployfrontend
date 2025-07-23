@@ -1,4 +1,3 @@
-
 // import { db } from "./lib/db";
 // import { drizzleAdapter } from "better-auth/adapters/drizzle";
 // import { betterAuth, type BetterAuthOptions } from "better-auth";
@@ -45,7 +44,7 @@
 // export const auth = betterAuth({
 //   appName: "NextDeploy",
 //   baseURL: BETTER_AUTH_URL,
-//   
+//
 //   // Database configuration
 //   database: adapter,
 //

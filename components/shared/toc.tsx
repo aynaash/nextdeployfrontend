@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 
-import { useMounted } from "@/hooks/use-mounted";
-import { TableOfContents } from "@/lib/toc";
-import { cn } from "@/lib/utils";
+import { useMounted } from '@/hooks/use-mounted';
+import { TableOfContents } from '@/lib/toc';
+import { cn } from '@/lib/utils';
 
 interface TocProps {
   toc: TableOfContents;
@@ -18,9 +18,9 @@ export function DashboardTableOfContents({ toc }: TocProps) {
             .flatMap((item) => [item.url, item?.items?.map((item) => item.url)])
             .flat()
             .filter(Boolean)
-            .map((id) => id?.split("#")[1])
+            .map((id) => id?.split('#')[1])
         : [],
-    [toc],
+    [toc]
   );
   const activeHeading = useActiveItem(itemIds);
   const mounted = useMounted();
@@ -30,15 +30,15 @@ export function DashboardTableOfContents({ toc }: TocProps) {
   }
 
   return mounted ? (
-    <div className="space-y-2">
-      <p className="text-[15px] font-medium">On This Page</p>
+    <div className='space-y-2'>
+      <p className='text-[15px] font-medium'>On This Page</p>
       <Tree tree={toc} activeItem={activeHeading} />
     </div>
   ) : null;
 }
 
 function useActiveItem(itemIds: (string | undefined)[]) {
-  const [activeId, setActiveId] = React.useState<string>("");
+  const [activeId, setActiveId] = React.useState<string>('');
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -49,7 +49,7 @@ function useActiveItem(itemIds: (string | undefined)[]) {
           }
         });
       },
-      { rootMargin: `0% 0% -80% 0%` },
+      { rootMargin: `0% 0% -80% 0%` }
     );
 
     itemIds?.forEach((id) => {
@@ -88,17 +88,15 @@ interface TreeProps {
 
 function Tree({ tree, level = 1, activeItem }: TreeProps) {
   return tree?.items?.length && level < 3 ? (
-    <ul className={cn("m-0 list-none", { "pl-4": level !== 1 })}>
+    <ul className={cn('m-0 list-none', { 'pl-4': level !== 1 })}>
       {tree.items.map((item, index) => {
         return (
-          <li key={index} className={cn("mt-0 pt-1")}>
+          <li key={index} className={cn('mt-0 pt-1')}>
             <a
               href={item.url}
               className={cn(
-                "inline-block text-sm no-underline",
-                item.url === `#${activeItem}`
-                  ? "font-medium text-primary"
-                  : "text-muted-foreground",
+                'inline-block text-sm no-underline',
+                item.url === `#${activeItem}` ? 'font-medium text-primary' : 'text-muted-foreground'
               )}
             >
               {item.title}

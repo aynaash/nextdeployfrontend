@@ -1,4 +1,3 @@
-
 // import { generateUUID } from 'jose/util/generate_uuid';
 // import { NextResponse, type NextRequest } from "next/server";
 // import { getSessionCookie } from "better-auth/cookies";
@@ -62,7 +61,7 @@
 //     message,
 //     ...context
 //   };
-//   
+//
 //   // In production, you'd send this to a logging service
 //   console[level === 'audit' ? 'info' : level](JSON.stringify(logData));
 // }
@@ -184,34 +183,34 @@
 //
 //   const ip = getClientIp(request);
 //   const currentTime = Date.now();
-//   
+//
 //   // Implementation with Redis (if configured)
 //   if (RATE_LIMIT_CONFIG.redisUrl) {
 //     try {
 //       // This would be replaced with actual Redis client implementation
 //       const redisClient = {}; // Mock for example
 //       const key = `rate_limit:${ip}`;
-//       
+//
 //       // const current = await redisClient.get(key);
 //       // const record = current ? JSON.parse(current) : { count: 0, lastReset: currentTime };
-//       
+//
 //       // Mock implementation:
 //       const record = { count: 0, lastReset: currentTime };
-//       
+//
 //       if (currentTime - record.lastReset > RATE_LIMIT_CONFIG.windowMs) {
 //         record.count = 0;
 //         record.lastReset = currentTime;
 //       }
 //
 //       record.count++;
-//       
+//
 //       // await redisClient.set(key, JSON.stringify(record), 'PX', RATE_LIMIT_CONFIG.windowMs);
-//       
+//
 //       if (record.count > RATE_LIMIT_CONFIG.max) {
 //         const retryAfter = Math.ceil(
 //           (RATE_LIMIT_CONFIG.windowMs - (currentTime - record.lastReset)) / 1000
 //         );
-//         
+//
 //         logger.warn('Rate limit exceeded', {
 //           ...context,
 //           status: 429,
@@ -221,14 +220,14 @@
 //         });
 //
 //         return new NextResponse(
-//           JSON.stringify({ 
+//           JSON.stringify({
 //             error: RATE_LIMIT_CONFIG.message,
 //             retryAfter,
 //             correlationId: context.correlationId
-//           }), 
+//           }),
 //           {
 //             status: 429,
-//             headers: { 
+//             headers: {
 //               'Content-Type': 'application/json',
 //               'Retry-After': String(retryAfter),
 //               'x-correlation-id': context.correlationId,
@@ -256,7 +255,7 @@
 //       const retryAfter = Math.ceil(
 //         (RATE_LIMIT_CONFIG.windowMs - (currentTime - record.lastReset)) / 1000
 //       );
-//       
+//
 //       logger.warn('Rate limit exceeded (in-memory)', {
 //         ...context,
 //         status: 429,
@@ -266,14 +265,14 @@
 //       });
 //
 //       return new NextResponse(
-//         JSON.stringify({ 
+//         JSON.stringify({
 //           error: RATE_LIMIT_CONFIG.message,
 //           retryAfter,
 //           correlationId: context.correlationId
-//         }), 
+//         }),
 //         {
 //           status: 429,
-//           headers: { 
+//           headers: {
 //             'Content-Type': 'application/json',
 //             'Retry-After': String(retryAfter),
 //             'x-correlation-id': context.correlationId,
@@ -316,15 +315,15 @@
 //   const protectedPaths = ['/dashboard', '/account', '/settings', '/admin'];
 //   const apiPaths = ['/api/'];
 //   const adminPaths = ['/admin', '/api/admin'];
-//   
+//
 //   return {
 //     isProtected: protectedPaths.some(path => request.nextUrl.pathname.startsWith(path)),
 //     isApi: apiPaths.some(path => request.nextUrl.pathname.startsWith(path)),
 //     isAdmin: adminPaths.some(path => request.nextUrl.pathname.startsWith(path)),
-//     cacheControl: request.nextUrl.pathname.startsWith('/api/') 
-//       ? CACHE_CONTROL.noStore 
+//     cacheControl: request.nextUrl.pathname.startsWith('/api/')
+//       ? CACHE_CONTROL.noStore
 //       : protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))
-//         ? CACHE_CONTROL.private 
+//         ? CACHE_CONTROL.private
 //         : CACHE_CONTROL.public
 //   };
 // }
@@ -457,16 +456,16 @@
 //   context: LogContext,
 //   routeConfig: ReturnType<typeof getRouteConfig>
 // ): NextResponse {
-//   const response = routeConfig.isApi 
-//     ? handleApiResponse(request, context) 
+//   const response = routeConfig.isApi
+//     ? handleApiResponse(request, context)
 //     : NextResponse.next();
 //
 //   applySecurityHeaders(response, context.correlationId);
 //   response.headers.set('Cache-Control', routeConfig.cacheControl);
-//   
+//
 //   // Add performance headers
 //   response.headers.set('x-response-time', `${context.duration}ms`);
-//   
+//
 //   return response;
 // }
 //
@@ -482,18 +481,18 @@
 // function handleErrorResponse(request: NextRequest, context: LogContext, error: Error): NextResponse {
 //   if (request.nextUrl.pathname.startsWith('/api')) {
 //     return NextResponse.json(
-//       { 
+//       {
 //         error: 'Internal Server Error',
 //         correlationId: context.correlationId,
 //         timestamp: new Date().toISOString()
 //       },
-//       { 
+//       {
 //         status: 500,
-//         headers: { 
+//         headers: {
 //           'x-correlation-id': context.correlationId,
 //           'Content-Type': 'application/json',
 //           'Cache-Control': CACHE_CONTROL.noStore
-//         } 
+//         }
 //       }
 //     );
 //   }

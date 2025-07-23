@@ -11,7 +11,7 @@
 // ) {
 //   try {
 //     const user = await requireAuth();
-//     
+//
 //     // Check if user is a member of the team
 //     const [membership] = await db.select()
 //       .from(teamMembers)
@@ -21,11 +21,11 @@
 //           eq(teamMembers.userId, user.id)
 //         )
 //       .limit(1);
-//     
+//
 //     if (!membership) {
 //       throw new ApiError('Forbidden', 403);
 //     }
-//     
+//
 //     const team = await db.query.teams.findFirst({
 //       where: eq(teams.id, params.teamId),
 //       with: {
@@ -49,13 +49,13 @@
 //         }
 //       }
 //     });
-//     
+//
 //     if (!team) {
 //       throw new ApiError('Team not found', 404);
 //     }
-//     
+//
 //     return successResponse(team);
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }
@@ -68,7 +68,7 @@
 //   try {
 //     const user = await requireAuth();
 //     const body = await request.json();
-//     
+//
 //     // Only team owners can update the team
 //     const [team] = await db.select()
 //       .from(teams)
@@ -79,11 +79,11 @@
 //         )
 //       )
 //       .limit(1);
-//     
+//
 //     if (!team) {
 //       throw new ApiError('Team not found or you are not the owner', 404);
 //     }
-//     
+//
 //     const [updatedTeam] = await db.update(teams)
 //       .set({
 //         name: body.name,
@@ -91,9 +91,9 @@
 //       })
 //       .where(eq(teams.id, params.teamId))
 //       .returning();
-//     
+//
 //     return successResponse(updatedTeam);
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }
@@ -105,7 +105,7 @@
 // ) {
 //   try {
 //     const user = await requireAuth();
-//     
+//
 //     // Only team owners can delete the team
 //     const [team] = await db.select()
 //       .from(teams)
@@ -116,18 +116,18 @@
 //         )
 //       )
 //       .limit(1);
-//     
+//
 //     if (!team) {
 //       throw new ApiError('Team not found or you are not the owner', 404);
 //     }
-//     
+//
 //     // Soft delete
 //     await db.update(teams)
 //       .set({ isDeleted: true })
 //       .where(eq(teams.id, params.teamId));
-//     
+//
 //     return noContentResponse();
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }

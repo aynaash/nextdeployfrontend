@@ -1,9 +1,5 @@
-import {NextApiResponse, NextApiRequest} from 'next';
+import { NextApiResponse, NextApiRequest } from 'next';
 import WebSocket from 'ws';
-
-
-
-
 
 // Maintain log streams for each agent
 const logStreams = new Map<string, Set<WebSocket>>();

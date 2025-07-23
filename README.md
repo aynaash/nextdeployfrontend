@@ -1,54 +1,57 @@
-
-# 🌟 NextDeploy Frontend  
+# 🌟 NextDeploy Frontend
 
 **A Production-Ready UI for NextDeploy**  
-Built with **Next.js**, designed for scale, and deployed with the same engine it helps validate.  
+Built with **Next.js**, designed for scale, and deployed with the same engine it helps validate.
 
-Welcome to the frontend that powers NextDeploy's dashboard, documentation, and—most importantly—**stresstests our platform in real-world conditions**.  
+Welcome to the frontend that powers NextDeploy's dashboard, documentation, and—most importantly—**stresstests our platform in real-world conditions**.
 
 ---
 
-## ✨ Why This Exists  
+## ✨ Why This Exists
 
-This isn't just another admin panel. It's a **living benchmark** for NextDeploy itself, ensuring:  
+This isn't just another admin panel. It's a **living benchmark** for NextDeploy itself, ensuring:
 
 ✅ **Real-world testing** of SSR, ISR, API routes, and middleware  
 ✅ **Observability** into deployment behavior and edge cases  
 ✅ **Minimal, maintainable UI** without unnecessary abstractions  
-✅ **Documentation** that stays in sync with actual platform behavior  
+✅ **Documentation** that stays in sync with actual platform behavior
 
-We built this to *find cracks before our users do*.  
+We built this to _find cracks before our users do_.
 
 ---
 
-## 🛠 Tech Stack  
+## 🛠 Tech Stack
 
-| Technology          | Purpose                              | Status       |
-|---------------------|--------------------------------------|--------------|
-| Next.js (App Router)| Core framework with RSC support      | ✅ Production |
-| Tailwind CSS        | Utility-first styling                | ✅ Stable     |
-| Websockets          | Real-time log streaming              | 🔧 Improving |
-| Custom Auth         | Route protection + RBAC              | ✅ Stable     |
-| PostgreSQL (Prisma) | Persistent state where needed        | ⚡ Optional   |
+| Technology           | Purpose                         | Status        |
+| -------------------- | ------------------------------- | ------------- |
+| Next.js (App Router) | Core framework with RSC support | ✅ Production |
+| Tailwind CSS         | Utility-first styling           | ✅ Stable     |
+| Websockets           | Real-time log streaming         | 🔧 Improving  |
+| Custom Auth          | Route protection + RBAC         | ✅ Stable     |
+| PostgreSQL (Prisma)  | Persistent state where needed   | ⚡ Optional   |
 
 **Key Differentiator:**  
-This app is deployed *using NextDeploy itself*—eating our own dogfood from day one.  
+This app is deployed _using NextDeploy itself_—eating our own dogfood from day one.
 
 ---
 
-## 🎯 Key Features  
+## 🎯 Key Features
 
-### 🧭 Dashboard  
-- Deployment management  
-- Real-time logs via WebSocket  
-- Environment configuration  
+### 🧭 Dashboard
 
-### 📚 Documentation  
-- Always up-to-date with platform capabilities  
-- Interactive examples where possible  
+- Deployment management
+- Real-time logs via WebSocket
+- Environment configuration
 
-### 🧪 Platform Validation  
-Every page tests critical Next.js features:  
+### 📚 Documentation
+
+- Always up-to-date with platform capabilities
+- Interactive examples where possible
+
+### 🧪 Platform Validation
+
+Every page tests critical Next.js features:
+
 ```mermaid
 flowchart LR
     A[SSR/ISR Pages] -->|Stress test| B(Rendering Pipeline)
@@ -58,61 +61,66 @@ flowchart LR
 
 ---
 
-## 🏗 Design Principles  
+## 🏗 Design Principles
 
 1. **Production Behavior First**  
-   If it doesn't work deployed, it doesn't work.  
+   If it doesn't work deployed, it doesn't work.
 
 2. **Minimal Abstraction**  
-   Clear code > clever patterns.  
+   Clear code > clever patterns.
 
 3. **UI as Instrumentation**  
-   Every component surfaces system behavior.  
+   Every component surfaces system behavior.
 
 4. **Progressive Enhancement**  
-   Core functions work without JavaScript.  
+   Core functions work without JavaScript.
 
 ---
 
-## 💻 Getting Started  
+## 💻 Getting Started
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-**Key Routes to Explore:**  
-- `/dashboard` - Protected management UI  
-- `/docs` - Public documentation  
-- `/api/logs` - Real backend-connected endpoint  
+**Key Routes to Explore:**
 
-**Deploy It Yourself:**  
+- `/dashboard` - Protected management UI
+- `/docs` - Public documentation
+- `/api/logs` - Real backend-connected endpoint
+
+**Deploy It Yourself:**
+
 ```bash
 nextdeploy build && nextdeploy ship
 ```
 
 ---
 
-## 🤝 How to Contribute  
+## 🤝 How to Contribute
 
-We welcome contributors who:  
-- Build UIs that reveal system behavior  
-- Care about production-grade Next.js patterns  
-- Prefer simple solutions to complex frameworks  
+We welcome contributors who:
 
-**Good First Issues:**  
-- Improving error boundaries  
-- Enhancing real-time status indicators  
-- Adding new platform validation tests  
+- Build UIs that reveal system behavior
+- Care about production-grade Next.js patterns
+- Prefer simple solutions to complex frameworks
 
-**Before Submitting:**  
-- [ ] Does this improve observability?  
-- [ ] Is the code maintainable at scale?  
-- [ ] Will it fail clearly if the backend breaks?  
+**Good First Issues:**
+
+- Improving error boundaries
+- Enhancing real-time status indicators
+- Adding new platform validation tests
+
+**Before Submitting:**
+
+- [ ] Does this improve observability?
+- [ ] Is the code maintainable at scale?
+- [ ] Will it fail clearly if the backend breaks?
 
 ---
 
-## 🗺 Roadmap  
+## 🗺 Roadmap
 
 ```mermaid
 gantt
@@ -127,19 +135,18 @@ gantt
 
 ---
 
-## 📚 Learn More  
+## 📚 Learn More
 
-- [NextDeploy CLI](https://github.com/aynaash/nextdeploy) - The deployment engine  
-- [Architecture Decisions](/.github/ARCHITECTURE.md) - Why we built it this way  
-- [Contributing Guide](/.github/CONTRIBUTING.md) - Collaboration standards  
+- [NextDeploy CLI](https://github.com/aynaash/nextdeploy) - The deployment engine
+- [Architecture Decisions](/.github/ARCHITECTURE.md) - Why we built it this way
+- [Contributing Guide](/.github/CONTRIBUTING.md) - Collaboration standards
 
 ---
 
-## 🌱 Final Thought  
+## 🌱 Final Thought
 
-This project embodies our belief that **frontend infrastructure matters**. It's not just about pixels—it's about creating interfaces that make complex systems understandable, reliable, and delightful to use.  
+This project embodies our belief that **frontend infrastructure matters**. It's not just about pixels—it's about creating interfaces that make complex systems understandable, reliable, and delightful to use.
 
-*"The interface is the system."* — Let's build it right.  
+_"The interface is the system."_ — Let's build it right.
 
---- 
-
+---

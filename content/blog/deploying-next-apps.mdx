@@ -1,45 +1,30 @@
-
 ---
-title: "NextDeploying Next.js Apps with NextDeploy"
-description: "A step-by-step guide to deploying your Next.js applications using the open-source DevOps platform NextDeploy."
-date: "2025-07-18"
-image: "/_static/blog/nextdeploy-post-cover.jpg"
-authors:
-  - shadcn
-  - johnSmith
-categories:
-  - education
-  - news
-related:
-  - server-client-components
-  - devops-tooling
-  - ci-cd-automation
+title: "Deploying Next.js Web Apps: A Complete Guide"
+date: 2025-07-24
+image: "/static/blog/nextjs-deployment-cover.jpg"
+authors: ["yussuf"]
+categories: ["education"]
+description: "Comprehensive guide to deploying Next.js applications in production environments"
+related: ["why_i_built_nextdeploy", "nextjs-optimization-tips"]
+published: true
 ---
 
-> _“Shipping should be boring. Your DevOps stack shouldn't be.”_ — NextDeploy
+# Deploying Next.js Web Apps
 
-Deploying a Next.js app used to mean choosing between Vercel, self-hosting, or complex CI/CD pipelines. **NextDeploy** gives you a third option: owning your deployment stack _without giving up automation or observability_.
+## Deployment Options Comparison
 
-In this post, we’ll walk you through deploying a production-ready Next.js app using **NextDeploy**, the CLI and daemon-based DevOps tool purpose-built for container-based Next.js deployments to any VPS.
+| Platform       | SSR Support | ISR | Edge Functions | Price          |
+|----------------|-------------|-----|----------------|----------------|
+| Vercel         | ✅          | ✅  | ✅             | Pay-as-you-go  |
+| AWS            | ✅          | ❌  | ✅             | Complex pricing|
+| NextDeploy     | ✅          | ✅  | ✅             | Flat monthly   |
+| Netlify        | ✅          | ❌  | ❌             | Free tier      |
 
----
+## Step-by-Step Deployment Guide
 
-## 🧠 What is NextDeploy?
-
-NextDeploy is an open-source DevOps platform that lets you:
-- 🔧 Build and Dockerize any Next.js app
-- 🚀 Deploy to any Linux VPS with SSH access
-- 📦 Attach databases like PostgreSQL or MySQL
-- 📈 Monitor deployments in real-time via a dashboard
-- 🔁 Handle logging, metrics, and failover out of the box
-
-The core consists of:
-- A **CLI** for init, build, deploy, and rollback commands
-- A **Daemon** that runs on your server to manage containers, logs, system metrics, and recovery
-
----
-
-## 🔧 Step 1: Install the NextDeploy CLI
-
+### 1. Preparing Your App
 ```bash
-curl -s https://nextdeploy.sh/install | bash
+# Build optimization
+npm run build
+# Run tests
+npm test

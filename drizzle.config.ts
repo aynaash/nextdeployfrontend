@@ -5,6 +5,6 @@ export default defineConfig({
   schema: './drizzle/schema/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-  url: "postgresql://elitebook:50307813117@localhost:5432/nextdeploy_dev",
+    url: 'postgresql://elitebook:50307813117@localhost:5432/nextdeploy_dev',
   },
 });

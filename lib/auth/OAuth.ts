@@ -1,4 +1,3 @@
-
 // import { signIn, signUp } from "../../auth-client.ts";
 //
 // export const githubSignIn = async ({
@@ -193,4 +192,4 @@
 // };
 //
 //
-/uth/
+/uth/;

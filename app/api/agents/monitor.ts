@@ -9,13 +9,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     // Return current agent statuses
     const agents = await db.agent.findMany();
-    const statuses = agents.map(agent => ({
+    const statuses = agents.map((agent) => ({
       id: agent.id,
       name: agent.name,
       status: agentStatus.get(agent.id)?.status || 'offline',
-      lastSeen: agentStatus.get(agent.id)?.lastSeen || null
+      lastSeen: agentStatus.get(agent.id)?.lastSeen || null,
     }));
-    
+
     return res.status(200).json(statuses);
   }
 
@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const now = new Date();
       for (const [agentId, data] of agentStatus.entries()) {
         const minutesSinceLastSeen = (now.getTime() - data.lastSeen.getTime()) / (1000 * 60);
-        
+
         if (minutesSinceLastSeen > 5 && data.status !== 'offline') {
           agentStatus.set(agentId, { ...data, status: 'offline' });
           broadcastStatusUpdate(agentId, 'offline');
@@ -64,10 +64,10 @@ function broadcastStatusUpdate(agentId: string, status: string) {
     type: 'status_update',
     agentId,
     status,
-    timestamp: new Date()
+    timestamp: new Date(),
   });
 
-  wss.clients.forEach(client => {
+  wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
     }

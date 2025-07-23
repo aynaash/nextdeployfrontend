@@ -10,7 +10,7 @@
 //     const errorObj = error instanceof Error ? error : new Error(String(error));
 //     const userAgent = headers().get('user-agent');
 //     const ipAddress = headers().get('x-forwarded-for');
-//     
+//
 //     await db.insert(errors).values({
 //       message: errorObj.message,
 //       stack: errorObj.stack,
@@ -21,7 +21,7 @@
 //         ipAddress,
 //       },
 //     });
-//     
+//
 //     // Also log to console
 //     console.error(errorObj);
 //   } catch (loggingError) {

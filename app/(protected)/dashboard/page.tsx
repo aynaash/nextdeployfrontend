@@ -1,8 +1,8 @@
-import { getCurrentUser } from "../../../lib/session";
-import { constructMetadata } from "../../../lib/utils";
-import { Button } from "@/components/ui/button";
-import { DashboardHeader } from "@/components/dashboard/header";
-import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { getCurrentUser } from '../../../lib/session';
+import { constructMetadata } from '../../../lib/utils';
+import { Button } from '@/components/ui/button';
+import { DashboardHeader } from '@/components/dashboard/header';
+import { EmptyPlaceholder } from '@/components/shared/empty-placeholder';
 
 // Define the User type
 type User = {
@@ -17,8 +17,8 @@ type User = {
 };
 export const dynamic = 'force-dynamic';
 export const metadata = constructMetadata({
-  title: "Dashboard – NextDeploy",
-  description: "Create and manage content.",
+  title: 'Dashboard – NextDeploy',
+  description: 'Create and manage content.',
 });
 
 export default async function DashboardPage() {
@@ -27,11 +27,11 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Dashboard"
+        heading='Dashboard'
         text={`Current Role: ${user?.role || 'user'} — Change your role in settings.`}
       />
       <EmptyPlaceholder>
-        <EmptyPlaceholder.Icon name="post" />
+        <EmptyPlaceholder.Icon name='post' />
         <EmptyPlaceholder.Title>No content created</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
           You don&apos;t have any content yet. Start creating content.

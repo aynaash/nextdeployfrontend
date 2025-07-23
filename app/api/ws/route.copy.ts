@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     wss.on('connection', (ws, req) => {
       const agentId = req.headers['x-agent-id'] as string;
-      
+
       if (!agentId || !verifyAgent(agentId)) {
         ws.close();
         return;
@@ -26,7 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const connection: AgentConnection = {
         socket: ws,
         agentId,
-        lastSeen: new Date()
+        lastSeen: new Date(),
       };
 
       agentConnections.set(agentId, connection);
@@ -34,7 +34,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       ws.on('message', (message) => {
         try {
           const msg = JSON.parse(message.toString());
-          
+
           if (!verifyMessage(msg)) {
             ws.close();
             return;
@@ -53,11 +53,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       });
 
       // Send initial configuration
-      ws.send(JSON.stringify({
-        type: 'config',
-        heartbeatInterval: 30000,
-        logBatchSize: 10
-      }));
+      ws.send(
+        JSON.stringify({
+          type: 'config',
+          heartbeatInterval: 30000,
+          logBatchSize: 10,
+        })
+      );
 
       broadcastAgentStatus(agentId, 'online');
     });
@@ -95,10 +97,10 @@ function broadcastAgentStatus(agentId: string, status: string) {
     type: 'agent_status',
     agentId,
     status,
-    timestamp: new Date()
+    timestamp: new Date(),
   });
 
-  wss.clients.forEach(client => {
+  wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
     }
@@ -111,10 +113,10 @@ function broadcastLogs(logData: any) {
 
   const message = JSON.stringify({
     type: 'log',
-    ...logData
+    ...logData,
   });
 
-  wss.clients.forEach(client => {
+  wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
     }

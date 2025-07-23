@@ -16,14 +16,14 @@
 // ) {
 //   try {
 //     await requireAuth(); // Ensure user is authenticated
-//     
+//
 //     const command = new GetObjectCommand({
 //       Bucket: process.env.S3_BUCKET_NAME,
 //       Key: params.key,
 //     });
 //
 //     const { Body, ContentType } = await s3.send(command);
-//     
+//
 //     return new NextResponse(Body, {
 //       headers: {
 //         'Content-Type': ContentType || 'application/octet-stream',

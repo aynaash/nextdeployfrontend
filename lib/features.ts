@@ -11,28 +11,28 @@
 //     .from(featureFlags)
 //     .where(eq(featureFlags.name, featureName))
 //     .limit(1);
-//   
+//
 //   if (!flag) return false;
 //   if (!flag.isEnabled) return false;
-//   
+//
 //   // Check if user is explicitly enabled
 //   if (userId && flag.userIds?.includes(userId)) {
 //     return true;
 //   }
-//   
+//
 //   // Check if team is explicitly enabled
 //   if (teamId && flag.teamIds?.includes(teamId)) {
 //     return true;
 //   }
-//   
+//
 //   // Check rollout percentage
 //   if (flag.rolloutPercentage > 0) {
-//     const hash = userId ? 
-//       cyrb53(userId) : 
+//     const hash = userId ?
+//       cyrb53(userId) :
 //       Math.floor(Math.random() * 100);
 //     return (hash % 100) < flag.rolloutPercentage;
 //   }
-//   
+//
 //   return flag.isEnabled;
 // }
 //

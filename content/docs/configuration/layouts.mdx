@@ -10,15 +10,15 @@ Explore the different layout options available for customizing your dashboard. Y
 In this layout, both the sidebar and the main content are centered in the middle of the page, like **Stripe dashboard**.
 
 ```tsx
-<MaxWidthWrapper className="max-w-[1650px] px-0">
-  <div className="relative flex min-h-screen w-full">
+<MaxWidthWrapper className='max-w-[1650px] px-0'>
+  <div className='relative flex min-h-screen w-full'>
     <DashboardSidebar links={filteredLinks} />
 
-    <div className="flex flex-1 flex-col">
-      <header className="bg-background sticky top-0 z-50 flex h-14 items-center gap-3 px-4 lg:h-[60px] xl:px-10">
+    <div className='flex flex-1 flex-col'>
+      <header className='sticky top-0 z-50 flex h-14 items-center gap-3 bg-background px-4 lg:h-[60px] xl:px-10'>
         <MobileSheetSidebar links={filteredLinks} />
 
-        <div className="w-full flex-1">
+        <div className='w-full flex-1'>
           <SearchCommand links={filteredLinks} />
         </div>
 
@@ -26,9 +26,7 @@ In this layout, both the sidebar and the main content are centered in the middle
         <UserAccountNav />
       </header>
 
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 xl:px-10">
-        {children}
-      </main>
+      <main className='flex flex-1 flex-col gap-4 p-4 lg:gap-6 xl:px-10'>{children}</main>
     </div>
   </div>
 </MaxWidthWrapper>
@@ -39,15 +37,15 @@ In this layout, both the sidebar and the main content are centered in the middle
 In this layout, the sidebar is fixed to the left side of the window, while only the main content is centered on the page. This gives for a more **traditional look**. This is the default layout.
 
 ```tsx
-<div className="relative flex min-h-screen w-full">
+<div className='relative flex min-h-screen w-full'>
   <DashboardSidebar links={filteredLinks} />
 
-  <div className="flex flex-1 flex-col">
-    <header className="bg-background sticky top-0 z-50 flex h-14 px-4 lg:h-[60px] xl:px-8">
-      <MaxWidthWrapper className="flex max-w-7xl items-center gap-x-3 px-0">
+  <div className='flex flex-1 flex-col'>
+    <header className='sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8'>
+      <MaxWidthWrapper className='flex max-w-7xl items-center gap-x-3 px-0'>
         <MobileSheetSidebar links={filteredLinks} />
 
-        <div className="w-full flex-1">
+        <div className='w-full flex-1'>
           <SearchCommand links={filteredLinks} />
         </div>
 
@@ -56,8 +54,8 @@ In this layout, the sidebar is fixed to the left side of the window, while only 
       </MaxWidthWrapper>
     </header>
 
-    <main className="flex-1 p-4 xl:px-8">
-      <MaxWidthWrapper className="flex h-full max-w-7xl flex-col gap-4 px-0 lg:gap-6">
+    <main className='flex-1 p-4 xl:px-8'>
+      <MaxWidthWrapper className='flex h-full max-w-7xl flex-col gap-4 px-0 lg:gap-6'>
         {children}
       </MaxWidthWrapper>
     </main>

@@ -1,11 +1,12 @@
-import { allPosts } from "../../../.contentlayer/generated";
+import { allPosts } from '../../../.contentlayer/generated';
 
-import { constructMetadata, getBlurDataURL } from "../../../lib/utils";2
-import { BlogPosts } from "@/components/content/blog-posts";
+import { constructMetadata, getBlurDataURL } from '../../../lib/utils';
+2;
+import { BlogPosts } from '@/components/content/blog-posts';
 
 export const metadata = constructMetadata({
-  title: "Blog – NextDeploy",
-  description: "Latest news and updates from Next SaaS Starter.",
+  title: 'Blog – NextDeploy',
+  description: 'Latest news and updates from Next SaaS Starter.',
 });
 
 export default async function BlogPage() {
@@ -16,7 +17,7 @@ export default async function BlogPage() {
       .map(async (post) => ({
         ...post,
         blurDataURL: await getBlurDataURL(post.image),
-      })),
+      }))
   );
 
   return <BlogPosts posts={posts} />;

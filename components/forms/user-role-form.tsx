@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useTransition } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { useState, useTransition } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,28 +13,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { SectionColumns } from "@/components/dashboard/section-columns";
-import { Icons } from "@/components/shared/icons";
+} from '@/components/ui/select';
+import { SectionColumns } from '@/components/dashboard/section-columns';
+import { Icons } from '@/components/shared/icons';
 
 // 1. Define UserRole enum and types
 enum UserRole {
-  USER = "user",
-  ADMIN = "admin",
-  SUPER_ADMIN = "super_admin",
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'super_admin',
 }
 
 const userRoleLabels: Record<UserRole, string> = {
-  [UserRole.USER]: "User",
-  [UserRole.ADMIN]: "Admin",
-  [UserRole.SUPER_ADMIN]: "Super Admin",
+  [UserRole.USER]: 'User',
+  [UserRole.ADMIN]: 'Admin',
+  [UserRole.SUPER_ADMIN]: 'Super Admin',
 };
 
 type User = {
@@ -54,7 +54,7 @@ const userRoleSchema = z.object({
 // 3. Mock update functions (replace with your actual implementations)
 const updateUserRole = async (userId: string, data: FormData) => {
   // Your actual implementation here
-  return { status: "success" };
+  return { status: 'success' };
 };
 
 const useSession = () => {
@@ -66,7 +66,7 @@ const useSession = () => {
 
 // 4. Main component
 interface UserRoleFormProps {
-  user: Pick<User, "id" | "role">;
+  user: Pick<User, 'id' | 'role'>;
 }
 
 export function UserRoleForm({ user }: UserRoleFormProps) {
@@ -90,17 +90,17 @@ export function UserRoleForm({ user }: UserRoleFormProps) {
       try {
         const { status } = await updateUserRoleWithId(data);
 
-        if (status !== "success") {
-          toast.error("Something went wrong.", {
-            description: "Your role was not updated. Please try again.",
+        if (status !== 'success') {
+          toast.error('Something went wrong.', {
+            description: 'Your role was not updated. Please try again.',
           });
         } else {
           await update();
           setUpdated(false);
-          toast.success("Your role has been updated.");
+          toast.success('Your role has been updated.');
         }
       } catch (error) {
-        toast.error("An unexpected error occurred.");
+        toast.error('An unexpected error occurred.');
       }
     });
   };
@@ -109,16 +109,16 @@ export function UserRoleForm({ user }: UserRoleFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <SectionColumns
-          title="Your Role"
-          description="Select the role what you want for test the app."
+          title='Your Role'
+          description='Select the role what you want for test the app.'
         >
-          <div className="flex w-full items-center gap-2">
+          <div className='flex w-full items-center gap-2'>
             <FormField
               control={form.control}
-              name="role"
+              name='role'
               render={({ field }) => (
-                <FormItem className="w-full space-y-0">
-                  <FormLabel className="sr-only">Role</FormLabel>
+                <FormItem className='w-full space-y-0'>
+                  <FormLabel className='sr-only'>Role</FormLabel>
                   <Select
                     onValueChange={(value: UserRole) => {
                       setUpdated(user.role !== value);
@@ -129,8 +129,8 @@ export function UserRoleForm({ user }: UserRoleFormProps) {
                     defaultValue={user.role}
                   >
                     <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a role" />
+                      <SelectTrigger className='w-full'>
+                        <SelectValue placeholder='Select a role' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -146,23 +146,23 @@ export function UserRoleForm({ user }: UserRoleFormProps) {
               )}
             />
             <Button
-              type="submit"
-              variant={updated ? "default" : "secondary"}
+              type='submit'
+              variant={updated ? 'default' : 'secondary'}
               disabled={isPending || !updated}
-              className="w-[67px] shrink-0 px-0 sm:w-[130px]"
+              className='w-[67px] shrink-0 px-0 sm:w-[130px]'
             >
               {isPending ? (
-                <Icons.spinner className="size-4 animate-spin" />
+                <Icons.spinner className='size-4 animate-spin' />
               ) : (
                 <p>
                   Save
-                  <span className="hidden sm:inline-flex">&nbsp;Changes</span>
+                  <span className='hidden sm:inline-flex'>&nbsp;Changes</span>
                 </p>
               )}
             </Button>
           </div>
-          <div className="flex flex-col justify-between p-1">
-            <p className="text-[13px] text-muted-foreground">
+          <div className='flex flex-col justify-between p-1'>
+            <p className='text-[13px] text-muted-foreground'>
               Remove this field on real production
             </p>
           </div>

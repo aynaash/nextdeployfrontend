@@ -1,20 +1,19 @@
-code[data-theme*=" "],
-code[data-theme*=" "] span {
+code[data-theme*=' '],
+code[data-theme*=' '] span {
   color: var(--shiki-light);
   background-color: var(--shiki-light-bg);
 }
 
 @media (prefers-color-scheme: dark) {
-
-  code[data-theme*=" "],
-  code[data-theme*=" "] span {
+  code[data-theme*=' '],
+  code[data-theme*=' '] span {
     color: var(--shiki-dark);
     background-color: var(--shiki-dark-bg);
   }
 }
 
 [data-rehype-pretty-code-figure] {
-  @apply relative mt-6 mb-4;
+  @apply relative mb-4 mt-6;
 }
 
 [data-rehype-pretty-code-figure] code {
@@ -24,11 +23,11 @@ code[data-theme*=" "] span {
 }
 
 [data-line] {
-  @apply px-4 min-h-[1rem] py-0.5 w-full inline-block;
+  @apply inline-block min-h-[1rem] w-full px-4 py-0.5;
 }
 
-[data-line-numbers]>[data-line]::before {
-  @apply text-muted-foreground text-xs;
+[data-line-numbers] > [data-line]::before {
+  @apply text-xs text-muted-foreground;
   counter-increment: line;
   content: counter(line);
   display: inline-block;
@@ -46,17 +45,17 @@ code[data-theme*=" "] span {
 }
 
 [data-highlighted-chars] {
-  @apply rounded-sm bg-zinc-600/50 text-foreground p-1;
+  @apply rounded-sm bg-zinc-600/50 p-1 text-foreground;
 }
 
 [data-rehype-pretty-code-title] {
-  @apply mt-3 py-2 px-4 text-sm font-medium;
+  @apply mt-3 px-4 py-2 text-sm font-medium;
 }
 
-.mdx>.steps:first-child>h3:first-child {
+.mdx > .steps:first-child > h3:first-child {
   @apply mt-0;
 }
 
-.steps>h3 {
-  @apply mt-8 mb-4 text-base font-semibold;
+.steps > h3 {
+  @apply mb-4 mt-8 text-base font-semibold;
 }

@@ -18,7 +18,7 @@ export function decrypt(encryptedText: string): string {
   const decipherIv = Buffer.from(ivHex, 'hex');
   const decipherSalt = Buffer.from(saltHex, 'hex');
   const decipherKey = scryptSync(password, decipherSalt, 32);
-  
+
   const decipher = createDecipheriv(algorithm, decipherKey, decipherIv);
   let decrypted = decipher.update(encrypted, 'hex', 'utf8');
   decrypted += decipher.final('utf8');

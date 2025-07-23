@@ -1,19 +1,26 @@
-export type UserRole = "admin" | "user" | "super_admin";
-export type DeploymentStatus = "pending" | "building" | "deploying" | "running" | "success" | "failed" | "cancelled";
-export type BillingStatus = "pending" | "paid" | "failed" | "refunded";
-export type MemberStatus = "pending" | "active" | "inactive" | "rejected";
-export type EnvType = "development" | "staging" | "production";
-export type ApiKeyScope = "read" | "write" | "admin";
-export type WebhookEventType = 
-  | "deployment_started"
-  | "deployment_success"
-  | "deployment_failed"
-  | "billing_updated"
-  | "team_invite"
-  | "project_created";
-export type DeviceType = "single_device" | "multi_device";
-export type Transports = "usb" | "nfc" | "ble" | "internal";
-export type LogLevel = "debug" | "info" | "warn" | "error" | "fatal";
+export type UserRole = 'admin' | 'user' | 'super_admin';
+export type DeploymentStatus =
+  | 'pending'
+  | 'building'
+  | 'deploying'
+  | 'running'
+  | 'success'
+  | 'failed'
+  | 'cancelled';
+export type BillingStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+export type MemberStatus = 'pending' | 'active' | 'inactive' | 'rejected';
+export type EnvType = 'development' | 'staging' | 'production';
+export type ApiKeyScope = 'read' | 'write' | 'admin';
+export type WebhookEventType =
+  | 'deployment_started'
+  | 'deployment_success'
+  | 'deployment_failed'
+  | 'billing_updated'
+  | 'team_invite'
+  | 'project_created';
+export type DeviceType = 'single_device' | 'multi_device';
+export type Transports = 'usb' | 'nfc' | 'ble' | 'internal';
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
 // Base interface with common fields
 interface BaseEntity {
@@ -28,12 +35,12 @@ export interface User extends BaseEntity {
   name: string;
   email: string;
   emailVerified: boolean;
-  image?: string | null |undefined;
+  image?: string | null | undefined;
   firstName?: string;
   lastName?: string;
   password?: string;
   role?: UserRole;
-  stripeCustomerId?:  string | null | undefined; 
+  stripeCustomerId?: string | null | undefined;
   stripeSubscriptionId?: string | null | undefined;
   stripePriceId?: string | null | undefined;
   stripeCurrentPeriodEnd?: Date | null | undefined;

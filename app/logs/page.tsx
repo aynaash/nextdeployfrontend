@@ -9,12 +9,12 @@ export default function LogsPage() {
 
   const handleFilterChange = (filters: any) => {
     setFilteredLogs(
-      logs.filter(log => {
+      logs.filter((log) => {
         return (
           (filters.agentId === '' || log.agentId === filters.agentId) &&
           (filters.level === 'all' || log.level === filters.level) &&
-          (filters.search === '' || 
-           log.message.toLowerCase().includes(filters.search.toLowerCase()))
+          (filters.search === '' ||
+            log.message.toLowerCase().includes(filters.search.toLowerCase()))
         );
       })
     );
@@ -22,10 +22,9 @@ export default function LogsPage() {
 
   return (
     <DashboardLayout>
-      <h1 className="mb-6 text-2xl font-bold">Log Viewer</h1>
+      <h1 className='mb-6 text-2xl font-bold'>Log Viewer</h1>
       <LogFilter agents={agents} onFilterChange={handleFilterChange} />
       <LogViewer logs={filteredLogs} />
     </DashboardLayout>
   );
 }
-

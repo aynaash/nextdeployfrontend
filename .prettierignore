@@ -3,3 +3,13 @@ node_modules
 .next
 build
 .contentlayer
+.next
+node_modules
+.nextdeploy
+public
+*.md
+*.yml
+*.html
+*.svg
+*.json
+*.mdx

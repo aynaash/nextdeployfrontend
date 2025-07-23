@@ -1,68 +1,68 @@
-import { DocsConfig } from "types";
+import { DocsConfig } from 'types';
 
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
-      title: "Documentation",
-      href: "/docs",
+      title: 'Documentation',
+      href: '/docs',
     },
     {
-      title: "Guides",
-      href: "/guides",
+      title: 'Guides',
+      href: '/guides',
     },
   ],
   sidebarNav: [
     {
-      title: "Getting Started",
+      title: 'Getting Started',
       items: [
         {
-          title: "Introduction",
-          href: "/docs",
+          title: 'Introduction',
+          href: '/docs',
         },
         {
-          title: "Installation",
-          href: "/docs/installation",
+          title: 'Installation',
+          href: '/docs/installation',
         },
       ],
     },
     {
-      title: "Configuration",
+      title: 'Configuration',
       items: [
         {
-          title: "Authentification",
-          href: "/docs/configuration/authentification",
+          title: 'Authentification',
+          href: '/docs/configuration/authentification',
         },
         {
-          title: "Blog",
-          href: "/docs/configuration/blog",
+          title: 'Blog',
+          href: '/docs/configuration/blog',
         },
         {
-          title: "Components",
-          href: "/docs/configuration/components",
+          title: 'Components',
+          href: '/docs/configuration/components',
         },
         {
-          title: "Config files",
-          href: "/docs/configuration/config-files",
+          title: 'Config files',
+          href: '/docs/configuration/config-files',
         },
         {
-          title: "Database",
-          href: "/docs/configuration/database",
+          title: 'Database',
+          href: '/docs/configuration/database',
         },
         {
-          title: "Email",
-          href: "/docs/configuration/email",
+          title: 'Email',
+          href: '/docs/configuration/email',
         },
         {
-          title: "Layouts",
-          href: "/docs/configuration/layouts",
+          title: 'Layouts',
+          href: '/docs/configuration/layouts',
         },
         {
-          title: "Markdown files",
-          href: "/docs/configuration/markdown-files",
+          title: 'Markdown files',
+          href: '/docs/configuration/markdown-files',
         },
         {
-          title: "Subscriptions",
-          href: "/docs/configuration/subscriptions",
+          title: 'Subscriptions',
+          href: '/docs/configuration/subscriptions',
         },
       ],
     },

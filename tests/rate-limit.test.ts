@@ -1,15 +1,14 @@
+import { checkRateLimit, resetRateLimit } from '@/lib/auth/rate-limit';
+import { MAX_TOKENS, REFILL_INTERVAL } from '@/lib/auth/constants';
 
-import { checkRateLimit, resetRateLimit } from "@/lib/auth/rate-limit";
-import { MAX_TOKENS, REFILL_INTERVAL } from "@/lib/auth/constants";
-
-describe("Rate Limiting", () => {
-  const identifier = "test_identifier";
+describe('Rate Limiting', () => {
+  const identifier = 'test_identifier';
 
   beforeEach(async () => {
     await resetRateLimit(identifier);
   });
 
-  it("should allow requests under the limit", async () => {
+  it('should allow requests under the limit', async () => {
     for (let i = 0; i < MAX_TOKENS; i++) {
       const result = await checkRateLimit(identifier);
       expect(result.success).toBe(true);
@@ -17,7 +16,7 @@ describe("Rate Limiting", () => {
     }
   });
 
-  it("should block requests over the limit", async () => {
+  it('should block requests over the limit', async () => {
     for (let i = 0; i < MAX_TOKENS; i++) {
       await checkRateLimit(identifier);
     }
@@ -27,7 +26,7 @@ describe("Rate Limiting", () => {
     expect(result.remaining).toBe(0);
   });
 
-  it("should refill tokens after interval", async () => {
+  it('should refill tokens after interval', async () => {
     for (let i = 0; i < MAX_TOKENS; i++) {
       await checkRateLimit(identifier);
     }

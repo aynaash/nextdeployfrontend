@@ -1,4 +1,3 @@
-
 Here’s how to build a **robust health check endpoint** for a Next.js app running in Docker, with production-level discipline:
 Here’s how to build a **robust health check endpoint** for a Next.js app running in Docker, with production-level discipline:
 
@@ -25,24 +24,24 @@ A proper health check should:
 In `pages/api/health.ts`:
 
 ```ts
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 type HealthResponse = {
-  status: 'ok'
-  uptime: number
-  timestamp: string
-  info: string
-}
+  status: 'ok';
+  uptime: number;
+  timestamp: string;
+  info: string;
+};
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<HealthResponse>) {
-  res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Cache-Control', 'no-store');
 
   res.status(200).json({
     status: 'ok',
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
     info: 'Next.js app is healthy',
-  }) 
+  });
 }
 ```
 
@@ -66,13 +65,13 @@ If your Next.js app connects to a DB, add a real check:
 ```ts
 // pages/api/health.ts
 
-import { db } from '@/lib/db' // Adjust to your setup
+import { db } from '@/lib/db'; // Adjust to your setup
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await db.raw('SELECT 1') // or equivalent ping
+    await db.raw('SELECT 1'); // or equivalent ping
   } catch (err) {
-    return res.status(500).json({ status: 'fail', error: 'DB unreachable' })
+    return res.status(500).json({ status: 'fail', error: 'DB unreachable' });
   }
 
   res.status(200).json({
@@ -80,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
     info: 'App and DB healthy',
-  })
+  });
 }
 ```
 
@@ -101,9 +100,9 @@ docker exec -it your_container_name curl http://localhost:3000/api/health
 ## 🧱 Production Suggestions
 
 1. **Separate Readiness and Liveness Probes**
+   - `api/liveness`: Just check the server is up
+   - `api/readiness`: Check dependencies like DB, Redis, etc.
 
-   * `api/liveness`: Just check the server is up
-   * `api/readiness`: Check dependencies like DB, Redis, etc.
 2. **Return a 5xx if something breaks**, or your orchestrator (K8s, Docker, ECS) won’t restart the container.
 3. **Log failures** in a persistent store if you're running on a platform like Fly, Render, or your own VPS.
 
@@ -111,10 +110,10 @@ docker exec -it your_container_name curl http://localhost:3000/api/health
 
 ## 🧨 Mistakes to Avoid
 
-* 💩 Using the root `/` as your health check endpoint.
-* 🧠 Forgetting to disable caching.
-* 🪦 Letting your health check depend on expensive or unstable services.
-* 🫥 Returning `200 OK` even when a core dependency (DB, cache) is broken.
+- 💩 Using the root `/` as your health check endpoint.
+- 🧠 Forgetting to disable caching.
+- 🪦 Letting your health check depend on expensive or unstable services.
+- 🫥 Returning `200 OK` even when a core dependency (DB, cache) is broken.
 
 ---
 
@@ -123,11 +122,11 @@ docker exec -it your_container_name curl http://localhost:3000/api/health
 ```ts
 // pages/api/health.ts
 export default function handler(_, res) {
-  res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-  })
+  });
 }
 ```
 
@@ -164,24 +163,24 @@ A proper health check should:
 In `pages/api/health.ts`:
 
 ```ts
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 type HealthResponse = {
-  status: 'ok'
-  uptime: number
-  timestamp: string
-  info: string
-}
+  status: 'ok';
+  uptime: number;
+  timestamp: string;
+  info: string;
+};
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<HealthResponse>) {
-  res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Cache-Control', 'no-store');
 
   res.status(200).json({
     status: 'ok',
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
     info: 'Next.js app is healthy',
-  })
+  });
 }
 ```
 
@@ -205,13 +204,13 @@ If your Next.js app connects to a DB, add a real check:
 ```ts
 // pages/api/health.ts
 
-import { db } from '@/lib/db' // Adjust to your setup
+import { db } from '@/lib/db'; // Adjust to your setup
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await db.raw('SELECT 1') // or equivalent ping
+    await db.raw('SELECT 1'); // or equivalent ping
   } catch (err) {
-    return res.status(500).json({ status: 'fail', error: 'DB unreachable' })
+    return res.status(500).json({ status: 'fail', error: 'DB unreachable' });
   }
 
   res.status(200).json({
@@ -219,7 +218,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
     info: 'App and DB healthy',
-  })
+  });
 }
 ```
 
@@ -240,9 +239,9 @@ docker exec -it your_container_name curl http://localhost:3000/api/health
 ## 🧱 Production Suggestions
 
 1. **Separate Readiness and Liveness Probes**
+   - `api/liveness`: Just check the server is up
+   - `api/readiness`: Check dependencies like DB, Redis, etc.
 
-   * `api/liveness`: Just check the server is up
-   * `api/readiness`: Check dependencies like DB, Redis, etc.
 2. **Return a 5xx if something breaks**, or your orchestrator (K8s, Docker, ECS) won’t restart the container.
 3. **Log failures** in a persistent store if you're running on a platform like Fly, Render, or your own VPS.
 
@@ -250,10 +249,10 @@ docker exec -it your_container_name curl http://localhost:3000/api/health
 
 ## 🧨 Mistakes to Avoid
 
-* 💩 Using the root `/` as your health check endpoint.
-* 🧠 Forgetting to disable caching.
-* 🪦 Letting your health check depend on expensive or unstable services.
-* 🫥 Returning `200 OK` even when a core dependency (DB, cache) is broken.
+- 💩 Using the root `/` as your health check endpoint.
+- 🧠 Forgetting to disable caching.
+- 🪦 Letting your health check depend on expensive or unstable services.
+- 🫥 Returning `200 OK` even when a core dependency (DB, cache) is broken.
 
 ---
 
@@ -262,11 +261,11 @@ docker exec -it your_container_name curl http://localhost:3000/api/health
 ```ts
 // pages/api/health.ts
 export default function handler(_, res) {
-  res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-  })
+  });
 }
 ```
 
@@ -279,8 +278,6 @@ HEALTHCHECK CMD curl -f http://localhost:3000/api/health || exit 1
 If you want to take it further, I can help you wire this into a full **NextDeploy observability system** where the daemon watches these health endpoints, reports metrics, and restarts containers when something breaks.
 
 Let me know how deep you want to go.
-
-
 
 As your application grows, ensuring it remains operational is crucial. Let's explore how you can add a health check endpoint to your Next.js app, providing you with peace of mind and proactive monitoring capabilities.
 
@@ -296,7 +293,7 @@ Create a new file called health.js in your pages/api directory:
 
 Code
 export default function handler(req, res) {
-  res.status(200).json({ status: 'OK' });
+res.status(200).json({ status: 'OK' });
 }
 
 This creates a simple endpoint that returns a 200 status code with a JSON response indicating your app is healthy.
@@ -305,11 +302,11 @@ Let's enhance this further by providing more detailed information:
 
 Code
 export default function handler(req, res) {
-  res.status(200).json({
-    status: 'OK',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-  });
+res.status(200).json({
+status: 'OK',
+uptime: process.uptime(),
+timestamp: new Date().toISOString(),
+});
 }
 
 If your app uses a database (like Prisma), you can add a connectivity check:
@@ -318,41 +315,39 @@ Code
 import prisma from '@/lib/prisma';
 
 export default async function handler(req, res) {
-  try {
-    await prisma.$queryRaw`SELECT 1`;
-    res.status(200).json({
-      status: 'OK',
-      database: 'Connected',
-      uptime: process.uptime(),
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'ERROR',
-      database: 'Disconnected',
-      error: error.message,
-    });
-  }
+try {
+await prisma.$queryRaw`SELECT 1`;
+res.status(200).json({
+status: 'OK',
+database: 'Connected',
+uptime: process.uptime(),
+timestamp: new Date().toISOString(),
+});
+} catch (error) {
+res.status(500).json({
+status: 'ERROR',
+database: 'Disconnected',
+error: error.message,
+});
+}
 }
 
 For additional security, you might want to add basic authentication:
 
 Code
 export default function handler(req, res) {
-  if (req.headers['x-api-key'] !== process.env.HEALTHCHECK_KEY) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  res.status(200).json({
-    status: 'OK',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-  });
+if (req.headers['x-api-key'] !== process.env.HEALTHCHECK_KEY) {
+return res.status(401).json({ error: 'Unauthorized' });
+}
+res.status(200).json({
+status: 'OK',
+uptime: process.uptime(),
+timestamp: new Date().toISOString(),
+});
 }
 
 Automate the checks
 With your new health check endpoint in place, you can now proactively monitor your application's status and receive timely alerts when issues arise. To effectively track uptime, response time, and receive prompt notifications of any failures, consider using a dedicated uptime monitoring service like Hyperping. Create an account, and you'll be guided through the process of setting up your first monitor.
-
-
 
 By simply adding your new health check endpoint to Hyperping, you can continuously monitor its availability without any complex configuration. After a few minutes, you'll gain valuable insights into your application's uptime and response time across various geographic regions (London, Amsterdam, Toronto, San Francisco, and more), along with historical data.
 

@@ -1,4 +1,3 @@
-
 import { NextResponse, type NextRequest } from 'next/server';
 
 /**
@@ -6,9 +5,9 @@ import { NextResponse, type NextRequest } from 'next/server';
  * (Not cryptographically strong, but works for tracing and correlation)
  */
 function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = Math.random() * 16 | 0; // get random int from 0 to 15
-    const v = c === 'x' ? r : (r & 0x3 | 0x8); // version bits
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0; // get random int from 0 to 15
+    const v = c === 'x' ? r : (r & 0x3) | 0x8; // version bits
     return v.toString(16); // convert to hex
   });
 }
@@ -61,5 +60,5 @@ function isStaticFile(req: NextRequest): boolean {
     '/assets/',
     '/robots.txt',
     '/sitemap.xml',
-  ].some(prefix => req.nextUrl.pathname.startsWith(prefix));
+  ].some((prefix) => req.nextUrl.pathname.startsWith(prefix));
 }

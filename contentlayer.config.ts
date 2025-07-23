@@ -10,12 +10,12 @@ import {
   defineDocumentType,
   makeSource,
   type FieldDef,
-} from "contentlayer2/source-files";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypePrettyCode from "rehype-pretty-code";
-import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
-import { visit } from "unist-util-visit";
+} from 'contentlayer2/source-files';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
+import { visit } from 'unist-util-visit';
 
 // --- Constants and Type Definitions --- //
 
@@ -24,7 +24,7 @@ import { visit } from "unist-util-visit";
  * @constant {Object} BLOG_AUTHORS
  */
 const BLOG_AUTHORS = {
-  yussuf: { name: "yussuf", avatar: "/authors/yussuf.png" },
+  yussuf: { name: 'yussuf', avatar: '/authors/yussuf.png' },
 } as const;
 
 type AuthorUsername = keyof typeof BLOG_AUTHORS;
@@ -37,17 +37,16 @@ type AuthorUsername = keyof typeof BLOG_AUTHORS;
  */
 const defaultComputedFields: ComputedFields = {
   slug: {
-    type: "string",
+    type: 'string',
     resolve: (doc) => `/${doc._raw.flattenedPath}`,
   },
   slugAsParams: {
-    type: "string",
-    resolve: (doc) => doc._raw.flattenedPath.split("/").slice(1).join("/"),
+    type: 'string',
+    resolve: (doc) => doc._raw.flattenedPath.split('/').slice(1).join('/'),
   },
   images: {
-    type: "list",
-    resolve: (doc) =>
-      doc.body.raw.match(/(?<=<Image[^>]*\bsrc=")[^"]+(?="[^>]*\/>)/g) || [],
+    type: 'list',
+    resolve: (doc) => doc.body.raw.match(/(?<=<Image[^>]*\bsrc=")[^"]+(?="[^>]*\/>)/g) || [],
   },
 };
 
@@ -56,9 +55,9 @@ const defaultComputedFields: ComputedFields = {
  * @constant {Record<string, FieldDef>} commonFields
  */
 const commonFields: Record<string, FieldDef> = {
-  title: { type: "string", required: true },
-  description: { type: "string" },
-  published: { type: "boolean", default: true },
+  title: { type: 'string', required: true },
+  description: { type: 'string' },
+  published: { type: 'boolean', default: true },
 };
 
 // --- Document Type Definitions --- //
@@ -68,41 +67,41 @@ const commonFields: Record<string, FieldDef> = {
  * @type {import('contentlayer2/source-files').DocumentTypeDef}
  */
 export const Post = defineDocumentType(() => ({
-  name: "Post",
+  name: 'Post',
   filePathPattern: `blog/**/*.mdx`,
-  contentType: "mdx",
+  contentType: 'mdx',
   fields: {
     ...commonFields,
-    date: { type: "date", required: true },
-    image: { type: "string", required: true },
+    date: { type: 'date', required: true },
+    image: { type: 'string', required: true },
     authors: {
-      type: "list",
-      of: { type: "string" },
+      type: 'list',
+      of: { type: 'string' },
       required: true,
     },
     categories: {
-      type: "list",
+      type: 'list',
       of: {
-        type: "enum",
-        options: ["news", "education"],
+        type: 'enum',
+        options: ['news', 'education'],
       },
       required: true,
     },
     related: {
-      type: "list",
-      of: { type: "string" },
+      type: 'list',
+      of: { type: 'string' },
     },
   },
   computedFields: {
     ...defaultComputedFields,
     authorDetails: {
-      type: "json",
+      type: 'json',
       resolve: (post) => {
         const authors = Array.isArray(post.authors)
           ? post.authors
-          : typeof post.authors === "string"
-          ? [post.authors]
-          : [];
+          : typeof post.authors === 'string'
+            ? [post.authors]
+            : [];
         return authors
           .filter((a): a is AuthorUsername => a in BLOG_AUTHORS)
           .map((a) => BLOG_AUTHORS[a]);
@@ -116,9 +115,9 @@ export const Post = defineDocumentType(() => ({
  * @type {import('contentlayer2/source-files').DocumentTypeDef}
  */
 export const Doc = defineDocumentType(() => ({
-  name: "Doc",
+  name: 'Doc',
   filePathPattern: `docs/**/*.mdx`,
-  contentType: "mdx",
+  contentType: 'mdx',
   fields: commonFields,
   computedFields: defaultComputedFields,
 }));
@@ -128,13 +127,13 @@ export const Doc = defineDocumentType(() => ({
  * @type {import('contentlayer2/source-files').DocumentTypeDef}
  */
 export const Guide = defineDocumentType(() => ({
-  name: "Guide",
+  name: 'Guide',
   filePathPattern: `guides/**/*.mdx`,
-  contentType: "mdx",
+  contentType: 'mdx',
   fields: {
     ...commonFields,
-    date: { type: "date", required: true },
-    featured: { type: "boolean", default: false },
+    date: { type: 'date', required: true },
+    featured: { type: 'boolean', default: false },
   },
   computedFields: defaultComputedFields,
 }));
@@ -144,9 +143,9 @@ export const Guide = defineDocumentType(() => ({
  * @type {import('contentlayer2/source-files').DocumentTypeDef}
  */
 export const Page = defineDocumentType(() => ({
-  name: "Page",
+  name: 'Page',
   filePathPattern: `pages/**/*.mdx`,
-  contentType: "mdx",
+  contentType: 'mdx',
   fields: commonFields,
   computedFields: defaultComputedFields,
 }));
@@ -158,9 +157,9 @@ export const Page = defineDocumentType(() => ({
  */
 const extractCodeFromPre = () => (tree: any) => {
   visit(tree, (node) => {
-    if (node?.type === "element" && node?.tagName === "pre") {
+    if (node?.type === 'element' && node?.tagName === 'pre') {
       const [codeEl] = node.children;
-      if (codeEl?.tagName !== "code") return;
+      if (codeEl?.tagName !== 'code') return;
       node.__rawString__ = codeEl.children?.[0].value;
     }
   });
@@ -172,13 +171,13 @@ const extractCodeFromPre = () => (tree: any) => {
 const attachRawStringToFigures = () => (tree: any) => {
   visit(tree, (node) => {
     if (
-      node?.type === "element" &&
-      node?.tagName === "figure" &&
-      "data-rehype-pretty-code-figure" in node.properties
+      node?.type === 'element' &&
+      node?.tagName === 'figure' &&
+      'data-rehype-pretty-code-figure' in node.properties
     ) {
       const pre = node.children.at(-1);
-      if (pre?.tagName === "pre") {
-        pre.properties["__rawString__"] = node.__rawString__;
+      if (pre?.tagName === 'pre') {
+        pre.properties['__rawString__'] = node.__rawString__;
       }
     }
   });
@@ -191,7 +190,7 @@ const attachRawStringToFigures = () => (tree: any) => {
  * @type {import('contentlayer2/source-files').MakeSourceOptions}
  */
 export default makeSource({
-  contentDirPath: "./content",
+  contentDirPath: './content',
   documentTypes: [Page, Doc, Guide, Post],
   mdx: {
     remarkPlugins: [remarkGfm],
@@ -201,12 +200,12 @@ export default makeSource({
       [
         rehypePrettyCode,
         {
-          theme: "github-dark",
+          theme: 'github-dark',
           keepBackground: false,
           onVisitLine(node: Element) {
             // Prevent empty lines from collapsing
             if (node.children.length === 0) {
-              node.children = [{ type: "text", value: " " }];
+              node.children = [{ type: 'text', value: ' ' }];
             }
           },
         },
@@ -216,8 +215,8 @@ export default makeSource({
         rehypeAutolinkHeadings,
         {
           properties: {
-            className: ["subheading-anchor"],
-            ariaLabel: "Link to section",
+            className: ['subheading-anchor'],
+            ariaLabel: 'Link to section',
           },
         },
       ],

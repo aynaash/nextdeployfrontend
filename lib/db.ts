@@ -15,32 +15,35 @@ let rawClient: Pool | ReturnType<typeof neon>;
 if (isEdgeRuntime()) {
   // Edge Runtime - Neon HTTP driver
   rawClient = neon(process.env.DATABASE_URL!);
-  db = drizzleNeon(rawClient, { 
+  db = drizzleNeon(rawClient, {
     schema,
-    logger: process.env.NODE_ENV === 'development'
+    logger: process.env.NODE_ENV === 'development',
   });
 } else {
   // Node.js Runtime - Standard Postgres (Pool)
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { 
-      rejectUnauthorized: false 
-    } : false,
+    ssl:
+      process.env.NODE_ENV === 'production'
+        ? {
+            rejectUnauthorized: false,
+          }
+        : false,
     max: 5,
-    idleTimeoutMillis: 30000
+    idleTimeoutMillis: 30000,
   });
 
   rawClient = pool;
-  db = drizzleNode(pool, { 
+  db = drizzleNode(pool, {
     schema,
-    logger: process.env.NODE_ENV === 'development'
+    logger: process.env.NODE_ENV === 'development',
   });
 
   // Safe connection cleanup
   const cleanup = async () => {
     if (cleanupCalled) return;
     cleanupCalled = true;
-    
+
     try {
       await pool.end();
     } catch (err) {

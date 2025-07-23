@@ -1,4 +1,3 @@
-
 import { Client } from 'pg';
 import fs from 'fs';
 
@@ -48,7 +47,7 @@ let mermaid = 'erDiagram\n';
 
 for (const [table, cols] of Object.entries(tables)) {
   mermaid += `  ${table} {\n`;
-  cols.forEach(col => mermaid += `    ${col}\n`);
+  cols.forEach((col) => (mermaid += `    ${col}\n`));
   mermaid += `  }\n`;
 }
 

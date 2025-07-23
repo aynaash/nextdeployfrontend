@@ -1,21 +1,15 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 interface CustomerPortalButtonProps {
   userStripeId: string;
 }
 
-export function CustomerPortalButton({
-  userStripeId,
-}: CustomerPortalButtonProps) {
+export function CustomerPortalButton({ userStripeId }: CustomerPortalButtonProps) {
   // Temporary UI before Stripe customer portal integration
   return (
-    <Button
-      variant="outline"
-      className="w-full cursor-not-allowed opacity-70"
-      disabled
-    >
+    <Button variant='outline' className='w-full cursor-not-allowed opacity-70' disabled>
       Customer portal coming soon
     </Button>
   );

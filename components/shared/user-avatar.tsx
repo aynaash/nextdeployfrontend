@@ -1,7 +1,7 @@
-import { User } from "@/lib/types";
-import { AvatarProps } from "@radix-ui/react-avatar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Icons } from "@/components/shared/icons";
+import { User } from '@/lib/types';
+import { AvatarProps } from '@radix-ui/react-avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Icons } from '@/components/shared/icons';
 
 interface UserAvatarProps extends AvatarProps {
   user: {
@@ -11,10 +11,10 @@ interface UserAvatarProps extends AvatarProps {
   fallbackIcon?: React.ReactNode;
 }
 
-export function UserAvatar({ 
-  user, 
-  fallbackIcon = <Icons.user className="size-4" />,
-  ...props 
+export function UserAvatar({
+  user,
+  fallbackIcon = <Icons.user className='size-4' />,
+  ...props
 }: UserAvatarProps) {
   // Normalize image source - handle undefined/null/empty strings
   const imageSrc = user.image?.trim() || undefined;
@@ -25,7 +25,7 @@ export function UserAvatar({
         <AvatarImage
           alt={`${user.name}'s profile picture`}
           src={imageSrc}
-          referrerPolicy="no-referrer"
+          referrerPolicy='no-referrer'
           onError={(e) => {
             // Fallback if image fails to load
             const target = e.target as HTMLImageElement;
@@ -34,7 +34,7 @@ export function UserAvatar({
         />
       ) : (
         <AvatarFallback>
-          <span className="sr-only">{user.name}</span>
+          <span className='sr-only'>{user.name}</span>
           {fallbackIcon}
         </AvatarFallback>
       )}

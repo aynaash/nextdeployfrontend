@@ -1,16 +1,9 @@
-
-import Link from "next/link";
-import * as React from "react";
+import Link from 'next/link';
+import * as React from 'react';
 
 // import { CustomerPortalButton } from "@/components/forms/customer-portal-button";
 // import { buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 // import { cn, formatDate } from "@/lib/utils";
 // import { UserSubscriptionPlan } from "types";
 
@@ -24,14 +17,12 @@ export function BillingInfo() {
     <Card>
       <CardHeader>
         <CardTitle>Billing Information</CardTitle>
-        <CardDescription>
-          Billing management will be available soon.
-        </CardDescription>
+        <CardDescription>Billing management will be available soon.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-muted-foreground">
-          We are currently working on our billing system. Check back later to view
-          and manage your subscription details.
+        <p className='text-muted-foreground'>
+          We are currently working on our billing system. Check back later to view and manage your
+          subscription details.
         </p>
       </CardContent>
     </Card>

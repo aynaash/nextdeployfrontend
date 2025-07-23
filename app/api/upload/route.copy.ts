@@ -21,7 +21,7 @@
 //     }
 //
 //     const key = `uploads/${user.id}/${Date.now()}-${fileName}`;
-//     
+//
 //     const command = new PutObjectCommand({
 //       Bucket: process.env.S3_BUCKET_NAME,
 //       Key: key,

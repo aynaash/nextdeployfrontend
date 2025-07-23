@@ -1,26 +1,23 @@
-import { Metadata } from "next";
-import { clsx, type ClassValue } from "clsx";
-import ms from "ms";
-import { twMerge } from "tailwind-merge";
-import { z, type ZodSchema } from "zod";
-import { siteConfig } from "@/config/site";
+import { Metadata } from 'next';
+import { clsx, type ClassValue } from 'clsx';
+import ms from 'ms';
+import { twMerge } from 'tailwind-merge';
+import { z, type ZodSchema } from 'zod';
+import { siteConfig } from '@/config/site';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
 export class ApiError extends Error {
   status: number;
-  
+
   constructor(message: string, status: number = 400) {
     super(message);
     this.status = status;
     this.name = 'ApiError';
   }
-  
+
   toResponse() {
-    return NextResponse.json(
-      { error: this.message },
-      { status: this.status }
-    );
+    return NextResponse.json({ error: this.message }, { status: this.status });
   }
 }
 
@@ -28,29 +25,23 @@ export function handleApiError(error: unknown) {
   if (error instanceof ApiError) {
     return error.toResponse();
   }
-  
+
   if (error instanceof ZodError) {
-    return NextResponse.json(
-      { error: 'Validation error', issues: error.errors },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Validation error', issues: error.errors }, { status: 400 });
   }
-  
+
   console.error(error);
-  return NextResponse.json(
-    { error: 'Internal server error' },
-    { status: 500 }
-  );
+  return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
 }
 
 export async function parseRequestBody<T>(request: Request, schema?: ZodSchema<T>): Promise<T> {
   try {
     const body = await request.json();
-    
+
     if (schema) {
       return schema.parse(body);
     }
-    
+
     return body;
   } catch (error) {
     if (error instanceof ZodError) {
@@ -79,7 +70,7 @@ export function constructMetadata({
   title = siteConfig.name,
   description = siteConfig.description,
   image = siteConfig.ogImage,
-  icons = "/favicon.ico",
+  icons = '/favicon.ico',
   noIndex = false,
 }: {
   title?: string;
@@ -92,36 +83,36 @@ export function constructMetadata({
     title,
     description,
     keywords: [
-      "Next.js",
-      "React",
-      "Prisma",
-      "Neon",
-      "Auth.js",
-      "shadcn ui",
-      "Resend",
-      "React Email",
-      "Stripe",
+      'Next.js',
+      'React',
+      'Prisma',
+      'Neon',
+      'Auth.js',
+      'shadcn ui',
+      'Resend',
+      'React Email',
+      'Stripe',
     ],
     authors: [
       {
-        name: "mickasmt",
+        name: 'mickasmt',
       },
     ],
-    creator: "mickasmt",
+    creator: 'mickasmt',
     openGraph: {
-      type: "website",
-      locale: "en_US",
+      type: 'website',
+      locale: 'en_US',
       url: siteConfig.url,
       title,
       description,
       siteName: title,
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
       images: [image],
-      creator: "@miickasmt",
+      creator: '@miickasmt',
     },
     icons,
     metadataBase: new URL(siteConfig.url),
@@ -137,29 +128,24 @@ export function constructMetadata({
 
 export function formatDate(input: string | number): string {
   const date = new Date(input);
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
   });
 }
-const url = process.env.NEXT_PUBLIC_APP_URL || "http:localhost:3000"
+const url = process.env.NEXT_PUBLIC_APP_URL || 'http:localhost:3000';
 export function absoluteUrl(path: string) {
   return `${url}${path}`;
 }
 
 // Utils from precedent.dev
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
-  if (!timestamp) return "never";
-  return `${ms(Date.now() - new Date(timestamp).getTime())}${
-    timeOnly ? "" : " ago"
-  }`;
+  if (!timestamp) return 'never';
+  return `${ms(Date.now() - new Date(timestamp).getTime())}${timeOnly ? '' : ' ago'}`;
 };
 
-export async function fetcher<JSON = any>(
-  input: RequestInfo,
-  init?: RequestInit,
-): Promise<JSON> {
+export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
   const res = await fetch(input, init);
 
   if (!res.ok) {
@@ -171,7 +157,7 @@ export async function fetcher<JSON = any>(
       error.status = res.status;
       throw error;
     } else {
-      throw new Error("An unexpected error occurred");
+      throw new Error('An unexpected error occurred');
     }
   }
 
@@ -179,15 +165,15 @@ export async function fetcher<JSON = any>(
 }
 
 export function nFormatter(num: number, digits?: number) {
-  if (!num) return "0";
+  if (!num) return '0';
   const lookup = [
-    { value: 1, symbol: "" },
-    { value: 1e3, symbol: "K" },
-    { value: 1e6, symbol: "M" },
-    { value: 1e9, symbol: "G" },
-    { value: 1e12, symbol: "T" },
-    { value: 1e15, symbol: "P" },
-    { value: 1e18, symbol: "E" },
+    { value: 1, symbol: '' },
+    { value: 1e3, symbol: 'K' },
+    { value: 1e6, symbol: 'M' },
+    { value: 1e9, symbol: 'G' },
+    { value: 1e12, symbol: 'T' },
+    { value: 1e15, symbol: 'P' },
+    { value: 1e18, symbol: 'E' },
   ];
   const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
   var item = lookup
@@ -196,13 +182,11 @@ export function nFormatter(num: number, digits?: number) {
     .find(function (item) {
       return num >= item.value;
     });
-  return item
-    ? (num / item.value).toFixed(digits || 1).replace(rx, "$1") + item.symbol
-    : "0";
+  return item ? (num / item.value).toFixed(digits || 1).replace(rx, '$1') + item.symbol : '0';
 }
 
 export function capitalize(str: string) {
-  if (!str || typeof str !== "string") return str;
+  if (!str || typeof str !== 'string') return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -213,33 +197,31 @@ export const truncate = (str: string, length: number) => {
 
 export const getBlurDataURL = async (url: string | null) => {
   if (!url) {
-    return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    return 'data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
   }
 
-  if (url.startsWith("/_static/")) {
+  if (url.startsWith('/_static/')) {
     url = `${siteConfig.url}${url}`;
   }
 
   try {
-    const response = await fetch(
-      `https://wsrv.nl/?url=${url}&w=50&h=50&blur=5`,
-    );
+    const response = await fetch(`https://wsrv.nl/?url=${url}&w=50&h=50&blur=5`);
     const buffer = await response.arrayBuffer();
-    const base64 = Buffer.from(buffer).toString("base64");
+    const base64 = Buffer.from(buffer).toString('base64');
 
     return `data:image/png;base64,${base64}`;
   } catch (error) {
-    return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    return 'data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
   }
 };
 export function sanitizeUrl(url: string): string {
   const cleanUrl = url
     .trim()
-    .replace(/^['"]+|['"]+$/g, "")
-    .replace(/^\/+|\/+$/g, "");
+    .replace(/^['"]+|['"]+$/g, '')
+    .replace(/^\/+|\/+$/g, '');
 
   return cleanUrl;
 }
 
 export const placeholderBlurhash =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAoJJREFUWEfFl4lu4zAMRO3cx/9/au6reMaOdkxTTl0grQFCRoqaT+SQotq2bV9N8rRt28xms87m83l553eZ/9vr9Wpkz+ezkT0ej+6dv1X81AFw7M4FBACPVn2c1Z3zLgDeJwHgeLFYdAARYioAEAKJEG2WAjl3gCwNYymQQ9b7/V4spmIAwO6Wy2VnAMikBWlDURBELf8CuN1uHQSrPwMAHK5WqwFELQ01AIXdAa7XawfAb3p6AOwK5+v1ugAoEq4FRSFLgavfQ49jAGQpAE5wjgGCeRrGdBArwHOPcwFcLpcGU1X0IsBuN5tNgYhaiFFwHTiAwq8I+O5xfj6fOz38K+X/fYAdb7fbAgFAjIJ6Aav3AYlQ6nfnDoDz0+lUxNiLALvf7XaDNGQ6GANQBKR85V27B4D3QQRw7hGIYlQKWGM79hSweyCUe1blXhEAogfABwHAXAcqSYkxCtHLUK3XBajSc4Dj8dilAeiSAgD2+30BAEKV4GKcAuDqB4TdYwBgPQByCgApUBoE4EJUGvxUjF3Q69/zLw3g/HA45ABKgdIQu+JPIyDnisCfAxAFNFM0EFNQ64gfS0EUoQP8ighrZSjn3oziZEQpauyKbfjbZchHUL/3AS/Dd30gAkxuRACgfO+EWQW8qwI1o+wseNuKcQiESjALvwNoMI0TcRzD4lFcPYwIM+JTF5x6HOs8yI7jeB5oKhpMRFH9UwaSCDB2Jmg4rc6E2TT0biIaG0rQhNqyhpHBcayTTSXH6vcDL7/sdqRK8LkwTsU499E8vRcAojHcZ4AxABdilgrp4lsXk8oVqgwh7+6H3phqd8J0Kk4vbx/+sZqCD/vNLya/5dT9fAH8g1WdNGgwbQAAAABJRU5ErkJggg==";
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAoJJREFUWEfFl4lu4zAMRO3cx/9/au6reMaOdkxTTl0grQFCRoqaT+SQotq2bV9N8rRt28xms87m83l553eZ/9vr9Wpkz+ezkT0ej+6dv1X81AFw7M4FBACPVn2c1Z3zLgDeJwHgeLFYdAARYioAEAKJEG2WAjl3gCwNYymQQ9b7/V4spmIAwO6Wy2VnAMikBWlDURBELf8CuN1uHQSrPwMAHK5WqwFELQ01AIXdAa7XawfAb3p6AOwK5+v1ugAoEq4FRSFLgavfQ49jAGQpAE5wjgGCeRrGdBArwHOPcwFcLpcGU1X0IsBuN5tNgYhaiFFwHTiAwq8I+O5xfj6fOz38K+X/fYAdb7fbAgFAjIJ6Aav3AYlQ6nfnDoDz0+lUxNiLALvf7XaDNGQ6GANQBKR85V27B4D3QQRw7hGIYlQKWGM79hSweyCUe1blXhEAogfABwHAXAcqSYkxCtHLUK3XBajSc4Dj8dilAeiSAgD2+30BAEKV4GKcAuDqB4TdYwBgPQByCgApUBoE4EJUGvxUjF3Q69/zLw3g/HA45ABKgdIQu+JPIyDnisCfAxAFNFM0EFNQ64gfS0EUoQP8ighrZSjn3oziZEQpauyKbfjbZchHUL/3AS/Dd30gAkxuRACgfO+EWQW8qwI1o+wseNuKcQiESjALvwNoMI0TcRzD4lFcPYwIM+JTF5x6HOs8yI7jeB5oKhpMRFH9UwaSCDB2Jmg4rc6E2TT0biIaG0rQhNqyhpHBcayTTSXH6vcDL7/sdqRK8LkwTsU499E8vRcAojHcZ4AxABdilgrp4lsXk8oVqgwh7+6H3phqd8J0Kk4vbx/+sZqCD/vNLya/5dT9fAH8g1WdNGgwbQAAAABJRU5ErkJggg==';

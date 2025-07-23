@@ -1,11 +1,8 @@
-import {NextApiRequest, NextApiResponse} from "next"
+import { NextApiRequest, NextApiResponse } from 'next';
 
-import WebSocket from 'ws'
+import WebSocket from 'ws';
 
-import {verifyMessage} from "../../../lib/crypto.ts"
-
-
-
+import { verifyMessage } from '../../../lib/crypto.ts';
 
 interface AgentConnection {
   socket: WebSocket;
@@ -22,7 +19,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     wss.on('connection', (ws, req) => {
       const agentId = req.headers['x-agent-id'] as string;
-      
+
       if (!agentId) {
         ws.close();
         return;
@@ -31,7 +28,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const connection: AgentConnection = {
         socket: ws,
         agentId,
-        lastSeen: new Date()
+        lastSeen: new Date(),
       };
 
       agentConnections.set(agentId, connection);
@@ -39,14 +36,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       ws.on('message', (message) => {
         try {
           const msg = JSON.parse(message.toString());
-          
+
           if (!verifyMessage(msg)) {
             ws.close();
             return;
           }
 
           connection.lastSeen = new Date();
-          
+
           // Handle message types
           switch (msg.type) {
             case 'event':

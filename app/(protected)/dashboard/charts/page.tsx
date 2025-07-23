@@ -1,27 +1,27 @@
-import { constructMetadata } from "../../../../lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import { AreaChartStacked } from "@/components/charts/area-chart-stacked";
-import { BarChartMixed } from "@/components/charts/bar-chart-mixed";
-import { InteractiveBarChart } from "@/components/charts/interactive-bar-chart";
-import { LineChartMultiple } from "@/components/charts/line-chart-multiple";
-import { RadarChartSimple } from "@/components/charts/radar-chart-simple";
-import { RadialChartGrid } from "@/components/charts/radial-chart-grid";
-import { RadialShapeChart } from "@/components/charts/radial-shape-chart";
-import { RadialStackedChart } from "@/components/charts/radial-stacked-chart";
-import { RadialTextChart } from "@/components/charts/radial-text-chart";
-import { DashboardHeader } from "@/components/dashboard/header";
-// TODO: the title should dynamic name of the project currently viewed by user 
+import { constructMetadata } from '../../../../lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AreaChartStacked } from '@/components/charts/area-chart-stacked';
+import { BarChartMixed } from '@/components/charts/bar-chart-mixed';
+import { InteractiveBarChart } from '@/components/charts/interactive-bar-chart';
+import { LineChartMultiple } from '@/components/charts/line-chart-multiple';
+import { RadarChartSimple } from '@/components/charts/radar-chart-simple';
+import { RadialChartGrid } from '@/components/charts/radial-chart-grid';
+import { RadialShapeChart } from '@/components/charts/radial-shape-chart';
+import { RadialStackedChart } from '@/components/charts/radial-stacked-chart';
+import { RadialTextChart } from '@/components/charts/radial-text-chart';
+import { DashboardHeader } from '@/components/dashboard/header';
+// TODO: the title should dynamic name of the project currently viewed by user
 export const metadata = constructMetadata({
-  title: "Charts – NextDeploy",
-  description: "This data collected from website by our daemons",
+  title: 'Charts – NextDeploy',
+  description: 'This data collected from website by our daemons',
 });
 export const dynamic = 'force-dynamic';
 export default function ChartsPage() {
   return (
     <>
-      <DashboardHeader heading="Metrics" text="This data collected from website by our daemons"/>
-      <div className="flex flex-col gap-5">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+      <DashboardHeader heading='Metrics' text='This data collected from website by our daemons' />
+      <div className='flex flex-col gap-5'>
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4'>
           <RadialTextChart />
           <AreaChartStacked />
           <BarChartMixed />
@@ -30,7 +30,7 @@ export default function ChartsPage() {
 
         <InteractiveBarChart />
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4'>
           <RadialChartGrid />
           <RadialShapeChart />
           <LineChartMultiple />

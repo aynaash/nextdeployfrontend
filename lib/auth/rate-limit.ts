@@ -14,8 +14,8 @@
 //   const updateResult = await db
 //     .update(rateLimits)
 //     .set({
-//       tokens: sql`CASE 
-//         WHEN ${rateLimits.lastRefill} <= ${lastRefillThreshold} 
+//       tokens: sql`CASE
+//         WHEN ${rateLimits.lastRefill} <= ${lastRefillThreshold}
 //         THEN ${MAX_TOKENS} - 1
 //         ELSE ${rateLimits.tokens} - 1
 //       END`,

@@ -11,7 +11,7 @@
 // ) {
 //   try {
 //     const user = await requireAuth();
-//     
+//
 //     // Check if user is a member of the team
 //     const [membership] = await db.select()
 //       .from(teamMembers)
@@ -21,11 +21,11 @@
 //           eq(teamMembers.userId, user.id)
 //         )
 //       .limit(1);
-//     
+//
 //     if (!membership) {
 //       throw new ApiError('Forbidden', 403);
 //     }
-//     
+//
 //     const members = await db.query.teamMembers.findMany({
 //       where: eq(teamMembers.teamId, params.teamId),
 //       with: {
@@ -39,9 +39,9 @@
 //         }
 //       }
 //     });
-//     
+//
 //     return successResponse(members);
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }
@@ -54,7 +54,7 @@
 //   try {
 //     const user = await requireAuth();
 //     const { email, role } = await request.json();
-//     
+//
 //     // Check if current user is a team admin/owner
 //     const [membership] = await db.select()
 //       .from(teamMembers)
@@ -69,21 +69,21 @@
 //         )
 //       )
 //       .limit(1);
-//     
+//
 //     if (!membership) {
 //       throw new ApiError('Forbidden', 403);
 //     }
-//     
+//
 //     // Find user by email
 //     const [invitee] = await db.select()
 //       .from(users)
 //       .where(eq(users.email, email))
 //       .limit(1);
-//     
+//
 //     if (!invitee) {
 //       throw new ApiError('User not found', 404);
 //     }
-//     
+//
 //     // Check if user is already a member
 //     const [existingMember] = await db.select()
 //       .from(teamMembers)
@@ -93,11 +93,11 @@
 //           eq(teamMembers.userId, invitee.id)
 //         )
 //       .limit(1);
-//     
+//
 //     if (existingMember) {
 //       throw new ApiError('User is already a team member', 409);
 //     }
-//     
+//
 //     const [newMember] = await db.insert(teamMembers)
 //       .values({
 //         teamId: params.teamId,
@@ -108,9 +108,9 @@
 //         joinedAt: new Date()
 //       })
 //       .returning();
-//     
+//
 //     return createdResponse(newMember);
-//     
+//
 //   } catch (error) {
 //     return handleApiError(error);
 //   }

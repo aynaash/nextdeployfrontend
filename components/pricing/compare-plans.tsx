@@ -9,18 +9,17 @@
 // import { HeaderSection } from "@/components/shared/header-section";
 // import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import MaxWidthWrapper from '@/components/shared/max-width-wrapper';
 
 export function ComparePlans() {
   return (
     <MaxWidthWrapper>
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Billing is Coming Soon
-        </h2>
-        <p className="mt-4 max-w-md text-lg text-muted-foreground">
-          We are working on adding plan comparisons and billing options. Stay tuned — exciting updates ahead!
+      <div className='flex flex-col items-center justify-center py-24 text-center'>
+        <h2 className='text-3xl font-bold tracking-tight sm:text-4xl'>Billing is Coming Soon</h2>
+        <p className='mt-4 max-w-md text-lg text-muted-foreground'>
+          We are working on adding plan comparisons and billing options. Stay tuned — exciting
+          updates ahead!
         </p>
       </div>
     </MaxWidthWrapper>
