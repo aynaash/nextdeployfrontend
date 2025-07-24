@@ -1,0 +1,331 @@
+
+---
+title: "Deploy to DigitalOcean VPS"
+description: "Step-by-step guide to deploy your Next.js app to a DigitalOcean droplet"
+difficulty: "Intermediate"
+duration: "25 min"
+---
+
+import { CodeBlock, Info, Warning, Success } from "@/components/mdx-components"
+
+# Deploy to DigitalOcean VPS
+
+This guide walks you through deploying a Next.js application to a DigitalOcean VPS using NextDeploy. You'll learn how to provision a droplet, configure it for deployment, and set up automated deployments.
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+- A DigitalOcean account
+- NextDeploy CLI installed (`npm install -g nextdeploy`)
+- A Next.js application ready for deployment
+- SSH key pair generated on your local machine
+
+## Step 1: Create a DigitalOcean Droplet
+
+### 1.1 Provision the Droplet
+
+Log into your DigitalOcean dashboard and create a new droplet:
+
+- **Image**: Ubuntu 22.04 LTS
+- **Size**: Basic plan, $12/month (2GB RAM, 1 vCPU)
+- **Region**: Choose closest to your users
+- **Authentication**: SSH keys (add your public key)
+
+<Info>
+For production applications, consider using at least the $24/month droplet (4GB RAM, 2 vCPUs) for better performance.
+</Info>
+
+### 1.2 Initial Server Setup
+
+Once your droplet is created, connect via SSH:
+
+<CodeBlock title="Connect to your droplet" language="bash">
+{`ssh root@your-droplet-ip`}
+</CodeBlock>
+
+Update the system and install essential packages:
+
+<CodeBlock title="System updates and packages" language="bash">
+{`# Update package index
+apt update && apt upgrade -y
+
+# Install essential packages
+apt install -y curl wget git nginx ufw fail2ban
+
+# Install Node.js 18 LTS
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+apt install -y nodejs
+
+# Verify installations
+node --version
+npm --version
+nginx -v`}
+</CodeBlock>
+
+## Step 2: Configure Server Security
+
+### 2.1 Set up Firewall
+
+<CodeBlock title="Configure UFW firewall" language="bash">
+{`# Allow SSH, HTTP, and HTTPS
+ufw allow OpenSSH
+ufw allow 'Nginx Full'
+ufw allow 3000  # For Next.js development server
+
+# Enable firewall
+ufw --force enable
+
+# Check status
+ufw status`}
+</CodeBlock>
+
+### 2.2 Create Deployment User
+
+<CodeBlock title="Create deploy user" language="bash">
+{`# Create deploy user
+adduser deploy
+
+# Add to sudo group
+usermod -aG sudo deploy
+
+# Set up SSH key for deploy user
+mkdir -p /home/deploy/.ssh
+cp /root/.ssh/authorized_keys /home/deploy/.ssh/
+chown -R deploy:deploy /home/deploy/.ssh
+chmod 700 /home/deploy/.ssh
+chmod 600 /home/deploy/.ssh/authorized_keys`}
+</CodeBlock>
+
+<Warning>
+Never deploy applications as the root user. Always use a dedicated deployment user for security.
+</Warning>
+
+## Step 3: Configure NextDeploy
+
+### 3.1 Initialize NextDeploy in Your Project
+
+In your local Next.js project directory:
+
+<CodeBlock title="Initialize NextDeploy" language="bash">
+{`# Initialize NextDeploy configuration
+nextdeploy init
+
+# This creates nextdeploy.config.js`}
+</CodeBlock>
+
+### 3.2 Configure Deployment Target
+
+Edit your `nextdeploy.config.js`:
+
+<CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs',
+    buildCommand: 'npm run build',
+    startCommand: 'npm start',
+    port: 3000
+  },
+  
+  targets: {
+    production: {
+      type: 'vps',
+      host: 'your-droplet-ip',
+      port: 22,
+      user: 'deploy',
+      path: '/var/www/my-nextjs-app',
+      
+      // Environment variables
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3000'
+      },
+      
+      // Post-deployment hooks
+      hooks: {
+        afterDeploy: [
+          'pm2 restart my-nextjs-app || pm2 start npm --name "my-nextjs-app" -- start'
+        ]
+      }
+    }
+  },
+  
+  // Infrastructure configuration
+  infrastructure: {
+    nginx: {
+      enabled: true,
+      domain: 'your-domain.com',  // Optional
+      ssl: true
+    },
+    
+    monitoring: {
+      enabled: true,
+      metrics: ['cpu', 'memory', 'requests']
+    }
+  }
+}`}
+</CodeBlock>
+
+## Step 4: Set up Process Management
+
+### 4.1 Install PM2 on the Server
+
+SSH back into your droplet as the deploy user:
+
+<CodeBlock title="Install PM2" language="bash">
+{`ssh deploy@your-droplet-ip
+
+# Install PM2 globally
+sudo npm install -g pm2
+
+# Set up PM2 to start on boot
+pm2 startup
+# Follow the instructions provided by the command above`}
+</CodeBlock>
+
+### 4.2 Configure Nginx (Optional)
+
+If you want to use Nginx as a reverse proxy:
+
+<CodeBlock title="Nginx configuration" language="bash">
+{`# Create Nginx configuration
+sudo nano /etc/nginx/sites-available/my-nextjs-app`}
+</CodeBlock>
+
+Add the following configuration:
+
+<CodeBlock title="/etc/nginx/sites-available/my-nextjs-app" language="nginx">
+{`server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}`}
+</CodeBlock>
+
+Enable the site:
+
+<CodeBlock title="Enable Nginx site" language="bash">
+{`# Enable the site
+sudo ln -s /etc/nginx/sites-available/my-nextjs-app /etc/nginx/sites-enabled/
+
+# Test configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo systemctl restart nginx`}
+</CodeBlock>
+
+## Step 5: Deploy Your Application
+
+### 5.1 First Deployment
+
+From your local project directory:
+
+<CodeBlock title="Deploy to production" language="bash">
+{`# Validate configuration
+nextdeploy validate --target production
+
+# Deploy to production
+nextdeploy deploy --target production`}
+</CodeBlock>
+
+The deployment process will:
+
+1. Build your Next.js application locally
+2. Create a deployment package
+3. Transfer files to your VPS
+4. Install dependencies on the server
+5. Start the application with PM2
+6. Run health checks
+
+### 5.2 Verify Deployment
+
+<CodeBlock title="Check deployment status" language="bash">
+{`# Check application status
+nextdeploy status --target production
+
+# View application logs
+nextdeploy logs --target production --tail 50`}
+</CodeBlock>
+
+<Success>
+Your Next.js application should now be running on your DigitalOcean VPS! Visit your droplet's IP address or domain to see it live.
+</Success>
+
+## Step 6: Set up SSL (Optional)
+
+If you have a domain name, set up SSL with Let's Encrypt:
+
+<CodeBlock title="Install Certbot" language="bash">
+{`# SSH into your droplet
+ssh deploy@your-droplet-ip
+
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Obtain SSL certificate
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+
+# Test automatic renewal
+sudo certbot renew --dry-run`}
+</CodeBlock>
+
+## Troubleshooting
+
+### Common Issues
+
+**Application not starting:**
+<CodeBlock title="Debug application startup" language="bash">
+{`# Check PM2 status
+pm2 status
+
+# View application logs
+pm2 logs my-nextjs-app
+
+# Restart application
+pm2 restart my-nextjs-app`}
+</CodeBlock>
+
+**Port conflicts:**
+<CodeBlock title="Check port usage" language="bash">
+{`# Check what's using port 3000
+sudo netstat -tlnp | grep :3000
+
+# Kill process if needed
+sudo kill -9 <process-id>`}
+</CodeBlock>
+
+**Permission issues:**
+<CodeBlock title="Fix permissions" language="bash">
+{`# Ensure deploy user owns the application directory
+sudo chown -R deploy:deploy /var/www/my-nextjs-app
+
+# Set correct permissions
+chmod -R 755 /var/www/my-nextjs-app`}
+</CodeBlock>
+
+## Next Steps
+
+- Set up [monitoring and alerts](/guides/monitoring-setup)
+- Configure [automated backups](/guides/backup-strategies)
+- Implement [blue-green deployments](/guides/blue-green-deployments)
+- Set up [CI/CD pipelines](/guides/cicd-integration)
+
+## Conclusion
+
+You've successfully deployed your Next.js application to a DigitalOcean VPS using NextDeploy. This setup gives you full control over your infrastructure while maintaining the simplicity of modern deployment tools.
+
+Your deployment is now production-ready with process management, optional reverse proxy, and SSL support. The NextDeploy CLI makes future deployments as simple as running `nextdeploy deploy --target production`.
+\`\`\`

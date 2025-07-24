@@ -1,0 +1,1541 @@
+
+---
+title: "Configuration"
+description: "Complete guide to configuring NextDeploy for your project"
+---
+
+import { CodeBlock, Info, Warning, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
+
+# Configuration
+
+NextDeploy uses a flexible configuration system that allows you to define your deployment settings, infrastructure requirements, and application behavior. This guide covers all configuration options and best practices.
+
+## Configuration File Structure
+
+The main configuration file is `nextdeploy.config.js` in your project root:
+
+<CodeBlock title="nextdeploy.config.js - Complete Structure" language="javascript">
+{`module.exports = {
+  // Application configuration
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs',
+    version: '1.0.0',
+    buildCommand: 'npm run build',
+    startCommand: 'npm start',
+    installCommand: 'npm ci',
+    port: 3000,
+    
+    // Health check configuration
+    healthCheck: {
+      path: '/api/health',
+      timeout: 30000,
+      retries: 3,
+      interval: 10000,
+      expectedStatus: 200
+    }
+  },
+
+  // Build configuration
+  build: {
+    cache: true,
+    parallel: true,
+    
+    // Environment variables for build
+    env: {
+      NODE_ENV: 'production',
+      NEXT_TELEMETRY_DISABLED: '1'
+    },
+    
+    // Build hooks
+    hooks: {
+      preBuild: [
+        'echo "Starting build..."',
+        'npm run lint',
+        'npm run test'
+      ],
+      postBuild: [
+        'echo "Build completed"',
+        'npm run analyze'
+      ]
+    }
+  },
+
+  // Deployment targets
+  targets: {
+    production: {
+      type: 'vps',
+      host: 'your-server.com',
+      user: 'deploy',
+      port: 22,
+      path: '/var/www/my-app',
+      
+      // Environment-specific settings
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3000'
+      },
+      
+      // Deployment strategy
+      strategy: 'blue-green',
+      
+      // Health checks
+      healthCheck: {
+        enabled: true,
+        path: '/api/health',
+        timeout: 30000,
+        retries: 3
+      }
+    },
+    
+    staging: {
+      type: 'vps',
+      host: 'staging.your-server.com',
+      user: 'deploy',
+      port: 22,
+      path: '/var/www/staging',
+      
+      env: {
+        NODE_ENV: 'staging',
+        PORT: '3000'
+      },
+      
+      strategy: 'replace'
+    }
+  },
+
+  // Infrastructure configuration
+  infrastructure: {
+    // Docker configuration
+    docker: {
+      enabled: true,
+      image: {
+        name: 'my-nextjs-app',
+        tag: 'latest',
+        registry: 'your-registry.com'
+      },
+      build: {
+        context: '.',
+        dockerfile: 'Dockerfile',
+        args: {
+          NODE_VERSION: '18-alpine',
+          BUILD_DATE: new Date().toISOString()
+        }
+      }
+    },
+    
+    // Load balancer configuration
+    loadBalancer: {
+      enabled: true,
+      type: 'nginx',
+      ssl: {
+        enabled: true,
+        provider: 'letsencrypt',
+        domains: ['your-domain.com', 'www.your-domain.com']
+      }
+    },
+    
+    // Database configuration
+    database: {
+      type: 'postgresql',
+      host: process.env.DATABASE_HOST,
+      port: 5432,
+      migrations: {
+        enabled: true,
+        path: './migrations'
+      }
+    },
+    
+    // Monitoring configuration
+    monitoring: {
+      enabled: true,
+      metrics: ['cpu', 'memory', 'requests', 'errors'],
+      alerts: {
+        cpu: { threshold: 80, duration: '5m' },
+        memory: { threshold: 85, duration: '5m' },
+        errors: { threshold: 10, duration: '1m' }
+      }
+    }
+  },
+
+  // Secrets management
+  secrets: {
+    database: {
+      password: {
+        source: 'env',
+        key: 'DATABASE_PASSWORD',
+        required: true
+      }
+    },
+    api: {
+      key: {
+        source: 'vault',
+        path: 'secret/api/key',
+        required: true
+      }
+    }
+  },
+
+  // Backup configuration
+  backup: {
+    enabled: true,
+    retention: 5,
+    compress: true,
+    schedule: '0 2 * * *'
+  },
+
+  // Global hooks
+  hooks: {
+    beforeDeploy: [
+      'echo "Starting deployment..."'
+    ],
+    afterDeploy: [
+      'echo "Deployment completed"',
+      'curl -f http://localhost:3000/api/health'
+    ],
+    onFailure: [
+      'echo "Deployment failed"',
+      'npm run notify:failure'
+    ]
+  }
+}`}
+</CodeBlock>
+
+## Application Configuration
+
+### Basic App Settings
+
+<CodeBlock title="App configuration options" language="javascript">
+{`module.exports = {
+  app: {
+    // Required: Application name (used for containers, logs, etc.)
+    name: 'my-nextjs-app',
+    
+    // Required: Framework type
+    framework: 'nextjs', // 'nextjs' | 'react' | 'vue' | 'nuxt' | 'custom'
+    
+    // Application version (used for tagging)
+    version: process.env.npm_package_version || '1.0.0',
+    
+    // Build and start commands
+    buildCommand: 'npm run build',
+    startCommand: 'npm start',
+    installCommand: 'npm ci --only=production',
+    
+    // Application port
+    port: 3000,
+    
+    // Process management
+    processes: {
+      web: {
+        command: 'npm start',
+        instances: 1,
+        memory: '512MB',
+        env: {
+          PORT: '3000'
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+### Health Check Configuration
+
+<CodeBlock title="Health check options" language="javascript">
+{`module.exports = {
+  app: {
+    healthCheck: {
+      // Health check endpoint path
+      path: '/api/health',
+      
+      // Request timeout in milliseconds
+      timeout: 30000,
+      
+      // Number of retries before marking as unhealthy
+      retries: 3,
+      
+      // Interval between health checks
+      interval: 10000,
+      
+      // Expected HTTP status code
+      expectedStatus: 200,
+      
+      // Custom headers to send with health check
+      headers: {
+        'User-Agent': 'NextDeploy-HealthCheck/1.0'
+      },
+      
+      // Grace period after deployment before health checks start
+      gracePeriod: 30000,
+      
+      // Custom health check command (alternative to HTTP)
+      command: 'node scripts/health-check.js'
+    }
+  }
+}`}
+</CodeBlock>
+
+## Build Configuration
+
+### Build Options
+
+<CodeBlock title="Build configuration" language="javascript">
+{`module.exports = {
+  build: {
+    // Enable build caching
+    cache: true,
+    
+    // Enable parallel builds
+    parallel: true,
+    
+    // Build timeout in milliseconds
+    timeout: 600000, // 10 minutes
+    
+    // Build environment variables
+    env: {
+      NODE_ENV: 'production',
+      NEXT_TELEMETRY_DISABLED: '1',
+      GENERATE_SOURCEMAP: 'false'
+    },
+    
+    // Build arguments for Docker
+    args: {
+      NODE_VERSION: '18-alpine',
+      BUILD_DATE: new Date().toISOString(),
+      GIT_COMMIT: process.env.GIT_COMMIT
+    },
+    
+    // Files to include/exclude from build
+    include: [
+      'src/**/*',
+      'public/**/*',
+      'package.json',
+      'next.config.js'
+    ],
+    exclude: [
+      'node_modules',
+      '.git',
+      '*.test.js',
+      'coverage'
+    ]
+  }
+}`}
+</CodeBlock>
+
+### Build Hooks
+
+<CodeBlock title="Build hooks configuration" language="javascript">
+{`module.exports = {
+  build: {
+    hooks: {
+      // Run before build starts
+      preBuild: [
+        'echo "Pre-build checks..."',
+        'npm run lint',
+        'npm run test:unit',
+        'npm audit --audit-level moderate'
+      ],
+      
+      // Run after successful build
+      postBuild: [
+        'echo "Build completed successfully"',
+        'npm run analyze',
+        'npm run generate:sitemap'
+      ],
+      
+      // Run if build fails
+      onBuildFailure: [
+        'echo "Build failed"',
+        'npm run notify:build-failure'
+      ]
+    }
+  }
+}`}
+</CodeBlock>
+
+## Deployment Targets
+
+### VPS Target Configuration
+
+<CodeBlock title="VPS target configuration" language="javascript">
+{`module.exports = {
+  targets: {
+    production: {
+      // Target type
+      type: 'vps',
+      
+      // Server connection details
+      host: 'your-server.com',
+      port: 22,
+      user: 'deploy',
+      
+      // Deployment path on server
+      path: '/var/www/my-app',
+      
+      // SSH configuration
+      ssh: {
+        keyPath: '~/.ssh/id_ed25519',
+        connectTimeout: 30000,
+        keepAlive: true,
+        agent: process.env.SSH_AUTH_SOCK
+      },
+      
+      // Environment variables for this target
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3000',
+        DATABASE_URL: process.env.PRODUCTION_DATABASE_URL
+      },
+      
+      // Deployment strategy
+      strategy: 'blue-green', // 'blue-green' | 'rolling' | 'replace' | 'canary'
+      
+      // Resource limits
+      resources: {
+        cpu: '1',
+        memory: '1Gi',
+        disk: '10Gi'
+      },
+      
+      // Scaling configuration
+      scaling: {
+        instances: 2,
+        autoScale: {
+          enabled: true,
+          minInstances: 1,
+          maxInstances: 5,
+          targetCPU: 70
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+### Kubernetes Target Configuration
+
+<CodeBlock title="Kubernetes target configuration" language="javascript">
+{`module.exports = {
+  targets: {
+    production: {
+      type: 'kubernetes',
+      
+      // Cluster configuration
+      cluster: 'production-cluster',
+      namespace: 'my-app',
+      context: 'production-context',
+      
+      // Kubernetes-specific settings
+      kubernetes: {
+        // Deployment configuration
+        deployment: {
+          replicas: 3,
+          strategy: {
+            type: 'RollingUpdate',
+            rollingUpdate: {
+              maxSurge: 1,
+              maxUnavailable: 0
+            }
+          }
+        },
+        
+        // Service configuration
+        service: {
+          type: 'ClusterIP',
+          ports: [
+            {
+              name: 'http',
+              port: 80,
+              targetPort: 3000
+            }
+          ]
+        },
+        
+        // Ingress configuration
+        ingress: {
+          enabled: true,
+          className: 'nginx',
+          hosts: [
+            {
+              host: 'your-domain.com',
+              paths: [
+                {
+                  path: '/',
+                  pathType: 'Prefix'
+                }
+              ]
+            }
+          ],
+          tls: [
+            {
+              secretName: 'tls-secret',
+              hosts: ['your-domain.com']
+            }
+          ]
+        },
+        
+        // Resource requests and limits
+        resources: {
+          requests: {
+            cpu: '100m',
+            memory: '128Mi'
+          },
+          limits: {
+            cpu: '500m',
+            memory: '512Mi'
+          }
+        },
+        
+        // Horizontal Pod Autoscaler
+        hpa: {
+          enabled: true,
+          minReplicas: 2,
+          maxReplicas: 10,
+          targetCPUUtilizationPercentage: 70
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+### Docker Target Configuration
+
+<CodeBlock title="Docker target configuration" language="javascript">
+{`module.exports = {
+  targets: {
+    local: {
+      type: 'docker',
+      
+      // Container configuration
+      container: {
+        name: 'my-nextjs-app',
+        image: 'my-nextjs-app:latest',
+        
+        // Port mapping
+        ports: [
+          '3000:3000'
+        ],
+        
+        // Volume mounts
+        volumes: [
+          './data:/app/data',
+          './logs:/app/logs'
+        ],
+        
+        // Environment variables
+        env: {
+          NODE_ENV: 'production',
+          PORT: '3000'
+        },
+        
+        // Resource limits
+        resources: {
+          memory: '512m',
+          cpus: '0.5'
+        },
+        
+        // Network configuration
+        network: 'app-network',
+        
+        // Restart policy
+        restart: 'unless-stopped',
+        
+        // Health check
+        healthcheck: {
+          test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/health'],
+          interval: '30s',
+          timeout: '10s',
+          retries: 3,
+          startPeriod: '30s'
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+## Infrastructure Configuration
+
+### Docker Configuration
+
+<CodeBlock title="Docker infrastructure configuration" language="javascript">
+{`module.exports = {
+  infrastructure: {
+    docker: {
+      // Enable Docker support
+      enabled: true,
+      
+      // Image configuration
+      image: {
+        name: 'my-nextjs-app',
+        tag: process.env.BUILD_NUMBER || 'latest',
+        registry: 'your-registry.com/namespace'
+      },
+      
+      // Build configuration
+      build: {
+        context: '.',
+        dockerfile: 'Dockerfile',
+        target: 'production',
+        
+        // Build arguments
+        args: {
+          NODE_VERSION: '18-alpine',
+          BUILD_DATE: new Date().toISOString(),
+          GIT_COMMIT: process.env.GIT_COMMIT || 'unknown'
+        },
+        
+        // Build options
+        options: {
+          platform: 'linux/amd64',
+          cache: true,
+          pull: true,
+          noCache: false
+        }
+      },
+      
+      // Registry configuration
+      registry: {
+        url: 'https://your-registry.com',
+        username: process.env.REGISTRY_USERNAME,
+        password: process.env.REGISTRY_PASSWORD,
+        
+        // Push configuration
+        push: {
+          enabled: true,
+          tags: ['latest', process.env.BUILD_NUMBER]
+        }
+      },
+      
+      // Compose configuration (for multi-service apps)
+      compose: {
+        version: '3.8',
+        services: {
+          app: {
+            build: '.',
+            ports: ['3000:3000'],
+            environment: {
+              NODE_ENV: 'production'
+            },
+            depends_on: ['database']
+          },
+          database: {
+            image: 'postgres:15-alpine',
+            environment: {
+              POSTGRES_DB: 'myapp',
+              POSTGRES_USER: 'user',
+              POSTGRES_PASSWORD: 'password'
+            },
+            volumes: ['postgres_data:/var/lib/postgresql/data']
+          }
+        },
+        volumes: {
+          postgres_data: {}
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+### Load Balancer Configuration
+
+<CodeBlock title="Load balancer configuration" language="javascript">
+{`module.exports = {
+  infrastructure: {
+    loadBalancer: {
+      // Enable load balancer
+      enabled: true,
+      
+      // Load balancer type
+      type: 'nginx', // 'nginx' | 'haproxy' | 'traefik' | 'aws-alb'
+      
+      // SSL/TLS configuration
+      ssl: {
+        enabled: true,
+        provider: 'letsencrypt', // 'letsencrypt' | 'custom' | 'cloudflare'
+        
+        // Domains to secure
+        domains: [
+          'your-domain.com',
+          'www.your-domain.com',
+          'api.your-domain.com'
+        ],
+        
+        // Certificate configuration
+        certificate: {
+          email: 'admin@your-domain.com',
+          keySize: 2048,
+          autoRenew: true
+        },
+        
+        // SSL options
+        options: {
+          protocols: ['TLSv1.2', 'TLSv1.3'],
+          ciphers: 'ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:!aNULL:!MD5:!DSS',
+          preferServerCiphers: true,
+          sessionCache: 'shared:SSL:10m',
+          sessionTimeout: '10m'
+        }
+      },
+      
+      // Rate limiting
+      rateLimiting: {
+        enabled: true,
+        requests: 100,
+        window: '1m',
+        burst: 20,
+        
+        // Custom rate limits by path
+        paths: {
+          '/api/': {
+            requests: 50,
+            window: '1m'
+          },
+          '/auth/': {
+            requests: 10,
+            window: '1m'
+          }
+        }
+      },
+      
+      // Caching configuration
+      caching: {
+        enabled: true,
+        
+        // Static assets caching
+        static: {
+          enabled: true,
+          maxAge: '1y',
+          paths: [
+            '/_next/static/',
+            '/images/',
+            '/favicon.ico'
+          ]
+        },
+        
+        // API response caching
+        api: {
+          enabled: false,
+          maxAge: '5m',
+          paths: [
+            '/api/public/'
+          ]
+        }
+      },
+      
+      // Health checks
+      healthCheck: {
+        enabled: true,
+        path: '/api/health',
+        interval: '30s',
+        timeout: '5s',
+        healthyThreshold: 2,
+        unhealthyThreshold: 3
+      },
+      
+      // Custom Nginx configuration
+      nginx: {
+        // Custom server blocks
+        serverBlocks: [
+          {
+            listen: 80,
+            serverName: 'your-domain.com www.your-domain.com',
+            return: '301 https://$server_name$request_uri'
+          }
+        ],
+        
+        // Custom location blocks
+        locations: [
+          {
+            path: '/api/',
+            proxyPass: 'http://backend',
+            proxySetHeaders: {
+              'Host': '$host',
+              'X-Real-IP': '$remote_addr',
+              'X-Forwarded-For': '$proxy_add_x_forwarded_for',
+              'X-Forwarded-Proto': '$scheme'
+            }
+          }
+        ],
+        
+        // Custom directives
+        customConfig: `
+          # Custom Nginx configuration
+          client_max_body_size 10M;
+          proxy_read_timeout 300s;
+          proxy_connect_timeout 75s;
+        `
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+## Environment Management
+
+### Environment Variables
+
+<CodeBlock title="Environment variable configuration" language="javascript">
+{`module.exports = {
+  // Global environment variables (applied to all targets)
+  env: {
+    NODE_ENV: 'production',
+    NEXT_TELEMETRY_DISABLED: '1',
+    TZ: 'UTC'
+  },
+  
+  // Target-specific environment variables
+  targets: {
+    production: {
+      env: {
+        // Override global variables
+        NODE_ENV: 'production',
+        
+        // Production-specific variables
+        DATABASE_URL: process.env.PRODUCTION_DATABASE_URL,
+        REDIS_URL: process.env.PRODUCTION_REDIS_URL,
+        API_BASE_URL: 'https://api.your-domain.com',
+        
+        // Feature flags
+        FEATURE_NEW_UI: 'true',
+        FEATURE_ANALYTICS: 'true',
+        
+        // Performance settings
+        NODE_OPTIONS: '--max-old-space-size=2048',
+        UV_THREADPOOL_SIZE: '128'
+      }
+    },
+    
+    staging: {
+      env: {
+        NODE_ENV: 'staging',
+        DATABASE_URL: process.env.STAGING_DATABASE_URL,
+        REDIS_URL: process.env.STAGING_REDIS_URL,
+        API_BASE_URL: 'https://staging-api.your-domain.com',
+        
+        // Debug settings for staging
+        DEBUG: 'app:*',
+        LOG_LEVEL: 'debug'
+      }
+    }
+  },
+  
+  // Environment file loading
+  envFiles: {
+    // Load different env files per target
+    production: ['.env.production', '.env.production.local'],
+    staging: ['.env.staging', '.env.staging.local'],
+    development: ['.env.development', '.env.development.local']
+  }
+}`}
+</CodeBlock>
+
+### Secrets Management
+
+<CodeBlock title="Secrets configuration" language="javascript">
+{`module.exports = {
+  secrets: {
+    // Database secrets
+    database: {
+      password: {
+        source: 'env', // 'env' | 'vault' | 'aws-secrets' | 'azure-keyvault'
+        key: 'DATABASE_PASSWORD',
+        required: true,
+        description: 'Database password for production'
+      },
+      
+      connectionString: {
+        source: 'vault',
+        path: 'secret/database/connection-string',
+        required: true,
+        version: 'latest'
+      }
+    },
+    
+    // API keys
+    external: {
+      stripeKey: {
+        source: 'env',
+        key: 'STRIPE_SECRET_KEY',
+        required: true,
+        environments: ['production', 'staging'] // Only required for these environments
+      },
+      
+      sendgridKey: {
+        source: 'aws-secrets',
+        secretId: 'prod/sendgrid/api-key',
+        region: 'us-east-1',
+        required: false
+      }
+    },
+    
+    // JWT secrets
+    auth: {
+      jwtSecret: {
+        source: 'generated', // Auto-generate if not provided
+        length: 64,
+        algorithm: 'base64',
+        rotate: true,
+        rotationSchedule: '0 0 1 * *' // Monthly rotation
+      },
+      
+      sessionSecret: {
+        source: 'vault',
+        path: 'secret/auth/session-secret',
+        required: true
+      }
+    },
+    
+    // SSL certificates
+    ssl: {
+      certificate: {
+        source: 'file',
+        path: '/etc/ssl/certs/your-domain.crt',
+        required: false
+      },
+      
+      privateKey: {
+        source: 'file',
+        path: '/etc/ssl/private/your-domain.key',
+        required: false,
+        permissions: '600'
+      }
+    }
+  },
+  
+  // Secret rotation configuration
+  secretRotation: {
+    enabled: true,
+    schedule: '0 2 1 * *', // Monthly at 2 AM on the 1st
+    notify: ['devops@your-company.com'],
+    
+    // Rotation policies
+    policies: {
+      database: {
+        rotationDays: 90,
+        notifyBefore: 7 // Notify 7 days before rotation
+      },
+      api: {
+        rotationDays: 30,
+        notifyBefore: 3
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+## Monitoring Configuration
+
+### Metrics and Alerting
+
+<CodeBlock title="Monitoring configuration" language="javascript">
+{`module.exports = {
+  infrastructure: {
+    monitoring: {
+      // Enable monitoring
+      enabled: true,
+      
+      // Metrics collection
+      metrics: {
+        // Application metrics
+        application: [
+          'response_time',
+          'requests_per_second',
+          'error_rate',
+          'active_connections',
+          'memory_usage',
+          'cpu_usage'
+        ],
+        
+        // System metrics
+        system: [
+          'cpu_usage',
+          'memory_usage',
+          'disk_usage',
+          'network_io',
+          'load_average'
+        ],
+        
+        // Custom business metrics
+        custom: [
+          'user_registrations',
+          'orders_completed',
+          'revenue_generated'
+        ]
+      },
+      
+      // Data retention
+      retention: {
+        raw: '7d',        // Raw metrics for 7 days
+        aggregated: '90d', // Aggregated metrics for 90 days
+        alerts: '30d'      // Alert history for 30 days
+      },
+      
+      // Collection intervals
+      intervals: {
+        metrics: 30,    // Collect metrics every 30 seconds
+        health: 10,     // Health checks every 10 seconds
+        logs: 5         // Log collection every 5 seconds
+      },
+      
+      // Alerting rules
+      alerts: {
+        // Response time alerts
+        responseTime: {
+          warning: {
+            threshold: 1000,  // 1 second
+            duration: '2m',   // For 2 minutes
+            severity: 'warning'
+          },
+          critical: {
+            threshold: 3000,  // 3 seconds
+            duration: '1m',   // For 1 minute
+            severity: 'critical'
+          }
+        },
+        
+        // Error rate alerts
+        errorRate: {
+          warning: {
+            threshold: 5,     // 5% error rate
+            duration: '5m',
+            severity: 'warning'
+          },
+          critical: {
+            threshold: 10,    // 10% error rate
+            duration: '2m',
+            severity: 'critical'
+          }
+        },
+        
+        // System resource alerts
+        cpuUsage: {
+          warning: {
+            threshold: 70,    // 70% CPU usage
+            duration: '5m',
+            severity: 'warning'
+          },
+          critical: {
+            threshold: 90,    // 90% CPU usage
+            duration: '2m',
+            severity: 'critical'
+          }
+        },
+        
+        // Custom business alerts
+        userRegistrations: {
+          info: {
+            threshold: 100,   // 100 registrations per hour
+            duration: '1h',
+            severity: 'info',
+            type: 'above'     // Alert when above threshold
+          }
+        }
+      },
+      
+      // Notification channels
+      notifications: {
+        email: {
+          enabled: true,
+          recipients: [
+            'devops@your-company.com',
+            'oncall@your-company.com'
+          ],
+          smtp: {
+            host: process.env.SMTP_HOST,
+            port: 587,
+            secure: false,
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS
+            }
+          }
+        },
+        
+        slack: {
+          enabled: true,
+          webhook: process.env.SLACK_WEBHOOK_URL,
+          channel: '#alerts',
+          username: 'NextDeploy Monitor',
+          
+          // Custom message templates
+          templates: {
+            warning: '⚠️ *Warning*: {{alert.name}} - {{alert.description}}',
+            critical: '🚨 *Critical*: {{alert.name}} - {{alert.description}}',
+            resolved: '✅ *Resolved*: {{alert.name}} - Issue has been resolved'
+          }
+        },
+        
+        pagerduty: {
+          enabled: false,
+          integrationKey: process.env.PAGERDUTY_INTEGRATION_KEY,
+          severity: 'critical' // Only send critical alerts to PagerDuty
+        },
+        
+        webhook: {
+          enabled: false,
+          url: process.env.WEBHOOK_URL,
+          headers: {
+            'Authorization': 'Bearer ' + process.env.WEBHOOK_TOKEN,
+            'Content-Type': 'application/json'
+          }
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+## Advanced Configuration
+
+### Deployment Hooks
+
+<CodeBlock title="Comprehensive hooks configuration" language="javascript">
+{`module.exports = {
+  hooks: {
+    // Global hooks (run for all deployments)
+    beforeDeploy: [
+      'echo "Starting deployment process..."',
+      'npm run pre-deploy:checks',
+      'npm run backup:create'
+    ],
+    
+    afterDeploy: [
+      'echo "Deployment completed successfully"',
+      'npm run post-deploy:verify',
+      'npm run cache:warm',
+      'npm run notify:success'
+    ],
+    
+    onFailure: [
+      'echo "Deployment failed, initiating rollback..."',
+      'npm run rollback:auto',
+      'npm run notify:failure'
+    ],
+    
+    // Build-specific hooks
+    preBuild: [
+      'npm run lint',
+      'npm run test:unit',
+      'npm run security:audit'
+    ],
+    
+    postBuild: [
+      'npm run test:integration',
+      'npm run analyze:bundle',
+      'npm run generate:docs'
+    ],
+    
+    // Database hooks
+    beforeMigration: [
+      'npm run db:backup',
+      'npm run db:validate'
+    ],
+    
+    afterMigration: [
+      'npm run db:seed:production',
+      'npm run db:verify'
+    ],
+    
+    // Custom lifecycle hooks
+    beforeHealthCheck: [
+      'sleep 10', // Wait for application to fully start
+      'npm run warm:cache'
+    ],
+    
+    afterHealthCheck: [
+      'npm run metrics:baseline',
+      'npm run monitoring:enable'
+    ]
+  },
+  
+  // Target-specific hooks
+  targets: {
+    production: {
+      hooks: {
+        beforeDeploy: [
+          'npm run production:pre-checks',
+          'npm run maintenance:enable'
+        ],
+        
+        afterDeploy: [
+          'npm run production:post-checks',
+          'npm run maintenance:disable',
+          'npm run cdn:purge'
+        ]
+      }
+    },
+    
+    staging: {
+      hooks: {
+        afterDeploy: [
+          'npm run e2e:tests',
+          'npm run performance:tests'
+        ]
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+### Configuration Validation
+
+<CodeBlock title="Configuration validation" language="javascript">
+{`module.exports = {
+  // Configuration validation rules
+  validation: {
+    // Required fields
+    required: [
+      'app.name',
+      'app.framework',
+      'targets'
+    ],
+    
+    // Field validation rules
+    rules: {
+      'app.name': {
+        type: 'string',
+        pattern: '^[a-z0-9-]+$',
+        minLength: 3,
+        maxLength: 50
+      },
+      
+      'app.port': {
+        type: 'number',
+        min: 1,
+        max: 65535
+      },
+      
+      'targets.*.host': {
+        type: 'string',
+        format: 'hostname'
+      },
+      
+      'targets.*.strategy': {
+        type: 'string',
+        enum: ['blue-green', 'rolling', 'replace', 'canary']
+      }
+    },
+    
+    // Custom validation functions
+    custom: [
+      {
+        name: 'validateTargets',
+        function: (config) => {
+          if (!config.targets || Object.keys(config.targets).length === 0) {
+            throw new Error('At least one deployment target must be defined')
+          }
+        }
+      },
+      
+      {
+        name: 'validateHealthCheck',
+        function: (config) => {
+          if (config.app.healthCheck && !config.app.healthCheck.path) {
+            throw new Error('Health check path is required when health check is enabled')
+          }
+        }
+      }
+    ]
+  },
+  
+  // Configuration schema (JSON Schema format)
+  schema: {
+    type: 'object',
+    properties: {
+      app: {
+        type: 'object',
+        required: ['name', 'framework'],
+        properties: {
+          name: {
+            type: 'string',
+            pattern: '^[a-z0-9-]+$'
+          },
+          framework: {
+            type: 'string',
+            enum: ['nextjs', 'react', 'vue', 'nuxt']
+          }
+        }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+## Configuration Best Practices
+
+### Environment-Specific Configuration
+
+<Info>
+Use environment-specific configuration files to manage different deployment environments effectively.
+</Info>
+
+<CodeBlock title="Environment-specific configuration pattern" language="javascript">
+{`// nextdeploy.config.js
+const baseConfig = {
+  app: {
+    name: 'my-app',
+    framework: 'nextjs'
+  }
+}
+
+const environments = {
+  development: {
+    ...baseConfig,
+    targets: {
+      local: {
+        type: 'docker',
+        ports: ['3000:3000']
+      }
+    },
+    infrastructure: {
+      monitoring: { enabled: false }
+    }
+  },
+  
+  staging: {
+    ...baseConfig,
+    targets: {
+      staging: {
+        type: 'vps',
+        host: 'staging.example.com',
+        strategy: 'replace'
+      }
+    },
+    infrastructure: {
+      monitoring: { enabled: true }
+    }
+  },
+  
+  production: {
+    ...baseConfig,
+    targets: {
+      production: {
+        type: 'kubernetes',
+        cluster: 'prod-cluster',
+        strategy: 'blue-green'
+      }
+    },
+    infrastructure: {
+      monitoring: { enabled: true },
+      backup: { enabled: true }
+    }
+  }
+}
+
+module.exports = environments[process.env.NODE_ENV] || environments.development`}
+</CodeBlock>
+
+### Configuration Security
+
+<Warning>
+Never commit sensitive information like passwords, API keys, or private keys to version control. Use environment variables or secret management systems.
+</Warning>
+
+<CodeBlock title="Secure configuration practices" language="javascript">
+{`module.exports = {
+  // ✅ Good: Use environment variables for sensitive data
+  database: {
+    host: process.env.DATABASE_HOST,
+    password: process.env.DATABASE_PASSWORD
+  },
+  
+  // ✅ Good: Use secret management
+  secrets: {
+    apiKey: {
+      source: 'vault',
+      path: 'secret/api/key'
+    }
+  },
+  
+  // ❌ Bad: Never hardcode sensitive data
+  // database: {
+  //   password: 'my-secret-password'
+  // }
+}`}
+</CodeBlock>
+
+### Configuration Validation
+
+<CodeBlock title="Validate configuration before deployment" language="bash">
+{`# Validate configuration syntax
+nextdeploy validate
+
+# Validate specific target
+nextdeploy validate --target production
+
+# Validate with verbose output
+nextdeploy validate --verbose
+
+# Check configuration schema
+nextdeploy config check --schema`}
+</CodeBlock>
+
+## Configuration Examples
+
+### Complete Production Configuration
+
+<CodeBlock title="Production-ready configuration example" language="javascript">
+{`module.exports = {
+  app: {
+    name: 'my-production-app',
+    framework: 'nextjs',
+    version: process.env.npm_package_version,
+    buildCommand: 'npm run build',
+    startCommand: 'npm start',
+    port: 3000,
+    
+    healthCheck: {
+      path: '/api/health',
+      timeout: 30000,
+      retries: 3,
+      interval: 10000
+    }
+  },
+  
+  build: {
+    cache: true,
+    parallel: true,
+    env: {
+      NODE_ENV: 'production',
+      NEXT_TELEMETRY_DISABLED: '1'
+    },
+    hooks: {
+      preBuild: ['npm run lint', 'npm run test'],
+      postBuild: ['npm run analyze']
+    }
+  },
+  
+  targets: {
+    production: {
+      type: 'kubernetes',
+      cluster: 'production-cluster',
+      namespace: 'my-app',
+      
+      strategy: 'blue-green',
+      
+      kubernetes: {
+        deployment: {
+          replicas: 3,
+          strategy: {
+            type: 'RollingUpdate',
+            rollingUpdate: {
+              maxSurge: 1,
+              maxUnavailable: 0
+            }
+          }
+        },
+        
+        resources: {
+          requests: { cpu: '100m', memory: '128Mi' },
+          limits: { cpu: '500m', memory: '512Mi' }
+        },
+        
+        hpa: {
+          enabled: true,
+          minReplicas: 3,
+          maxReplicas: 10,
+          targetCPUUtilizationPercentage: 70
+        }
+      },
+      
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3000'
+      }
+    }
+  },
+  
+  infrastructure: {
+    docker: {
+      enabled: true,
+      image: {
+        name: 'my-production-app',
+        tag: process.env.BUILD_NUMBER || 'latest'
+      }
+    },
+    
+    loadBalancer: {
+      enabled: true,
+      type: 'nginx',
+      ssl: {
+        enabled: true,
+        provider: 'letsencrypt',
+        domains: ['myapp.com', 'www.myapp.com']
+      },
+      rateLimiting: {
+        enabled: true,
+        requests: 100,
+        window: '1m'
+      }
+    },
+    
+    monitoring: {
+      enabled: true,
+      metrics: ['cpu', 'memory', 'requests', 'errors'],
+      alerts: {
+        cpu: { threshold: 80, duration: '5m' },
+        memory: { threshold: 85, duration: '5m' },
+        errors: { threshold: 10, duration: '1m' }
+      },
+      notifications: {
+        email: {
+          enabled: true,
+          recipients: ['devops@company.com']
+        },
+        slack: {
+          enabled: true,
+          webhook: process.env.SLACK_WEBHOOK_URL,
+          channel: '#alerts'
+        }
+      }
+    }
+  },
+  
+  secrets: {
+    database: {
+      password: {
+        source: 'vault',
+        path: 'secret/database/password',
+        required: true
+      }
+    }
+  },
+  
+  backup: {
+    enabled: true,
+    retention: 7,
+    schedule: '0 2 * * *'
+  },
+  
+  hooks: {
+    beforeDeploy: [
+      'npm run pre-deploy:checks'
+    ],
+    afterDeploy: [
+      'npm run post-deploy:verify',
+      'npm run cache:warm'
+    ],
+    onFailure: [
+      'npm run rollback:auto',
+      'npm run notify:failure'
+    ]
+  }
+}`}
+</CodeBlock>
+
+## Next Steps
+
+Now that you understand NextDeploy configuration:
+
+1. **[CLI Commands](/docs/cli/commands)** - Learn all available CLI commands
+2. **[Deployment Strategies](/docs/deployment-strategies)** - Explore different deployment approaches
+3. **[Monitoring Setup](/docs/monitoring/metrics)** - Set up comprehensive monitoring
+4. **[Security Configuration](/docs/security/authentication)** - Secure your deployments
+
+<Success>
+🎉 **Configuration Complete!** You now have a comprehensive understanding of NextDeploy configuration options. Start with a basic setup and gradually add more advanced features as needed.
+</Success>

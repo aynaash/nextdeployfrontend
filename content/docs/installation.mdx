@@ -1,20 +1,444 @@
----
-title: Installation
-description: How to install the NextDeploy CLI and set up your server for deployment.
----
-
-To get started with NextDeploy, you’ll install the CLI, generate your project config, and connect a remote server (VPS or bare metal) where your Next.js apps will be deployed.
-
-> 💡 NextDeploy is built with Go and works on **Linux, macOS, and Windows**. You can deploy to any server with Docker and SSH access.
 
 ---
+title: "Installation"
+description: "Install and set up NextDeploy CLI on your development machine"
+---
 
-## 🔧 1. Install the CLI
+import { CodeBlock, Info, Warning, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
 
-The CLI is the primary tool to deploy and manage your apps.
+# Installation
 
-### macOS / Linux (with cURL)
+NextDeploy CLI is the primary tool for managing your deployments. This guide covers installation on all major operating systems and troubleshooting common issues.
 
-```bash
-curl -sSL https://nextdeploy.one/install | sh
-```
+## System Requirements
+
+Before installing NextDeploy, ensure your system meets these requirements:
+
+- **Node.js**: Version 16.0.0 or higher
+- **npm**: Version 7.0.0 or higher (comes with Node.js)
+- **Operating System**: Windows 10+, macOS 10.15+, or Linux (Ubuntu 18.04+, CentOS 7+)
+- **Memory**: At least 2GB RAM available
+- **Disk Space**: 500MB free space for CLI and dependencies
+
+<Info>
+We recommend using the latest LTS version of Node.js for the best experience and security updates.
+</Info>
+
+## Installation Methods
+
+<Tabs defaultValue="npm" className="w-full">
+  <TabsList className="grid w-full grid-cols-4">
+    <TabsTrigger value="npm">npm</TabsTrigger>
+    <TabsTrigger value="yarn">Yarn</TabsTrigger>
+    <TabsTrigger value="pnpm">pnpm</TabsTrigger>
+    <TabsTrigger value="binary">Binary</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="npm" className="space-y-4">
+    <h3 className="text-xl font-semibold">Install with npm</h3>
+    <p>The recommended way to install NextDeploy CLI is through npm:</p>
+    
+    <CodeBlock title="Install NextDeploy CLI globally" language="bash">
+{`# Install globally
+npm install -g nextdeploy
+
+# Verify installation
+nextdeploy --version
+
+# Check available commands
+nextdeploy --help`}
+    </CodeBlock>
+    
+    <Success>
+      Global installation allows you to use the `nextdeploy` command from anywhere in your terminal.
+    </Success>
+  </TabsContent>
+  
+  <TabsContent value="yarn" className="space-y-4">
+    <h3 className="text-xl font-semibold">Install with Yarn</h3>
+    <p>If you prefer Yarn as your package manager:</p>
+    
+    <CodeBlock title="Install with Yarn" language="bash">
+{`# Install globally with Yarn
+yarn global add nextdeploy
+
+# Verify installation
+nextdeploy --version
+
+# If command not found, add Yarn global bin to PATH
+export PATH="$(yarn global bin):$PATH"`}
+    </CodeBlock>
+    
+    <Warning>
+      Make sure Yarn's global bin directory is in your PATH environment variable.
+    </Warning>
+  </TabsContent>
+  
+  <TabsContent value="pnpm" className="space-y-4">
+    <h3 className="text-xl font-semibold">Install with pnpm</h3>
+    <p>For pnpm users:</p>
+    
+    <CodeBlock title="Install with pnpm" language="bash">
+{`# Install globally with pnpm
+pnpm add -g nextdeploy
+
+# Verify installation
+nextdeploy --version
+
+# Check pnpm global directory
+pnpm root -g`}
+    </CodeBlock>
+  </TabsContent>
+  
+  <TabsContent value="binary" className="space-y-4">
+    <h3 className="text-xl font-semibold">Download Binary</h3>
+    <p>Download pre-compiled binaries for your platform:</p>
+    
+    <div className="grid md:grid-cols-3 gap-4 my-6">
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🐧 Linux</h4>
+        <CodeBlock language="bash">
+{`# Download for Linux x64
+curl -L https://github.com/nextdeploy/cli/releases/latest/download/nextdeploy-linux-x64.tar.gz | tar xz
+
+# Move to PATH
+sudo mv nextdeploy /usr/local/bin/`}
+        </CodeBlock>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🍎 macOS</h4>
+        <CodeBlock language="bash">
+{`# Download for macOS
+curl -L https://github.com/nextdeploy/cli/releases/latest/download/nextdeploy-macos.tar.gz | tar xz
+
+# Move to PATH
+sudo mv nextdeploy /usr/local/bin/`}
+        </CodeBlock>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🪟 Windows</h4>
+        <CodeBlock language="powershell">
+{`# Download for Windows
+Invoke-WebRequest -Uri "https://github.com/nextdeploy/cli/releases/latest/download/nextdeploy-windows.zip" -OutFile "nextdeploy.zip"
+
+# Extract and add to PATH
+Expand-Archive nextdeploy.zip -DestinationPath C:\\nextdeploy`}
+        </CodeBlock>
+      </div>
+    </div>
+  </TabsContent>
+</Tabs>
+
+## Verification
+
+After installation, verify that NextDeploy CLI is working correctly:
+
+<CodeBlock title="Verify installation" language="bash">
+{`# Check version
+nextdeploy --version
+# Should output: nextdeploy/1.x.x
+
+# Check help
+nextdeploy --help
+# Should show available commands
+
+# Check system requirements
+nextdeploy doctor
+# Runs system diagnostics`}
+</CodeBlock>
+
+## Configuration
+
+### Initial Setup
+
+Run the initial setup to configure NextDeploy for your environment:
+
+<CodeBlock title="Initial setup" language="bash">
+{`# Run setup wizard
+nextdeploy setup
+
+# Or configure manually
+nextdeploy config set user.name "Your Name"
+nextdeploy config set user.email "your.email@example.com"`}
+</CodeBlock>
+
+### Authentication
+
+Set up authentication for NextDeploy services:
+
+<CodeBlock title="Authentication setup" language="bash">
+{`# Login to NextDeploy (if using hosted services)
+nextdeploy auth login
+
+# Or set API token manually
+nextdeploy config set auth.token "your-api-token"
+
+# Verify authentication
+nextdeploy auth whoami`}
+</CodeBlock>
+
+### Global Configuration
+
+Configure global settings that apply to all projects:
+
+<CodeBlock title="Global configuration" language="bash">
+{`# Set default deployment strategy
+nextdeploy config set defaults.strategy "blue-green"
+
+# Set default monitoring
+nextdeploy config set defaults.monitoring true
+
+# Set default backup retention
+nextdeploy config set defaults.backup.retention 5
+
+# View all configuration
+nextdeploy config list`}
+</CodeBlock>
+
+## Platform-Specific Setup
+
+### Windows Setup
+
+<CodeBlock title="Windows-specific setup" language="powershell">
+{`# Install Windows Subsystem for Linux (recommended)
+wsl --install
+
+# Or install Git Bash for better terminal experience
+# Download from: https://git-scm.com/download/win
+
+# Add NextDeploy to Windows PATH
+$env:PATH += ";C:\nextdeploy"
+[Environment]::SetEnvironmentVariable("PATH", $env:PATH, "User")`}
+</CodeBlock>
+
+### macOS Setup
+
+<CodeBlock title="macOS-specific setup" language="bash">
+{`# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install NextDeploy via Homebrew (alternative method)
+brew tap nextdeploy/tap
+brew install nextdeploy
+
+# Update shell profile
+echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc`}
+</CodeBlock>
+
+### Linux Setup
+
+<CodeBlock title="Linux-specific setup" language="bash">
+{`# Ubuntu/Debian
+sudo apt update
+sudo apt install curl git
+
+# CentOS/RHEL
+sudo yum install curl git
+
+# Add to shell profile
+echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Set up completion (optional)
+nextdeploy completion bash | sudo tee /etc/bash_completion.d/nextdeploy`}
+</CodeBlock>
+
+## IDE Integration
+
+### VS Code Extension
+
+Install the NextDeploy VS Code extension for enhanced development experience:
+
+<CodeBlock title="VS Code extension" language="bash">
+{`# Install via command line
+code --install-extension nextdeploy.nextdeploy-vscode
+
+# Or search for "NextDeploy" in VS Code Extensions marketplace`}
+</CodeBlock>
+
+Features included:
+- Syntax highlighting for `nextdeploy.config.js`
+- IntelliSense and auto-completion
+- Integrated terminal commands
+- Deployment status in status bar
+
+### JetBrains IDEs
+
+For IntelliJ IDEA, WebStorm, and other JetBrains IDEs:
+
+1. Go to **Settings** → **Plugins**
+2. Search for "NextDeploy"
+3. Install and restart IDE
+
+## Shell Completion
+
+Enable shell completion for better CLI experience:
+
+<Tabs defaultValue="bash" className="w-full">
+  <TabsList className="grid w-full grid-cols-3">
+    <TabsTrigger value="bash">Bash</TabsTrigger>
+    <TabsTrigger value="zsh">Zsh</TabsTrigger>
+    <TabsTrigger value="fish">Fish</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="bash">
+    <CodeBlock title="Bash completion" language="bash">
+{`# Generate completion script
+nextdeploy completion bash > /tmp/nextdeploy_completion
+
+# Install system-wide
+sudo mv /tmp/nextdeploy_completion /etc/bash_completion.d/nextdeploy
+
+# Or add to your .bashrc
+echo 'source <(nextdeploy completion bash)' >> ~/.bashrc
+source ~/.bashrc`}
+    </CodeBlock>
+  </TabsContent>
+  
+  <TabsContent value="zsh">
+    <CodeBlock title="Zsh completion" language="bash">
+{`# Add to .zshrc
+echo 'source <(nextdeploy completion zsh)' >> ~/.zshrc
+source ~/.zshrc
+
+# Or for Oh My Zsh users
+mkdir -p ~/.oh-my-zsh/completions
+nextdeploy completion zsh > ~/.oh-my-zsh/completions/_nextdeploy`}
+    </CodeBlock>
+  </TabsContent>
+  
+  <TabsContent value="fish">
+    <CodeBlock title="Fish completion" language="bash">
+{`# Generate and install completion
+nextdeploy completion fish > ~/.config/fish/completions/nextdeploy.fish
+
+# Reload fish configuration
+source ~/.config/fish/config.fish`}
+    </CodeBlock>
+  </TabsContent>
+</Tabs>
+
+## Troubleshooting
+
+### Common Issues
+
+#### Command Not Found
+
+<CodeBlock title="Fix command not found" language="bash">
+{`# Check if NextDeploy is installed
+npm list -g nextdeploy
+
+# Check PATH
+echo $PATH
+
+# Reinstall if necessary
+npm uninstall -g nextdeploy
+npm install -g nextdeploy
+
+# For npm permission issues on macOS/Linux
+sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}`}
+</CodeBlock>
+
+#### Permission Errors
+
+<CodeBlock title="Fix permission errors" language="bash">
+{`# Linux/macOS: Fix npm permissions
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Windows: Run as Administrator
+# Right-click Command Prompt → "Run as administrator"`}
+</CodeBlock>
+
+#### Version Conflicts
+
+<CodeBlock title="Resolve version conflicts" language="bash">
+{`# Check Node.js version
+node --version
+
+# Update Node.js if needed
+# Visit: https://nodejs.org/
+
+# Clear npm cache
+npm cache clean --force
+
+# Reinstall NextDeploy
+npm uninstall -g nextdeploy
+npm install -g nextdeploy@latest`}
+</CodeBlock>
+
+### Getting Help
+
+If you're still experiencing issues:
+
+<CodeBlock title="Diagnostic commands" language="bash">
+{`# Run system diagnostics
+nextdeploy doctor
+
+# Check configuration
+nextdeploy config list
+
+# Enable debug mode
+nextdeploy --debug <command>
+
+# View logs
+nextdeploy logs --system`}
+</CodeBlock>
+
+## Updating NextDeploy
+
+Keep NextDeploy CLI up to date for the latest features and security fixes:
+
+<CodeBlock title="Update NextDeploy" language="bash">
+{`# Check current version
+nextdeploy --version
+
+# Check for updates
+nextdeploy update check
+
+# Update to latest version
+nextdeploy update
+
+# Or update via npm
+npm update -g nextdeploy
+
+# View changelog
+nextdeploy changelog`}
+</CodeBlock>
+
+## Uninstallation
+
+If you need to remove NextDeploy CLI:
+
+<CodeBlock title="Uninstall NextDeploy" language="bash">
+{`# Uninstall via npm
+npm uninstall -g nextdeploy
+
+# Remove configuration (optional)
+rm -rf ~/.nextdeploy
+
+# Remove shell completion
+sudo rm /etc/bash_completion.d/nextdeploy
+
+# Verify removal
+which nextdeploy
+# Should return: command not found`}
+</CodeBlock>
+
+## Next Steps
+
+Now that NextDeploy CLI is installed, you're ready to:
+
+1. **[Quick Start](/docs/quick-start)** - Deploy your first application
+2. **[Configuration](/docs/configuration)** - Set up your project configuration
+3. **[CLI Commands](/docs/cli/commands)** - Learn all available commands
+
+<Success>
+🎉 **Installation Complete!** NextDeploy CLI is now ready to use. Run `nextdeploy --help` to see all available commands.
+</Success>
+\`\`\`

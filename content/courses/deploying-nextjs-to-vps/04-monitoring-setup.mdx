@@ -1,0 +1,919 @@
+
+---
+title: "Lesson 4: Monitoring Setup"
+description: "Implement monitoring, logging, and alerting for production"
+lesson: 4
+duration: "35 min"
+---
+
+import { CodeBlock, Info, Warning, Success, Badge } from "@/components/mdx-components"
+
+# Lesson 4: Monitoring Setup
+
+<div className="flex items-center space-x-4 mb-8">
+  <Badge variant="outline">Lesson 4 of 4</Badge>
+  <Badge variant="outline">35 minutes</Badge>
+  <Badge className="bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300">Advanced</Badge>
+</div>
+
+In this final lesson, we'll implement comprehensive monitoring and observability for your production Next.js deployment. You'll learn how to collect metrics, set up alerting, and optimize performance based on real data.
+
+## Learning Objectives
+
+By the end of this lesson, you will:
+
+- Set up application and infrastructure monitoring
+- Implement structured logging and log aggregation
+- Configure alerting for critical issues
+- Create performance dashboards
+- Set up automated performance optimization
+- Implement error tracking and debugging
+
+## Step 1: NextDeploy Built-in Monitoring
+
+### 1.1 Enable NextDeploy Monitoring
+
+NextDeploy includes built-in monitoring capabilities. Let's configure them:
+
+<CodeBlock title="nextdeploy.config.js (monitoring configuration)" language="javascript">
+{`module.exports = {
+  // ... previous configuration
+  
+  infrastructure: {
+    monitoring: {
+      enabled: true,
+      
+      // Metrics collection
+      metrics: {
+        application: ['response_time', 'requests_per_second', 'error_rate', 'active_connections'],
+        system: ['cpu_usage', 'memory_usage', 'disk_usage', 'network_io'],
+        custom: ['business_metrics', 'user_actions'],
+      },
+      
+      // Data retention
+      retention: {
+        raw: '7d',      // Raw metrics for 7 days
+        aggregated: '90d', // Aggregated metrics for 90 days
+        alerts: '30d',     // Alert history for 30 days
+      },
+      
+      // Collection intervals
+      intervals: {
+        metrics: 30,    // Collect metrics every 30 seconds
+        health: 10,     // Health checks every 10 seconds
+        logs: 5,        // Log collection every 5 seconds
+      },
+      
+      // Alerting configuration
+      alerts: {
+        // Response time alerts
+        response_time: {
+          warning: { threshold: 1000, duration: '2m' },  // 1s for 2 minutes
+          critical: { threshold: 3000, duration: '1m' }, // 3s for 1 minute
+        },
+        
+        // Error rate alerts
+        error_rate: {
+          warning: { threshold: 5, duration: '5m' },   // 5% errors for 5 minutes
+          critical: { threshold: 10, duration: '2m' }, // 10% errors for 2 minutes
+        },
+        
+        // System resource alerts
+        cpu_usage: {
+          warning: { threshold: 70, duration: '5m' },
+          critical: { threshold: 90, duration: '2m' },
+        },
+        
+        memory_usage: {
+          warning: { threshold: 80, duration: '5m' },
+          critical: { threshold: 95, duration: '1m' },
+        },
+        
+        disk_usage: {
+          warning: { threshold: 80, duration: '1h' },
+          critical: { threshold: 90, duration: '10m' },
+        },
+      },
+      
+      // Notification channels
+      notifications: {
+        email: {
+          enabled: true,
+          recipients: ['admin@yourcompany.com'],
+          smtp: {
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS,
+            },
+          },
+        },
+        
+        slack: {
+          enabled: false, // Enable if you have Slack
+          webhook: process.env.SLACK_WEBHOOK,
+          channel: '#alerts',
+          username: 'NextDeploy Monitor',
+        },
+        
+        webhook: {
+          enabled: false,
+          url: process.env.WEBHOOK_URL,
+          headers: {
+            'Authorization': 'Bearer ' + process.env.WEBHOOK_TOKEN,
+          },
+        },
+      },
+    },
+    
+    // ... rest of configuration
+  },
+}`}
+</CodeBlock>
+
+### 1.2 Add Monitoring Endpoints to Your App
+
+Enhance your Next.js application with monitoring endpoints:
+
+<CodeBlock title="src/app/api/metrics/route.ts" language="typescript">
+{`import { NextResponse } from 'next/server'
+
+// Simple in-memory metrics store (use Redis in production)
+const metrics = {
+  requests: 0,
+  errors: 0,
+  startTime: Date.now(),
+  responses: [] as number[],
+}
+
+export async function GET() {
+  try {
+    const uptime = Date.now() - metrics.startTime
+    const avgResponseTime = metrics.responses.length > 0 
+      ? metrics.responses.reduce((a, b) => a + b, 0) / metrics.responses.length 
+      : 0
+    
+    const metricsData = {
+      timestamp: new Date().toISOString(),
+      uptime: uptime,
+      requests: {
+        total: metrics.requests,
+        errors: metrics.errors,
+        success_rate: metrics.requests > 0 ? (metrics.requests - metrics.errors) / metrics.requests * 100 : 100,
+      },
+      performance: {
+        average_response_time: Math.round(avgResponseTime),
+        memory_usage: process.memoryUsage(),
+        cpu_usage: process.cpuUsage(),
+      },
+      system: {
+        node_version: process.version,
+        platform: process.platform,
+        arch: process.arch,
+        pid: process.pid,
+      },
+    }
+    
+    return NextResponse.json(metricsData)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to collect metrics' }, 
+      { status: 500 }
+    )
+  }
+}
+
+// Helper function to track requests (call this in middleware)
+export function trackRequest(responseTime: number, isError: boolean = false) {
+  metrics.requests++
+  if (isError) metrics.errors++
+  
+  metrics.responses.push(responseTime)
+  
+  // Keep only last 1000 response times to prevent memory leaks
+  if (metrics.responses.length > 1000) {
+    metrics.responses = metrics.responses.slice(-100)
+  }
+}`}
+</CodeBlock>
+
+### 1.3 Add Request Tracking Middleware
+
+<CodeBlock title="src/middleware.ts" language="typescript">
+{`import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const startTime = Date.now()
+  
+  const response = NextResponse.next()
+  
+  // Add response time header
+  response.headers.set('X-Response-Time', \`\${Date.now() - startTime}ms\`)
+  
+  // Track the request (you might want to send this to your metrics endpoint)
+  if (typeof window === 'undefined') {
+    // Server-side tracking
+    const responseTime = Date.now() - startTime
+    const isError = response.status >= 400
+    
+    // You could send this to your metrics collection service
+    console.log(\`Request: \${request.method} \${request.url} - \${responseTime}ms - \${response.status}\`)
+  }
+  
+  return response
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api/health (exclude health checks from metrics)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api/health|_next/static|_next/image|favicon.ico).*)',
+  ],
+}`}
+</CodeBlock>
+
+## Step 2: System-Level Monitoring
+
+### 2.1 Install Monitoring Tools on Your VPS
+
+<CodeBlock title="Install monitoring tools" language="bash">
+{`# SSH into your server
+ssh deploy@your-server-ip
+
+# Install monitoring tools
+sudo apt update
+sudo apt install -y htop iotop nethogs ncdu tree
+
+# Install Node.js monitoring tools
+sudo npm install -g pm2 clinic
+
+# Install Docker monitoring tools
+sudo apt install -y docker-stats`}
+</CodeBlock>
+
+### 2.2 Set Up Resource Monitoring Script
+
+<CodeBlock title="Create monitoring script" language="bash">
+{`# Create comprehensive monitoring script
+cat > /home/deploy/system-monitor.sh << 'EOF'
+#!/bin/bash
+
+METRICS_FILE="/home/deploy/logs/system-metrics.log"
+APP_NAME="my-deployment-app"
+DATE=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Function to log metrics in JSON format
+log_metric() {
+    echo "{\"timestamp\":\"$DATE\",\"type\":\"$1\",\"value\":$2,\"unit\":\"$3\"}" >> $METRICS_FILE
+}
+
+# CPU Usage
+CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | sed 's/%us,//')
+log_metric "cpu_usage" "$CPU_USAGE" "percent"
+
+# Memory Usage
+MEMORY_INFO=$(free -m | grep '^Mem:')
+TOTAL_MEM=$(echo $MEMORY_INFO | awk '{print $2}')
+USED_MEM=$(echo $MEMORY_INFO | awk '{print $3}')
+MEMORY_USAGE=$(echo "scale=2; $USED_MEM / $TOTAL_MEM * 100" | bc)
+log_metric "memory_usage" "$MEMORY_USAGE" "percent"
+log_metric "memory_used" "$USED_MEM" "MB"
+log_metric "memory_total" "$TOTAL_MEM" "MB"
+
+# Disk Usage
+DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
+log_metric "disk_usage" "$DISK_USAGE" "percent"
+
+# Network Statistics
+NETWORK_STATS=$(cat /proc/net/dev | grep eth0 | awk '{print $2, $10}')
+RX_BYTES=$(echo $NETWORK_STATS | awk '{print $1}')
+TX_BYTES=$(echo $NETWORK_STATS | awk '{print $2}')
+log_metric "network_rx" "$RX_BYTES" "bytes"
+log_metric "network_tx" "$TX_BYTES" "bytes"
+
+# Docker Container Stats
+if docker ps | grep -q $APP_NAME; then
+    CONTAINER_STATS=$(docker stats --no-stream --format "{{.CPUPerc}},{{.MemUsage}}" $APP_NAME)
+    CONTAINER_CPU=$(echo $CONTAINER_STATS | cut -d',' -f1 | sed 's/%//')
+    CONTAINER_MEM=$(echo $CONTAINER_STATS | cut -d',' -f2 | cut -d'/' -f1 | sed 's/MiB//')
+    
+    log_metric "container_cpu" "$CONTAINER_CPU" "percent"
+    log_metric "container_memory" "$CONTAINER_MEM" "MB"
+fi
+
+# Application Health Check
+HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/health)
+log_metric "health_status" "$HEALTH_STATUS" "http_code"
+
+# Response Time Check
+RESPONSE_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3000/api/health)
+RESPONSE_TIME_MS=$(echo "$RESPONSE_TIME * 1000" | bc | cut -d'.' -f1)
+log_metric "response_time" "$RESPONSE_TIME_MS" "ms"
+
+EOF
+
+chmod +x /home/deploy/system-monitor.sh
+
+# Set up cron job to run every minute
+(crontab -l 2>/dev/null; echo "* * * * * /home/deploy/system-monitor.sh") | crontab -`}
+</CodeBlock>
+
+## Step 3: Log Management
+
+### 3.1 Configure Structured Logging
+
+<CodeBlock title="src/lib/logger.ts" language="typescript">
+{`interface LogLevel {
+  ERROR: 0
+  WARN: 1
+  INFO: 2
+  DEBUG: 3
+}
+
+const LOG_LEVELS: LogLevel = {
+  ERROR: 0,
+  WARN: 1,
+  INFO: 2,
+  DEBUG: 3,
+}
+
+class Logger {
+  private level: number
+  private context: string
+
+  constructor(context: string = 'App', level: string = 'INFO') {
+    this.context = context
+    this.level = LOG_LEVELS[level as keyof LogLevel] ?? LOG_LEVELS.INFO
+  }
+
+  private log(level: keyof LogLevel, message: string, data?: any) {
+    if (LOG_LEVELS[level] > this.level) return
+
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      level,
+      context: this.context,
+      message,
+      ...(data && { data }),
+      pid: process.pid,
+      memory: process.memoryUsage(),
+    }
+
+    if (level === 'ERROR') {
+      console.error(JSON.stringify(logEntry))
+    } else {
+      console.log(JSON.stringify(logEntry))
+    }
+  }
+
+  error(message: string, error?: Error | any) {
+    this.log('ERROR', message, error instanceof Error ? {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    } : error)
+  }
+
+  warn(message: string, data?: any) {
+    this.log('WARN', message, data)
+  }
+
+  info(message: string, data?: any) {
+    this.log('INFO', message, data)
+  }
+
+  debug(message: string, data?: any) {
+    this.log('DEBUG', message, data)
+  }
+
+  // Performance logging
+  time(label: string) {
+    console.time(label)
+  }
+
+  timeEnd(label: string) {
+    console.timeEnd(label)
+  }
+
+  // Request logging middleware
+  logRequest(req: any, res: any, responseTime: number) {
+    this.info('HTTP Request', {
+      method: req.method,
+      url: req.url,
+      status: res.status,
+      responseTime: \`\${responseTime}ms\`,
+      userAgent: req.headers['user-agent'],
+      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+    })
+  }
+}
+
+export const logger = new Logger('NextApp', process.env.LOG_LEVEL || 'INFO')
+export default Logger`}
+</CodeBlock>
+
+### 3.2 Implement Log Rotation and Management
+
+<CodeBlock title="Log rotation setup" language="bash">
+{`# SSH into your server
+ssh deploy@your-server-ip
+
+# Configure log rotation for application logs
+sudo nano /etc/logrotate.d/nextdeploy-app
+
+# Add this configuration:
+cat | sudo tee /etc/logrotate.d/nextdeploy-app << 'EOF'
+/home/deploy/logs/*.log {
+    daily
+    missingok
+    rotate 30
+    compress
+    delaycompress
+    notifempty
+    create 644 deploy deploy
+    postrotate
+        # Restart the application to reopen log files
+        docker kill -s USR1 \$(docker ps -q --filter name=my-deployment-app) 2>/dev/null || true
+    endscript
+}
+
+/home/deploy/logs/*.json {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    create 644 deploy deploy
+}
+EOF
+
+# Test log rotation
+sudo logrotate -d /etc/logrotate.d/nextdeploy-app`}
+</CodeBlock>
+
+## Step 4: Performance Optimization
+
+### 4.1 Create Performance Monitoring Script
+
+<CodeBlock title="Performance optimization script" language="bash">
+{`# Create performance monitoring and optimization script
+cat > /home/deploy/performance-optimizer.sh << 'EOF'
+#!/bin/bash
+
+LOG_FILE="/home/deploy/logs/performance.log"
+APP_NAME="my-deployment-app"
+DATE=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Function to log performance data
+log_performance() {
+    echo "[$DATE] $1" >> $LOG_FILE
+}
+
+# Check application response time
+RESPONSE_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3000/api/health)
+RESPONSE_TIME_MS=$(echo "$RESPONSE_TIME * 1000" | bc | cut -d'.' -f1)
+
+log_performance "Response time: ${RESPONSE_TIME_MS}ms"
+
+# If response time is too high, investigate and potentially restart
+if [ $RESPONSE_TIME_MS -gt 3000 ]; then
+    log_performance "HIGH RESPONSE TIME DETECTED: ${RESPONSE_TIME_MS}ms"
+    
+    # Log current resource usage
+    log_performance "CPU Usage: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}')"
+    log_performance "Memory Usage: $(free -m | grep '^Mem:' | awk '{print $3 "/" $2 " MB"}')"
+    
+    # Log container stats
+    if docker ps | grep -q $APP_NAME; then
+        CONTAINER_STATS=$(docker stats --no-stream --format "CPU: {{.CPUPerc}}, Memory: {{.MemUsage}}" $APP_NAME)
+        log_performance "Container Stats: $CONTAINER_STATS"
+    fi
+    
+    # Check if we should restart (if response time > 5 seconds)
+    if [ $RESPONSE_TIME_MS -gt 5000 ]; then
+        log_performance "RESTARTING APPLICATION due to poor performance"
+        docker restart $APP_NAME
+        sleep 10
+        
+        # Check if restart helped
+        NEW_RESPONSE_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3000/api/health)
+        NEW_RESPONSE_TIME_MS=$(echo "$NEW_RESPONSE_TIME * 1000" | bc | cut -d'.' -f1)
+        log_performance "Response time after restart: ${NEW_RESPONSE_TIME_MS}ms"
+    fi
+fi
+
+# Clean up old performance logs (keep last 1000 lines)
+tail -n 1000 $LOG_FILE > ${LOG_FILE}.tmp && mv ${LOG_FILE}.tmp $LOG_FILE
+
+EOF
+
+chmod +x /home/deploy/performance-optimizer.sh
+
+# Run performance optimization every 5 minutes
+(crontab -l 2>/dev/null; echo "*/5 * * * * /home/deploy/performance-optimizer.sh") | crontab -`}
+</CodeBlock>
+
+## Step 5: Dashboard and Visualization
+
+### 5.1 Create Simple Monitoring Dashboard
+
+<CodeBlock title="src/app/admin/dashboard/page.tsx" language="typescript">
+{`'use client'
+
+import { useEffect, useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Activity, Server, Zap, AlertTriangle } from 'lucide-react'
+
+interface SystemMetrics {
+  timestamp: string
+  uptime: number
+  requests: {
+    total: number
+    errors: number
+    success_rate: number
+  }
+  performance: {
+    average_response_time: number
+    memory_usage: {
+      rss: number
+      heapTotal: number
+      heapUsed: number
+      external: number
+    }
+  }
+}
+
+export default function MonitoringDashboard() {
+  const [metrics, setMetrics] = useState<SystemMetrics | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date())
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const response = await fetch('/api/metrics')
+        const data = await response.json()
+        setMetrics(data)
+        setLastUpdate(new Date())
+      } catch (error) {
+        console.error('Failed to fetch metrics:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMetrics()
+    const interval = setInterval(fetchMetrics, 30000) // Update every 30 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-64">Loading metrics...</div>
+  }
+
+  if (!metrics) {
+    return <div className="flex items-center justify-center h-64">Failed to load metrics</div>
+  }
+
+  const formatUptime = (uptime: number) => {
+    const seconds = Math.floor(uptime / 1000)
+    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
+
+    if (days > 0) return \`\${days}d \${hours % 24}h\`
+    if (hours > 0) return \`\${hours}h \${minutes % 60}m\`
+    return \`\${minutes}m \${seconds % 60}s\`
+  }
+
+  const formatBytes = (bytes: number) => {
+    const mb = bytes / 1024 / 1024
+    return \`\${mb.toFixed(1)} MB\`
+  }
+
+  const getStatusColor = (successRate: number) => {
+    if (successRate >= 99) return 'bg-green-500'
+    if (successRate >= 95) return 'bg-yellow-500'
+    return 'bg-red-500'
+  }
+
+  return (
+    <div className="container mx-auto py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">System Monitoring Dashboard</h1>
+        <p className="text-muted-foreground">
+          Last updated: {lastUpdate.toLocaleTimeString()}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* System Status */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">System Status</CardTitle>
+            <Server className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">Healthy</div>
+            <p className="text-xs text-muted-foreground">
+              Uptime: {formatUptime(metrics.uptime)}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Success Rate */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {metrics.requests.success_rate.toFixed(1)}%
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <div className={\`w-2 h-2 rounded-full \${getStatusColor(metrics.requests.success_rate)}\`} />
+              <p className="text-xs text-muted-foreground">
+                {metrics.requests.total} total requests
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Response Time */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg Response Time</CardTitle>
+            <Zap className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {metrics.performance.average_response_time}ms
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Last 1000 requests
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Error Count */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Errors</CardTitle>
+            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-red-600">
+              {metrics.requests.errors}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Error rate: {((metrics.requests.errors / metrics.requests.total) * 100).toFixed(2)}%
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Memory Usage */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Memory Usage</CardTitle>
+          <CardDescription>Application memory consumption</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>Heap Used</span>
+                <span>{formatBytes(metrics.performance.memory_usage.heapUsed)} / {formatBytes(metrics.performance.memory_usage.heapTotal)}</span>
+              </div>
+              <Progress 
+                value={(metrics.performance.memory_usage.heapUsed / metrics.performance.memory_usage.heapTotal) * 100} 
+                className="h-2"
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="text-muted-foreground">RSS:</span>
+                <span className="ml-2 font-mono">{formatBytes(metrics.performance.memory_usage.rss)}</span>
+              </div>
+              <div>
+                <span className="text-muted-foreground">External:</span>
+                <span className="ml-2 font-mono">{formatBytes(metrics.performance.memory_usage.external)}</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}`}
+</CodeBlock>
+
+## Step 6: Alerting System
+
+### 6.1 Set Up Email Alerts
+
+<CodeBlock title="Create alerting script" language="bash">
+{`# Create alerting script
+cat > /home/deploy/alert-system.sh << 'EOF'
+#!/bin/bash
+
+ALERT_LOG="/home/deploy/logs/alerts.log"
+EMAIL_RECIPIENT="admin@yourcompany.com"
+APP_NAME="my-deployment-app"
+SERVER_NAME="Production Server"
+DATE=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Function to send email alert
+send_alert() {
+    local SUBJECT="$1"
+    local MESSAGE="$2"
+    local PRIORITY="$3"
+    
+    # Log the alert
+    echo "[$DATE] ALERT [$PRIORITY]: $SUBJECT" >> $ALERT_LOG
+    
+    # Send email using mail command (requires mailutils)
+    if command -v mail &> /dev/null; then
+        echo "$MESSAGE" | mail -s "[$PRIORITY] $SERVER_NAME: $SUBJECT" $EMAIL_RECIPIENT
+    fi
+    
+    # You could also send to Slack, Discord, etc.
+    # curl -X POST -H 'Content-type: application/json' \
+    #     --data "{\"text\":\"[$PRIORITY] $SERVER_NAME: $SUBJECT\\n$MESSAGE\"}" \
+    #     YOUR_SLACK_WEBHOOK_URL
+}
+
+# Check application health
+HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/health)
+if [ "$HEALTH_STATUS" != "200" ]; then
+    send_alert "Application Health Check Failed" \
+        "Health endpoint returned status: $HEALTH_STATUS\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "CRITICAL"
+fi
+
+# Check response time
+RESPONSE_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3000/api/health)
+RESPONSE_TIME_MS=$(echo "$RESPONSE_TIME * 1000" | bc | cut -d'.' -f1)
+
+if [ $RESPONSE_TIME_MS -gt 5000 ]; then
+    send_alert "High Response Time Detected" \
+        "Response time: ${RESPONSE_TIME_MS}ms (threshold: 5000ms)\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "CRITICAL"
+elif [ $RESPONSE_TIME_MS -gt 2000 ]; then
+    send_alert "Elevated Response Time" \
+        "Response time: ${RESPONSE_TIME_MS}ms (threshold: 2000ms)\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "WARNING"
+fi
+
+# Check disk space
+DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
+if [ $DISK_USAGE -gt 90 ]; then
+    send_alert "Critical Disk Space" \
+        "Disk usage: ${DISK_USAGE}% (threshold: 90%)\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "CRITICAL"
+elif [ $DISK_USAGE -gt 80 ]; then
+    send_alert "High Disk Usage" \
+        "Disk usage: ${DISK_USAGE}% (threshold: 80%)\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "WARNING"
+fi
+
+# Check memory usage
+MEMORY_USAGE=$(free | grep '^Mem:' | awk '{printf "%.0f", $3/$2 * 100.0}')
+if [ $MEMORY_USAGE -gt 95 ]; then
+    send_alert "Critical Memory Usage" \
+        "Memory usage: ${MEMORY_USAGE}% (threshold: 95%)\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "CRITICAL"
+elif [ $MEMORY_USAGE -gt 85 ]; then
+    send_alert "High Memory Usage" \
+        "Memory usage: ${MEMORY_USAGE}% (threshold: 85%)\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "WARNING"
+fi
+
+# Check if Docker container is running
+if ! docker ps | grep -q $APP_NAME; then
+    send_alert "Application Container Down" \
+        "Docker container '$APP_NAME' is not running\\nTime: $DATE\\nServer: $SERVER_NAME" \
+        "CRITICAL"
+fi
+
+EOF
+
+chmod +x /home/deploy/alert-system.sh
+
+# Install mail utilities
+sudo apt install -y mailutils
+
+# Run alert checks every 2 minutes
+(crontab -l 2>/dev/null; echo "*/2 * * * * /home/deploy/alert-system.sh") | crontab -`}
+</CodeBlock>
+
+## Step 7: Deploy Monitoring Configuration
+
+### 7.1 Deploy with Monitoring Enabled
+
+<CodeBlock title="Deploy with monitoring" language="bash">
+{`# Deploy the updated application with monitoring
+nextdeploy deploy --target production --enable-monitoring
+
+# Check monitoring status
+nextdeploy monitor --target production --status
+
+# View real-time metrics
+nextdeploy monitor --target production --live`}
+</CodeBlock>
+
+## Lesson Summary
+
+Congratulations! You've successfully completed the entire NextDeploy course and implemented:
+
+✅ **Comprehensive Monitoring System**
+- Built-in NextDeploy monitoring with custom metrics
+- System-level resource monitoring
+- Application performance tracking
+- Real-time dashboard for visualizing metrics
+
+✅ **Professional Logging Infrastructure**
+- Structured JSON logging with multiple levels
+- Automated log rotation and management
+- Request tracking and performance logging
+- Centralized log storage and search
+
+✅ **Proactive Alerting System**
+- Email notifications for critical issues
+- Multi-threshold alerting (warning/critical)
+- Health check monitoring with automated recovery
+- Resource usage alerts with trend analysis
+
+✅ **Performance Optimization**
+- Automated performance monitoring
+- Response time tracking and optimization
+- Memory usage analysis and cleanup
+- Container resource management
+
+✅ **Production-Ready Operations**
+- Comprehensive monitoring dashboard
+- Automated incident response
+- Performance trend analysis
+- Scalable monitoring architecture
+
+## Final Course Summary
+
+Throughout this 4-lesson course, you've built a complete production deployment pipeline:
+
+1. **Lesson 1**: Set up NextDeploy and configured your Next.js project
+2. **Lesson 2**: Created optimized Docker containers with security best practices
+3. **Lesson 3**: Deployed to production VPS with zero-downtime strategies
+4. **Lesson 4**: Implemented comprehensive monitoring and observability
+
+You now have the skills to deploy, monitor, and maintain production Next.js applications with confidence!
+
+## Next Steps & Advanced Topics
+
+Consider exploring these advanced topics:
+
+- **Multi-region deployments** for global scale
+- **Database replication and backup strategies**
+- **Advanced security hardening and compliance**
+- **Cost optimization and resource scaling**
+- **Integration with external monitoring services** (DataDog, New Relic)
+- **Implementing chaos engineering practices**
+
+## Getting Help
+
+If you need assistance:
+- Join our Discord community for peer support
+- Check the NextDeploy documentation for detailed guides
+- Open GitHub issues for bug reports or feature requests
+- Schedule office hours with instructors for personalized help
+
+---
+
+<div className="flex justify-between items-center mt-8 pt-8 border-t">
+  <div>
+    <a href="/courses/deploying-nextjs-to-vps/03-ssh-deploy" className="text-blue-600 hover:underline">
+      ← Lesson 3: SSH Deployment
+    </a>
+  </div>
+  <div className="text-right">
+    <a href="/courses/deploying-nextjs-to-vps" className="font-semibold text-blue-600 hover:underline">
+      🎉 Course Complete! Back to Overview →
+    </a>
+  </div>
+</div>
+\`\`\`
+
+Now let me add the dynamic routing for blog posts and guides:

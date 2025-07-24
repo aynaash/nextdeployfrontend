@@ -1,0 +1,634 @@
+
+---
+title: "Lesson 3: SSH Deployment"
+description: "Deploy your application to VPS using SSH and automation"
+lesson: 3
+duration: "50 min"
+---
+
+import { CodeBlock, Info, Warning, Success, Badge } from "@/components/mdx-components"
+
+# Lesson 3: SSH Deployment
+
+<div className="flex items-center space-x-4 mb-8">
+  <Badge variant="outline">Lesson 3 of 4</Badge>
+  <Badge variant="outline">50 minutes</Badge>
+  <Badge className="bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300">Advanced</Badge>
+</div>
+
+In this lesson, we'll deploy your containerized Next.js application to a VPS using SSH automation. You'll learn how to configure your server, set up secure deployments, and manage your application in production.
+
+## Learning Objectives
+
+By the end of this lesson, you will:
+
+- Configure a VPS for production deployments
+- Set up SSH key-based authentication
+- Deploy your application using NextDeploy
+- Configure reverse proxy with Nginx
+- Implement zero-downtime deployments
+- Set up SSL certificates with Let's Encrypt
+
+## Step 1: VPS Setup and Configuration
+
+### 1.1 Choose Your VPS Provider
+
+For this lesson, we'll use DigitalOcean, but the process works with any VPS provider:
+
+- **DigitalOcean**: $12/month droplet (2GB RAM, 1 vCPU)
+- **Linode**: $12/month Nanode (2GB RAM, 1 vCPU)
+- **Vultr**: $12/month instance (2GB RAM, 1 vCPU)
+- **AWS EC2**: t3.small instance
+- **Google Cloud**: e2-small instance
+
+<Info>
+For production applications, consider at least 4GB RAM for better performance and to handle traffic spikes.
+</Info>
+
+### 1.2 Initial Server Setup
+
+Connect to your VPS and perform initial setup:
+
+<CodeBlock title="Initial server setup" language="bash">
+{`# Connect to your VPS
+ssh root@your-server-ip
+
+# Update system packages
+apt update && apt upgrade -y
+
+# Install essential packages
+apt install -y curl wget git nginx ufw fail2ban htop unzip
+
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+
+# Install Docker Compose
+curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# Verify installations
+docker --version
+docker-compose --version
+nginx -v`}
+</CodeBlock>
+
+## Step 2: Security Configuration
+
+### 2.1 Configure Firewall
+
+<CodeBlock title="Set up UFW firewall" language="bash">
+{`# Allow SSH, HTTP, and HTTPS
+ufw allow OpenSSH
+ufw allow 'Nginx Full'
+ufw allow 2376/tcp  # Docker daemon (if needed)
+
+# Enable firewall
+ufw --force enable
+
+# Check status
+ufw status verbose`}
+</CodeBlock>
+
+### 2.2 Create Deployment User
+
+<CodeBlock title="Create deployment user" language="bash">
+{`# Create deploy user with home directory
+useradd -m -s /bin/bash deploy
+
+# Add to necessary groups
+usermod -aG sudo,docker deploy
+
+# Set up SSH directory
+mkdir -p /home/deploy/.ssh
+chmod 700 /home/deploy/.ssh
+
+# Copy your SSH key (replace with your public key)
+echo "your-ssh-public-key-here" > /home/deploy/.ssh/authorized_keys
+chmod 600 /home/deploy/.ssh/authorized_keys
+chown -R deploy:deploy /home/deploy/.ssh
+
+# Test SSH access
+# ssh deploy@your-server-ip`}
+</CodeBlock>
+
+### 2.3 Configure SSH Security
+
+<CodeBlock title="Secure SSH configuration" language="bash">
+{`# Edit SSH configuration
+nano /etc/ssh/sshd_config
+
+# Add these security settings:
+# PermitRootLogin no
+# PasswordAuthentication no
+# PubkeyAuthentication yes
+# Port 22
+# MaxAuthTries 3
+# ClientAliveInterval 300
+# ClientAliveCountMax 2
+
+# Restart SSH service
+systemctl restart sshd`}
+</CodeBlock>
+
+<Warning>
+Make sure you can connect with your SSH key before disabling password authentication!
+</Warning>
+
+## Step 3: Configure NextDeploy for Production
+
+### 3.1 Update NextDeploy Configuration
+
+Update your local `nextdeploy.config.js` with production settings:
+
+<CodeBlock title="nextdeploy.config.js (production target)" language="javascript">
+{`module.exports = {
+  // ... previous configuration
+  
+  targets: {
+    production: {
+      type: 'vps',
+      host: 'your-server-ip', // Replace with your server IP
+      port: 22,
+      user: 'deploy',
+      
+      // Deployment paths
+      deployPath: '/home/deploy/apps/my-deployment-app',
+      backupPath: '/home/deploy/backups',
+      
+      // SSH configuration
+      ssh: {
+        keyPath: '~/.ssh/id_ed25519', // Path to your private key
+        connectTimeout: 30000,
+        keepAlive: true,
+      },
+      
+      // Environment variables for production
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3000',
+        HOSTNAME: '0.0.0.0',
+        // Add your production environment variables here
+        // DATABASE_URL: 'your-production-database-url',
+        // API_KEY: 'your-production-api-key',
+      },
+      
+      // Deployment strategy
+      strategy: 'blue-green', // or 'rolling' or 'replace'
+      
+      // Health check configuration
+      healthCheck: {
+        enabled: true,
+        path: '/api/health',
+        timeout: 30000,
+        retries: 3,
+        interval: 5000,
+      },
+      
+      // Backup configuration
+      backup: {
+        enabled: true,
+        retention: 5, // Keep 5 previous deployments
+        compress: true,
+      },
+      
+      // Post-deployment hooks
+      hooks: {
+        beforeDeploy: [
+          'echo "Starting deployment to production..."',
+          'docker system prune -f --volumes',
+        ],
+        afterDeploy: [
+          'echo "Deployment completed successfully"',
+          'curl -f http://localhost:3000/api/health || exit 1',
+        ],
+        onFailure: [
+          'echo "Deployment failed, rolling back..."',
+          'docker logs my-deployment-app --tail 50',
+        ],
+      },
+    },
+  },
+  
+  // ... rest of configuration
+}`}
+</CodeBlock>
+
+### 3.2 Set Up Environment Variables
+
+Create a secure way to manage production environment variables:
+
+<CodeBlock title="Environment variable management" language="bash">
+{`# On your local machine, create encrypted env file
+nextdeploy env encrypt --target production --input .env.production --output .env.production.enc
+
+# The encrypted file can be safely committed to version control
+git add .env.production.enc
+git commit -m "Add encrypted production environment variables"`}
+</CodeBlock>
+
+## Step 4: Server-Side Preparation
+
+### 4.1 Prepare Deployment Directory
+
+SSH into your server and prepare the deployment environment:
+
+<CodeBlock title="Prepare deployment directory" language="bash">
+{`# SSH into your server
+ssh deploy@your-server-ip
+
+# Create deployment directories
+mkdir -p /home/deploy/apps/my-deployment-app
+mkdir -p /home/deploy/backups
+mkdir -p /home/deploy/logs
+
+# Set proper permissions
+chown -R deploy:deploy /home/deploy/apps
+chown -R deploy:deploy /home/deploy/backups
+chown -R deploy:deploy /home/deploy/logs
+
+# Create docker network for the application
+docker network create app-network || true`}
+</CodeBlock>
+
+### 4.2 Configure Nginx Reverse Proxy
+
+<CodeBlock title="Nginx configuration" language="bash">
+{`# Create Nginx configuration file
+sudo nano /etc/nginx/sites-available/my-deployment-app`}
+</CodeBlock>
+
+Add the following Nginx configuration:
+
+<CodeBlock title="/etc/nginx/sites-available/my-deployment-app" language="nginx">
+{`# Rate limiting
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=general:10m rate=30r/s;
+
+# Upstream configuration
+upstream app_backend {
+    server 127.0.0.1:3000;
+    keepalive 32;
+}
+
+server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com; # Replace with your domain
+    
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/json
+        application/javascript
+        application/xml+rss
+        application/atom+xml
+        image/svg+xml;
+    
+    # Static file handling
+    location /_next/static/ {
+        proxy_pass http://app_backend;
+        proxy_cache_valid 1y;
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # API routes with rate limiting
+    location /api/ {
+        limit_req zone=api burst=20 nodelay;
+        proxy_pass http://app_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 300s;
+        proxy_connect_timeout 75s;
+    }
+    
+    # Health check endpoint (no rate limiting)
+    location /api/health {
+        proxy_pass http://app_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        access_log off;
+    }
+    
+    # Main application
+    location / {
+        limit_req zone=general burst=50 nodelay;
+        proxy_pass http://app_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 300s;
+        proxy_connect_timeout 75s;
+    }
+    
+    # Error pages
+    error_page 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+}`}
+</CodeBlock>
+
+Enable the site:
+
+<CodeBlock title="Enable Nginx site" language="bash">
+{`# Enable the site
+sudo ln -s /etc/nginx/sites-available/my-deployment-app /etc/nginx/sites-enabled/
+
+# Remove default site
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Test configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo systemctl restart nginx
+sudo systemctl enable nginx`}
+</CodeBlock>
+
+## Step 5: Deploy Your Application
+
+### 5.1 Validate Configuration
+
+<CodeBlock title="Validate deployment configuration" language="bash">
+{`# Validate NextDeploy configuration
+nextdeploy validate --target production
+
+# Test SSH connection
+nextdeploy ssh --target production --test
+
+# Check server requirements
+nextdeploy doctor --target production`}
+</CodeBlock>
+
+### 5.2 First Deployment
+
+<CodeBlock title="Deploy to production" language="bash">
+{`# Deploy to production with verbose output
+nextdeploy deploy --target production --verbose
+
+# Monitor deployment progress
+nextdeploy status --target production --follow`}
+</CodeBlock>
+
+The deployment process will:
+
+1. 🔍 Validate configuration and connectivity
+2. 🏗️ Build your Docker image locally
+3. 📦 Create deployment package
+4. 🚀 Transfer files to your VPS
+5. 🐳 Build/pull Docker image on server
+6. 🔄 Start new container with blue-green strategy
+7. ✅ Run health checks
+8. 🔄 Switch traffic to new container
+9. 🧹 Clean up old containers
+
+<Success>
+Your application should now be accessible at http://your-server-ip or your domain name!
+</Success>
+
+## Step 6: SSL Certificate Setup
+
+### 6.1 Install Certbot
+
+<CodeBlock title="Install Let's Encrypt Certbot" language="bash">
+{`# SSH into your server
+ssh deploy@your-server-ip
+
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Obtain SSL certificate (replace with your domain)
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+
+# Test automatic renewal
+sudo certbot renew --dry-run
+
+# Set up automatic renewal
+sudo crontab -e
+# Add this line:
+# 0 12 * * * /usr/bin/certbot renew --quiet`}
+</CodeBlock>
+
+## Step 7: Zero-Downtime Deployments
+
+### 7.1 Configure Blue-Green Deployment
+
+NextDeploy supports blue-green deployments for zero downtime:
+
+<CodeBlock title="Blue-green deployment configuration" language="javascript">
+{`// In nextdeploy.config.js
+module.exports = {
+  targets: {
+    production: {
+      // ... other config
+      
+      strategy: 'blue-green',
+      blueGreen: {
+        healthCheckPath: '/api/health',
+        healthCheckTimeout: 30000,
+        switchDelay: 5000, // Wait 5s before switching traffic
+        rollbackOnFailure: true,
+        keepPreviousVersion: true,
+      },
+    },
+  },
+}`}
+</CodeBlock>
+
+### 7.2 Test Zero-Downtime Deployment
+
+<CodeBlock title="Test deployment with traffic monitoring" language="bash">
+{`# In one terminal, monitor your application
+watch -n 1 'curl -s http://your-domain.com/api/health | jq .'
+
+# In another terminal, deploy
+nextdeploy deploy --target production
+
+# The health endpoint should never return errors during deployment`}
+</CodeBlock>
+
+## Step 8: Monitoring and Logging
+
+### 8.1 Set Up Application Monitoring
+
+<CodeBlock title="Production monitoring setup" language="bash">
+{`# SSH into your server
+ssh deploy@your-server-ip
+
+# Set up log rotation
+sudo nano /etc/logrotate.d/my-deployment-app
+
+# Add log rotation configuration:
+# /home/deploy/logs/*.log {
+#     daily
+#     missingok
+#     rotate 52
+#     compress
+#     notifempty
+#     create 644 deploy deploy
+#     postrotate
+#         docker kill -s USR1 my-deployment-app 2>/dev/null || true
+#     endscript
+# }
+
+# Create monitoring script
+cat > /home/deploy/monitor.sh << 'EOF'
+#!/bin/bash
+# Simple monitoring script
+
+APP_NAME="my-deployment-app"
+LOG_FILE="/home/deploy/logs/monitor.log"
+DATE=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Check if container is running
+if ! docker ps | grep -q $APP_NAME; then
+    echo "[$DATE] ERROR: Container $APP_NAME is not running" >> $LOG_FILE
+    # Restart the application
+    cd /home/deploy/apps/my-deployment-app && docker-compose up -d
+fi
+
+# Check health endpoint
+if ! curl -f -s http://localhost:3000/api/health > /dev/null; then
+    echo "[$DATE] ERROR: Health check failed" >> $LOG_FILE
+fi
+
+# Check disk space
+DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
+if [ $DISK_USAGE -gt 80 ]; then
+    echo "[$DATE] WARNING: Disk usage is at ${DISK_USAGE}%" >> $LOG_FILE
+fi
+EOF
+
+chmod +x /home/deploy/monitor.sh
+
+# Add to crontab for regular monitoring
+crontab -e
+# Add: */5 * * * * /home/deploy/monitor.sh`}
+</CodeBlock>
+
+## Step 9: Backup and Recovery
+
+### 9.1 Set Up Automated Backups
+
+<CodeBlock title="Backup configuration" language="bash">
+{`# Create backup script
+cat > /home/deploy/backup.sh << 'EOF'
+#!/bin/bash
+
+BACKUP_DIR="/home/deploy/backups"
+APP_DIR="/home/deploy/apps/my-deployment-app"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_NAME="backup_$DATE.tar.gz"
+
+# Create backup
+tar -czf "$BACKUP_DIR/$BACKUP_NAME" -C "$APP_DIR" .
+
+# Keep only last 5 backups
+cd "$BACKUP_DIR"
+ls -t backup_*.tar.gz | tail -n +6 | xargs rm -f
+
+# Log backup completion
+echo "$(date): Backup $BACKUP_NAME created" >> /home/deploy/logs/backup.log
+EOF
+
+chmod +x /home/deploy/backup.sh
+
+# Schedule daily backups
+crontab -e
+# Add: 0 2 * * * /home/deploy/backup.sh`}
+</CodeBlock>
+
+## Step 10: Troubleshooting Production Issues
+
+### 10.1 Common Issues and Solutions
+
+<CodeBlock title="Troubleshooting commands" language="bash">
+{`# Check application logs
+nextdeploy logs --target production --tail 100
+
+# Check container status
+ssh deploy@your-server-ip 'docker ps'
+
+# Check system resources
+ssh deploy@your-server-ip 'htop'
+
+# Check Nginx status
+ssh deploy@your-server-ip 'sudo systemctl status nginx'
+
+# Check disk space
+ssh deploy@your-server-ip 'df -h'
+
+# Check memory usage
+ssh deploy@your-server-ip 'free -h'
+
+# Restart application
+nextdeploy restart --target production
+
+# Rollback to previous version
+nextdeploy rollback --target production`}
+</CodeBlock>
+
+## Lesson Summary
+
+Congratulations! You've successfully:
+
+✅ Configured a production VPS with security best practices  
+✅ Set up SSH key-based authentication  
+✅ Configured NextDeploy for production deployments  
+✅ Set up Nginx reverse proxy with SSL  
+✅ Implemented zero-downtime blue-green deployments  
+✅ Configured monitoring and backup systems  
+✅ Learned production troubleshooting techniques  
+
+## What's Next?
+
+In the final lesson, we'll set up comprehensive monitoring and observability for your production deployment, including metrics collection, alerting, and performance optimization.
+
+## Practice Exercise
+
+1. Set up a staging environment with a similar configuration
+2. Implement automated testing in your deployment pipeline
+3. Configure database backups (if using a database)
+4. Set up monitoring alerts via email or Slack
+
+---
+
+<div className="flex justify-between items-center mt-8 pt-8 border-t">
+  <div>
+    <a href="/courses/deploying-nextjs-to-vps/02-build-image" className="text-blue-600 hover:underline">
+      ← Lesson 2: Building Docker Images
+    </a>
+  </div>
+  <div className="text-right">
+    <p className="text-sm text-muted-foreground">Final lesson:</p>
+    <a href="/courses/deploying-nextjs-to-vps/04-monitoring-setup" className="font-semibold text-blue-600 hover:underline">
+      Lesson 4: Monitoring Setup →
+    </a>
+  </div>
+</div>
+\`\`\`

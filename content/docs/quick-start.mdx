@@ -1,0 +1,477 @@
+
+---
+title: "Quick Start"
+description: "Deploy your first Next.js application with NextDeploy in under 5 minutes"
+---
+
+import { CodeBlock, Info, Warning, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
+
+# Quick Start
+
+Get your Next.js application deployed in under 5 minutes with NextDeploy. This guide assumes you have NextDeploy CLI installed and a Next.js project ready to deploy.
+
+## Prerequisites Checklist
+
+Before we begin, make sure you have:
+
+- ✅ **NextDeploy CLI installed** ([Installation Guide](/docs/installation))
+- ✅ **A Next.js application** (create one with `npx create-next-app@latest`)
+- ✅ **A deployment target** (VPS, cloud server, or local Docker)
+- ✅ **SSH access** to your server (for VPS deployments)
+
+<Info>
+Don't have a Next.js app? Create one quickly with: `npx create-next-app@latest my-app --typescript --tailwind --eslint --app --src-dir`
+</Info>
+
+## Step 1: Initialize NextDeploy
+
+Navigate to your Next.js project and initialize NextDeploy:
+
+<CodeBlock title="Initialize NextDeploy in your project" language="bash">
+{`# Navigate to your Next.js project
+cd my-nextjs-app
+
+# Initialize NextDeploy
+nextdeploy init
+
+# This creates:
+# - nextdeploy.config.js (main configuration)
+# - .nextdeploy/ (local cache and logs)
+# - Updates .gitignore`}
+</CodeBlock>
+
+The initialization wizard will ask you a few questions:
+
+<CodeBlock title="Initialization wizard" language="text">
+{`? What's your application name? my-nextjs-app
+? What framework are you using? Next.js
+? What's your preferred deployment strategy? Blue-Green
+? Enable monitoring? Yes
+? Enable automatic backups? Yes
+
+✅ NextDeploy initialized successfully!`}
+</CodeBlock>
+
+## Step 2: Configure Your Deployment Target
+
+Choose your deployment target and configure it:
+
+<Tabs defaultValue="vps" className="w-full">
+  <TabsList className="grid w-full grid-cols-3">
+    <TabsTrigger value="vps">VPS/Cloud Server</TabsTrigger>
+    <TabsTrigger value="docker">Local Docker</TabsTrigger>
+    <TabsTrigger value="kubernetes">Kubernetes</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="vps" className="space-y-4">
+    <h3 className="text-xl font-semibold">VPS/Cloud Server Deployment</h3>
+    
+    <CodeBlock title="Configure VPS target" language="bash">
+{`# Add your server details
+nextdeploy target add production \\
+  --type vps \\
+  --host your-server.com \\
+  --user deploy \\
+  --port 22 \\
+  --path /var/www/my-app
+
+# Test connection
+nextdeploy target test production`}
+    </CodeBlock>
+    
+    <p>Or edit <code>nextdeploy.config.js</code> directly:</p>
+    
+    <CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs'
+  },
+  targets: {
+    production: {
+      type: 'vps',
+      host: 'your-server.com',
+      user: 'deploy',
+      port: 22,
+      path: '/var/www/my-app',
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3000'
+      }
+    }
+  }
+}`}
+    </CodeBlock>
+  </TabsContent>
+  
+  <TabsContent value="docker" className="space-y-4">
+    <h3 className="text-xl font-semibold">Local Docker Deployment</h3>
+    
+    <CodeBlock title="Configure Docker target" language="bash">
+{`# Add Docker target
+nextdeploy target add local \\
+  --type docker \\
+  --image my-nextjs-app \\
+  --port 3000:3000
+
+# Ensure Docker is running
+docker --version`}
+    </CodeBlock>
+    
+    <CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs'
+  },
+  targets: {
+    local: {
+      type: 'docker',
+      image: 'my-nextjs-app',
+      ports: ['3000:3000'],
+      env: {
+        NODE_ENV: 'production'
+      }
+    }
+  },
+  infrastructure: {
+    docker: {
+      enabled: true,
+      buildArgs: {
+        NODE_VERSION: '18-alpine'
+      }
+    }
+  }
+}`}
+    </CodeBlock>
+  </TabsContent>
+  
+  <TabsContent value="kubernetes" className="space-y-4">
+    <h3 className="text-xl font-semibold">Kubernetes Deployment</h3>
+    
+    <CodeBlock title="Configure Kubernetes target" language="bash">
+{`# Add Kubernetes target
+nextdeploy target add production \\
+  --type kubernetes \\
+  --cluster my-cluster \\
+  --namespace my-app
+
+# Test cluster connection
+kubectl cluster-info`}
+    </CodeBlock>
+    
+    <CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs'
+  },
+  targets: {
+    production: {
+      type: 'kubernetes',
+      cluster: 'my-cluster',
+      namespace: 'my-app',
+      replicas: 3,
+      resources: {
+        requests: {
+          cpu: '100m',
+          memory: '128Mi'
+        },
+        limits: {
+          cpu: '500m',
+          memory: '512Mi'
+        }
+      }
+    }
+  }
+}`}
+    </CodeBlock>
+  </TabsContent>
+</Tabs>
+
+## Step 3: Add Health Check Endpoint
+
+Create a health check endpoint for NextDeploy to monitor your application:
+
+<CodeBlock title="src/app/api/health/route.ts" language="typescript">
+{`import { NextResponse } from 'next/server'
+
+export async function GET() {
+  try {
+    // Basic health check
+    const health = {
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      version: process.env.npm_package_version || '1.0.0'
+    }
+    
+    return NextResponse.json(health)
+  } catch (error) {
+    return NextResponse.json(
+      { status: 'unhealthy', error: 'Health check failed' },
+      { status: 503 }
+    )
+  }
+}`}
+</CodeBlock>
+
+## Step 4: Validate Configuration
+
+Before deploying, validate your configuration:
+
+<CodeBlock title="Validate configuration" language="bash">
+{`# Validate NextDeploy configuration
+nextdeploy validate
+
+# Check target connectivity
+nextdeploy target test production
+
+# Run pre-deployment checks
+nextdeploy preflight production`}
+</CodeBlock>
+
+Expected output:
+<CodeBlock title="Validation output" language="text">
+{`✅ Configuration is valid
+✅ Target 'production' is reachable
+✅ SSH connection successful
+✅ Required dependencies available
+✅ Health check endpoint accessible
+✅ All preflight checks passed`}
+</CodeBlock>
+
+## Step 5: Deploy Your Application
+
+Now for the exciting part - deploy your application!
+
+<CodeBlock title="Deploy to production" language="bash">
+{`# Deploy with verbose output
+nextdeploy deploy production --verbose
+
+# Or use the shorthand
+nextdeploy deploy prod -v`}
+</CodeBlock>
+
+You'll see the deployment progress in real-time:
+
+<CodeBlock title="Deployment output" language="text">
+{`🚀 Starting deployment to production...
+
+📦 Building application...
+   ✅ Next.js build completed (45s)
+   ✅ Docker image built (32s)
+   ✅ Image size: 180MB (optimized)
+
+🔄 Deploying with blue-green strategy...
+   ✅ Green environment created
+   ✅ Application started successfully
+   ✅ Health checks passed (3/3)
+   ✅ Traffic switched to green environment
+   ✅ Blue environment cleaned up
+
+🎉 Deployment completed successfully!
+   📍 URL: https://your-server.com
+   ⏱️  Total time: 2m 15s
+   📊 Status: nextdeploy status production`}
+</CodeBlock>
+
+## Step 6: Verify Deployment
+
+Check that your deployment is working correctly:
+
+<CodeBlock title="Verify deployment" language="bash">
+{`# Check deployment status
+nextdeploy status production
+
+# View application logs
+nextdeploy logs production --tail 50
+
+# Test health endpoint
+curl https://your-server.com/api/health
+
+# View deployment metrics
+nextdeploy metrics production`}
+</CodeBlock>
+
+<Success>
+🎉 **Congratulations!** Your Next.js application is now deployed and running in production.
+</Success>
+
+## Step 7: Set Up Monitoring (Optional)
+
+Enable monitoring to keep track of your application's health:
+
+<CodeBlock title="Enable monitoring" language="bash">
+{`# Enable built-in monitoring
+nextdeploy monitoring enable production
+
+# Set up alerts
+nextdeploy alerts add production \\
+  --name "High Response Time" \\
+  --metric response_time \\
+  --threshold 2000 \\
+  --email your@email.com
+
+# View monitoring dashboard
+nextdeploy dashboard production`}
+</CodeBlock>
+
+## Common Deployment Patterns
+
+### Environment Variables
+
+<CodeBlock title="Set environment variables" language="bash">
+{`# Set environment variables
+nextdeploy env set production DATABASE_URL "postgresql://..."
+nextdeploy env set production API_KEY "your-api-key"
+
+# Or use environment files
+nextdeploy env load production .env.production
+
+# View current environment
+nextdeploy env list production`}
+</CodeBlock>
+
+### Custom Build Commands
+
+<CodeBlock title="Custom build configuration" language="javascript">
+{`// nextdeploy.config.js
+module.exports = {
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs',
+    buildCommand: 'npm run build:production',
+    startCommand: 'npm run start:production',
+    installCommand: 'npm ci --only=production'
+  },
+  build: {
+    env: {
+      NODE_ENV: 'production',
+      NEXT_TELEMETRY_DISABLED: '1'
+    },
+    hooks: {
+      preBuild: ['npm run lint', 'npm run test'],
+      postBuild: ['npm run analyze']
+    }
+  }
+}`}
+</CodeBlock>
+
+### Database Integration
+
+<CodeBlock title="Database configuration" language="javascript">
+{`// nextdeploy.config.js
+module.exports = {
+  // ... other config
+  database: {
+    type: 'postgresql',
+    host: process.env.DATABASE_HOST,
+    migrations: {
+      enabled: true,
+      path: './migrations'
+    }
+  },
+  hooks: {
+    beforeDeploy: ['npm run db:migrate'],
+    afterDeploy: ['npm run db:seed']
+  }
+}`}
+</CodeBlock>
+
+## Troubleshooting Quick Fixes
+
+### Deployment Fails
+
+<CodeBlock title="Debug deployment issues" language="bash">
+{`# Check detailed logs
+nextdeploy logs production --level debug
+
+# Validate configuration again
+nextdeploy validate --verbose
+
+# Test connection manually
+ssh deploy@your-server.com
+
+# Check server resources
+nextdeploy system production`}
+</CodeBlock>
+
+### Application Won't Start
+
+<CodeBlock title="Debug application startup" language="bash">
+{`# Check application logs
+nextdeploy logs production --app
+
+# Test health endpoint
+nextdeploy health production
+
+# Check port availability
+nextdeploy exec production "netstat -tlnp | grep :3000"
+
+# Restart application
+nextdeploy restart production`}
+</CodeBlock>
+
+### Build Issues
+
+<CodeBlock title="Debug build problems" language="bash">
+{`# Check build logs
+nextdeploy logs production --build
+
+# Test build locally
+npm run build
+
+# Clear build cache
+nextdeploy cache clear production
+
+# Rebuild from scratch
+nextdeploy deploy production --no-cache`}
+</CodeBlock>
+
+## Next Steps
+
+Now that you have your first deployment running, explore these advanced features:
+
+### 🔧 **Configuration**
+- [Complete Configuration Guide](/docs/configuration)
+- [Environment Management](/docs/cli/environment-variables)
+- [Secrets Management](/docs/security/secrets)
+
+### 🚀 **Advanced Deployments**
+- [Deployment Strategies](/docs/deployment-strategies)
+- [Blue-Green Deployments](/docs/deployment-strategies#blue-green)
+- [Rollback Procedures](/docs/deployment-strategies#rollbacks)
+
+### 📊 **Monitoring & Observability**
+- [Metrics Collection](/docs/monitoring/metrics)
+- [Log Management](/docs/monitoring/logging)
+- [Alerting Setup](/docs/monitoring/alerting)
+
+### 🔒 **Security**
+- [Authentication Setup](/docs/security/authentication)
+- [Network Security](/docs/security/network)
+- [SSL/TLS Configuration](/docs/security/ssl)
+
+### 🎯 **Best Practices**
+- [Production Checklist](/docs/best-practices/production)
+- [Performance Optimization](/docs/best-practices/performance)
+- [Disaster Recovery](/docs/best-practices/disaster-recovery)
+
+## Getting Help
+
+If you run into issues:
+
+- **📚 Documentation**: Browse our [complete documentation](/docs)
+- **💬 Community**: Join our [Discord server](https://discord.gg/nextdeploy)
+- **🐛 Issues**: Report bugs on [GitHub](https://github.com/nextdeploy/nextdeploy/issues)
+- **📧 Support**: Contact support for enterprise customers
+
+<Info>
+**Pro Tip**: Use `nextdeploy --help` or `nextdeploy <command> --help` to get detailed information about any command.
+</Info>
+
+---
+
+**🎉 You're all set!** Your Next.js application is deployed and ready for the world. Welcome to the NextDeploy community!
+\`\`\`

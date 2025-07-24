@@ -1,0 +1,750 @@
+
+---
+title: "Infrastructure as Code Best Practices with NextDeploy"
+description: "Implementing IaC principles for scalable and maintainable deployment pipelines."
+author: "Mike Rodriguez"
+date: "2024-01-05"
+tags: ["Infra as Code", "DevOps", "Best Practices"]
+---
+
+import { CodeBlock, Info, Warning, Success } from "@/components/mdx-components"
+
+# Infrastructure as Code Best Practices with NextDeploy
+
+Infrastructure as Code (IaC) has revolutionized how we manage and deploy applications. Instead of manually configuring servers and services, IaC allows us to define our entire infrastructure using code, making it version-controlled, repeatable, and scalable.
+
+## What is Infrastructure as Code?
+
+Infrastructure as Code is the practice of managing and provisioning computing infrastructure through machine-readable definition files, rather than physical hardware configuration or interactive configuration tools.
+
+### Key Benefits of IaC
+
+- **Consistency**: Identical environments every time
+- **Version Control**: Track changes and rollback when needed
+- **Automation**: Reduce manual errors and save time
+- **Scalability**: Easily replicate environments
+- **Documentation**: Code serves as living documentation
+
+<Info>
+NextDeploy embraces IaC principles by allowing you to define your entire deployment configuration in code, from infrastructure setup to application deployment.
+</Info>
+
+## NextDeploy Configuration as Code
+
+### Basic Configuration Structure
+
+<CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  // Application definition
+  app: {
+    name: 'my-nextjs-app',
+    framework: 'nextjs',
+    version: '1.0.0',
+    buildCommand: 'npm run build',
+    startCommand: 'npm start',
+    healthCheck: {
+      path: '/api/health',
+      timeout: 30000,
+      retries: 3
+    }
+  },
+
+  // Infrastructure definition
+  infrastructure: {
+    // Container configuration
+    docker: {
+      enabled: true,
+      image: {
+        name: 'my-nextjs-app',
+        tag: process.env.BUILD_NUMBER || 'latest',
+        registry: process.env.DOCKER_REGISTRY
+      },
+      build: {
+        context: '.',
+        dockerfile: 'Dockerfile',
+        args: {
+          NODE_VERSION: '18-alpine',
+          BUILD_DATE: new Date().toISOString()
+        }
+      }
+    },
+
+    // Load balancer configuration
+    loadBalancer: {
+      enabled: true,
+      type: 'nginx',
+      ssl: {
+        enabled: true,
+        provider: 'letsencrypt',
+        domains: ['myapp.com', 'www.myapp.com']
+      },
+      rateLimiting: {
+        requests: 100,
+        window: '1m'
+      }
+    },
+
+    // Database configuration
+    database: {
+      type: 'postgresql',
+      version: '15',
+      storage: '20GB',
+      backup: {
+        enabled: true,
+        schedule: '0 2 * * *',
+        retention: '30d'
+      }
+    },
+
+    // Monitoring and observability
+    monitoring: {
+      enabled: true,
+      metrics: ['cpu', 'memory', 'disk', 'network'],
+      alerts: {
+        cpu: { threshold: 80, duration: '5m' },
+        memory: { threshold: 85, duration: '5m' },
+        disk: { threshold: 90, duration: '1h' }
+      },
+      logging: {
+        level: 'info',
+        retention: '30d',
+        structured: true
+      }
+    }
+  },
+
+  // Environment-specific configurations
+  environments: {
+    development: {
+      replicas: 1,
+      resources: {
+        cpu: '0.5',
+        memory: '512Mi'
+      },
+      env: {
+        NODE_ENV: 'development',
+        LOG_LEVEL: 'debug'
+      }
+    },
+
+    staging: {
+      replicas: 2,
+      resources: {
+        cpu: '1',
+        memory: '1Gi'
+      },
+      env: {
+        NODE_ENV: 'staging',
+        LOG_LEVEL: 'info'
+      }
+    },
+
+    production: {
+      replicas: 3,
+      resources: {
+        cpu: '2',
+        memory: '2Gi'
+      },
+      env: {
+        NODE_ENV: 'production',
+        LOG_LEVEL: 'warn'
+      },
+      autoscaling: {
+        enabled: true,
+        minReplicas: 3,
+        maxReplicas: 10,
+        targetCPU: 70
+      }
+    }
+  },
+
+  // Deployment targets
+  targets: {
+    production: {
+      type: 'kubernetes',
+      cluster: 'production-cluster',
+      namespace: 'my-app',
+      region: 'us-west-2'
+    },
+    staging: {
+      type: 'vps',
+      host: 'staging.myapp.com',
+      user: 'deploy',
+      path: '/var/www/staging'
+    }
+  }
+}`}
+</CodeBlock>
+
+## Environment Management
+
+### Environment-Specific Configurations
+
+<CodeBlock title="Environment configuration pattern" language="javascript">
+{`// nextdeploy.config.js
+const baseConfig = {
+  app: {
+    name: 'my-app',
+    framework: 'nextjs'
+  }
+}
+
+const environments = {
+  development: {
+    ...baseConfig,
+    infrastructure: {
+      docker: {
+        enabled: false // Use local development
+      },
+      database: {
+        type: 'sqlite',
+        file: './dev.db'
+      }
+    }
+  },
+
+  staging: {
+    ...baseConfig,
+    infrastructure: {
+      docker: {
+        enabled: true,
+        image: { tag: 'staging' }
+      },
+      database: {
+        type: 'postgresql',
+        host: 'staging-db.internal',
+        ssl: false
+      }
+    }
+  },
+
+  production: {
+    ...baseConfig,
+    infrastructure: {
+      docker: {
+        enabled: true,
+        image: { tag: 'latest' }
+      },
+      database: {
+        type: 'postgresql',
+        host: 'prod-db.internal',
+        ssl: true,
+        connectionPool: {
+          min: 5,
+          max: 20
+        }
+      },
+      cdn: {
+        enabled: true,
+        provider: 'cloudflare'
+      }
+    }
+  }
+}
+
+module.exports = environments[process.env.NODE_ENV] || environments.development`}
+</CodeBlock>
+
+### Configuration Validation
+
+<CodeBlock title="Configuration validation" language="javascript">
+{`// config/validator.js
+const Joi = require('joi')
+
+const configSchema = Joi.object({
+  app: Joi.object({
+    name: Joi.string().required(),
+    framework: Joi.string().valid('nextjs', 'react', 'vue').required(),
+    version: Joi.string().pattern(/^\\d+\\.\\d+\\.\\d+$/).required()
+  }).required(),
+
+  infrastructure: Joi.object({
+    docker: Joi.object({
+      enabled: Joi.boolean().required(),
+      image: Joi.when('enabled', {
+        is: true,
+        then: Joi.object({
+          name: Joi.string().required(),
+          tag: Joi.string().required()
+        }).required()
+      })
+    }),
+
+    database: Joi.object({
+      type: Joi.string().valid('postgresql', 'mysql', 'mongodb').required(),
+      host: Joi.string().when('type', {
+        is: Joi.not('sqlite'),
+        then: Joi.required()
+      })
+    })
+  }).required()
+})
+
+function validateConfig(config) {
+  const { error, value } = configSchema.validate(config)
+  if (error) {
+    throw new Error(\`Configuration validation failed: \${error.message}\`)
+  }
+  return value
+}
+
+module.exports = { validateConfig }`}
+</CodeBlock>
+
+## Version Control and GitOps
+
+### Git-Based Deployment Workflow
+
+<CodeBlock title="GitOps workflow" language="yaml">
+{`# .github/workflows/deploy.yml
+name: Deploy Application
+
+on:
+  push:
+    branches: [main, staging, develop]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          else
+            echo "environment=development" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate configuration
+        run: |
+          npm install
+          node -e "
+            const { validateConfig } = require('./config/validator');
+            const config = require('./nextdeploy.config.js');
+            validateConfig(config);
+            console.log('Configuration is valid');
+          "
+
+      - name: Deploy with NextDeploy
+        run: |
+          npx nextdeploy deploy \\
+            --target ${{ steps.env.outputs.environment }} \\
+            --config nextdeploy.config.js \\
+            --wait-for-completion
+        env:
+          NEXTDEPLOY_TOKEN: ${{ secrets.NEXTDEPLOY_TOKEN }}
+          NODE_ENV: ${{ steps.env.outputs.environment }}`}
+</CodeBlock>
+
+### Configuration Drift Detection
+
+<CodeBlock title="Drift detection script" language="bash">
+{`#!/bin/bash
+# scripts/detect-drift.sh
+
+echo "Checking for configuration drift..."
+
+# Get current deployed configuration
+DEPLOYED_CONFIG=$(nextdeploy config get --target production --format json)
+
+# Get expected configuration from code
+EXPECTED_CONFIG=$(node -e "
+  const config = require('./nextdeploy.config.js');
+  console.log(JSON.stringify(config, null, 2));
+")
+
+# Compare configurations
+if ! echo "$DEPLOYED_CONFIG" | diff -u - <(echo "$EXPECTED_CONFIG"); then
+  echo "❌ Configuration drift detected!"
+  echo "Run 'nextdeploy deploy --target production' to sync configuration"
+  exit 1
+else
+  echo "✅ Configuration is in sync"
+fi`}
+</CodeBlock>
+
+## Secrets Management
+
+### Environment Variables and Secrets
+
+<CodeBlock title="Secrets configuration" language="javascript">
+{`// nextdeploy.config.js
+module.exports = {
+  // ... other config
+
+  secrets: {
+    // Database credentials
+    database: {
+      url: {
+        source: 'env',
+        key: 'DATABASE_URL',
+        required: true
+      },
+      password: {
+        source: 'vault',
+        path: 'secret/database/password',
+        required: true
+      }
+    },
+
+    // API keys
+    external: {
+      stripeKey: {
+        source: 'env',
+        key: 'STRIPE_SECRET_KEY',
+        required: true,
+        environments: ['production', 'staging']
+      },
+      sendgridKey: {
+        source: 'vault',
+        path: 'secret/sendgrid/api-key',
+        required: false
+      }
+    },
+
+    // JWT secrets
+    auth: {
+      jwtSecret: {
+        source: 'generated',
+        length: 64,
+        algorithm: 'base64'
+      }
+    }
+  },
+
+  // Secret rotation policy
+  secretRotation: {
+    enabled: true,
+    schedule: '0 2 1 * *', // Monthly
+    notify: ['devops@company.com']
+  }
+}`}
+</CodeBlock>
+
+### Encrypted Configuration Files
+
+<CodeBlock title="Configuration encryption" language="bash">
+{`# Encrypt sensitive configuration
+nextdeploy config encrypt \\
+  --input nextdeploy.config.js \\
+  --output nextdeploy.config.enc \\
+  --key-file .encryption-key
+
+# Decrypt for deployment
+nextdeploy config decrypt \\
+  --input nextdeploy.config.enc \\
+  --key-file .encryption-key \\
+  | nextdeploy deploy --config -`}
+</CodeBlock>
+
+## Infrastructure Testing
+
+### Configuration Testing
+
+<CodeBlock title="Configuration tests" language="javascript">
+{`// tests/config.test.js
+const { validateConfig } = require('../config/validator')
+const config = require('../nextdeploy.config.js')
+
+describe('NextDeploy Configuration', () => {
+  test('should have valid configuration', () => {
+    expect(() => validateConfig(config)).not.toThrow()
+  })
+
+  test('should have required environments', () => {
+    expect(config.environments).toHaveProperty('production')
+    expect(config.environments).toHaveProperty('staging')
+  })
+
+  test('production should have proper resource limits', () => {
+    const prod = config.environments.production
+    expect(prod.resources.cpu).toBeDefined()
+    expect(prod.resources.memory).toBeDefined()
+    expect(prod.replicas).toBeGreaterThan(1)
+  })
+
+  test('should have monitoring enabled in production', () => {
+    expect(config.infrastructure.monitoring.enabled).toBe(true)
+  })
+
+  test('should have SSL enabled for production', () => {
+    expect(config.infrastructure.loadBalancer.ssl.enabled).toBe(true)
+  })
+})`}
+</CodeBlock>
+
+### Infrastructure Validation
+
+<CodeBlock title="Infrastructure validation" language="bash">
+{`#!/bin/bash
+# scripts/validate-infrastructure.sh
+
+echo "Validating infrastructure configuration..."
+
+# Check if required services are defined
+if ! grep -q "database:" nextdeploy.config.js; then
+  echo "❌ Database configuration missing"
+  exit 1
+fi
+
+# Validate resource limits
+CPU_LIMIT=$(node -e "
+  const config = require('./nextdeploy.config.js');
+  console.log(config.environments.production.resources.cpu);
+")
+
+if [[ "$CPU_LIMIT" < "1" ]]; then
+  echo "⚠️  Warning: Production CPU limit is less than 1 core"
+fi
+
+# Check for security configurations
+if ! grep -q "ssl.*enabled.*true" nextdeploy.config.js; then
+  echo "❌ SSL not enabled for production"
+  exit 1
+fi
+
+echo "✅ Infrastructure configuration is valid"`}
+</CodeBlock>
+
+## Monitoring and Observability
+
+### Infrastructure Monitoring Configuration
+
+<CodeBlock title="Monitoring as code" language="javascript">
+{`// monitoring/config.js
+module.exports = {
+  dashboards: [
+    {
+      name: 'Application Overview',
+      panels: [
+        {
+          title: 'Request Rate',
+          type: 'graph',
+          targets: [
+            {
+              expr: 'rate(http_requests_total[5m])',
+              legendFormat: '{{method}} {{status}}'
+            }
+          ]
+        },
+        {
+          title: 'Response Time',
+          type: 'graph',
+          targets: [
+            {
+              expr: 'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))',
+              legendFormat: '95th percentile'
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  alerts: [
+    {
+      name: 'High Error Rate',
+      condition: 'rate(http_requests_total{status=~"5.."}[5m]) > 0.1',
+      duration: '2m',
+      severity: 'critical',
+      annotations: {
+        summary: 'High error rate detected',
+        description: 'Error rate is above 10% for 2 minutes'
+      }
+    },
+    {
+      name: 'High Response Time',
+      condition: 'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1',
+      duration: '5m',
+      severity: 'warning',
+      annotations: {
+        summary: 'High response time detected',
+        description: '95th percentile response time is above 1 second'
+      }
+    }
+  ]
+}`}
+</CodeBlock>
+
+## Disaster Recovery and Backup
+
+### Backup Configuration
+
+<CodeBlock title="Backup as code" language="javascript">
+{`// backup/config.js
+module.exports = {
+  backups: {
+    database: {
+      enabled: true,
+      schedule: '0 2 * * *', // Daily at 2 AM
+      retention: {
+        daily: 7,
+        weekly: 4,
+        monthly: 12
+      },
+      storage: {
+        type: 's3',
+        bucket: 'my-app-backups',
+        encryption: true
+      }
+    },
+
+    application: {
+      enabled: true,
+      schedule: '0 1 * * 0', // Weekly on Sunday at 1 AM
+      includes: [
+        'uploads/',
+        'config/',
+        'logs/'
+      ],
+      excludes: [
+        'node_modules/',
+        '.next/',
+        'tmp/'
+      ]
+    },
+
+    infrastructure: {
+      enabled: true,
+      schedule: '0 0 1 * *', // Monthly on 1st at midnight
+      includes: [
+        'nextdeploy.config.js',
+        'docker-compose.yml',
+        'nginx.conf'
+      ]
+    }
+  },
+
+  recovery: {
+    rto: '4h', // Recovery Time Objective
+    rpo: '1h', // Recovery Point Objective
+    procedures: [
+      {
+        name: 'Database Recovery',
+        steps: [
+          'Stop application',
+          'Restore database from backup',
+          'Verify data integrity',
+          'Start application',
+          'Run health checks'
+        ]
+      }
+    ]
+  }
+}`}
+</CodeBlock>
+
+## Best Practices Summary
+
+### 1. Configuration Organization
+
+<Warning>
+Keep your configuration files organized and well-documented. Use comments to explain complex configurations and maintain a clear structure.
+</Warning>
+
+### 2. Environment Parity
+
+<CodeBlock title="Environment parity checklist" language="javascript">
+{`// Ensure consistency across environments
+const environmentChecklist = {
+  // ✅ Same base configuration
+  baseConfig: 'shared across all environments',
+  
+  // ✅ Environment-specific overrides only
+  overrides: 'only necessary differences',
+  
+  // ✅ Same deployment process
+  deployment: 'identical process for all environments',
+  
+  // ✅ Same monitoring setup
+  monitoring: 'consistent across environments',
+  
+  // ✅ Same security policies
+  security: 'no security differences'
+}`}
+</CodeBlock>
+
+### 3. Security First
+
+<CodeBlock title="Security best practices" language="javascript">
+{`module.exports = {
+  security: {
+    // ✅ Encrypt secrets at rest
+    secrets: { encryption: 'enabled' },
+    
+    // ✅ Use least privilege access
+    permissions: { principle: 'least-privilege' },
+    
+    // ✅ Enable audit logging
+    audit: { enabled: true },
+    
+    // ✅ Regular security scans
+    scanning: { schedule: 'daily' },
+    
+    // ✅ Automated updates
+    updates: { security: 'automatic' }
+  }
+}`}
+</CodeBlock>
+
+### 4. Documentation and Comments
+
+<CodeBlock title="Well-documented configuration" language="javascript">
+{`module.exports = {
+  // Application configuration
+  // This section defines the core application settings
+  app: {
+    name: 'my-nextjs-app', // Must match package.json name
+    framework: 'nextjs',   // Framework type for optimization
+    version: '1.0.0'       // Semantic version for tracking
+  },
+
+  // Infrastructure definition
+  // Define all infrastructure components as code
+  infrastructure: {
+    // Container orchestration
+    // Using Docker for consistent deployments
+    docker: {
+      enabled: true,
+      // Image configuration
+      // Built from local Dockerfile with optimization
+      image: {
+        name: 'my-nextjs-app',
+        tag: 'latest' // Use build number in CI/CD
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+## Conclusion
+
+Infrastructure as Code with NextDeploy provides a powerful foundation for scalable, maintainable deployments. By following these best practices, you'll achieve:
+
+<Success>
+- **Consistency** across all environments
+- **Reliability** through automated testing
+- **Security** with proper secrets management
+- **Scalability** with environment-specific configurations
+- **Maintainability** through clear documentation
+</Success>
+
+Start implementing these practices incrementally, beginning with basic configuration management and gradually adding more sophisticated features like automated testing and monitoring.
+
+## Next Steps
+
+1. **Audit your current configuration** - Review existing deployment scripts
+2. **Implement configuration validation** - Add automated testing
+3. **Set up GitOps workflow** - Automate deployments from Git
+4. **Add monitoring as code** - Define observability requirements
+5. **Plan disaster recovery** - Document and test recovery procedures
+
+Ready to implement IaC best practices? Check out our [VPS Deployment Course](/courses/deploying-nextjs-to-vps) for hands-on experience with NextDeploy's IaC capabilities.
+\`\`\`
+

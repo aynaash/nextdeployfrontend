@@ -1,0 +1,548 @@
+
+---
+title: "Lesson 2: Building Docker Images"
+description: "Create optimized Docker images for your Next.js application"
+lesson: 2
+duration: "45 min"
+---
+
+import { CodeBlock, Info, Warning, Success, Badge } from "@/components/mdx-components"
+
+# Lesson 2: Building Docker Images
+
+<div className="flex items-center space-x-4 mb-8">
+  <Badge variant="outline">Lesson 2 of 4</Badge>
+  <Badge variant="outline">45 minutes</Badge>
+  <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300">Intermediate</Badge>
+</div>
+
+In this lesson, we'll create optimized Docker images for your Next.js application. Docker ensures consistent deployments across different environments and makes your application portable and scalable.
+
+## Learning Objectives
+
+By the end of this lesson, you will:
+
+- Understand Docker fundamentals for Next.js applications
+- Create multi-stage Docker builds for optimization
+- Configure Docker for NextDeploy integration
+- Implement security best practices in Docker images
+- Test and validate your Docker setup
+
+## Step 1: Understanding Docker for Next.js
+
+Docker containers package your application with all its dependencies, ensuring it runs consistently across different environments. For Next.js applications, we need to consider:
+
+- **Build optimization**: Minimize image size and build time
+- **Security**: Use minimal base images and non-root users
+- **Performance**: Optimize for production workloads
+- **Caching**: Leverage Docker layer caching effectively
+
+<Info>
+Next.js 13+ with the App Router has built-in support for Docker with the `output: 'standalone'` configuration we set up in Lesson 1.
+</Info>
+
+## Step 2: Create the Dockerfile
+
+Let's create an optimized multi-stage Dockerfile:
+
+<CodeBlock title="Dockerfile" language="dockerfile">
+{`# Use the official Node.js image as base
+FROM node:18-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Install dependencies based on the preferred package manager
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \\
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \\
+  elif [ -f package-lock.json ]; then npm ci; \\
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \\
+  else echo "Lockfile not found." && exit 1; \\
+  fi
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Build the application
+RUN npm run build
+
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy the public folder
+COPY --from=builder /app/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+CMD ["node", "server.js"]`}
+</CodeBlock>
+
+## Step 3: Create Docker Ignore File
+
+Create a `.dockerignore` file to exclude unnecessary files from the Docker build context:
+
+<CodeBlock title=".dockerignore" language="text">
+{`# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js build output
+.next
+out
+
+# Environment variables
+.env*.local
+.env.production
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# NextDeploy
+nextdeploy.log
+.nextdeploy`}
+</CodeBlock>
+
+## Step 4: Configure NextDeploy for Docker
+
+Update your `nextdeploy.config.js` to include Docker configuration:
+
+<CodeBlock title="nextdeploy.config.js (Docker section)" language="javascript">
+{`module.exports = {
+  // ... previous configuration
+  
+  infrastructure: {
+    docker: {
+      enabled: true,
+      
+      // Image configuration
+      image: {
+        name: 'my-deployment-app',
+        tag: 'latest',
+        registry: null, // We'll configure this later for production
+      },
+      
+      // Build configuration
+      build: {
+        context: '.',
+        dockerfile: 'Dockerfile',
+        target: 'runner', // Use the production stage
+        
+        // Build arguments
+        args: {
+          NODE_VERSION: '18-alpine',
+          BUILD_DATE: new Date().toISOString(),
+        },
+        
+        // Build options
+        options: {
+          platform: 'linux/amd64', // Ensure compatibility
+          cache: true,
+          pull: true, // Always pull base images
+        }
+      },
+      
+      // Container runtime configuration
+      run: {
+        ports: ['3000:3000'],
+        environment: {
+          NODE_ENV: 'production',
+          PORT: '3000',
+        },
+        
+        // Resource limits
+        resources: {
+          memory: '512m',
+          cpus: '0.5',
+        },
+        
+        // Health check
+        healthCheck: {
+          test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/health'],
+          interval: '30s',
+          timeout: '3s',
+          retries: 3,
+          startPeriod: '10s',
+        },
+        
+        // Restart policy
+        restart: 'unless-stopped',
+      }
+    },
+    
+    // ... rest of configuration
+  }
+}`}
+</CodeBlock>
+
+## Step 5: Add Docker Scripts
+
+Add Docker-related scripts to your `package.json`:
+
+<CodeBlock title="package.json (additional scripts)" language="json">
+{`{
+  "scripts": {
+    // ... existing scripts
+    
+    // Docker scripts
+    "docker:build": "docker build -t my-deployment-app .",
+    "docker:build:prod": "docker build --target runner -t my-deployment-app:production .",
+    "docker:run": "docker run -p 3000:3000 --env-file .env.local my-deployment-app",
+    "docker:run:prod": "docker run -p 3000:3000 --env-file .env.production my-deployment-app:production",
+    "docker:shell": "docker run -it --entrypoint /bin/sh my-deployment-app",
+    "docker:logs": "docker logs -f my-deployment-app",
+    "docker:clean": "docker system prune -f",
+    
+    // NextDeploy Docker integration
+    "deploy:build": "nextdeploy build --target production",
+    "deploy:push": "nextdeploy push --target production",
+  }
+}`}
+</CodeBlock>
+
+## Step 6: Test Docker Build Locally
+
+Let's build and test our Docker image:
+
+<CodeBlock title="Build and test Docker image" language="bash">
+{`# Build the Docker image
+npm run docker:build
+
+# Check the image size
+docker images my-deployment-app
+
+# Run the container locally
+npm run docker:run
+
+# In another terminal, test the health endpoint
+curl http://localhost:3000/api/health
+
+# Stop the container
+docker stop $(docker ps -q --filter ancestor=my-deployment-app)`}
+</CodeBlock>
+
+<Success>
+If the health check returns a successful response, your Docker image is working correctly!
+</Success>
+
+## Step 7: Optimize Docker Image Size
+
+Let's analyze and optimize our Docker image:
+
+<CodeBlock title="Analyze image layers" language="bash">
+{`# Install dive for image analysis (optional)
+# On macOS: brew install dive
+# On Ubuntu: wget https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb && sudo apt install ./dive_0.10.0_linux_amd64.deb
+
+# Analyze the image
+dive my-deployment-app
+
+# Check image size
+docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.Size}}" my-deployment-app`}
+</CodeBlock>
+
+## Step 8: Advanced Docker Optimizations
+
+Here are some advanced optimizations you can apply:
+
+<CodeBlock title="Dockerfile.optimized" language="dockerfile">
+{`# Multi-architecture build support
+FROM --platform=$BUILDPLATFORM node:18-alpine AS base
+
+# Install dependencies with better caching
+FROM base AS deps
+RUN apk add --no-cache libc6-compat curl
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies with npm ci for faster, reliable builds
+RUN npm ci --only=production && npm cache clean --force
+
+# Development dependencies for building
+FROM base AS build-deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+# Build stage
+FROM build-deps AS builder
+WORKDIR /app
+COPY . .
+
+# Build with optimizations
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+RUN npm run build
+
+# Production stage with minimal footprint
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \\
+    adduser --system --uid 1001 nextjs
+
+# Copy built application
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+# Set up proper permissions
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Health check with better configuration
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \\
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+CMD ["node", "server.js"]`}
+</CodeBlock>
+
+## Step 9: Docker Compose for Development
+
+Create a `docker-compose.yml` for local development:
+
+<CodeBlock title="docker-compose.yml" language="yaml">
+{`version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    env_file:
+      - .env.local
+    volumes:
+      # Mount source code for development (optional)
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Optional: Add database service
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: myapp
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:`}
+</CodeBlock>
+
+## Step 10: Security Best Practices
+
+Implement security best practices in your Docker setup:
+
+<CodeBlock title="Security checklist" language="bash">
+{`# 1. Scan for vulnerabilities
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
+  -v $HOME/Library/Caches:/root/.cache/ \\
+  aquasec/trivy image my-deployment-app
+
+# 2. Check for secrets in the image
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
+  wagoodman/dive:latest my-deployment-app
+
+# 3. Run security benchmark
+docker run --rm --net host --pid host --userns host --cap-add audit_control \\
+  -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \\
+  -v /etc:/etc:ro \\
+  -v /usr/bin/containerd:/usr/bin/containerd:ro \\
+  -v /usr/bin/runc:/usr/bin/runc:ro \\
+  -v /usr/lib/systemd:/usr/lib/systemd:ro \\
+  -v /var/lib:/var/lib:ro \\
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \\
+  --label docker_bench_security \\
+  docker/docker-bench-security`}
+</CodeBlock>
+
+<Warning>
+Always scan your Docker images for vulnerabilities before deploying to production. Consider using automated security scanning in your CI/CD pipeline.
+</Warning>
+
+## Step 11: NextDeploy Integration Test
+
+Test the NextDeploy Docker integration:
+
+<CodeBlock title="Test NextDeploy Docker build" language="bash">
+{`# Build using NextDeploy
+nextdeploy build --target production --verbose
+
+# Check build logs
+nextdeploy logs --build --target production
+
+# Validate the built image
+docker images | grep my-deployment-app`}
+</CodeBlock>
+
+## Lesson Summary
+
+Congratulations! You've successfully:
+
+✅ Created an optimized multi-stage Dockerfile  
+✅ Configured Docker integration with NextDeploy  
+✅ Implemented security best practices  
+✅ Set up local testing with Docker Compose  
+✅ Added image optimization and vulnerability scanning  
+✅ Tested NextDeploy Docker integration  
+
+## What's Next?
+
+In the next lesson, we'll deploy your containerized application to a VPS using SSH. You'll learn how to configure your server, set up the deployment pipeline, and manage your application in production.
+
+## Troubleshooting
+
+**Docker build fails:**
+<CodeBlock title="Debug Docker build" language="bash">
+{`# Build with verbose output
+docker build --progress=plain --no-cache -t my-deployment-app .
+
+# Check Docker daemon
+docker info
+
+# Clean up build cache
+docker builder prune -f`}
+</CodeBlock>
+
+**Image too large:**
+<CodeBlock title="Reduce image size" language="bash">
+{`# Use alpine variants
+# Remove unnecessary packages
+# Use .dockerignore effectively
+# Multi-stage builds
+# Check layer sizes with dive`}
+</CodeBlock>
+
+## Practice Exercise
+
+Before moving to the next lesson:
+
+1. Optimize your Dockerfile to reduce image size by at least 20%
+2. Add a database service to your docker-compose.yml
+3. Create a production docker-compose.prod.yml file
+4. Set up automated vulnerability scanning
+
+---
+
+<div className="flex justify-between items-center mt-8 pt-8 border-t">
+  <div>
+    <a href="/courses/deploying-nextjs-to-vps/01-init-project" className="text-blue-600 hover:underline">
+      ← Lesson 1: Project Initialization
+    </a>
+  </div>
+  <div className="text-right">
+    <p className="text-sm text-muted-foreground">Next lesson:</p>
+    <a href="/courses/deploying-nextjs-to-vps/03-ssh-deploy" className="font-semibold text-blue-600 hover:underline">
+      Lesson 3: SSH Deployment →
+    </a>
+  </div>
+</div>

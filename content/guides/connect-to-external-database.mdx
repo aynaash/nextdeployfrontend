@@ -1,0 +1,725 @@
+
+---
+title: "Connect with External Database"
+description: "Configure and connect your application to external databases like PostgreSQL and MongoDB"
+difficulty: "Intermediate"
+duration: "20 min"
+tags: ["Database", "PostgreSQL", "MongoDB"]
+---
+
+import { CodeBlock, Info, Warning, Success } from "@/components/mdx-components"
+
+# Connect with External Database
+
+Modern Next.js applications often require persistent data storage through external databases. This guide covers how to securely connect your NextDeploy applications to popular databases like PostgreSQL, MongoDB, and MySQL, with proper configuration management and security best practices.
+
+## Database Options Overview
+
+### PostgreSQL
+- **Best for**: Complex queries, ACID compliance, relational data
+- **Providers**: AWS RDS, Google Cloud SQL, DigitalOcean Managed Databases
+- **Use cases**: E-commerce, analytics, traditional web applications
+
+### MongoDB
+- **Best for**: Document storage, flexible schemas, rapid development
+- **Providers**: MongoDB Atlas, AWS DocumentDB, DigitalOcean Managed MongoDB
+- **Use cases**: Content management, real-time applications, IoT data
+
+### MySQL
+- **Best for**: Web applications, proven reliability, wide compatibility
+- **Providers**: AWS RDS, Google Cloud SQL, PlanetScale
+- **Use cases**: WordPress, traditional web apps, legacy systems
+
+<Info>
+This guide focuses on PostgreSQL and MongoDB as they're the most popular choices for modern Next.js applications, but the principles apply to any database system.
+</Info>
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+- NextDeploy CLI installed and configured
+- A Next.js application ready for database integration
+- Access to a database provider (cloud or self-hosted)
+- Basic understanding of database concepts
+
+## Part 1: PostgreSQL Integration
+
+### Step 1: Set Up PostgreSQL Database
+
+First, create a PostgreSQL database. We'll use DigitalOcean Managed Databases as an example:
+
+<CodeBlock title="Create PostgreSQL database" language="bash">
+{`# Using DigitalOcean CLI (doctl)
+doctl databases create my-app-db \\
+  --engine postgres \\
+  --version 15 \\
+  --region nyc1 \\
+  --size db-s-1vcpu-1gb \\
+  --num-nodes 1
+
+# Or create through the web interface:
+# 1. Go to DigitalOcean Dashboard
+# 2. Create -> Databases
+# 3. Choose PostgreSQL 15
+# 4. Select region and size
+# 5. Name your database cluster`}
+</CodeBlock>
+
+### Step 2: Install Database Dependencies
+
+<CodeBlock title="Install PostgreSQL dependencies" language="bash">
+{`# Install PostgreSQL client and ORM
+npm install pg @types/pg
+
+# Optional: Install Prisma for type-safe database access
+npm install prisma @prisma/client
+npm install -D prisma
+
+# Or use Drizzle ORM for lightweight alternative
+npm install drizzle-orm drizzle-kit
+npm install pg @types/pg`}
+</CodeBlock>
+
+### Step 3: Configure Database Connection
+
+Create a database configuration module:
+
+<CodeBlock title="src/lib/database.ts" language="typescript">
+{`import { Pool, PoolClient } from 'pg'
+
+interface DatabaseConfig {
+  host: string
+  port: number
+  database: string
+  user: string
+  password: string
+  ssl?: boolean
+  max?: number
+  idleTimeoutMillis?: number
+  connectionTimeoutMillis?: number
+}
+
+class DatabaseManager {
+  private pool: Pool | null = null
+  private config: DatabaseConfig
+
+  constructor() {
+    this.config = {
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: parseInt(process.env.DATABASE_PORT || '5432'),
+      database: process.env.DATABASE_NAME || 'myapp',
+      user: process.env.DATABASE_USER || 'postgres',
+      password: process.env.DATABASE_PASSWORD || '',
+      ssl: process.env.NODE_ENV === 'production',
+      max: 20, // Maximum number of clients in the pool
+      idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+      connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
+    }
+  }
+
+  async connect(): Promise<Pool> {
+    if (this.pool) {
+      return this.pool
+    }
+
+    try {
+      this.pool = new Pool(this.config)
+      
+      // Test the connection
+      const client = await this.pool.connect()
+      await client.query('SELECT NOW()')
+      client.release()
+      
+      console.log('✅ Database connected successfully')
+      return this.pool
+    } catch (error) {
+      console.error('❌ Database connection failed:', error)
+      throw error
+    }
+  }
+
+  async query(text: string, params?: any[]): Promise<any> {
+    const pool = await this.connect()
+    
+    try {
+      const start = Date.now()
+      const result = await pool.query(text, params)
+      const duration = Date.now() - start
+      
+      console.log('Executed query', { text, duration, rows: result.rowCount })
+      return result
+    } catch (error) {
+      console.error('Query error:', error)
+      throw error
+    }
+  }
+
+  async getClient(): Promise<PoolClient> {
+    const pool = await this.connect()
+    return pool.connect()
+  }
+
+  async transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
+    const client = await this.getClient()
+    
+    try {
+      await client.query('BEGIN')
+      const result = await callback(client)
+      await client.query('COMMIT')
+      return result
+    } catch (error) {
+      await client.query('ROLLBACK')
+      throw error
+    } finally {
+      client.release()
+    }
+  }
+
+  async close(): Promise<void> {
+    if (this.pool) {
+      await this.pool.end()
+      this.pool = null
+      console.log('Database connection closed')
+    }
+  }
+
+  async healthCheck(): Promise<boolean> {
+    try {
+      const result = await this.query('SELECT 1 as health')
+      return result.rows[0].health === 1
+    } catch (error) {
+      console.error('Database health check failed:', error)
+      return false
+    }
+  }
+}
+
+export const db = new DatabaseManager()
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await db.close()
+  process.exit(0)
+})
+
+process.on('SIGTERM', async () => {
+  await db.close()
+  process.exit(0)
+})`}
+</CodeBlock>
+
+### Step 4: Create Database Schema
+
+<CodeBlock title="scripts/create-schema.sql" language="sql">
+{`-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create posts table
+CREATE TABLE IF NOT EXISTS posts (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT,
+  author_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  published BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_posts_author_id ON posts(author_id);
+CREATE INDEX IF NOT EXISTS idx_posts_published ON posts(published);
+
+-- Create updated_at trigger function
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create triggers for updated_at
+CREATE TRIGGER update_users_updated_at 
+  BEFORE UPDATE ON users 
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_posts_updated_at 
+  BEFORE UPDATE ON posts 
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();`}
+</CodeBlock>
+
+### Step 5: Database Migration System
+
+<CodeBlock title="src/lib/migrations.ts" language="typescript">
+{`import { db } from './database'
+import fs from 'fs/promises'
+import path from 'path'
+
+interface Migration {
+  id: number
+  name: string
+  sql: string
+  executed_at?: Date
+}
+
+class MigrationManager {
+  private migrationsPath = path.join(process.cwd(), 'migrations')
+
+  async init(): Promise<void> {
+    // Create migrations table if it doesn't exist
+    await db.query(\`
+      CREATE TABLE IF NOT EXISTS migrations (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        executed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      )
+    \`)
+  }
+
+  async getMigrations(): Promise<Migration[]> {
+    try {
+      const files = await fs.readdir(this.migrationsPath)
+      const migrations: Migration[] = []
+
+      for (const file of files.sort()) {
+        if (file.endsWith('.sql')) {
+          const id = parseInt(file.split('_')[0])
+          const name = file.replace('.sql', '')
+          const sql = await fs.readFile(
+            path.join(this.migrationsPath, file), 
+            'utf-8'
+          )
+          
+          migrations.push({ id, name, sql })
+        }
+      }
+
+      return migrations
+    } catch (error) {
+      console.error('Error reading migrations:', error)
+      return []
+    }
+  }
+
+  async getExecutedMigrations(): Promise<number[]> {
+    const result = await db.query('SELECT id FROM migrations ORDER BY id')
+    return result.rows.map((row: any) => row.id)
+  }
+
+  async runMigrations(): Promise<void> {
+    await this.init()
+    
+    const migrations = await this.getMigrations()
+    const executed = await this.getExecutedMigrations()
+    
+    const pending = migrations.filter(m => !executed.includes(m.id))
+    
+    if (pending.length === 0) {
+      console.log('✅ No pending migrations')
+      return
+    }
+
+    console.log(\`🔄 Running \${pending.length} pending migrations...\`)
+
+    for (const migration of pending) {
+      try {
+        await db.transaction(async (client) => {
+          // Execute migration SQL
+          await client.query(migration.sql)
+          
+          // Record migration as executed
+          await client.query(
+            'INSERT INTO migrations (id, name) VALUES ($1, $2)',
+            [migration.id, migration.name]
+          )
+        })
+        
+        console.log(\`✅ Migration \${migration.name} completed\`)
+      } catch (error) {
+        console.error(\`❌ Migration \${migration.name} failed:`, error)
+        throw error
+      }
+    }
+  }
+
+  async rollback(steps: number = 1): Promise<void> {
+    const executed = await db.query(
+      'SELECT id, name FROM migrations ORDER BY id DESC LIMIT $1',
+      [steps]
+    )
+
+    for (const migration of executed.rows) {
+      try {
+        // Note: This is a simplified rollback
+        // In practice, you'd need rollback SQL files
+        await db.query('DELETE FROM migrations WHERE id = $1', [migration.id])
+        console.log(\`↩️  Rolled back migration \${migration.name}\`)
+      } catch (error) {
+        console.error(\`❌ Rollback failed for \${migration.name}:`, error)
+        throw error
+      }
+    }
+  }
+}
+
+export const migrationManager = new MigrationManager()`}
+</CodeBlock>
+
+## Part 2: MongoDB Integration
+
+### Step 1: Set Up MongoDB Database
+
+<CodeBlock title="Create MongoDB database" language="bash">
+{`# Using MongoDB Atlas (recommended)
+# 1. Go to https://cloud.mongodb.com/
+# 2. Create a new cluster
+# 3. Choose your cloud provider and region
+# 4. Create database user and get connection string
+
+# Or using DigitalOcean Managed MongoDB
+doctl databases create my-app-mongo \\
+  --engine mongodb \\
+  --version 5.0 \\
+  --region nyc1 \\
+  --size db-s-1vcpu-1gb \\
+  --num-nodes 1`}
+</CodeBlock>
+
+### Step 2: Install MongoDB Dependencies
+
+<CodeBlock title="Install MongoDB dependencies" language="bash">
+{`# Install MongoDB driver
+npm install mongodb @types/mongodb
+
+# Optional: Install Mongoose for ODM
+npm install mongoose @types/mongoose
+
+# Or use Prisma with MongoDB
+npm install prisma @prisma/client
+npx prisma init`}
+</CodeBlock>
+
+### Step 3: Configure MongoDB Connection
+
+<CodeBlock title="src/lib/mongodb.ts" language="typescript">
+{`import { MongoClient, Db, Collection } from 'mongodb'
+
+interface MongoConfig {
+  uri: string
+  dbName: string
+  options: {
+    maxPoolSize: number
+    serverSelectionTimeoutMS: number
+    socketTimeoutMS: number
+    connectTimeoutMS: number
+  }
+}
+
+class MongoManager {
+  private client: MongoClient | null = null
+  private db: Db | null = null
+  private config: MongoConfig
+
+  constructor() {
+    this.config = {
+      uri: process.env.MONGODB_URI || 'mongodb://localhost:27017',
+      dbName: process.env.MONGODB_DB_NAME || 'myapp',
+      options: {
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 5000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 10000,
+      }
+    }
+  }
+
+  async connect(): Promise<Db> {
+    if (this.db) {
+      return this.db
+    }
+
+    try {
+      this.client = new MongoClient(this.config.uri, this.config.options)
+      await this.client.connect()
+      
+      this.db = this.client.db(this.config.dbName)
+      
+      // Test the connection
+      await this.db.admin().ping()
+      
+      console.log('✅ MongoDB connected successfully')
+      return this.db
+    } catch (error) {
+      console.error('❌ MongoDB connection failed:', error)
+      throw error
+    }
+  }
+
+  async getCollection<T = any>(name: string): Promise<Collection<T>> {
+    const db = await this.connect()
+    return db.collection<T>(name)
+  }
+
+  async close(): Promise<void> {
+    if (this.client) {
+      await this.client.close()
+      this.client = null
+      this.db = null
+      console.log('MongoDB connection closed')
+    }
+  }
+
+  async healthCheck(): Promise<boolean> {
+    try {
+      const db = await this.connect()
+      await db.admin().ping()
+      return true
+    } catch (error) {
+      console.error('MongoDB health check failed:', error)
+      return false
+    }
+  }
+
+  // Helper methods for common operations
+  async findOne<T>(collection: string, filter: any): Promise<T | null> {
+    const coll = await this.getCollection<T>(collection)
+    return coll.findOne(filter)
+  }
+
+  async findMany<T>(collection: string, filter: any = {}, options: any = {}): Promise<T[]> {
+    const coll = await this.getCollection<T>(collection)
+    return coll.find(filter, options).toArray()
+  }
+
+  async insertOne<T>(collection: string, document: T): Promise<any> {
+    const coll = await this.getCollection<T>(collection)
+    return coll.insertOne(document as any)
+  }
+
+  async updateOne<T>(collection: string, filter: any, update: any): Promise<any> {
+    const coll = await this.getCollection<T>(collection)
+    return coll.updateOne(filter, update)
+  }
+
+  async deleteOne(collection: string, filter: any): Promise<any> {
+    const coll = await this.getCollection(collection)
+    return coll.deleteOne(filter)
+  }
+}
+
+export const mongodb = new MongoManager()
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await mongodb.close()
+  process.exit(0)
+})
+
+process.on('SIGTERM', async () => {
+  await mongodb.close()
+  process.exit(0)
+})`}
+</CodeBlock>
+
+## Part 3: NextDeploy Configuration
+
+### Step 1: Configure Database in NextDeploy
+
+Update your `nextdeploy.config.js` to include database configuration:
+
+<CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  // ... existing configuration
+
+  // Database configuration
+  database: {
+    // PostgreSQL configuration
+    postgres: {
+      enabled: true,
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT || 5432,
+      database: process.env.DATABASE_NAME,
+      user: process.env.DATABASE_USER,
+      // Password should be in secrets, not here
+      ssl: process.env.NODE_ENV === 'production',
+      
+      // Connection pool settings
+      pool: {
+        min: 2,
+        max: 20,
+        idleTimeoutMillis: 30000
+      },
+      
+      // Migration settings
+      migrations: {
+        enabled: true,
+        path: './migrations',
+        autoRun: process.env.NODE_ENV !== 'production'
+      }
+    },
+
+    // MongoDB configuration
+    mongodb: {
+      enabled: false, // Set to true if using MongoDB
+      // URI should be in secrets
+      database: process.env.MONGODB_DB_NAME,
+      
+      // Connection options
+      options: {
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 5000
+      }
+    }
+  },
+
+  // Secrets management
+  secrets: {
+    database: {
+      // PostgreSQL secrets
+      password: {
+        source: 'env',
+        key: 'DATABASE_PASSWORD',
+        required: true
+      },
+      
+      // MongoDB secrets
+      uri: {
+        source: 'env',
+        key: 'MONGODB_URI',
+        required: false
+      }
+    }
+  },
+
+  // Health checks including database
+  healthChecks: {
+    database: {
+      enabled: true,
+      timeout: 5000,
+      retries: 3
+    }
+  },
+
+  // Deployment hooks for database operations
+  hooks: {
+    beforeDeploy: [
+      'echo "Running database migrations..."',
+      'npm run db:migrate'
+    ],
+    afterDeploy: [
+      'echo "Verifying database connection..."',
+      'npm run db:health'
+    ]
+  }
+}`}
+</CodeBlock>
+
+### Step 2: Environment Configuration
+
+<CodeBlock title=".env.production" language="bash">
+{`# PostgreSQL Configuration
+DATABASE_HOST=your-postgres-host.com
+DATABASE_PORT=5432
+DATABASE_NAME=myapp_production
+DATABASE_USER=myapp_user
+DATABASE_PASSWORD=your-secure-password
+
+# MongoDB Configuration (if using)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/myapp?retryWrites=true&w=majority
+MONGODB_DB_NAME=myapp_production
+
+# SSL Configuration
+DATABASE_SSL=true
+DATABASE_SSL_REJECT_UNAUTHORIZED=true`}
+</CodeBlock>
+
+### Step 3: Add Database Scripts
+
+<CodeBlock title="package.json scripts" language="json">
+{`{
+  "scripts": {
+    // ... existing scripts
+    
+    // Database scripts
+    "db:migrate": "node scripts/migrate.js",
+    "db:seed": "node scripts/seed.js",
+    "db:health": "node scripts/health-check.js",
+    "db:backup": "node scripts/backup.js",
+    "db:restore": "node scripts/restore.js",
+    
+    // Development database scripts
+    "db:dev:setup": "npm run db:migrate && npm run db:seed",
+    "db:dev:reset": "node scripts/reset-dev-db.js"
+  }
+}`}
+</CodeBlock>
+
+## Part 4: API Integration
+
+### Step 1: Create Database API Routes
+
+<CodeBlock title="src/app/api/users/route.ts" language="typescript">
+{`import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/lib/database'
+import { z } from 'zod'
+
+// Validation schemas
+const createUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(1),
+  password: z.string().min(8)
+})
+
+const updateUserSchema = z.object({
+  name: z.string().min(1).optional(),
+  email: z.string().email().optional()
+})
+
+// GET /api/users - List users
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '10')
+    const offset = (page - 1) * limit
+
+    const result = await db.query(
+      \`SELECT id, email, name, created_at, updated_at 
+       FROM users 
+       ORDER BY created_at DESC 
+       LIMIT $1 OFFSET $2\`,
+      [limit, offset]
+    )
+
+    const countResult = await db.query('SELECT COUNT(*) FROM users')
+    const total = parseInt(countResult.rows[0].count)
+
+    return NextResponse.json({
+      users: result.rows,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    })
+  } catch (error) {
+    console.error('Error fetching users:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch users' },
+      { status: 500 }
+    )
+  }
+}
+
+// POST /api/
+\`\`\`

@@ -1,0 +1,194 @@
+
+---
+title: "Deploying Next.js to VPS"
+description: "Complete course on deploying Next.js applications to your own VPS infrastructure"
+level: "Beginner to Intermediate"
+duration: "2.5 hours"
+lessons: 4
+---
+
+import { Badge, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
+import { Info, Success } from "@/components/mdx-components"
+
+# Deploying Next.js to VPS
+
+<div className="flex items-center space-x-4 mb-8">
+  <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">Beginner to Intermediate</Badge>
+  <Badge variant="outline">4 Lessons</Badge>
+  <Badge variant="outline">2.5 hours</Badge>
+</div>
+
+Welcome to the complete course on deploying Next.js applications to your own VPS infrastructure using NextDeploy. This course will take you from zero to production-ready deployments.
+
+## What You'll Learn
+
+By the end of this course, you'll be able to:
+
+- Set up and configure a VPS for Next.js deployments
+- Use NextDeploy CLI for automated deployments
+- Implement proper security practices
+- Set up monitoring and logging
+- Handle production troubleshooting
+
+## Prerequisites
+
+- Basic knowledge of Next.js and React
+- Familiarity with command line/terminal
+- Understanding of basic server concepts
+- A VPS provider account (DigitalOcean, Linode, etc.)
+
+<Info>
+Don't worry if you're new to server management - we'll cover everything step by step!
+</Info>
+
+## Course Structure
+
+<Tabs defaultValue="overview" className="w-full">
+  <TabsList className="grid w-full grid-cols-4">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="lessons">Lessons</TabsTrigger>
+    <TabsTrigger value="resources">Resources</TabsTrigger>
+    <TabsTrigger value="community">Community</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="overview" className="space-y-4">
+    <h3 className="text-xl font-semibold">Course Overview</h3>
+    <p>This course follows a hands-on approach where you'll deploy a real Next.js application to a VPS. Each lesson builds upon the previous one, ensuring you understand both the theory and practical implementation.</p>
+    
+    <div className="grid md:grid-cols-2 gap-4 mt-6">
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🎯 Learning Approach</h4>
+        <p className="text-sm text-muted-foreground">Hands-on tutorials with real-world examples and best practices from production environments.</p>
+      </div>
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🛠️ Tools Used</h4>
+        <p className="text-sm text-muted-foreground">NextDeploy CLI, Ubuntu Server, Nginx, PM2, and various monitoring tools.</p>
+      </div>
+    </div>
+  </TabsContent>
+  
+  <TabsContent value="lessons" className="space-y-4">
+    <h3 className="text-xl font-semibold">Course Lessons</h3>
+    
+    <div className="space-y-4">
+      <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+        <div>
+          <h4 className="font-semibold">Lesson 1: Project Initialization</h4>
+          <p className="text-sm text-muted-foreground">Set up your Next.js project and configure NextDeploy</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge variant="outline">30 min</Badge>
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">Available</Badge>
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+        <div>
+          <h4 className="font-semibold">Lesson 2: Building Docker Images</h4>
+          <p className="text-sm text-muted-foreground">Create optimized Docker images for your Next.js application</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge variant="outline">45 min</Badge>
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">Available</Badge>
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+        <div>
+          <h4 className="font-semibold">Lesson 3: SSH Deployment</h4>
+          <p className="text-sm text-muted-foreground">Deploy your application to VPS using SSH and automation</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge variant="outline">50 min</Badge>
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">Available</Badge>
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+        <div>
+          <h4 className="font-semibold">Lesson 4: Monitoring Setup</h4>
+          <p className="text-sm text-muted-foreground">Implement monitoring, logging, and alerting for production</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge variant="outline">35 min</Badge>
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">Available</Badge>
+        </div>
+      </div>
+    </div>
+  </TabsContent>
+  
+  <TabsContent value="resources" className="space-y-4">
+    <h3 className="text-xl font-semibold">Course Resources</h3>
+    
+    <div className="grid md:grid-cols-2 gap-4">
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">📁 Source Code</h4>
+        <p className="text-sm text-muted-foreground mb-2">Complete source code for all examples and exercises.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">Download Repository</a>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">📋 Checklists</h4>
+        <p className="text-sm text-muted-foreground mb-2">Deployment checklists and troubleshooting guides.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">View Checklists</a>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🎥 Video Recordings</h4>
+        <p className="text-sm text-muted-foreground mb-2">HD video recordings of all deployment processes.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">Watch Videos</a>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">📖 Reference Docs</h4>
+        <p className="text-sm text-muted-foreground mb-2">Quick reference guides and command cheat sheets.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">View Docs</a>
+      </div>
+    </div>
+  </TabsContent>
+  
+  <TabsContent value="community" className="space-y-4">
+    <h3 className="text-xl font-semibold">Community & Support</h3>
+    
+    <div className="space-y-4">
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">💬 Discord Community</h4>
+        <p className="text-sm text-muted-foreground mb-2">Join our Discord server to connect with other learners and get help from instructors.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">Join Discord</a>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">❓ Q&A Forum</h4>
+        <p className="text-sm text-muted-foreground mb-2">Ask questions and get answers from the community and course instructors.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">Visit Forum</a>
+      </div>
+      
+      <div className="p-4 border rounded-lg">
+        <h4 className="font-semibold mb-2">🎯 Office Hours</h4>
+        <p className="text-sm text-muted-foreground mb-2">Weekly live sessions with instructors for Q&A and troubleshooting.</p>
+        <a href="#" className="text-blue-600 hover:underline text-sm">Schedule Session</a>
+      </div>
+    </div>
+  </TabsContent>
+</Tabs>
+
+## Getting Started
+
+Ready to begin your deployment journey? Start with the first lesson where we'll set up your development environment and initialize your first NextDeploy project.
+
+<Success>
+This course includes lifetime access to all materials and updates. Start learning at your own pace!
+</Success>
+
+---
+
+<div className="flex justify-between items-center mt-8 pt-8 border-t">
+  <div>
+    <p className="text-sm text-muted-foreground">Next up:</p>
+    <p className="font-semibold">Lesson 1: Project Initialization</p>
+  </div>
+  <a href="/courses/deploying-nextjs-to-vps/01-init-project" className="text-blue-600 hover:underline">
+    Start Course →
+  </a>
+</div>
+\`\`\`

@@ -1,0 +1,397 @@
+
+---
+title: "Lesson 1: Project Initialization"
+description: "Set up your Next.js project and configure NextDeploy for deployment"
+lesson: 1
+duration: "30 min"
+---
+
+import { CodeBlock, Info, Warning, Success, Badge } from "@/components/mdx-components"
+
+# Lesson 1: Project Initialization
+
+<div className="flex items-center space-x-4 mb-8">
+  <Badge variant="outline">Lesson 1 of 4</Badge>
+  <Badge variant="outline">30 minutes</Badge>
+  <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">Beginner</Badge>
+</div>
+
+Welcome to the first lesson of our VPS deployment course! In this lesson, we'll set up a Next.js project from scratch and configure NextDeploy for automated deployments.
+
+## Learning Objectives
+
+By the end of this lesson, you will:
+
+- Create a production-ready Next.js application
+- Install and configure the NextDeploy CLI
+- Understand NextDeploy's configuration system
+- Prepare your project for VPS deployment
+
+## Step 1: Create a New Next.js Project
+
+Let's start by creating a new Next.js application with all the modern features we'll need for production deployment.
+
+<CodeBlock title="Create Next.js project" language="bash">
+{`# Create a new Next.js project
+npx create-next-app@latest my-deployment-app --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
+
+# Navigate to the project directory
+cd my-deployment-app
+
+# Install additional dependencies for production
+npm install @next/bundle-analyzer compression helmet`}
+</CodeBlock>
+
+<Info>
+We're using the App Router with TypeScript and Tailwind CSS for a modern, production-ready setup. The additional packages will help with performance optimization and security.
+</Info>
+
+## Step 2: Configure Next.js for Production
+
+Let's optimize our Next.js configuration for production deployment:
+
+<CodeBlock title="next.config.js" language="javascript">
+{`/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Enable experimental features for better performance
+  experimental: {
+    optimizeCss: true,
+  },
+  
+  // Optimize images
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60,
+  },
+  
+  // Enable compression
+  compress: true,
+  
+  // Security headers
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+    ]
+  },
+  
+  // Output configuration for deployment
+  output: 'standalone',
+  
+  // Environment variables validation
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
+}
+
+module.exports = nextConfig`}
+</CodeBlock>
+
+## Step 3: Install NextDeploy CLI
+
+Now let's install the NextDeploy CLI globally and initialize it in our project:
+
+<CodeBlock title="Install NextDeploy CLI" language="bash">
+{`# Install NextDeploy CLI globally
+npm install -g nextdeploy
+
+# Verify installation
+nextdeploy --version
+
+# Initialize NextDeploy in your project
+nextdeploy init`}
+</CodeBlock>
+
+The `nextdeploy init` command will create a `nextdeploy.config.js` file in your project root with default configuration.
+
+## Step 4: Configure NextDeploy
+
+Let's customize the NextDeploy configuration for our specific needs:
+
+<CodeBlock title="nextdeploy.config.js" language="javascript">
+{`module.exports = {
+  // Application configuration
+  app: {
+    name: 'my-deployment-app',
+    framework: 'nextjs',
+    buildCommand: 'npm run build',
+    startCommand: 'npm start',
+    port: 3000,
+    
+    // Health check endpoint
+    healthCheck: {
+      path: '/api/health',
+      timeout: 30000,
+      retries: 3
+    }
+  },
+  
+  // Build configuration
+  build: {
+    // Enable build caching
+    cache: true,
+    
+    // Build environment variables
+    env: {
+      NODE_ENV: 'production',
+      NEXT_TELEMETRY_DISABLED: '1'
+    },
+    
+    // Pre-build hooks
+    hooks: {
+      preBuild: [
+        'echo "Starting build process..."',
+        'npm ci --only=production'
+      ]
+    }
+  },
+  
+  // Deployment targets (we'll configure this in the next lesson)
+  targets: {
+    production: {
+      // Will be configured in Lesson 3
+    }
+  },
+  
+  // Infrastructure configuration
+  infrastructure: {
+    // Docker configuration (for Lesson 2)
+    docker: {
+      enabled: true,
+      registry: null, // We'll set this up later
+      buildArgs: {
+        NODE_VERSION: '18-alpine'
+      }
+    },
+    
+    // Monitoring configuration (for Lesson 4)
+    monitoring: {
+      enabled: true,
+      metrics: ['cpu', 'memory', 'requests', 'errors'],
+      alerts: {
+        cpu: { threshold: 80, duration: '5m' },
+        memory: { threshold: 85, duration: '5m' },
+        errors: { threshold: 10, duration: '1m' }
+      }
+    }
+  }
+}`}
+</CodeBlock>
+
+<Warning>
+Don't worry about the empty production target - we'll configure this in Lesson 3 when we set up our VPS server.
+</Warning>
+
+## Step 5: Create a Health Check Endpoint
+
+Let's create a health check endpoint that NextDeploy can use to verify our deployment:
+
+<CodeBlock title="src/app/api/health/route.ts" language="typescript">
+{`import { NextResponse } from 'next/server'
+
+export async function GET() {
+  try {
+    // Perform basic health checks
+    const healthCheck = {
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV,
+      version: process.env.npm_package_version || '1.0.0',
+      
+      // Check critical services (add your own checks here)
+      services: {
+        database: 'connected', // Replace with actual DB check
+        cache: 'connected',     // Replace with actual cache check
+      }
+    }
+    
+    return NextResponse.json(healthCheck, { status: 200 })
+  } catch (error) {
+    return NextResponse.json(
+      { 
+        status: 'unhealthy', 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      }, 
+      { status: 503 }
+    )
+  }
+}`}
+</CodeBlock>
+
+## Step 6: Add Deployment Scripts
+
+Let's add some useful scripts to our `package.json` for deployment:
+
+<CodeBlock title="package.json scripts section" language="json">
+{`{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    
+    // Deployment scripts
+    "deploy:validate": "nextdeploy validate",
+    "deploy:production": "nextdeploy deploy --target production",
+    "deploy:status": "nextdeploy status --target production",
+    "deploy:logs": "nextdeploy logs --target production --tail 100",
+    
+    // Build analysis
+    "analyze": "ANALYZE=true npm run build",
+    
+    // Production testing
+    "build:test": "npm run build && npm run start"
+  }
+}`}
+</CodeBlock>
+
+## Step 7: Environment Variables Setup
+
+Create environment variable files for different environments:
+
+<CodeBlock title=".env.local" language="bash">
+{`# Local development environment
+NODE_ENV=development
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Add your local environment variables here
+# DATABASE_URL=your-local-database-url
+# API_KEY=your-local-api-key`}
+</CodeBlock>
+
+<CodeBlock title=".env.production" language="bash">
+{`# Production environment (will be used during deployment)
+NODE_ENV=production
+NEXT_PUBLIC_APP_URL=https://your-domain.com
+
+# Production environment variables (keep these secure!)
+# DATABASE_URL=your-production-database-url
+# API_KEY=your-production-api-key`}
+</CodeBlock>
+
+<Warning>
+Never commit `.env.production` to version control! Add it to your `.gitignore` file. We'll learn how to manage production secrets securely in later lessons.
+</Warning>
+
+## Step 8: Test Your Configuration
+
+Let's validate our NextDeploy configuration:
+
+<CodeBlock title="Validate configuration" language="bash">
+{`# Validate NextDeploy configuration
+nextdeploy validate
+
+# Test the build process
+npm run build
+
+# Test the health check endpoint
+npm run build:test
+# In another terminal: curl http://localhost:3000/api/health`}
+</CodeBlock>
+
+<Success>
+If all commands run successfully, your project is properly configured for deployment!
+</Success>
+
+## Step 9: Version Control Setup
+
+Initialize Git and make your first commit:
+
+<CodeBlock title="Git setup" language="bash">
+{`# Initialize Git repository
+git init
+
+# Add .env.production to .gitignore
+echo ".env.production" >> .gitignore
+echo "nextdeploy.log" >> .gitignore
+
+# Add all files and commit
+git add .
+git commit -m "Initial commit: NextDeploy configuration complete"
+
+# Optional: Add remote repository
+# git remote add origin https://github.com/yourusername/my-deployment-app.git
+# git push -u origin main`}
+</CodeBlock>
+
+## Lesson Summary
+
+Congratulations! You've successfully:
+
+✅ Created a production-ready Next.js application  
+✅ Installed and configured NextDeploy CLI  
+✅ Set up health checks and monitoring endpoints  
+✅ Configured environment variables  
+✅ Added deployment scripts  
+✅ Initialized version control  
+
+## What's Next?
+
+In the next lesson, we'll create optimized Docker images for your application. This will ensure consistent deployments across different environments and make your application portable.
+
+## Troubleshooting
+
+**NextDeploy CLI not found:**
+<CodeBlock title="Fix CLI installation" language="bash">
+{`# Reinstall globally
+npm uninstall -g nextdeploy
+npm install -g nextdeploy
+
+# Check npm global path
+npm config get prefix`}
+</CodeBlock>
+
+**Build errors:**
+<CodeBlock title="Debug build issues" language="bash">
+{`# Clear Next.js cache
+rm -rf .next
+
+# Clear npm cache
+npm cache clean --force
+
+# Reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install`}
+</CodeBlock>
+
+## Practice Exercise
+
+Before moving to the next lesson, try this exercise:
+
+1. Modify the health check endpoint to include a database connection test
+2. Add a custom build script that runs linting before building
+3. Create a staging environment configuration in `nextdeploy.config.js`
+
+---
+
+<div className="flex justify-between items-center mt-8 pt-8 border-t">
+  <div>
+    <a href="/courses/deploying-nextjs-to-vps" className="text-blue-600 hover:underline">
+      ← Back to Course Overview
+    </a>
+  </div>
+  <div className="text-right">
+    <p className="text-sm text-muted-foreground">Next lesson:</p>
+    <a href="/courses/deploying-nextjs-to-vps/02-build-image" className="font-semibold text-blue-600 hover:underline">
+      Lesson 2: Building Docker Images →
+    </a>
+  </div>
+</div>
