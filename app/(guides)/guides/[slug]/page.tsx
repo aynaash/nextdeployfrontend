@@ -4,6 +4,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Clock, ArrowLeft } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 
 // This would typically come from a CMS or markdown files
 const guides = {
@@ -223,23 +225,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${guide.title} | NextDeploy Guides`,
     description: guide.description,
+    openGraph: {
+      title: guide.title,
+      description: guide.description,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: guide.title,
+      description: guide.description,
+    },
   }
 }
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case "Beginner":
-      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
     case "Intermediate":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
     case "Advanced":
-      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
     default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300"
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
   }
 }
 
-export default function GuidePage({ params }: PageProps) {
+export default async function GuidePage({ params }: PageProps) {
   const guide = guides[params.slug as keyof typeof guides]
 
   if (!guide) {
@@ -247,33 +259,39 @@ export default function GuidePage({ params }: PageProps) {
   }
 
   return (
-    <div className="container py-12">
+    <div className="container py-8 sm:py-12">
       <div className="mx-auto max-w-4xl">
         <div className="mb-8">
           <Link
             href="/guides"
-            className="mb-6 inline-flex items-center text-blue-600 transition-colors hover:text-blue-800"
+            className="group mb-6 inline-flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            <ArrowLeft className="mr-2 size-4" />
+            <ArrowLeft className="mr-2 size-4 transition-transform group-hover:-translate-x-1" />
             Back to Guides
           </Link>
 
           <div className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <Badge className={getDifficultyColor(guide.difficulty)}>{guide.difficulty}</Badge>
+            <div className="flex flex-wrap items-center gap-4">
+              <Badge className={cn("rounded-md px-3 py-1 text-sm font-medium", getDifficultyColor(guide.difficulty))}>
+                {guide.difficulty}
+              </Badge>
               <div className="flex items-center text-sm text-muted-foreground">
-                <Clock className="mr-1 size-4" />
+                <Clock className="mr-1.5 size-4" />
                 {guide.duration}
               </div>
             </div>
 
-            <h1 className="text-4xl font-bold leading-tight">{guide.title}</h1>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{guide.title}</h1>
 
-            <p className="text-xl leading-relaxed text-muted-foreground">{guide.description}</p>
+            <p className="text-lg text-muted-foreground">{guide.description}</p>
 
             <div className="flex flex-wrap gap-2">
               {guide.tags.map((tag) => (
-                <Badge key={tag} variant="outline" className="text-xs">
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="rounded-md px-2.5 py-0.5 text-xs font-medium"
+                >
                   {tag}
                 </Badge>
               ))}
@@ -281,26 +299,26 @@ export default function GuidePage({ params }: PageProps) {
           </div>
         </div>
 
-        <div className="prose prose-lg max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: guide.content.replace(/\n/g, "<br>") }} />
+        <div className="prose prose-lg max-w-none dark:prose-invert">
+          <MarkdownRenderer content={guide.content} />
         </div>
 
-        <div className="mt-12 border-t pt-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="mb-2 text-lg font-semibold">Ready for more advanced topics?</h3>
+        <div className="mt-12 border-t pt-8 dark:border-t-gray-800">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Ready for more advanced topics?</h3>
               <p className="text-muted-foreground">Explore our comprehensive courses for deeper learning.</p>
             </div>
-            <div className="space-x-4">
+            <div className="flex flex-wrap gap-3">
               <Link
                 href="/courses"
-                className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+                className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
               >
                 Browse Courses
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+                className="inline-flex items-center rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Read Blog
               </Link>

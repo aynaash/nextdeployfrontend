@@ -6,6 +6,10 @@ const salt = randomBytes(16);
 const key = scryptSync(password, salt, 32);
 const iv = randomBytes(16);
 
+export function crypto(){
+  // does encrytion 
+  console.log("Ecryption logic")
+}
 export function encrypt(text: string): string {
   const cipher = createCipheriv(algorithm, key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
