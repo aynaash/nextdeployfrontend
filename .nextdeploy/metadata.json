@@ -1,0 +1,2414 @@
+{
+  "app_name": "nextdeploy",
+  "next_version": "^15.4.3",
+  "nextbuildmetadata": {
+    "buildId": "PSE3Oxd3-Br5i5pYKbPn6",
+    "buildManifest": {
+      "ampDevFiles": [],
+      "ampFirstPages": [],
+      "devFiles": [],
+      "lowPriorityFiles": [
+        "static/PSE3Oxd3-Br5i5pYKbPn6/_buildManifest.js",
+        "static/PSE3Oxd3-Br5i5pYKbPn6/_ssgManifest.js"
+      ],
+      "pages": {
+        "/_app": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/framework-dbc5688b1c67bd2e.js",
+          "static/chunks/main-862767c4c74d1d0a.js",
+          "static/chunks/pages/_app-fc74d4042cec2fea.js"
+        ],
+        "/_error": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/framework-dbc5688b1c67bd2e.js",
+          "static/chunks/main-862767c4c74d1d0a.js",
+          "static/chunks/pages/_error-92f7dff255ba2aed.js"
+        ]
+      },
+      "polyfillFiles": [
+        "static/chunks/polyfills-42372ed130431b0a.js"
+      ],
+      "rootMainFiles": [
+        "static/chunks/webpack-2458a232bd2c9c45.js",
+        "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+        "static/chunks/206-bf7bb9f90a94a85b.js",
+        "static/chunks/main-app-eef1e14f20c7e6dd.js"
+      ],
+      "rootMainFilesTree": {}
+    },
+    "appBuildManifest": {
+      "pages": {
+        "/(auth)/layout": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(auth)/layout-c70074cc04f2b98e.js"
+        ],
+        "/(auth)/login/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/4325-e4a7064912cfeeb8.js",
+          "static/chunks/392-5e37d037323d8e7c.js",
+          "static/chunks/2047-108d83460800f305.js",
+          "static/chunks/5510-c03800dfac8ad42c.js",
+          "static/chunks/app/(auth)/login/page-cbce73a1a1871e46.js"
+        ],
+        "/(auth)/register/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/4325-e4a7064912cfeeb8.js",
+          "static/chunks/392-5e37d037323d8e7c.js",
+          "static/chunks/2047-108d83460800f305.js",
+          "static/chunks/5510-c03800dfac8ad42c.js",
+          "static/chunks/app/(auth)/register/page-9d7b7dc88cd594e0.js"
+        ],
+        "/(blog)/blog/[slug]/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(blog)/blog/[slug]/page-c70074cc04f2b98e.js"
+        ],
+        "/(blog)/blog/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/app/(blog)/blog/page-62406e1ba3d99d44.js"
+        ],
+        "/(courses)/courses/[slug]/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/7092-bd8648368bda5edf.js",
+          "static/chunks/app/(courses)/courses/[slug]/page-308ce44d7b964e5b.js"
+        ],
+        "/(courses)/courses/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/7092-bd8648368bda5edf.js",
+          "static/chunks/app/(courses)/courses/page-1ab9f4e9603f67dc.js"
+        ],
+        "/(docs)/docs/[slugs]/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/1621-511d9da3e44bc52b.js",
+          "static/chunks/2587-9db9876fda34b080.js",
+          "static/chunks/7190-b25e2a2e5a89587e.js",
+          "static/chunks/4288-2632dc0d8fc5fc8e.js",
+          "static/chunks/app/(docs)/docs/[slugs]/page-af7743266f5070b4.js"
+        ],
+        "/(docs)/docs/layout": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/1621-511d9da3e44bc52b.js",
+          "static/chunks/2587-9db9876fda34b080.js",
+          "static/chunks/4288-2632dc0d8fc5fc8e.js",
+          "static/chunks/app/(docs)/docs/layout-75a6f60a05877530.js"
+        ],
+        "/(docs)/docs/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/app/(docs)/docs/page-62406e1ba3d99d44.js"
+        ],
+        "/(guides)/guides/[slug]/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/css/5eacd01f773eed7f.css",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/app/(guides)/guides/[slug]/page-77dbdb8544044086.js"
+        ],
+        "/(guides)/guides/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/app/(guides)/guides/page-62406e1ba3d99d44.js"
+        ],
+        "/(marketing)/error": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/app/(marketing)/error-ab953f59e24f38fe.js"
+        ],
+        "/(marketing)/layout": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/css/b0206731bedab288.css",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/4325-e4a7064912cfeeb8.js",
+          "static/chunks/1621-511d9da3e44bc52b.js",
+          "static/chunks/392-5e37d037323d8e7c.js",
+          "static/chunks/2047-108d83460800f305.js",
+          "static/chunks/7190-b25e2a2e5a89587e.js",
+          "static/chunks/4343-388f1fcf6e3304bd.js",
+          "static/chunks/5510-c03800dfac8ad42c.js",
+          "static/chunks/app/(marketing)/layout-27d7c382e12fcd52.js"
+        ],
+        "/(marketing)/not-found": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/app/(marketing)/not-found-6a35dc69a3ee195f.js"
+        ],
+        "/(marketing)/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/2462-5aeff8910fef1106.js",
+          "static/chunks/app/(marketing)/page-cc66ab35a452f51d.js"
+        ],
+        "/(marketing)/pricing/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(marketing)/pricing/loading-c70074cc04f2b98e.js"
+        ],
+        "/(marketing)/pricing/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/2462-5aeff8910fef1106.js",
+          "static/chunks/app/(marketing)/pricing/page-3d26b31f1f0bfde0.js"
+        ],
+        "/(protected)/admin/layout": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/admin/layout-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/admin/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/admin/loading-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/admin/orders/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/admin/orders/loading-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/admin/orders/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/admin/orders/page-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/admin/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/app/(protected)/admin/page-62406e1ba3d99d44.js"
+        ],
+        "/(protected)/dashboard/billing/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/billing/loading-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/dashboard/billing/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/billing/page-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/dashboard/charts/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/charts/loading-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/dashboard/charts/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/9957-dc880e2a8528b55f.js",
+          "static/chunks/app/(protected)/dashboard/charts/page-8abf787b9f79072f.js"
+        ],
+        "/(protected)/dashboard/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/loading-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/dashboard/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/page-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/dashboard/settings/loading": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/settings/loading-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/dashboard/settings/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/(protected)/dashboard/settings/page-c70074cc04f2b98e.js"
+        ],
+        "/(protected)/layout": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/4325-e4a7064912cfeeb8.js",
+          "static/chunks/1621-511d9da3e44bc52b.js",
+          "static/chunks/392-5e37d037323d8e7c.js",
+          "static/chunks/2587-9db9876fda34b080.js",
+          "static/chunks/7190-b25e2a2e5a89587e.js",
+          "static/chunks/4343-388f1fcf6e3304bd.js",
+          "static/chunks/7300-87331c4ebbdf1c64.js",
+          "static/chunks/4288-2632dc0d8fc5fc8e.js",
+          "static/chunks/app/(protected)/layout-2000597567cab927.js"
+        ],
+        "/_not-found/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/_not-found/page-2bfdd45f63039bcb.js"
+        ],
+        "/agents/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/8218-1f44db2468610186.js",
+          "static/chunks/app/agents/page-43d711ec56cd27d2.js"
+        ],
+        "/api/agents/[agents]/route": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/api/agents/[agents]/route-c70074cc04f2b98e.js"
+        ],
+        "/api/agents/route": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/api/agents/route-c70074cc04f2b98e.js"
+        ],
+        "/api/auth/[...all]/route": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/api/auth/[...all]/route-c70074cc04f2b98e.js"
+        ],
+        "/api/ws/route": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/api/ws/route-c70074cc04f2b98e.js"
+        ],
+        "/dash/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/817-e0103af6d303dca0.js",
+          "static/chunks/6021-7795e20ee1acfcfd.js",
+          "static/chunks/8218-1f44db2468610186.js",
+          "static/chunks/app/dash/page-3d48b8058024cd68.js"
+        ],
+        "/layout": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/css/b59292ce93d504fd.css",
+          "static/css/55170bd7a0e34ccb.css",
+          "static/chunks/4325-e4a7064912cfeeb8.js",
+          "static/chunks/app/layout-0835347ca4150c44.js"
+        ],
+        "/logs/page": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/logs/page-c70074cc04f2b98e.js"
+        ],
+        "/robots.txt/route": [
+          "static/chunks/webpack-2458a232bd2c9c45.js",
+          "static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+          "static/chunks/206-bf7bb9f90a94a85b.js",
+          "static/chunks/main-app-eef1e14f20c7e6dd.js",
+          "static/chunks/app/robots.txt/route-c70074cc04f2b98e.js"
+        ]
+      }
+    },
+    "prerenderManifest": {
+      "dynamicRoutes": {
+        "/courses/[slug]": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/courses/[slug].rsc",
+          "dataRouteRegex": "^/courses/([^/]+?)\\.rsc$",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "fallback": null,
+          "routeRegex": "^/courses/([^/]+?)(?:/)?$"
+        },
+        "/docs/[slugs]": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/docs/[slugs].rsc",
+          "dataRouteRegex": "^/docs/([^/]+?)\\.rsc$",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "fallback": null,
+          "routeRegex": "^/docs/([^/]+?)(?:/)?$"
+        },
+        "/guides/[slug]": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/guides/[slug].rsc",
+          "dataRouteRegex": "^/guides/([^/]+?)\\.rsc$",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "fallback": null,
+          "routeRegex": "^/guides/([^/]+?)(?:/)?$"
+        }
+      },
+      "notFoundRoutes": [],
+      "preview": {
+        "previewModeEncryptionKey": "6acda1af3834030ce00307167013fee836a834fff17346c995a22572c2e164b0",
+        "previewModeId": "b6313e3c1bcd074e87f5f10f84f01bd5",
+        "previewModeSigningKey": "488e4f6bc3a866ebd5bd99f01fe447442fac9d4fedd95dd50f82962ab3582293"
+      },
+      "routes": {
+        "/": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/index.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/"
+        },
+        "/agents": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/agents.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/agents"
+        },
+        "/blog": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/blog.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/blog"
+        },
+        "/courses": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/courses.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/courses"
+        },
+        "/courses/deploying-nextjs-to-vps": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/courses/deploying-nextjs-to-vps.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/courses/[slug]"
+        },
+        "/dash": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/dash.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/dash"
+        },
+        "/docs": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/docs.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/docs"
+        },
+        "/guides": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/guides.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/guides"
+        },
+        "/guides/deploy-to-digitalocean-vps": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/guides/deploy-to-digitalocean-vps.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/guides/[slug]"
+        },
+        "/guides/getting-started": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/guides/getting-started.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/guides/[slug]"
+        },
+        "/opengraph-image.jpg": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": null,
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialHeaders": {
+            "cache-control": "public, immutable, no-transform, max-age=31536000",
+            "content-type": "image/jpeg",
+            "x-next-cache-tags": "_N_T_/layout,_N_T_/opengraph-image.jpg/layout,_N_T_/opengraph-image.jpg/route,_N_T_/opengraph-image.jpg"
+          },
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/opengraph-image.jpg"
+        },
+        "/pricing": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": "/pricing.rsc",
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/pricing"
+        },
+        "/robots.txt": {
+          "allowHeader": [
+            "host",
+            "x-matched-path",
+            "x-prerender-revalidate",
+            "x-prerender-revalidate-if-generated",
+            "x-next-revalidated-tags",
+            "x-next-revalidate-tag-token"
+          ],
+          "dataRoute": null,
+          "experimentalBypassFor": [
+            {
+              "key": "Next-Action",
+              "type": "header"
+            },
+            {
+              "key": "content-type",
+              "type": "header",
+              "value": "multipart/form-data;.*"
+            }
+          ],
+          "initialHeaders": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "content-type": "text/plain",
+            "x-next-cache-tags": "_N_T_/layout,_N_T_/robots.txt/layout,_N_T_/robots.txt/route,_N_T_/robots.txt"
+          },
+          "initialRevalidateSeconds": false,
+          "srcRoute": "/robots.txt"
+        }
+      },
+      "version": 4
+    },
+    "routesManifest": {
+      "basePath": "",
+      "caseSensitive": false,
+      "dataRoutes": [],
+      "dynamicRoutes": [
+        {
+          "namedRegex": "^/api/agents/(?\u003cnxtPagents\u003e[^/]+?)(?:/)?$",
+          "page": "/api/agents/[agents]",
+          "regex": "^/api/agents/([^/]+?)(?:/)?$",
+          "routeKeys": {
+            "nxtPagents": "nxtPagents"
+          }
+        },
+        {
+          "namedRegex": "^/api/auth/(?\u003cnxtPall\u003e.+?)(?:/)?$",
+          "page": "/api/auth/[...all]",
+          "regex": "^/api/auth/(.+?)(?:/)?$",
+          "routeKeys": {
+            "nxtPall": "nxtPall"
+          }
+        },
+        {
+          "namedRegex": "^/blog/(?\u003cnxtPslug\u003e[^/]+?)(?:/)?$",
+          "page": "/blog/[slug]",
+          "regex": "^/blog/([^/]+?)(?:/)?$",
+          "routeKeys": {
+            "nxtPslug": "nxtPslug"
+          }
+        },
+        {
+          "namedRegex": "^/courses/(?\u003cnxtPslug\u003e[^/]+?)(?:/)?$",
+          "page": "/courses/[slug]",
+          "regex": "^/courses/([^/]+?)(?:/)?$",
+          "routeKeys": {
+            "nxtPslug": "nxtPslug"
+          }
+        },
+        {
+          "namedRegex": "^/docs/(?\u003cnxtPslugs\u003e[^/]+?)(?:/)?$",
+          "page": "/docs/[slugs]",
+          "regex": "^/docs/([^/]+?)(?:/)?$",
+          "routeKeys": {
+            "nxtPslugs": "nxtPslugs"
+          }
+        },
+        {
+          "namedRegex": "^/guides/(?\u003cnxtPslug\u003e[^/]+?)(?:/)?$",
+          "page": "/guides/[slug]",
+          "regex": "^/guides/([^/]+?)(?:/)?$",
+          "routeKeys": {
+            "nxtPslug": "nxtPslug"
+          }
+        }
+      ],
+      "headers": [],
+      "pages404": true,
+      "redirects": [
+        {
+          "destination": "/:path+",
+          "internal": true,
+          "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$",
+          "source": "/:path+/",
+          "statusCode": 308
+        }
+      ],
+      "rewriteHeaders": {
+        "pathHeader": "x-nextjs-rewritten-path",
+        "queryHeader": "x-nextjs-rewritten-query"
+      },
+      "rewrites": {
+        "afterFiles": [],
+        "beforeFiles": [],
+        "fallback": []
+      },
+      "rsc": {
+        "contentTypeHeader": "text/x-component",
+        "didPostponeHeader": "x-nextjs-postponed",
+        "header": "RSC",
+        "prefetchHeader": "Next-Router-Prefetch",
+        "prefetchSegmentDirSuffix": ".segments",
+        "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+        "prefetchSegmentSuffix": ".segment.rsc",
+        "prefetchSuffix": ".prefetch.rsc",
+        "suffix": ".rsc",
+        "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+      },
+      "staticRoutes": [
+        {
+          "namedRegex": "^/(?:/)?$",
+          "page": "/",
+          "regex": "^/(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/_not\\-found(?:/)?$",
+          "page": "/_not-found",
+          "regex": "^/_not\\-found(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/admin(?:/)?$",
+          "page": "/admin",
+          "regex": "^/admin(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/admin/orders(?:/)?$",
+          "page": "/admin/orders",
+          "regex": "^/admin/orders(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/agents(?:/)?$",
+          "page": "/agents",
+          "regex": "^/agents(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/blog(?:/)?$",
+          "page": "/blog",
+          "regex": "^/blog(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/courses(?:/)?$",
+          "page": "/courses",
+          "regex": "^/courses(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/dash(?:/)?$",
+          "page": "/dash",
+          "regex": "^/dash(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/dashboard(?:/)?$",
+          "page": "/dashboard",
+          "regex": "^/dashboard(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/dashboard/billing(?:/)?$",
+          "page": "/dashboard/billing",
+          "regex": "^/dashboard/billing(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/dashboard/charts(?:/)?$",
+          "page": "/dashboard/charts",
+          "regex": "^/dashboard/charts(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/dashboard/settings(?:/)?$",
+          "page": "/dashboard/settings",
+          "regex": "^/dashboard/settings(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/docs(?:/)?$",
+          "page": "/docs",
+          "regex": "^/docs(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/guides(?:/)?$",
+          "page": "/guides",
+          "regex": "^/guides(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/login(?:/)?$",
+          "page": "/login",
+          "regex": "^/login(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/logs(?:/)?$",
+          "page": "/logs",
+          "regex": "^/logs(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/opengraph\\-image\\.jpg(?:/)?$",
+          "page": "/opengraph-image.jpg",
+          "regex": "^/opengraph\\-image\\.jpg(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/pricing(?:/)?$",
+          "page": "/pricing",
+          "regex": "^/pricing(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/register(?:/)?$",
+          "page": "/register",
+          "regex": "^/register(?:/)?$",
+          "routeKeys": {}
+        },
+        {
+          "namedRegex": "^/robots\\.txt(?:/)?$",
+          "page": "/robots.txt",
+          "regex": "^/robots\\.txt(?:/)?$",
+          "routeKeys": {}
+        }
+      ],
+      "version": 3
+    },
+    "imagesManifest": {
+      "images": {
+        "contentDispositionType": "attachment",
+        "contentSecurityPolicy": "script-src 'none'; frame-src 'none'; sandbox;",
+        "dangerouslyAllowSVG": false,
+        "deviceSizes": [
+          640,
+          750,
+          828,
+          1080,
+          1200,
+          1920,
+          2048,
+          3840
+        ],
+        "disableStaticImages": false,
+        "domains": [],
+        "formats": [
+          "image/webp"
+        ],
+        "imageSizes": [
+          16,
+          32,
+          48,
+          64,
+          96,
+          128,
+          256,
+          384
+        ],
+        "loader": "default",
+        "loaderFile": "",
+        "minimumCacheTTL": 60,
+        "path": "/_next/image",
+        "remotePatterns": [
+          {
+            "hostname": "^(?:^(?:avatars\\.githubusercontent\\.com)$)$",
+            "pathname": "^(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)\\/?)$",
+            "protocol": "https"
+          },
+          {
+            "hostname": "^(?:^(?:lh3\\.googleusercontent\\.com)$)$",
+            "pathname": "^(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)\\/?)$",
+            "protocol": "https"
+          },
+          {
+            "hostname": "^(?:^(?:randomuser\\.me)$)$",
+            "pathname": "^(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)\\/?)$",
+            "protocol": "https"
+          }
+        ],
+        "sizes": [
+          640,
+          750,
+          828,
+          1080,
+          1200,
+          1920,
+          2048,
+          3840,
+          16,
+          32,
+          48,
+          64,
+          96,
+          128,
+          256,
+          384
+        ],
+        "unoptimized": true
+      },
+      "version": 1
+    },
+    "appPathRoutesManifest": {
+      "/(auth)/login/page": "/login",
+      "/(auth)/register/page": "/register",
+      "/(blog)/blog/[slug]/page": "/blog/[slug]",
+      "/(blog)/blog/page": "/blog",
+      "/(courses)/courses/[slug]/page": "/courses/[slug]",
+      "/(courses)/courses/page": "/courses",
+      "/(docs)/docs/[slugs]/page": "/docs/[slugs]",
+      "/(docs)/docs/page": "/docs",
+      "/(guides)/guides/[slug]/page": "/guides/[slug]",
+      "/(guides)/guides/page": "/guides",
+      "/(marketing)/page": "/",
+      "/(marketing)/pricing/page": "/pricing",
+      "/(protected)/admin/orders/page": "/admin/orders",
+      "/(protected)/admin/page": "/admin",
+      "/(protected)/dashboard/billing/page": "/dashboard/billing",
+      "/(protected)/dashboard/charts/page": "/dashboard/charts",
+      "/(protected)/dashboard/page": "/dashboard",
+      "/(protected)/dashboard/settings/page": "/dashboard/settings",
+      "/_not-found/page": "/_not-found",
+      "/agents/page": "/agents",
+      "/api/agents/[agents]/route": "/api/agents/[agents]",
+      "/api/agents/route": "/api/agents",
+      "/api/auth/[...all]/route": "/api/auth/[...all]",
+      "/api/ws/route": "/api/ws",
+      "/dash/page": "/dash",
+      "/logs/page": "/logs",
+      "/opengraph-image.jpg/route": "/opengraph-image.jpg",
+      "/robots.txt/route": "/robots.txt"
+    },
+    "reactLoadableManifest": {},
+    "diagnostics": null
+  },
+  "static_routes": null,
+  "dymanic_routes": null,
+  "build_command": "yarn build",
+  "start_command": "yarn start",
+  "has_image_assets": true,
+  "cdn_enabled": false,
+  "domain": "https://www.nextdeploy.one",
+  "middleware": {
+    "path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/middleware.ts",
+    "matchers": null,
+    "runtime": "nodejs"
+  },
+  "static_assets": {
+    "public_dir": [
+      {
+        "path": "public/Inter-Italic-VariableFont_opsz,wght.ttf",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/Inter-Italic-VariableFont_opsz,wght.ttf",
+        "public_path": "/Inter-Italic-VariableFont_opsz,wght.ttf",
+        "type": "font",
+        "extension": ".ttf",
+        "size": 904532
+      },
+      {
+        "path": "public/Inter-VariableFont_opsz,wght.ttf",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/Inter-VariableFont_opsz,wght.ttf",
+        "public_path": "/Inter-VariableFont_opsz,wght.ttf",
+        "type": "font",
+        "extension": ".ttf",
+        "size": 874708
+      },
+      {
+        "path": "public/OFL.txt",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/OFL.txt",
+        "public_path": "/OFL.txt",
+        "type": "document",
+        "extension": ".txt",
+        "size": 4470
+      },
+      {
+        "path": "public/README.txt",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/README.txt",
+        "public_path": "/README.txt",
+        "type": "document",
+        "extension": ".txt",
+        "size": 4230
+      },
+      {
+        "path": "public/_static/avatars/mickasmt.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/avatars/mickasmt.png",
+        "public_path": "/_static/avatars/mickasmt.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 326017
+      },
+      {
+        "path": "public/_static/avatars/shadcn.jpeg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/avatars/shadcn.jpeg",
+        "public_path": "/_static/avatars/shadcn.jpeg",
+        "type": "image",
+        "extension": ".jpeg",
+        "size": 31014
+      },
+      {
+        "path": "public/_static/blog/blog-post-1.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/blog/blog-post-1.jpg",
+        "public_path": "/_static/blog/blog-post-1.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 69040
+      },
+      {
+        "path": "public/_static/blog/blog-post-2.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/blog/blog-post-2.jpg",
+        "public_path": "/_static/blog/blog-post-2.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 69414
+      },
+      {
+        "path": "public/_static/blog/blog-post-3.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/blog/blog-post-3.jpg",
+        "public_path": "/_static/blog/blog-post-3.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 70573
+      },
+      {
+        "path": "public/_static/blog/blog-post-4.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/blog/blog-post-4.jpg",
+        "public_path": "/_static/blog/blog-post-4.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 89779
+      },
+      {
+        "path": "public/_static/docs/gg-auth-config.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/docs/gg-auth-config.jpg",
+        "public_path": "/_static/docs/gg-auth-config.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 61726
+      },
+      {
+        "path": "public/_static/favicons/android-chrome-192x192.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-chrome-192x192.png",
+        "public_path": "/_static/favicons/android-chrome-192x192.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 9417
+      },
+      {
+        "path": "public/_static/favicons/android-chrome-512x512.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-chrome-512x512.png",
+        "public_path": "/_static/favicons/android-chrome-512x512.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 27548
+      },
+      {
+        "path": "public/_static/favicons/android-icon-144x144.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-icon-144x144.png",
+        "public_path": "/_static/favicons/android-icon-144x144.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 17759
+      },
+      {
+        "path": "public/_static/favicons/android-icon-192x192.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-icon-192x192.png",
+        "public_path": "/_static/favicons/android-icon-192x192.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 28734
+      },
+      {
+        "path": "public/_static/favicons/android-icon-36x36.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-icon-36x36.png",
+        "public_path": "/_static/favicons/android-icon-36x36.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 2756
+      },
+      {
+        "path": "public/_static/favicons/android-icon-48x48.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-icon-48x48.png",
+        "public_path": "/_static/favicons/android-icon-48x48.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 3800
+      },
+      {
+        "path": "public/_static/favicons/android-icon-72x72.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-icon-72x72.png",
+        "public_path": "/_static/favicons/android-icon-72x72.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 6183
+      },
+      {
+        "path": "public/_static/favicons/android-icon-96x96.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/android-icon-96x96.png",
+        "public_path": "/_static/favicons/android-icon-96x96.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 9197
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-114x114.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-114x114.png",
+        "public_path": "/_static/favicons/apple-icon-114x114.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 12031
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-120x120.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-120x120.png",
+        "public_path": "/_static/favicons/apple-icon-120x120.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 13154
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-144x144.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-144x144.png",
+        "public_path": "/_static/favicons/apple-icon-144x144.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 17759
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-152x152.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-152x152.png",
+        "public_path": "/_static/favicons/apple-icon-152x152.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 19334
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-180x180.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-180x180.png",
+        "public_path": "/_static/favicons/apple-icon-180x180.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 25628
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-57x57.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-57x57.png",
+        "public_path": "/_static/favicons/apple-icon-57x57.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 4644
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-60x60.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-60x60.png",
+        "public_path": "/_static/favicons/apple-icon-60x60.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 4903
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-72x72.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-72x72.png",
+        "public_path": "/_static/favicons/apple-icon-72x72.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 6183
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-76x76.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-76x76.png",
+        "public_path": "/_static/favicons/apple-icon-76x76.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 6672
+      },
+      {
+        "path": "public/_static/favicons/apple-icon-precomposed.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon-precomposed.png",
+        "public_path": "/_static/favicons/apple-icon-precomposed.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 29170
+      },
+      {
+        "path": "public/_static/favicons/apple-icon.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-icon.png",
+        "public_path": "/_static/favicons/apple-icon.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 29170
+      },
+      {
+        "path": "public/_static/favicons/apple-touch-icon.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/apple-touch-icon.png",
+        "public_path": "/_static/favicons/apple-touch-icon.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 8903
+      },
+      {
+        "path": "public/_static/favicons/browserconfig.xml",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/browserconfig.xml",
+        "public_path": "/_static/favicons/browserconfig.xml",
+        "type": "document",
+        "extension": ".xml",
+        "size": 281
+      },
+      {
+        "path": "public/_static/favicons/favicon-16x16.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/favicon-16x16.png",
+        "public_path": "/_static/favicons/favicon-16x16.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 1245
+      },
+      {
+        "path": "public/_static/favicons/favicon-32x32.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/favicon-32x32.png",
+        "public_path": "/_static/favicons/favicon-32x32.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 2425
+      },
+      {
+        "path": "public/_static/favicons/favicon-96x96.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/favicon-96x96.png",
+        "public_path": "/_static/favicons/favicon-96x96.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 9197
+      },
+      {
+        "path": "public/_static/favicons/favicon.ico",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/favicon.ico",
+        "public_path": "/_static/favicons/favicon.ico",
+        "type": "image",
+        "extension": ".ico",
+        "size": 1150
+      },
+      {
+        "path": "public/_static/favicons/manifest.json",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/manifest.json",
+        "public_path": "/_static/favicons/manifest.json",
+        "type": "document",
+        "extension": ".json",
+        "size": 820
+      },
+      {
+        "path": "public/_static/favicons/ms-icon-144x144.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/ms-icon-144x144.png",
+        "public_path": "/_static/favicons/ms-icon-144x144.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 17759
+      },
+      {
+        "path": "public/_static/favicons/ms-icon-150x150.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/ms-icon-150x150.png",
+        "public_path": "/_static/favicons/ms-icon-150x150.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 18907
+      },
+      {
+        "path": "public/_static/favicons/ms-icon-310x310.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/ms-icon-310x310.png",
+        "public_path": "/_static/favicons/ms-icon-310x310.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 60665
+      },
+      {
+        "path": "public/_static/favicons/ms-icon-70x70.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/favicons/ms-icon-70x70.png",
+        "public_path": "/_static/favicons/ms-icon-70x70.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 5959
+      },
+      {
+        "path": "public/_static/illustrations/call-waiting.svg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/illustrations/call-waiting.svg",
+        "public_path": "/_static/illustrations/call-waiting.svg",
+        "type": "image",
+        "extension": ".svg",
+        "size": 16143
+      },
+      {
+        "path": "public/_static/illustrations/rocket-crashed.svg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/illustrations/rocket-crashed.svg",
+        "public_path": "/_static/illustrations/rocket-crashed.svg",
+        "type": "image",
+        "extension": ".svg",
+        "size": 49304
+      },
+      {
+        "path": "public/_static/illustrations/work-from-home.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/illustrations/work-from-home.jpg",
+        "public_path": "/_static/illustrations/work-from-home.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 405140
+      },
+      {
+        "path": "public/_static/og.jpg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/_static/og.jpg",
+        "public_path": "/_static/og.jpg",
+        "type": "image",
+        "extension": ".jpg",
+        "size": 71963
+      },
+      {
+        "path": "public/logo (1).png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/logo (1).png",
+        "public_path": "/logo (1).png",
+        "type": "image",
+        "extension": ".png",
+        "size": 273373
+      },
+      {
+        "path": "public/logo.jpeg",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/logo.jpeg",
+        "public_path": "/logo.jpeg",
+        "type": "image",
+        "extension": ".jpeg",
+        "size": 19342
+      },
+      {
+        "path": "public/logo.png",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/logo.png",
+        "public_path": "/logo.png",
+        "type": "image",
+        "extension": ".png",
+        "size": 1479187
+      },
+      {
+        "path": "public/site.webmanifest",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/public/site.webmanifest",
+        "public_path": "/site.webmanifest",
+        "type": "other",
+        "extension": ".webmanifest",
+        "size": 404
+      }
+    ],
+    "static_folder": null,
+    "next_static": [
+      {
+        "path": ".next/static/PSE3Oxd3-Br5i5pYKbPn6/_buildManifest.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/PSE3Oxd3-Br5i5pYKbPn6/_buildManifest.js",
+        "public_path": "/_next/static/PSE3Oxd3-Br5i5pYKbPn6/_buildManifest.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 1510
+      },
+      {
+        "path": ".next/static/PSE3Oxd3-Br5i5pYKbPn6/_ssgManifest.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/PSE3Oxd3-Br5i5pYKbPn6/_ssgManifest.js",
+        "public_path": "/_next/static/PSE3Oxd3-Br5i5pYKbPn6/_ssgManifest.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 160
+      },
+      {
+        "path": ".next/static/chunks/1621-511d9da3e44bc52b.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/1621-511d9da3e44bc52b.js",
+        "public_path": "/_next/static/chunks/1621-511d9da3e44bc52b.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 30873
+      },
+      {
+        "path": ".next/static/chunks/2047-108d83460800f305.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/2047-108d83460800f305.js",
+        "public_path": "/_next/static/chunks/2047-108d83460800f305.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 198248
+      },
+      {
+        "path": ".next/static/chunks/206-bf7bb9f90a94a85b.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/206-bf7bb9f90a94a85b.js",
+        "public_path": "/_next/static/chunks/206-bf7bb9f90a94a85b.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 166176
+      },
+      {
+        "path": ".next/static/chunks/2462-5aeff8910fef1106.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/2462-5aeff8910fef1106.js",
+        "public_path": "/_next/static/chunks/2462-5aeff8910fef1106.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 13542
+      },
+      {
+        "path": ".next/static/chunks/2587-9db9876fda34b080.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/2587-9db9876fda34b080.js",
+        "public_path": "/_next/static/chunks/2587-9db9876fda34b080.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 17692
+      },
+      {
+        "path": ".next/static/chunks/392-5e37d037323d8e7c.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/392-5e37d037323d8e7c.js",
+        "public_path": "/_next/static/chunks/392-5e37d037323d8e7c.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 33691
+      },
+      {
+        "path": ".next/static/chunks/4288-2632dc0d8fc5fc8e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/4288-2632dc0d8fc5fc8e.js",
+        "public_path": "/_next/static/chunks/4288-2632dc0d8fc5fc8e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 6206
+      },
+      {
+        "path": ".next/static/chunks/4325-e4a7064912cfeeb8.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/4325-e4a7064912cfeeb8.js",
+        "public_path": "/_next/static/chunks/4325-e4a7064912cfeeb8.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 33164
+      },
+      {
+        "path": ".next/static/chunks/4343-388f1fcf6e3304bd.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/4343-388f1fcf6e3304bd.js",
+        "public_path": "/_next/static/chunks/4343-388f1fcf6e3304bd.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 56165
+      },
+      {
+        "path": ".next/static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+        "public_path": "/_next/static/chunks/47204603-3cb3cef1cb6c8bd3.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 172733
+      },
+      {
+        "path": ".next/static/chunks/5510-c03800dfac8ad42c.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/5510-c03800dfac8ad42c.js",
+        "public_path": "/_next/static/chunks/5510-c03800dfac8ad42c.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 7000
+      },
+      {
+        "path": ".next/static/chunks/6021-7795e20ee1acfcfd.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/6021-7795e20ee1acfcfd.js",
+        "public_path": "/_next/static/chunks/6021-7795e20ee1acfcfd.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 115498
+      },
+      {
+        "path": ".next/static/chunks/7092-bd8648368bda5edf.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/7092-bd8648368bda5edf.js",
+        "public_path": "/_next/static/chunks/7092-bd8648368bda5edf.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 7803
+      },
+      {
+        "path": ".next/static/chunks/7190-b25e2a2e5a89587e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/7190-b25e2a2e5a89587e.js",
+        "public_path": "/_next/static/chunks/7190-b25e2a2e5a89587e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 8881
+      },
+      {
+        "path": ".next/static/chunks/7300-87331c4ebbdf1c64.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/7300-87331c4ebbdf1c64.js",
+        "public_path": "/_next/static/chunks/7300-87331c4ebbdf1c64.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 57448
+      },
+      {
+        "path": ".next/static/chunks/817-e0103af6d303dca0.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/817-e0103af6d303dca0.js",
+        "public_path": "/_next/static/chunks/817-e0103af6d303dca0.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 8516
+      },
+      {
+        "path": ".next/static/chunks/8218-1f44db2468610186.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/8218-1f44db2468610186.js",
+        "public_path": "/_next/static/chunks/8218-1f44db2468610186.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 8998
+      },
+      {
+        "path": ".next/static/chunks/9957-dc880e2a8528b55f.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/9957-dc880e2a8528b55f.js",
+        "public_path": "/_next/static/chunks/9957-dc880e2a8528b55f.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 435026
+      },
+      {
+        "path": ".next/static/chunks/app/(auth)/layout-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(auth)/layout-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(auth)/layout-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(auth)/login/page-cbce73a1a1871e46.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(auth)/login/page-cbce73a1a1871e46.js",
+        "public_path": "/_next/static/chunks/app/(auth)/login/page-cbce73a1a1871e46.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 15271
+      },
+      {
+        "path": ".next/static/chunks/app/(auth)/register/page-9d7b7dc88cd594e0.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(auth)/register/page-9d7b7dc88cd594e0.js",
+        "public_path": "/_next/static/chunks/app/(auth)/register/page-9d7b7dc88cd594e0.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 16415
+      },
+      {
+        "path": ".next/static/chunks/app/(blog)/blog/[slug]/page-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(blog)/blog/[slug]/page-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(blog)/blog/[slug]/page-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(blog)/blog/page-62406e1ba3d99d44.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(blog)/blog/page-62406e1ba3d99d44.js",
+        "public_path": "/_next/static/chunks/app/(blog)/blog/page-62406e1ba3d99d44.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 204
+      },
+      {
+        "path": ".next/static/chunks/app/(courses)/courses/[slug]/page-308ce44d7b964e5b.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(courses)/courses/[slug]/page-308ce44d7b964e5b.js",
+        "public_path": "/_next/static/chunks/app/(courses)/courses/[slug]/page-308ce44d7b964e5b.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 138
+      },
+      {
+        "path": ".next/static/chunks/app/(courses)/courses/page-1ab9f4e9603f67dc.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(courses)/courses/page-1ab9f4e9603f67dc.js",
+        "public_path": "/_next/static/chunks/app/(courses)/courses/page-1ab9f4e9603f67dc.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 137
+      },
+      {
+        "path": ".next/static/chunks/app/(docs)/docs/[slugs]/page-af7743266f5070b4.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/[slugs]/page-af7743266f5070b4.js",
+        "public_path": "/_next/static/chunks/app/(docs)/docs/[slugs]/page-af7743266f5070b4.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 10551
+      },
+      {
+        "path": ".next/static/chunks/app/(docs)/docs/layout-75a6f60a05877530.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/layout-75a6f60a05877530.js",
+        "public_path": "/_next/static/chunks/app/(docs)/docs/layout-75a6f60a05877530.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 7066
+      },
+      {
+        "path": ".next/static/chunks/app/(docs)/docs/page-62406e1ba3d99d44.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/page-62406e1ba3d99d44.js",
+        "public_path": "/_next/static/chunks/app/(docs)/docs/page-62406e1ba3d99d44.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 204
+      },
+      {
+        "path": ".next/static/chunks/app/(guides)/guides/[slug]/page-77dbdb8544044086.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(guides)/guides/[slug]/page-77dbdb8544044086.js",
+        "public_path": "/_next/static/chunks/app/(guides)/guides/[slug]/page-77dbdb8544044086.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 252
+      },
+      {
+        "path": ".next/static/chunks/app/(guides)/guides/page-62406e1ba3d99d44.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(guides)/guides/page-62406e1ba3d99d44.js",
+        "public_path": "/_next/static/chunks/app/(guides)/guides/page-62406e1ba3d99d44.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 204
+      },
+      {
+        "path": ".next/static/chunks/app/(marketing)/error-ab953f59e24f38fe.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(marketing)/error-ab953f59e24f38fe.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/error-ab953f59e24f38fe.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 4543
+      },
+      {
+        "path": ".next/static/chunks/app/(marketing)/layout-27d7c382e12fcd52.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(marketing)/layout-27d7c382e12fcd52.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/layout-27d7c382e12fcd52.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 23799
+      },
+      {
+        "path": ".next/static/chunks/app/(marketing)/not-found-6a35dc69a3ee195f.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(marketing)/not-found-6a35dc69a3ee195f.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/not-found-6a35dc69a3ee195f.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 7677
+      },
+      {
+        "path": ".next/static/chunks/app/(marketing)/page-cc66ab35a452f51d.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(marketing)/page-cc66ab35a452f51d.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/page-cc66ab35a452f51d.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 239
+      },
+      {
+        "path": ".next/static/chunks/app/(marketing)/pricing/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(marketing)/pricing/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/pricing/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(marketing)/pricing/page-3d26b31f1f0bfde0.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(marketing)/pricing/page-3d26b31f1f0bfde0.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/pricing/page-3d26b31f1f0bfde0.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 239
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/admin/layout-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/admin/layout-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/admin/layout-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/admin/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/admin/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/admin/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/admin/orders/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/admin/orders/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/admin/orders/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/admin/orders/page-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/admin/orders/page-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/admin/orders/page-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/admin/page-62406e1ba3d99d44.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/admin/page-62406e1ba3d99d44.js",
+        "public_path": "/_next/static/chunks/app/(protected)/admin/page-62406e1ba3d99d44.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 204
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/billing/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/billing/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/billing/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/billing/page-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/billing/page-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/billing/page-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/charts/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/charts/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/charts/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/charts/page-8abf787b9f79072f.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/charts/page-8abf787b9f79072f.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/charts/page-8abf787b9f79072f.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 26717
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/page-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/page-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/page-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/settings/loading-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/settings/loading-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/settings/loading-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/dashboard/settings/page-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/settings/page-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/settings/page-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/(protected)/layout-2000597567cab927.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/(protected)/layout-2000597567cab927.js",
+        "public_path": "/_next/static/chunks/app/(protected)/layout-2000597567cab927.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 31918
+      },
+      {
+        "path": ".next/static/chunks/app/_not-found/page-2bfdd45f63039bcb.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/_not-found/page-2bfdd45f63039bcb.js",
+        "public_path": "/_next/static/chunks/app/_not-found/page-2bfdd45f63039bcb.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 2683
+      },
+      {
+        "path": ".next/static/chunks/app/agents/page-43d711ec56cd27d2.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/agents/page-43d711ec56cd27d2.js",
+        "public_path": "/_next/static/chunks/app/agents/page-43d711ec56cd27d2.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 3387
+      },
+      {
+        "path": ".next/static/chunks/app/api/agents/[agents]/route-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/api/agents/[agents]/route-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/api/agents/[agents]/route-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/api/agents/route-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/api/agents/route-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/api/agents/route-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/api/auth/[...all]/route-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/api/auth/[...all]/route-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/api/auth/[...all]/route-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/api/ws/route-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/api/ws/route-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/api/ws/route-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/dash/page-3d48b8058024cd68.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/dash/page-3d48b8058024cd68.js",
+        "public_path": "/_next/static/chunks/app/dash/page-3d48b8058024cd68.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 318
+      },
+      {
+        "path": ".next/static/chunks/app/layout-0835347ca4150c44.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/layout-0835347ca4150c44.js",
+        "public_path": "/_next/static/chunks/app/layout-0835347ca4150c44.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 7873
+      },
+      {
+        "path": ".next/static/chunks/app/logs/page-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/logs/page-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/logs/page-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/app/robots.txt/route-c70074cc04f2b98e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/app/robots.txt/route-c70074cc04f2b98e.js",
+        "public_path": "/_next/static/chunks/app/robots.txt/route-c70074cc04f2b98e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 230
+      },
+      {
+        "path": ".next/static/chunks/framework-dbc5688b1c67bd2e.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/framework-dbc5688b1c67bd2e.js",
+        "public_path": "/_next/static/chunks/framework-dbc5688b1c67bd2e.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 139862
+      },
+      {
+        "path": ".next/static/chunks/main-862767c4c74d1d0a.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/main-862767c4c74d1d0a.js",
+        "public_path": "/_next/static/chunks/main-862767c4c74d1d0a.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 116419
+      },
+      {
+        "path": ".next/static/chunks/main-app-eef1e14f20c7e6dd.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/main-app-eef1e14f20c7e6dd.js",
+        "public_path": "/_next/static/chunks/main-app-eef1e14f20c7e6dd.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 572
+      },
+      {
+        "path": ".next/static/chunks/pages/_app-fc74d4042cec2fea.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/pages/_app-fc74d4042cec2fea.js",
+        "public_path": "/_next/static/chunks/pages/_app-fc74d4042cec2fea.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 241
+      },
+      {
+        "path": ".next/static/chunks/pages/_error-92f7dff255ba2aed.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/pages/_error-92f7dff255ba2aed.js",
+        "public_path": "/_next/static/chunks/pages/_error-92f7dff255ba2aed.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 224
+      },
+      {
+        "path": ".next/static/chunks/polyfills-42372ed130431b0a.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/polyfills-42372ed130431b0a.js",
+        "public_path": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 112594
+      },
+      {
+        "path": ".next/static/chunks/webpack-2458a232bd2c9c45.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/chunks/webpack-2458a232bd2c9c45.js",
+        "public_path": "/_next/static/chunks/webpack-2458a232bd2c9c45.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 3562
+      },
+      {
+        "path": ".next/static/css/55170bd7a0e34ccb.css",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/css/55170bd7a0e34ccb.css",
+        "public_path": "/_next/static/css/55170bd7a0e34ccb.css",
+        "type": "stylesheet",
+        "extension": ".css",
+        "size": 124509
+      },
+      {
+        "path": ".next/static/css/5eacd01f773eed7f.css",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/css/5eacd01f773eed7f.css",
+        "public_path": "/_next/static/css/5eacd01f773eed7f.css",
+        "type": "stylesheet",
+        "extension": ".css",
+        "size": 1316
+      },
+      {
+        "path": ".next/static/css/b0206731bedab288.css",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/css/b0206731bedab288.css",
+        "public_path": "/_next/static/css/b0206731bedab288.css",
+        "type": "stylesheet",
+        "extension": ".css",
+        "size": 124491
+      },
+      {
+        "path": ".next/static/css/b59292ce93d504fd.css",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/css/b59292ce93d504fd.css",
+        "public_path": "/_next/static/css/b59292ce93d504fd.css",
+        "type": "stylesheet",
+        "extension": ".css",
+        "size": 2012
+      },
+      {
+        "path": ".next/static/media/18a6d2958e497d80-s.p.ttf",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/media/18a6d2958e497d80-s.p.ttf",
+        "public_path": "/_next/static/media/18a6d2958e497d80-s.p.ttf",
+        "type": "font",
+        "extension": ".ttf",
+        "size": 82800
+      },
+      {
+        "path": ".next/static/media/46d5fe52ddbe8c49-s.p.ttf",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/media/46d5fe52ddbe8c49-s.p.ttf",
+        "public_path": "/_next/static/media/46d5fe52ddbe8c49-s.p.ttf",
+        "type": "font",
+        "extension": ".ttf",
+        "size": 85256
+      },
+      {
+        "path": ".next/static/media/90475aac776488b6-s.p.woff2",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/media/90475aac776488b6-s.p.woff2",
+        "public_path": "/_next/static/media/90475aac776488b6-s.p.woff2",
+        "type": "font",
+        "extension": ".woff2",
+        "size": 40932
+      },
+      {
+        "path": ".next/static/media/cc27cf3ff100ea21-s.p.ttf",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/media/cc27cf3ff100ea21-s.p.ttf",
+        "public_path": "/_next/static/media/cc27cf3ff100ea21-s.p.ttf",
+        "type": "font",
+        "extension": ".ttf",
+        "size": 874708
+      },
+      {
+        "path": ".next/static/media/dd830f3b569412d7-s.p.ttf",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/media/dd830f3b569412d7-s.p.ttf",
+        "public_path": "/_next/static/media/dd830f3b569412d7-s.p.ttf",
+        "type": "font",
+        "extension": ".ttf",
+        "size": 904532
+      },
+      {
+        "path": ".next/static/media/e11418ac562b8ac1-s.p.woff2",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/media/e11418ac562b8ac1-s.p.woff2",
+        "public_path": "/_next/static/media/e11418ac562b8ac1-s.p.woff2",
+        "type": "font",
+        "extension": ".woff2",
+        "size": 56800
+      }
+    ],
+    "other_assets": null
+  },
+  "git_commit": "6f84b98",
+  "git_dirty": true,
+  "generated_at": "2025-07-30T16:34:49+03:00",
+  "build_lock_file": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/build.lock",
+  "metadata_file_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/metadata.json",
+  "assets_output_dir": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/assets",
+  "config": {
+    "Version": "1.0",
+    "App": {
+      "Name": "nextdeploy",
+      "Port": 3000,
+      "Environment": "production",
+      "Domain": "https://www.nextdeploy.one",
+      "Secrets": null
+    },
+    "Repository": {
+      "URL": "git@github.com:username/example-app.git",
+      "Branch": "main",
+      "AutoDeploy": false,
+      "WebhookSecret": ""
+    },
+    "Docker": {
+      "Image": "hersiyussuf/nextdeploy",
+      "Registry": "docker.io",
+      "RegistryRegion": "",
+      "Build": {
+        "Context": ".",
+        "Dockerfile": "Dockerfile",
+        "NoCache": false,
+        "Args": {
+          "NODE_ENV": "production"
+        }
+      },
+      "Push": true,
+      "Username": "hersiyussuf",
+      "Password": "dckr_pat_H8xP4EPpj4_zKE91zKnInqXh010",
+      "AlwaysPull": false,
+      "Strategy": "",
+      "AutoPush": false,
+      "Platform": "",
+      "NoCache": false,
+      "BuildContext": "",
+      "Target": ""
+    },
+    "Deployment": {
+      "Server": {
+        "Host": "51.20.134.163",
+        "User": "",
+        "SSHKey": "",
+        "UseSudo": false
+      },
+      "Container": {
+        "Name": "nextdeploy",
+        "Restart": "always",
+        "Ports": [
+          "80:3000"
+        ],
+        "HealthCheck": null
+      }
+    },
+    "Database": {
+      "Type": "postgres",
+      "Host": "192.0.2.124",
+      "Port": "5432",
+      "Username": "dbuser",
+      "Password": "secret",
+      "Name": "exampledb"
+    },
+    "Monitoring": {
+      "Enabled": true,
+      "Type": "",
+      "Endpoint": "",
+      "Alerts": {
+        "CPUThreshold": 0,
+        "MemoryThreshold": 0,
+        "Email": "",
+        "SlackWebhook": ""
+      }
+    },
+    "Secrets": {
+      "Provider": "",
+      "Doppler": null,
+      "Vault": null,
+      "Files": null,
+      "Project": "",
+      "Config": ""
+    },
+    "Logging": {
+      "Driver": "",
+      "Options": null
+    },
+    "Backup": {
+      "Enabled": true,
+      "Schedule": "",
+      "Retention": 0,
+      "Storage": {
+        "Type": "",
+        "Endpoint": "",
+        "Bucket": "nextdeploy-backups",
+        "AccessKey": "",
+        "SecretKey": ""
+      }
+    },
+    "SSL": {
+      "Enabled": true,
+      "Provider": "letsencrypt",
+      "Domains": null,
+      "Email": "yussufhersi219@gmail.com",
+      "Wildcard": true,
+      "DNSProvider": "namecheap",
+      "Staging": false,
+      "Force": false,
+      "AutoRenew": true,
+      "Domain": "nextdeploy.one"
+    },
+    "Webhooks": null,
+    "Environment": null,
+    "Servers": [
+      {
+        "Name": "production",
+        "Host": "51.20.134.163",
+        "Port": 0,
+        "Username": "ubuntu",
+        "Password": "",
+        "KeyPath": "/home/elitebook/.ssh/nextdeploy-key.pem",
+        "SSHKey": "~/.ssh/nextdeploy-key.pem",
+        "KeyPassphrase": ""
+      }
+    ],
+    "SSLConfig": null,
+    "CloudProvider": null
+  },
+  "image_assets": {
+    "public_images": null,
+    "optimized_images": null,
+    "static_imports": null
+  },
+  "route_info": {
+    "static_routes": [
+      "/",
+      "/_not-found",
+      "/admin",
+      "/admin/orders",
+      "/agents",
+      "/blog",
+      "/courses",
+      "/dash",
+      "/dashboard",
+      "/dashboard/billing",
+      "/dashboard/charts",
+      "/dashboard/settings",
+      "/docs",
+      "/guides",
+      "/login",
+      "/logs",
+      "/opengraph-image.jpg",
+      "/pricing",
+      "/register",
+      "/robots.txt"
+    ],
+    "dynamic_routes": [
+      "/api/agents/[agents]",
+      "/api/auth/[...all]",
+      "/blog/[slug]",
+      "/courses/[slug]",
+      "/docs/[slugs]",
+      "/guides/[slug]"
+    ],
+    "ssg_routes": {},
+    "ssr_routes": null,
+    "isr_routes": {},
+    "api_routes": null,
+    "fallback_routes": {},
+    "middleware_routes": null
+  },
+  "output": "",
+  "next_build": {
+    "root_files": {
+      "build_manifest": "",
+      "app_build_manifest": "",
+      "react_loadable_manifest": "",
+      "package_json": "",
+      "last_build_timestamp": ""
+    },
+    "cache": {
+      "images": null,
+      "webpack": {
+        "client_development": null,
+        "client_production": null,
+        "server_development": null,
+        "server_production": null,
+        "edge_server_development": null,
+        "edge_server_production": null
+      },
+      "swc": null
+    },
+    "server": {
+      "manifests": {
+        "app_paths": "",
+        "middleware": "",
+        "pages": "",
+        "font": "",
+        "server_reference": ""
+      },
+      "app_routes": null,
+      "vendor_chunks": null,
+      "middleware": {
+        "path": "",
+        "matchers": null
+      }
+    },
+    "static": {
+      "chunks": {
+        "app": null,
+        "pages": null,
+        "polyfills": "",
+        "webpack": "",
+        "main": ""
+      },
+      "css": null,
+      "media": null,
+      "webpack": null
+    },
+    "has_app_router": false,
+    "has_pages_router": false,
+    "build_metadata": {
+      "next_version": "",
+      "build_target": "",
+      "build_id": "",
+      "has_typescript": false,
+      "has_eslint": false,
+      "output_mode": ""
+    }
+  }
+}
