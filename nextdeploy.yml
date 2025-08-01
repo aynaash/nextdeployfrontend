@@ -1,4 +1,5 @@
-version: '1.0' # ⚠️ Do NOT change unless you change field meanings, format, or logic.
+
+version: "1.0" # ⚠️ Do NOT change unless you change field meanings, format, or logic.
 
 # ==================================================
 # APP METADATA
@@ -42,7 +43,7 @@ servers:
     host: 51.20.134.163
     username: ubuntu
     ssh_key: ~/.ssh/nextdeploy-key.pem
-    key_path: '/home/elitebook/.ssh/nextdeploy-key.pem'
+    key_path: "/home/elitebook/.ssh/nextdeploy-key.pem"
     use_sudo: false
 
     container:
@@ -52,7 +53,7 @@ servers:
       volumes:
         - ./data:/app/data
       ports:
-        - '80:3000'
+        - "80:3000"
       healthcheck:
         path: /api/health
         interval: 30s
@@ -166,4 +167,4 @@ deployment:
     name: nextdeploy
     restart: always
     ports:
-      - '80:3000'
+      - "80:3000"

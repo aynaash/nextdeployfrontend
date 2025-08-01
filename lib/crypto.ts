@@ -16,7 +16,10 @@ export function encrypt(text: string): string {
   encrypted += cipher.final('hex');
   return `${iv.toString('hex')}:${salt.toString('hex')}:${encrypted}`;
 }
-
+export function verifyMessage(message: string, signature: string) {
+  // Your verification logic here (e.g., using ethers, jwt, etc.)
+  return true; // or false
+}
 export function decrypt(encryptedText: string): string {
   const [ivHex, saltHex, encrypted] = encryptedText.split(':');
   const decipherIv = Buffer.from(ivHex, 'hex');
