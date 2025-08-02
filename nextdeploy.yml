@@ -46,6 +46,14 @@ servers:
     key_path: "/home/elitebook/.ssh/nextdeploy-key.pem"
     use_sudo: false
 
+    webserver:
+      type: caddy # Could be nginx, apache, caddy, etc.
+      config_path: /etc/caddy/Caddyfile # Path to webserver config file 
+      enabled: true # Enable this server block
+      ssl_enabled: true # Use SSL for this server block
+      ssl_cert_path: /etc/letsencrypt/live/nextdeploy.one/fullchain.pem
+      ssl_key_path: /etc/letsencrypt/live/nextdeploy.one/privkey.pem
+
     container:
       name: nextdeploy
       restart: always
