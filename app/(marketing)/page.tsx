@@ -24,18 +24,18 @@ export default function IndexPage() {
       <Powered />
 
       {/* Three Pillars Section - From second version */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Why Choose NextDeploy?</h2>
-          <p className="text-xl text-muted-foreground text-center mb-12">
+      <section className="px-4 py-20">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">Why Choose NextDeploy?</h2>
+          <p className="mb-12 text-center text-xl text-muted-foreground">
             Built by DevOps engineers, for developers who want control
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center hover:shadow-lg transition-shadow">
+          <div className="grid gap-8 md:grid-cols-3">
+            <Card className="text-center transition-shadow hover:shadow-lg">
               <CardHeader>
-                <div className="mx-auto mb-4 p-3 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
-                  <Zap className="h-8 w-8 text-green-600" />
+                <div className="mx-auto mb-4 w-fit rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                  <Zap className="size-8 text-green-600" />
                 </div>
                 <CardTitle className="text-2xl">Fast Deployment</CardTitle>
               </CardHeader>
@@ -47,10 +47,10 @@ export default function IndexPage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card className="text-center transition-shadow hover:shadow-lg">
               <CardHeader>
-                <div className="mx-auto mb-4 p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full w-fit">
-                  <Shield className="h-8 w-8 text-blue-600" />
+                <div className="mx-auto mb-4 w-fit rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
+                  <Shield className="size-8 text-blue-600" />
                 </div>
                 <CardTitle className="text-2xl">Infrastructure Ownership</CardTitle>
               </CardHeader>
@@ -62,10 +62,10 @@ export default function IndexPage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card className="text-center transition-shadow hover:shadow-lg">
               <CardHeader>
-                <div className="mx-auto mb-4 p-3 bg-purple-100 dark:bg-purple-900/20 rounded-full w-fit">
-                  <Activity className="h-8 w-8 text-purple-600" />
+                <div className="mx-auto mb-4 w-fit rounded-full bg-purple-100 p-3 dark:bg-purple-900/20">
+                  <Activity className="size-8 text-purple-600" />
                 </div>
                 <CardTitle className="text-2xl">Real-Time Monitoring</CardTitle>
               </CardHeader>
@@ -84,30 +84,30 @@ export default function IndexPage() {
       <InfoLanding data={infos[0]} reverse={true} />
 
       {/* Quick Start Section - From second version */}
-      <section className="py-20 px-4 bg-slate-50 dark:bg-slate-900/50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Deploy?</h2>
-          <p className="text-lg text-muted-foreground mb-8">Get started with NextDeploy in minutes, not hours</p>
+      <section className="bg-slate-50 px-4 py-20 dark:bg-slate-900/50">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-6 text-3xl font-bold">Ready to Deploy?</h2>
+          <p className="mb-8 text-lg text-muted-foreground">Get started with NextDeploy in minutes, not hours</p>
 
-          <div className="bg-slate-900 dark:bg-slate-800 rounded-lg p-6 text-left">
-            <div className="flex items-center mb-4">
-              <Terminal className="h-5 w-5 text-green-400 mr-2" />
-              <span className="text-green-400 font-mono text-sm">Terminal</span>
+          <div className="rounded-lg bg-slate-900 p-6 text-left dark:bg-slate-800">
+            <div className="mb-4 flex items-center">
+              <Terminal className="mr-2 size-5 text-green-400" />
+              <span className="font-mono text-sm text-green-400">Terminal</span>
             </div>
-            <code className="text-green-400 font-mono text-sm block">
-              <span className="text-slate-400"># Install NextDeploy CLI</span>
+            <code className="block font-mono text-sm text-green-400">
+              <span className="text-slate-400"># Initiate the deployment</span>
               <br />
-              npm install -g nextdeploy
+              nextdeploy init 
               <br />
               <br />
-              <span className="text-slate-400"># Initialize your project</span>
+              <span className="text-slate-400"># Build your project</span>
               <br />
-              nextdeploy init
+              nextdeploy build
               <br />
               <br />
               <span className="text-slate-400"># Deploy to your server</span>
               <br />
-              nextdeploy deploy
+              nextdeploy ship
             </code>
           </div>
 
@@ -115,7 +115,7 @@ export default function IndexPage() {
             <Button asChild size="lg">
               <Link href="/guides/getting-started">
                 Start Your First Deployment
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 size-5" />
               </Link>
             </Button>
           </div>

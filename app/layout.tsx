@@ -6,7 +6,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { Analytics } from '@/components/analytics';
 //import ModalProvider from "@/components/modals/providers";
 import { TailwindIndicator } from '@/components/tailwind-indicator';
-
+import { RootProvider } from 'fumadocs-ui/provider';
+import type { ReactNode } from 'react';
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -32,7 +33,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
+          <RootProvider>
           {children}
+          </RootProvider>
           <Analytics />
           <Toaster richColors closeButton />
           <TailwindIndicator />
