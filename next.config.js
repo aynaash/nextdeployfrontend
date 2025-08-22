@@ -1,3 +1,4 @@
+const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -15,7 +16,7 @@ const nextConfig = {
    experimental: {
     globalNotFound: true,
   },
-  images: {
+    images: {
     unoptimized: true,
     remotePatterns: [
       {
@@ -32,12 +33,24 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { webpack }) => {
+ webpack: (config, { webpack }) => {
+    // Add IgnorePlugin
     config.plugins.push(
       new webpack.IgnorePlugin({
         resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
       })
     );
+
+    // Set up path aliases correctly
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname),
+      '@/components': path.resolve(__dirname, 'components'),
+      '@/hooks': path.resolve(__dirname, 'hooks'),
+      '@/lib': path.resolve(__dirname, 'lib'),
+      '@/app': path.resolve(__dirname, 'app'),
+    };
+
     return config;
   },
 };

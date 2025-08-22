@@ -34,6 +34,7 @@ const RAW_RUNTIME_STATE =
           ["@commitlint/config-conventional", "npm:19.8.1"],\
           ["@hookform/resolvers", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:5.2.1"],\
           ["@ianvs/prettier-plugin-sort-imports", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:4.5.1"],\
+          ["@mdx-js/loader", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:3.1.0"],\
           ["@neondatabase/serverless", "npm:1.0.1"],\
           ["@next/mdx", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:15.4.5"],\
           ["@radix-ui/react-accessible-icon", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:1.1.7"],\
@@ -2197,6 +2198,30 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@mdx-js/loader", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "../../../../.yarn/berry/cache/@mdx-js-loader-npm-3.1.0-caf2b82778-10c0.zip/node_modules/@mdx-js/loader/",\
+        "packageDependencies": [\
+          ["@mdx-js/loader", "npm:3.1.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:3.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/@mdx-js-loader-virtual-dc018a41c4/5/.yarn/berry/cache/@mdx-js-loader-npm-3.1.0-caf2b82778-10c0.zip/node_modules/@mdx-js/loader/",\
+        "packageDependencies": [\
+          ["@mdx-js/loader", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:3.1.0"],\
+          ["@mdx-js/mdx", "npm:3.1.0"],\
+          ["@types/webpack", null],\
+          ["source-map", "npm:0.7.6"],\
+          ["webpack", null]\
+        ],\
+        "packagePeers": [\
+          "@types/webpack",\
+          "webpack"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@mdx-js/mdx", [\
       ["npm:3.1.0", {\
         "packageLocation": "../../../../.yarn/berry/cache/@mdx-js-mdx-npm-3.1.0-8c5103e032-10c0.zip/node_modules/@mdx-js/mdx/",\
@@ -2290,7 +2315,7 @@ const RAW_RUNTIME_STATE =
       ["virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:15.4.5", {\
         "packageLocation": "./.yarn/__virtual__/@next-mdx-virtual-e5845d9493/5/.yarn/berry/cache/@next-mdx-npm-15.4.5-9ad34b8b08-10c0.zip/node_modules/@next/mdx/",\
         "packageDependencies": [\
-          ["@mdx-js/loader", null],\
+          ["@mdx-js/loader", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:3.1.0"],\
           ["@mdx-js/react", null],\
           ["@next/mdx", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:15.4.5"],\
           ["@types/mdx-js__loader", null],\
@@ -7535,6 +7560,7 @@ const RAW_RUNTIME_STATE =
           ["@commitlint/config-conventional", "npm:19.8.1"],\
           ["@hookform/resolvers", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:5.2.1"],\
           ["@ianvs/prettier-plugin-sort-imports", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:4.5.1"],\
+          ["@mdx-js/loader", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:3.1.0"],\
           ["@neondatabase/serverless", "npm:1.0.1"],\
           ["@next/mdx", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:15.4.5"],\
           ["@radix-ui/react-accessible-icon", "virtual:49f9246bf385d8d9489992398577962867703c38e458c450282af0485a0a3d4c21707a80bf286c00efca8ce5f420bacb7f63fe26ec24b3c9891fd65062480270#npm:1.1.7"],\

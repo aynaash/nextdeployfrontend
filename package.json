@@ -22,6 +22,7 @@
     "@auth/drizzle-adapter": "^1.9.1",
     "@better-auth/stripe": "^1.2.8",
     "@hookform/resolvers": "^5.0.1",
+    "@mdx-js/loader": "^3.1.0",
     "@neondatabase/serverless": "^1.0.0",
     "@next/mdx": "^15.4.3",
     "@radix-ui/react-accessible-icon": "^1.1.0",
