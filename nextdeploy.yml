@@ -14,7 +14,7 @@ app:
 # GIT SOURCE CONFIGURATION
 # ==================================================
 repository:
-  url: git@github.com:username/example-app.git # Must be accessible from deployer
+  url: git@github.com:aynaash/nextdeploy.git # Must be accessible from deployer
   branch: main
   auto_deploy: true # Enable webhook-triggered CI/CD
   webhook_secret: your_webhook_secret # Used to verify webhook origin
@@ -29,7 +29,7 @@ docker:
     args:
       NODE_ENV: production
     no_cache: false # Force rebuilds (good for CI, bad for caching)
-  image: hersiyussuf/nextdeploy
+  image: hersi/nextdeploy
   registry: registry.digitalocean.com/hersi
   push: true
   username: hersiyussuf
