@@ -1,6 +1,6 @@
 {
-  "git_commit": "81996ad",
-  "git_dirty": false,
-  "generated_at": "2025-08-23T15:13:31+03:00",
+  "git_commit": "41916d9",
+  "git_dirty": true,
+  "generated_at": "2025-08-23T15:33:01+03:00",
   "metadata_file": ".nextdeploy/metadata.json"
 }
