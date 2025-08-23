@@ -40,10 +40,10 @@ docker:
 # ==================================================
 servers:
   - name: production # Unique ID (used for logs, filtering, routing)
-    host: 51.20.134.163
-    username: ubuntu
-    ssh_key: ~/.ssh/nextdeploy-key.pem
-    key_path: "/home/elitebook/.ssh/nextdeploy-key.pem"
+    host: 164.92.97.55
+    username: nextdeploy
+    ssh_key: ~/.ssh/nextdeploy
+    key_path: "/home/elitebook/.ssh/nextdeploy"
     use_sudo: false
 
     webserver:

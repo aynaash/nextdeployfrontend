@@ -2,14 +2,14 @@
   "app_name": "nextdeploy",
   "next_version": "^15.4.3",
   "nextbuildmetadata": {
-    "buildId": "KC463EkQLcSuBRY5vnYC8",
+    "buildId": "UAvOCv1uq51ITM9reO2F-",
     "buildManifest": {
       "ampDevFiles": [],
       "ampFirstPages": [],
       "devFiles": [],
       "lowPriorityFiles": [
-        "static/KC463EkQLcSuBRY5vnYC8/_buildManifest.js",
-        "static/KC463EkQLcSuBRY5vnYC8/_ssgManifest.js"
+        "static/UAvOCv1uq51ITM9reO2F-/_buildManifest.js",
+        "static/UAvOCv1uq51ITM9reO2F-/_ssgManifest.js"
       ],
       "pages": {
         "/_app": [
@@ -1504,17 +1504,17 @@
     "static_folder": null,
     "next_static": [
       {
-        "path": ".next/static/KC463EkQLcSuBRY5vnYC8/_buildManifest.js",
-        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/KC463EkQLcSuBRY5vnYC8/_buildManifest.js",
-        "public_path": "/_next/static/KC463EkQLcSuBRY5vnYC8/_buildManifest.js",
+        "path": ".next/static/UAvOCv1uq51ITM9reO2F-/_buildManifest.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/UAvOCv1uq51ITM9reO2F-/_buildManifest.js",
+        "public_path": "/_next/static/UAvOCv1uq51ITM9reO2F-/_buildManifest.js",
         "type": "script",
         "extension": ".js",
         "size": 1396
       },
       {
-        "path": ".next/static/KC463EkQLcSuBRY5vnYC8/_ssgManifest.js",
-        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/KC463EkQLcSuBRY5vnYC8/_ssgManifest.js",
-        "public_path": "/_next/static/KC463EkQLcSuBRY5vnYC8/_ssgManifest.js",
+        "path": ".next/static/UAvOCv1uq51ITM9reO2F-/_ssgManifest.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/UAvOCv1uq51ITM9reO2F-/_ssgManifest.js",
+        "public_path": "/_next/static/UAvOCv1uq51ITM9reO2F-/_ssgManifest.js",
         "type": "script",
         "extension": ".js",
         "size": 160
@@ -2146,9 +2146,8 @@
     ],
     "other_assets": null
   },
-  "git_commit": "41916d9",
-  "git_dirty": true,
-  "generated_at": "2025-08-23T15:33:01+03:00",
+  "git_commit": "6785b4a",
+  "generated_at": "2025-08-23T15:35:15+03:00",
   "build_lock_file": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/build.lock",
   "metadata_file_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/metadata.json",
   "assets_output_dir": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/assets",
