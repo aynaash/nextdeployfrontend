@@ -2,14 +2,14 @@
   "app_name": "nextdeploy",
   "next_version": "^15.4.3",
   "nextbuildmetadata": {
-    "buildId": "Y3K6PoJWS3ZNlF3VHe6Rj",
+    "buildId": "bSkpNwfbjWEPH_M8mg4jC",
     "buildManifest": {
       "ampDevFiles": [],
       "ampFirstPages": [],
       "devFiles": [],
       "lowPriorityFiles": [
-        "static/Y3K6PoJWS3ZNlF3VHe6Rj/_buildManifest.js",
-        "static/Y3K6PoJWS3ZNlF3VHe6Rj/_ssgManifest.js"
+        "static/bSkpNwfbjWEPH_M8mg4jC/_buildManifest.js",
+        "static/bSkpNwfbjWEPH_M8mg4jC/_ssgManifest.js"
       ],
       "pages": {
         "/_app": [
@@ -1504,17 +1504,17 @@
     "static_folder": null,
     "next_static": [
       {
-        "path": ".next/static/Y3K6PoJWS3ZNlF3VHe6Rj/_buildManifest.js",
-        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/Y3K6PoJWS3ZNlF3VHe6Rj/_buildManifest.js",
-        "public_path": "/_next/static/Y3K6PoJWS3ZNlF3VHe6Rj/_buildManifest.js",
+        "path": ".next/static/bSkpNwfbjWEPH_M8mg4jC/_buildManifest.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/bSkpNwfbjWEPH_M8mg4jC/_buildManifest.js",
+        "public_path": "/_next/static/bSkpNwfbjWEPH_M8mg4jC/_buildManifest.js",
         "type": "script",
         "extension": ".js",
         "size": 1396
       },
       {
-        "path": ".next/static/Y3K6PoJWS3ZNlF3VHe6Rj/_ssgManifest.js",
-        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/Y3K6PoJWS3ZNlF3VHe6Rj/_ssgManifest.js",
-        "public_path": "/_next/static/Y3K6PoJWS3ZNlF3VHe6Rj/_ssgManifest.js",
+        "path": ".next/static/bSkpNwfbjWEPH_M8mg4jC/_ssgManifest.js",
+        "absolute_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.next/static/bSkpNwfbjWEPH_M8mg4jC/_ssgManifest.js",
+        "public_path": "/_next/static/bSkpNwfbjWEPH_M8mg4jC/_ssgManifest.js",
         "type": "script",
         "extension": ".js",
         "size": 160
@@ -2146,8 +2146,8 @@
     ],
     "other_assets": null
   },
-  "git_commit": "3a117c7",
-  "generated_at": "2025-08-23T14:32:21+03:00",
+  "git_commit": "71df311",
+  "generated_at": "2025-08-23T14:49:03+03:00",
   "build_lock_file": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/build.lock",
   "metadata_file_path": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/metadata.json",
   "assets_output_dir": "/home/elitebook/Music/twoyears/NextDeploy/nextdeployfrontend/.nextdeploy/assets",
@@ -2168,7 +2168,7 @@
     },
     "Docker": {
       "Image": "hersi/nextdeploy",
-      "Registry": "registry.digitalocean.com/hersi",
+      "Registry": "registry.digitalocean.com",
       "RegistryRegion": "",
       "Build": {
         "Context": ".",
