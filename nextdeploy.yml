@@ -30,7 +30,7 @@ docker:
       NODE_ENV: production
     no_cache: false # Force rebuilds (good for CI, bad for caching)
   image: hersi/nextdeploy
-  registry: registry.digitalocean.com/hersi
+  registry: registry.digitalocean.com
   push: true
   username: hersiyussuf
   password: dckr_pat_H8xP4EPpj4_zKE91zKnInqXh010
