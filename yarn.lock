@@ -246,13 +246,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@better-auth/stripe@npm:^1.2.8":
-  version: 1.3.4
-  resolution: "@better-auth/stripe@npm:1.3.4"
+"@better-auth/stripe@npm:^1.3.7":
+  version: 1.3.7
+  resolution: "@better-auth/stripe@npm:1.3.7"
   dependencies:
-    better-auth: "npm:^1.3.4"
-    zod: "npm:^4.0.0"
-  checksum: 10c0/622fa3f2245bc1d624cbd0bf7d69ac11b31a0af2118cf5edc1ddf3bf55a4471a1f5fb52ac5bfda00f6ad0f739ece2d43f3153e2c3dc8e56dff62a64994347b62
+    better-auth: "npm:^1.3.7"
+  peerDependencies:
+    zod: ^3.25.0 || ^4.0.0
+  checksum: 10c0/bc72ab3f1e92653d349c3242f87c8f154aece6ef87c3d324be28b261840c5f5dcbb239a148865321843929f07e192cb2990c1f8cdd5a2ac5bedbc805e94cf588
   languageName: node
   linkType: hard
 
@@ -263,6 +264,15 @@ __metadata:
     typescript: "npm:^5.8.2"
     uncrypto: "npm:^0.1.3"
   checksum: 10c0/6e93ad61dfee41ac39525a40e3bcc6496ec95793ca72b4b58f941704409865df80ff3ae907e597f9140928c43c3b892235aa53e511b460ac8c1ff50155529ea6
+  languageName: node
+  linkType: hard
+
+"@better-auth/utils@npm:0.2.6":
+  version: 0.2.6
+  resolution: "@better-auth/utils@npm:0.2.6"
+  dependencies:
+    uncrypto: "npm:^0.1.3"
+  checksum: 10c0/7fa0f85e4578d5b10227bc074607fd038e5ba7fd1fafccc9465f8cc99dd7908cde309f89edc89f774bfa846c64255f257a061de872ec617e1099382b380c4da8
   languageName: node
   linkType: hard
 
@@ -4759,14 +4769,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:^13.0.0":
+"@simplewebauthn/browser@npm:^13.0.0, @simplewebauthn/browser@npm:^13.1.2":
   version: 13.1.2
   resolution: "@simplewebauthn/browser@npm:13.1.2"
   checksum: 10c0/43c21437d01f7d458b749f70827f5d1182356c62034398a9cc7096ff46d543c6d277e8979335f999c2b53289f8cb7c96211defafec87a613426e50af386c7c25
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:^13.0.0":
+"@simplewebauthn/server@npm:^13.0.0, @simplewebauthn/server@npm:^13.1.2":
   version: 13.1.2
   resolution: "@simplewebauthn/server@npm:13.1.2"
   dependencies:
@@ -5861,7 +5871,7 @@ __metadata:
   resolution: "NextDeploy@workspace:."
   dependencies:
     "@auth/drizzle-adapter": "npm:^1.9.1"
-    "@better-auth/stripe": "npm:^1.2.8"
+    "@better-auth/stripe": "npm:^1.3.7"
     "@commitlint/cli": "npm:^19.3.0"
     "@commitlint/config-conventional": "npm:^19.2.2"
     "@hookform/resolvers": "npm:^5.0.1"
@@ -6456,35 +6466,47 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-auth@npm:^1.3.4":
-  version: 1.3.4
-  resolution: "better-auth@npm:1.3.4"
+"better-auth@npm:^1.3.7":
+  version: 1.3.7
+  resolution: "better-auth@npm:1.3.7"
   dependencies:
-    "@better-auth/utils": "npm:0.2.5"
+    "@better-auth/utils": "npm:0.2.6"
     "@better-fetch/fetch": "npm:^1.1.18"
     "@noble/ciphers": "npm:^0.6.0"
     "@noble/hashes": "npm:^1.8.0"
-    "@simplewebauthn/browser": "npm:^13.0.0"
-    "@simplewebauthn/server": "npm:^13.0.0"
-    better-call: "npm:^1.0.12"
+    "@simplewebauthn/browser": "npm:^13.1.2"
+    "@simplewebauthn/server": "npm:^13.1.2"
+    better-call: "npm:^1.0.13"
     defu: "npm:^6.1.4"
-    jose: "npm:^5.9.6"
-    kysely: "npm:^0.28.1"
-    nanostores: "npm:^0.11.3"
-    zod: "npm:^4.0.5"
+    jose: "npm:^5.10.0"
+    kysely: "npm:^0.28.5"
+    nanostores: "npm:^0.11.4"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
+    zod: ^3.25.0 || ^4.0.0
   peerDependenciesMeta:
     react:
       optional: true
     react-dom:
       optional: true
-  checksum: 10c0/70083439396a788eac3048dd577e0cf11d62298aeb6cfa64d53894e459b0d945c85a02819ce414f557afa390669e225c54a2c03f0c0ccfc6f755c09f16e26abf
+  checksum: 10c0/f28036f79c01aad66c8051d6df98ed829160325a9af26b2361face63ee0ce11c85143685bd508c6792821de4a0c7987e4ca1cd294c05948607b72099eae82818
   languageName: node
   linkType: hard
 
-"better-call@npm:^1.0.12, better-call@npm:^1.0.8":
+"better-call@npm:^1.0.13":
+  version: 1.0.16
+  resolution: "better-call@npm:1.0.16"
+  dependencies:
+    "@better-fetch/fetch": "npm:^1.1.4"
+    rou3: "npm:^0.5.1"
+    set-cookie-parser: "npm:^2.7.1"
+    uncrypto: "npm:^0.1.3"
+  checksum: 10c0/b6482f11e1dcbcc3508e70a07ac716f5b72261fe56edbc80b193b3154f3b84eb1c21808b92979feb02eb0dcef2dd19da3aff28424552071d4f86e95273a40fac
+  languageName: node
+  linkType: hard
+
+"better-call@npm:^1.0.8":
   version: 1.0.12
   resolution: "better-call@npm:1.0.12"
   dependencies:
@@ -10259,7 +10281,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^5.9.6":
+"jose@npm:^5.10.0, jose@npm:^5.9.6":
   version: 5.10.0
   resolution: "jose@npm:5.10.0"
   checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
@@ -10418,6 +10440,13 @@ __metadata:
   version: 0.28.3
   resolution: "kysely@npm:0.28.3"
   checksum: 10c0/ded46427497085b572528610087de6c5f142aa4d9661e50706771ecb51bc8fd35afeab1b79f96b80e8f678423871857b3c8ced73b0eab9c89c08da42e8c17785
+  languageName: node
+  linkType: hard
+
+"kysely@npm:^0.28.5":
+  version: 0.28.5
+  resolution: "kysely@npm:0.28.5"
+  checksum: 10c0/f987cad2453c412ecb4664c76bd6256748c6a75f0fb8dc09616864a67771745f267d3bc8eadbda0ea61269c71fa7acca808212c30cdcf4d0eef80d41d343288f
   languageName: node
   linkType: hard
 
@@ -11641,7 +11670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanostores@npm:^0.11.3":
+"nanostores@npm:^0.11.3, nanostores@npm:^0.11.4":
   version: 0.11.4
   resolution: "nanostores@npm:0.11.4"
   checksum: 10c0/45ce577ccd96938b756c238e5783b0de3369381905f164e7bd003794d34a3c1eb7bddb049699a48a35bb03d9745bcb3cd6ad549b5e81493b2de22ae2bdccf14c
@@ -15583,13 +15612,6 @@ __metadata:
   version: 3.25.76
   resolution: "zod@npm:3.25.76"
   checksum: 10c0/5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c
-  languageName: node
-  linkType: hard
-
-"zod@npm:^4.0.0, zod@npm:^4.0.5":
-  version: 4.0.14
-  resolution: "zod@npm:4.0.14"
-  checksum: 10c0/ec8681050d393f3be1c2c8f30d7dd4f56bec3746855fb17288be856185a0fe65e68d1b24aec657bbf956f64c05e69332d3751eafd6c103d19385bcc46075612b
   languageName: node
   linkType: hard
 
