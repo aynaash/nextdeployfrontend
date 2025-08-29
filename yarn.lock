@@ -5939,7 +5939,7 @@ __metadata:
     highlight.js: "npm:^11.11.1"
     husky: "npm:^9.1.1"
     jose: "npm:^6.0.11"
-    lucide-react: "npm:^0.414.0"
+    lucide-react: "npm:^0.542.0"
     marked: "npm:^16.1.1"
     mdast-util-toc: "npm:^7.1.0"
     motion: "npm:^12.11.3"
@@ -10628,12 +10628,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.414.0":
-  version: 0.414.0
-  resolution: "lucide-react@npm:0.414.0"
+"lucide-react@npm:^0.542.0":
+  version: 0.542.0
+  resolution: "lucide-react@npm:0.542.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/280123f5f43cad653aa74f519ad2294fdc82c32028c780e3228c2a92997e987e4708a20527af64731882a9dedc6117f98ba0582946e86751a8f02f8297f8f815
+  checksum: 10c0/3ccdb898a480f0194f93abef0b6f0347bc2647db24051e65a17c1dbd22ca0d10a7636d9af68c92665b42b6c9e761567a0d65944fe8568fb0e30a7ea57281ccec
   languageName: node
   linkType: hard
 
