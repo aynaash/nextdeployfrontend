@@ -32,9 +32,8 @@ docker:
   image: nextdeploy
   registry: registry.digitalocean.com/hersi
   push: true
-  username: hersiyussuf
-  password: dckr_pat_H8xP4EPpj4_zKE91zKnInqXh010
-
+  username: yussufhersi219@gmail.com
+  password: your_registry_password
 # ==================================================
 # INFRASTRUCTURE / SERVER TARGETS
 # ==================================================

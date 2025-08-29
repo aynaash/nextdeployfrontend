@@ -1,0 +1,228 @@
+name: PR Quality Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  pr-title-check:
+    name: PR Title Check
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Check PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          requireScope: false
+          subjectPattern: ^[A-Z].{10,}$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            starts with an uppercase character and contains at least 10 characters.
+
+  file-changes-check:
+    name: File Changes Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files_yaml: |
+            config:
+              - '*.config.{js,ts,json}'
+              - 'package.json'
+              - 'yarn.lock'
+              - 'tsconfig.json'
+            components:
+              - 'components/**'
+              - 'app/**'
+            tests:
+              - 'tests/**'
+              - '**/*.test.{js,ts,tsx}'
+              - '**/*.spec.{js,ts,tsx}'
+            docs:
+              - '*.md'
+              - 'docs/**'
+            
+      - name: Check if tests are needed
+        if: steps.changed-files.outputs.components_any_changed == 'true'
+        run: |
+          if [ "${{ steps.changed-files.outputs.tests_any_changed }}" != "true" ]; then
+            echo "⚠️ Components changed but no tests were updated"
+            echo "Consider adding or updating tests for your changes"
+          else
+            echo "✅ Tests were updated alongside component changes"
+          fi
+          
+      - name: Check for documentation updates
+        if: steps.changed-files.outputs.components_any_changed == 'true'
+        run: |
+          if [ "${{ steps.changed-files.outputs.docs_any_changed }}" != "true" ]; then
+            echo "💡 Consider updating documentation for your changes"
+          else
+            echo "📚 Documentation was updated"
+          fi
+
+  code-complexity:
+    name: Code Complexity Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        
+      - name: Install complexity checker
+        run: yarn add --dev complexity-report
+        
+      - name: Check code complexity
+        run: |
+          npx cr --format json --output complexity-report.json app/ components/ lib/ || true
+          
+      - name: Comment complexity report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('complexity-report.json', 'utf8'));
+              
+              let comment = '## 📊 Code Complexity Report\n\n';
+              
+              if (report.reports && report.reports.length > 0) {
+                const highComplexity = report.reports.filter(r => 
+                  r.functions && r.functions.some(f => f.complexity && f.complexity.cyclomatic > 10)
+                );
+                
+                if (highComplexity.length > 0) {
+                  comment += '⚠️ **Files with high complexity:**\n\n';
+                  highComplexity.forEach(file => {
+                    const complexFunctions = file.functions.filter(f => f.complexity && f.complexity.cyclomatic > 10);
+                    comment += `- **${file.path}**\n`;
+                    complexFunctions.forEach(func => {
+                      comment += `  - \`${func.name}\`: Cyclomatic complexity ${func.complexity.cyclomatic}\n`;
+                    });
+                  });
+                  comment += '\n💡 Consider refactoring functions with complexity > 10\n';
+                } else {
+                  comment += '✅ All functions have acceptable complexity levels\n';
+                }
+              } else {
+                comment += '📝 No complexity issues found\n';
+              }
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not generate complexity report:', error.message);
+            }
+
+  bundle-size-check:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        
+      - name: Build for bundle analysis
+        run: |
+          yarn build
+          
+      - name: Analyze bundle size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            function getDirectorySize(dirPath) {
+              let totalSize = 0;
+              try {
+                const files = fs.readdirSync(dirPath);
+                for (const file of files) {
+                  const filePath = path.join(dirPath, file);
+                  const stats = fs.statSync(filePath);
+                  if (stats.isDirectory()) {
+                    totalSize += getDirectorySize(filePath);
+                  } else {
+                    totalSize += stats.size;
+                  }
+                }
+              } catch (error) {
+                console.log(`Error reading directory ${dirPath}:`, error.message);
+              }
+              return totalSize;
+            }
+            
+            function formatBytes(bytes) {
+              if (bytes === 0) return '0 Bytes';
+              const k = 1024;
+              const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+              const i = Math.floor(Math.log(bytes) / Math.log(k));
+              return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            const buildSize = getDirectorySize('.next');
+            const staticSize = getDirectorySize('.next/static');
+            
+            const comment = `## 📦 Bundle Size Analysis
+            
+            | Metric | Size |
+            |--------|------|
+            | Total Build | ${formatBytes(buildSize)} |
+            | Static Assets | ${formatBytes(staticSize)} |
+            
+            ${buildSize > 50 * 1024 * 1024 ? '⚠️ Bundle size is quite large. Consider code splitting or optimization.' : '✅ Bundle size looks good!'}
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

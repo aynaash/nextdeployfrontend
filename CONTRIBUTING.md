@@ -122,11 +122,7 @@ It’s not a dummy. We deploy this frontend with our own engine. If you break so
 
 ### 2. **Performance Is a Feature**
 
-We’re not bloated. No random UI libraries. No waste.  
-Minimal CSS, fast loads, and **clear SSR boundaries**.
-
 ### 3. **Dogfooding > Theory**
-
 If a feature can’t be deployed cleanly with NextDeploy, we want to know now — not after launch. The frontend **must hurt the backend if it’s weak**.
 
 ### 4. **Simple Is Scalable**

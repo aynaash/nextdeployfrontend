@@ -28,7 +28,7 @@ We built this to _find cracks before our users do_.
 | Tailwind CSS         | Utility-first styling           | ✅ Stable     |
 | Websockets           | Real-time log streaming         | 🔧 Improving  |
 | Custom Auth          | Route protection + RBAC         | ✅ Stable     |
-| PostgreSQL (Prisma)  | Persistent state where needed   | ⚡ Optional   |
+| PostgreSQL (drizzle)  | Persistent state where needed   | ⚡ Optional   |
 
 **Key Differentiator:**  
 This app is deployed _using NextDeploy itself_—eating our own dogfood from day one.
@@ -40,7 +40,6 @@ This app is deployed _using NextDeploy itself_—eating our own dogfood from day
 ### 🧭 Dashboard
 
 - Deployment management
-- Real-time logs via WebSocket
 - Environment configuration
 
 ### 📚 Documentation
