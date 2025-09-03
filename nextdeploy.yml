@@ -39,7 +39,7 @@ docker:
 # ==================================================
 servers:
   - name: production # Unique ID (used for logs, filtering, routing)
-    host: ip
+    host: 164.92.97.55 // make cli read ip from env var
     username: nextdeploy
     ssh_key: ~/.ssh/nextdeploy
     key_path: "/home/elitebook/.ssh/nextdeploy"

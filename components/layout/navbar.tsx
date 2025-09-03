@@ -65,7 +65,6 @@ export function NavBar({ scroll = false }: NavBarProps) {
           <Link href='/' className='flex items-center space-x-1.5' legacyBehavior>
             <Logo />
           </Link>
-
           {navItems.length > 0 && (
             <nav className='hidden gap-6 md:flex'>
               {navItems.map((item, index) => (
