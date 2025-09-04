@@ -25,7 +25,7 @@ export default function ResetPasswordPage() {
             buttonVariants({ variant: 'ghost' }),
             'flex items-center gap-2 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20'
           )}
-        >
+          legacyBehavior>
           <ArrowLeft className='size-4' />
           Back to Login
         </Link>

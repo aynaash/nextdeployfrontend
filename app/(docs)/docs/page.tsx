@@ -214,7 +214,7 @@ export default function DocsPage() {
               <Link
                 href="/docs/quick-start"
                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
+                >
                 Quick Start Guide
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -233,7 +233,7 @@ export default function DocsPage() {
               <Link
                 href="/docs/api"
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
+                >
                 API Reference
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -252,7 +252,7 @@ export default function DocsPage() {
               <Link
                 href="/docs/examples"
                 className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-              >
+                >
                 View Examples
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -275,7 +275,6 @@ export default function DocsPage() {
                     <p className="text-muted-foreground">{section.description}</p>
                   </div>
                 </div>
-
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {section.docs.map((doc) => (
                     <Card key={doc.href} className="hover:shadow-lg transition-shadow group">
@@ -285,7 +284,10 @@ export default function DocsPage() {
                           <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
                         </div>
                         <CardTitle className="text-lg">
-                          <Link href={doc.href} className="hover:text-blue-600 transition-colors">
+                          <Link
+                            href={doc.href}
+                            className="hover:text-blue-600 transition-colors"
+                          >
                             {doc.title}
                           </Link>
                         </CardTitle>
@@ -295,7 +297,7 @@ export default function DocsPage() {
                   ))}
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -322,5 +324,5 @@ export default function DocsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

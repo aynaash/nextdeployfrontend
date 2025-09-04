@@ -265,7 +265,7 @@ export default async function GuidePage({ params }: PageProps) {
           <Link
             href="/guides"
             className="group mb-6 inline-flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-          >
+            >
             <ArrowLeft className="mr-2 size-4 transition-transform group-hover:-translate-x-1" />
             Back to Guides
           </Link>
@@ -327,7 +327,7 @@ export default async function GuidePage({ params }: PageProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export async function generateStaticParams() {

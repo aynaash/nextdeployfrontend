@@ -20,7 +20,7 @@ export default function NotFound() {
 
         <div className="flex flex-col justify-center gap-4 sm:flex-row">
           <Button asChild>
-            <Link href="/">
+            <Link href="/" legacyBehavior>
               <Home className="mr-2 size-4" />
               Go Home
             </Link>
@@ -49,5 +49,5 @@ export default function NotFound() {
         </div>
       </div>
     </div>
-  )
+  );
 }

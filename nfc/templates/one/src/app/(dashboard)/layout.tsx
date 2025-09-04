@@ -28,7 +28,7 @@ const MockNavbar = () => {
     <div id="nav" className="border-b border-dashed flex items-center justify-between">
       <div id="brand" className="h-full md:border-r border-dashed w-[300px] flex items-center justify-center">
         <Button variant="ghost" className="w-full h-full font-heading text-lg md:text-2xl font-bold" asChild>
-          <Link href="/">
+          <Link href="/" legacyBehavior>
             <span>{siteConfig.name}</span>
           </Link>
         </Button>
@@ -56,7 +56,7 @@ const MockNavbar = () => {
         <UserProfile className="size-10 md:size-14" />
       </div>
     </div>
-  )
+  );
 }
 
 const MockSidebar = () => {
@@ -64,36 +64,36 @@ const MockSidebar = () => {
     <div id="sidebar" className="w-[300px] border-r border-dashed hidden md:block">
       <div className="flex flex-col divide-y border-b border-dashed">
         <Button variant="ghost" className="border-dashed h-14 text-left justify-start pl-8" asChild>
-          <Link href="/dashboard">
+          <Link href="/dashboard" legacyBehavior>
             <Layout />
             <span>Dashboard</span>
           </Link>
         </Button>
         <Button variant="ghost" className="border-dashed h-14 text-left justify-start pl-8 opacity-50 cursor-not-allowed" disabled asChild>
-          <Link href="/settings">
+          <Link href="/settings" legacyBehavior>
             <Settings />
             <span>Settings</span>
           </Link>
         </Button>
         <Button variant="ghost" className="border-dashed h-14 text-left justify-start pl-8 opacity-50 cursor-not-allowed" disabled asChild>
-          <Link href="/analytics">
+          <Link href="/analytics" legacyBehavior>
             <BarChart2 />
             <span>Analytics</span>
           </Link>
         </Button>
         <Button variant="ghost" className="border-dashed h-14 text-left justify-start pl-8 opacity-50 cursor-not-allowed" disabled asChild>
-          <Link href="/users">
+          <Link href="/users" legacyBehavior>
             <Users />
             <span>Users</span>
           </Link>
         </Button>
         <Button variant="ghost" className="border-dashed h-14 text-left justify-start pl-8 opacity-50 cursor-not-allowed" disabled asChild>
-          <Link href="/billing">
+          <Link href="/billing" legacyBehavior>
             <CreditCard />
             <span>Billing</span>
           </Link>
         </Button>
       </div>
     </div>
-  )
+  );
 }

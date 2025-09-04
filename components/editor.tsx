@@ -128,7 +128,7 @@ export function Editor({ post }: EditorProps) {
             <Link
               href="/dashboard"
               className={cn(buttonVariants({ variant: "ghost" }))}
-            >
+              legacyBehavior>
               <>
                 <Icons.chevronLeft className="mr-2 size-4" />
                 Back
@@ -165,5 +165,5 @@ export function Editor({ post }: EditorProps) {
         </div>
       </div>
     </form>
-  )
+  );
 }

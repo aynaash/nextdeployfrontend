@@ -66,7 +66,10 @@ export default function BlogPage() {
                   ))}
                 </div>
                 <CardTitle className="text-2xl">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-blue-600 transition-colors">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="hover:text-blue-600 transition-colors"
+                    legacyBehavior>
                     {post.title}
                   </Link>
                 </CardTitle>
@@ -90,5 +93,5 @@ export default function BlogPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

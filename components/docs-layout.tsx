@@ -160,7 +160,6 @@ export function DocsLayout({ children }: DocsLayoutProps) {
                   <span className="flex-1 text-left">{section.title}</span>
                   {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                 </Button>
-
                 {isExpanded && (
                   <div className="ml-6 mt-1 space-y-1">
                     {section.items.map((item) => (
@@ -173,14 +172,14 @@ export function DocsLayout({ children }: DocsLayoutProps) {
                             ? "bg-primary text-primary-foreground"
                             : "text-muted-foreground hover:text-foreground",
                         )}
-                      >
+                        legacyBehavior>
                         {item.title}
                       </Link>
                     ))}
                   </div>
                 )}
               </div>
-            )
+            );
           })}
         </div>
       </ScrollArea>

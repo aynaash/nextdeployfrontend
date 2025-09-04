@@ -1,57 +1,43 @@
-import * as React from "react"
+"use client"
 
+import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { ModeToggle } from "@/components/mode-toggle"
 
-export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
+type FooterProps = React.HTMLAttributes<HTMLElement>
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const isExternal = href.startsWith("http")
   return (
-    <footer className={cn(className)}>
-      <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
-        <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-          <Icons.logo />
+    <Link
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      className="text-sm text-muted-foreground transition-colors hover:text-primary"
+    >
+      {children}
+    </Link>
+  )
+}
+
+export function SiteFooter({ className }: FooterProps) {
+  return (
+    <footer className={cn("py-10 md:py-0", className)}>
+      <div className="container grid gap-6 md:h-24 md:grid-cols-2 md:items-center">
+        <div className="flex flex-col items-center gap-4 md:flex-row md:gap-2">
+          <Icons.logo className="size-6" />
           <p className="text-center text-sm leading-loose md:text-left">
-            Built by{" "}
-            <a
-              href={siteConfig.links.twitter}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              shadcn
-            </a>
-            . Hosted on{" "}
-            <a
-              href="https://vercel.com"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              Vercel
-            </a>
-            . Illustrations by{" "}
-            <a
-              href="https://popsy.co"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              Popsy
-            </a>
-            . The source code is available on{" "}
-            <a
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              GitHub
-            </a>
-            .
+            Built by <FooterLink href={siteConfig.links.twitter}>shadcn</FooterLink>.{" "}
+            Hosted on <FooterLink href="https://vercel.com">Vercel</FooterLink>.{" "}
+            Illustrations by <FooterLink href="https://popsy.co">Popsy</FooterLink>.{" "}
+            Source code on <FooterLink href={siteConfig.links.github}>GitHub</FooterLink>.
           </p>
         </div>
-        <ModeToggle />
+        <div className="flex justify-center md:justify-end">
+          <ModeToggle />
+        </div>
       </div>
     </footer>
   )

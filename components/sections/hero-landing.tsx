@@ -17,16 +17,16 @@ export default function HeroLanding() {
   href='https://x.com/HersiYussuf'
   className={cn(
     buttonVariants({ variant: 'outline', size: 'sm', rounded: 'full' }),
-    'border-muted-foreground/20 bg-background/80 px-4 backdrop-blur-sm transition-all duration-300 hover:bg-background/90'
+    'border-muted-foreground/20 bg-background/80 px-4 backdrop-blur-sm transition-all duration-300 hover:bg-background/90 flex items-center'
   )}
   target='_blank'
 >
-  <>
-    <span className='mr-3'>🚀</span>
-    <span className='hidden md:flex'>Introducing&nbsp;</span> 
-    NextDeploy
+  <span className='flex items-center'>
+    <span className='mr-2'>🚀</span>
+    <span className='hidden md:flex'>Introducing&nbsp;</span>
+    <span>NextDeploy</span>
     <Icons.twitter className='ml-2 size-3.5' />
-  </>
+  </span>
 </Link>
 
         <h1 className='animate-fade-in text-balance font-urban text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-[66px]'>
@@ -71,7 +71,7 @@ export default function HeroLanding() {
     }),
     'border-muted-foreground/20 bg-background/80 px-8 backdrop-blur-sm transition-all duration-300 hover:bg-background/90'
   )}
->
+  >
   <span className="flex items-center">
     <Terminal className='mr-2 size-4' />
     <span>See Docs</span>

@@ -196,18 +196,17 @@ export function NavMobile() {
               {links.map(
                 ({ title, href }, index) =>
                   href && ( // Only render if href exists
-                    <motion.li key={href} className='py-3' variants={itemVariants} custom={index}>
+                    (<motion.li key={href} className='py-3' variants={itemVariants} custom={index}>
                       <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
                         <Link
                           href={href}
                           onClick={() => setIsOpen(false)}
                           className='flex w-full font-medium capitalize'
-                          legacyBehavior
                         >
                           {title}
                         </Link>
                       </motion.div>
-                    </motion.li>
+                    </motion.li>)
                   )
               )}
               {renderAuthLinks()}
@@ -228,7 +227,6 @@ export function NavMobile() {
                   href={siteConfig.links.github}
                   target='_blank'
                   rel='noreferrer'
-                  legacyBehavior
                 >
                   <Icons.gitHub className='size-6' />
                   <span className='sr-only'>GitHub</span>

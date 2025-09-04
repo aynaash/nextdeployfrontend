@@ -62,9 +62,9 @@ export function NavBar({ scroll = false }: NavBarProps) {
         large={false}
       >
         <div className='flex gap-6 md:gap-10'>
-          <Link href='/' className='flex items-center space-x-1.5' legacyBehavior>
-            <Logo />
-          </Link>
+<Link href="/" className="flex items-center space-x-1.5">
+  <Logo />
+</Link>
           {navItems.length > 0 && (
             <nav className='hidden gap-6 md:flex'>
               {navItems.map((item, index) => (
@@ -80,7 +80,6 @@ export function NavBar({ scroll = false }: NavBarProps) {
                     'text-foreground/60',
                     item.disabled && 'cursor-not-allowed opacity-80'
                   )}
-                  legacyBehavior
                 >
                   {item.title}
                 </Link>
@@ -92,7 +91,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
         <div className='flex items-center space-x-3'>
           {/* {isDocsLayout && ( */}
           {false && ( // Disabled docs layout features
-            <div className='hidden flex-1 items-center space-x-4 sm:justify-end lg:flex'>
+            (<div className='hidden flex-1 items-center space-x-4 sm:justify-end lg:flex'>
               <div className='hidden lg:flex lg:grow-0'>
                 <DocsSearch />
               </div>
@@ -104,18 +103,17 @@ export function NavBar({ scroll = false }: NavBarProps) {
                   href={siteConfig.links.github}
                   target='_blank'
                   rel='noreferrer'
-                  legacyBehavior
                 >
                   <Icons.gitHub className='size-7' />
                   <span className='sr-only'>GitHub</span>
                 </Link>
               </div>
-            </div>
+            </div>)
           )}
 
           {/* {!session ? ( */}
           {true ? ( // Always show sign in button
-            <Button
+            (<Button
               className='hidden gap-2 px-5 md:flex'
               variant='default'
               size='sm'
@@ -125,13 +123,12 @@ export function NavBar({ scroll = false }: NavBarProps) {
             >
               <span>Sign In</span>
               <Icons.arrowRight className='size-4' />
-            </Button>
+            </Button>)
           ) : (
             <Link
               // href={session.user.role === "admin" ? "/admin" : "/dashboard"}
               href='/dashboard'
               className='hidden md:block'
-              legacyBehavior
             >
               <Button className='gap-2 px-5' variant='default' size='sm' rounded='full'>
                 <span>Dashboard</span>

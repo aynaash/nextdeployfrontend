@@ -53,7 +53,7 @@ export function DocsSidebarNavItems({
             )}
             target={item.external ? "_blank" : ""}
             rel={item.external ? "noreferrer" : ""}
-          >
+            legacyBehavior>
             {item.title}
           </Link>
         ) : (
@@ -63,5 +63,5 @@ export function DocsSidebarNavItems({
         )
       )}
     </div>
-  ) : null
+  ) : null;
 }

@@ -50,7 +50,7 @@ const MenuItem = ({ item, isCollapsed }: MenuItemProps) => {
               ? "text-[#7A7A7A] border border-[#424242] bg-[#242424]"
               : "text-[#7A7A7A] hover:bg-[#242424] border border-transparent hover:border hover:border-[#424242]"
           }`}
-        >
+          legacyBehavior>
           {content}
         </Link>
       ) : (

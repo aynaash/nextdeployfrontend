@@ -23,7 +23,7 @@ export function Navigation() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2" legacyBehavior>
           <Terminal className="h-6 w-6 text-blue-600" />
           <span className="font-bold text-xl">NextDeploy</span>
         </Link>
@@ -37,7 +37,7 @@ export function Navigation() {
                 "transition-colors hover:text-foreground/80",
                 pathname === item.href ? "text-foreground" : "text-foreground/60",
               )}
-            >
+              legacyBehavior>
               {item.name}
             </Link>
           ))}
@@ -45,7 +45,10 @@ export function Navigation() {
 
         <div className="flex items-center space-x-4 ml-auto">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="https://github.com/nextdeploy/nextdeploy" target="_blank">
+            <Link
+              href="https://github.com/nextdeploy/nextdeploy"
+              target="_blank"
+              legacyBehavior>
               <Github className="h-4 w-4" />
             </Link>
           </Button>
@@ -67,7 +70,7 @@ export function Navigation() {
                       "text-sm font-medium transition-colors hover:text-foreground/80",
                       pathname === item.href ? "text-foreground" : "text-foreground/60",
                     )}
-                  >
+                    legacyBehavior>
                     {item.name}
                   </Link>
                 ))}
@@ -77,5 +80,5 @@ export function Navigation() {
         </div>
       </div>
     </header>
-  )
+  );
 }

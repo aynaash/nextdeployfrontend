@@ -22,7 +22,7 @@ export default function Sidebar() {
         <ul className='space-y-2'>
           {navItems.map((item) => (
             <li key={item.name}>
-              <Link href={item.href}>
+              <Link href={item.href} legacyBehavior>
                 <Button
                   className={`flex items-center rounded-lg p-2 ${router.pathname === item.href ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
                 >

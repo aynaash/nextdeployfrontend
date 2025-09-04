@@ -16,13 +16,10 @@ export default function IndexPage() {
     <div className="min-h-screen">
       {/* Hero Section - Using the component from first version */}
       <HeroLanding />
-      
       {/* Preview Section */}
       <PreviewLanding />
-      
       {/* Powered By Section */}
       <Powered />
-
       {/* Three Pillars Section - From second version */}
       <section className="px-4 py-20">
         <div className="mx-auto max-w-6xl">
@@ -79,10 +76,8 @@ export default function IndexPage() {
           </div>
         </div>
       </section>
-
       {/* Info Section - Using component from first version */}
       <InfoLanding data={infos[0]} reverse={true} />
-
       {/* Quick Start Section - From second version */}
       <section className="bg-slate-50 px-4 py-20 dark:bg-slate-900/50">
         <div className="mx-auto max-w-4xl text-center">
@@ -121,7 +116,6 @@ export default function IndexPage() {
           </div>
         </div>
       </section>
-
       {/* Additional sections from first version can be added here */}
       {/* <Features /> */}
       {/* <Testimonials /> */}

@@ -21,7 +21,7 @@ export function MainNav({ items, children }: MainNavProps) {
 
   return (
     <div className="flex gap-6 md:gap-10">
-      <Link href="/" className="hidden items-center space-x-2 md:flex">
+      <Link href="/" className="hidden items-center space-x-2 md:flex" legacyBehavior>
         <Icons.logo />
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
@@ -40,7 +40,7 @@ export function MainNav({ items, children }: MainNavProps) {
                   : "text-foreground/60",
                 item.disabled && "cursor-not-allowed opacity-80"
               )}
-            >
+              legacyBehavior>
               {item.title}
             </Link>
           ))}
@@ -57,5 +57,5 @@ export function MainNav({ items, children }: MainNavProps) {
         <MobileNav items={items}>{children}</MobileNav>
       )}
     </div>
-  )
+  );
 }

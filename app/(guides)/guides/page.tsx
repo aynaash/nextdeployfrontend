@@ -94,7 +94,10 @@ export default function GuidesPage() {
                   <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
                 </div>
                 <CardTitle className="text-xl">
-                  <Link href={`/guides/${guide.slug}`} className="hover:text-blue-600 transition-colors">
+                  <Link
+                    href={`/guides/${guide.slug}`}
+                    className="hover:text-blue-600 transition-colors"
+                    legacyBehavior>
                     {guide.title}
                   </Link>
                 </CardTitle>
@@ -114,5 +117,5 @@ export default function GuidesPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

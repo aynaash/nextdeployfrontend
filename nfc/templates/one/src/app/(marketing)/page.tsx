@@ -36,11 +36,14 @@ export default function Home() {
           <div className="flex-1 flex flex-col">
             <div id="nav" className="w-full flex items-center justify-end border-b border-dashed divide-x">
               <div id="brand" className="font-mono text-sm flex-1 flex items-center h-full px-3 border-dashed">
-                <Link href="/" className="hover:underline">{siteConfig.origin.replace("https://", "")}</Link>
+                <Link href="/" className="hover:underline" legacyBehavior>{siteConfig.origin.replace("https://", "")}</Link>
               </div>
               {!isPending && (session ? (
                 <Button className="h-full border-dashed" size="lg" variant="ghost" asChild>
-                  <Link href="/dashboard" className="flex items-center gap-2 group/nav">
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 group/nav"
+                    legacyBehavior>
                     <span>Dashboard</span>
                     <div className="relative z-10 size-4 overflow-hidden flex items-center justify-center">
                       <ArrowUpRight className="-z-10 absolute opacity-100 scale-100 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 group-hover/nav:-translate-y-5 group-hover/nav:translate-x-5 group-hover/nav:opacity-0 group-hover/nav:scale-0 transition-all duration-200" />
@@ -50,7 +53,10 @@ export default function Home() {
                 </Button>
               ) : (
                 <Button className="h-full border-dashed" size="lg" variant="ghost" asChild>
-                  <Link href="/sign-in" className="flex items-center gap-2 group/nav">
+                  <Link
+                    href="/sign-in"
+                    className="flex items-center gap-2 group/nav"
+                    legacyBehavior>
                     <span>Sign In</span>
                     <div className="relative z-10 size-4 overflow-hidden flex items-center justify-center">
                       <ArrowUpRight className="-z-10 absolute opacity-100 scale-100 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 group-hover/nav:-translate-y-5 group-hover/nav:translate-x-5 group-hover/nav:opacity-0 group-hover/nav:scale-0 transition-all duration-200" />
@@ -85,7 +91,7 @@ export default function Home() {
                 </a>
               </Button>
               <Button asChild>
-                <Link href="/dashboard" className="gap-2 group">
+                <Link href="/dashboard" className="gap-2 group" legacyBehavior>
                   <span>Get started</span>
                   <ArrowRight className="size-4 group-hover:translate-x-1 transition-all duration-150" />
                 </Link>
@@ -136,7 +142,7 @@ export default function Home() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const techConfig = [

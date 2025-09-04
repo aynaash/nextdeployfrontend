@@ -51,7 +51,6 @@ export default function Powered() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='rounded-lg border bg-background p-4 text-center text-sm font-medium transition-colors hover:bg-muted/50'
-                legacyBehavior
               >
                 {logo.icon}
               </Link>
