@@ -14,12 +14,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Run Linux installer
+      - name: Run Linux installer (dry-run)
         run: |
           chmod +x ./app/scripts/linux-cli.sh
           bash ./app/scripts/linux-cli.sh --dry-run
+
+      - name: Run Linux installer (real)
+        run: |
           bash ./app/scripts/linux-cli.sh
-          ~/.local/bin/nextdeploy --help || echo "Binary not found in PATH"
+          # Call binary directly, don’t rely on PATH in CI
+          ~/.local/bin/nextdeploy --help || (echo "Binary not found" && exit 1)
 
   test-macos:
     runs-on: macos-latest
@@ -27,12 +31,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Run macOS installer
+      - name: Run macOS installer (dry-run)
         run: |
           chmod +x ./app/scripts/mac-cli.sh
           bash ./app/scripts/mac-cli.sh --dry-run
+
+      - name: Run macOS installer (real)
+        run: |
           bash ./app/scripts/mac-cli.sh
-          ~/.local/bin/nextdeploy --help || echo "Binary not found in PATH"
+          ~/.local/bin/nextdeploy --help || (echo "Binary not found" && exit 1)
 
   test-windows:
     runs-on: windows-latest
@@ -45,9 +52,11 @@ jobs:
         run: |
           Set-ExecutionPolicy Bypass -Scope Process -Force
           ./app/scripts/windows.ps1
-          $env:Path += ";$env:USERPROFILE\.local\bin"
-          if (Test-Path "$env:USERPROFILE\.local\bin\nextdeploy.exe") {
-            & "$env:USERPROFILE\.local\bin\nextdeploy.exe" --help
+
+          $binPath = "$env:USERPROFILE\.local\bin\nextdeploy.exe"
+          if (Test-Path $binPath) {
+            & $binPath --help
           } else {
-            Write-Output "Binary not found in expected path"
+            Write-Error "Binary not found at $binPath"
+            exit 1
           }
