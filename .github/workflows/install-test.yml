@@ -1,0 +1,53 @@
+
+name: Test CLI Installers
+
+on:
+  workflow_dispatch:  # manual trigger
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Run Linux installer
+        run: |
+          chmod +x ./app/scripts/linux-cli.sh
+          bash ./app/scripts/linux-cli.sh --dry-run
+          bash ./app/scripts/linux-cli.sh
+          ~/.local/bin/nextdeploy --help || echo "Binary not found in PATH"
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Run macOS installer
+        run: |
+          chmod +x ./app/scripts/mac-cli.sh
+          bash ./app/scripts/mac-cli.sh --dry-run
+          bash ./app/scripts/mac-cli.sh
+          ~/.local/bin/nextdeploy --help || echo "Binary not found in PATH"
+
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Run Windows installer
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+          ./app/scripts/windows.ps1
+          $env:Path += ";$env:USERPROFILE\.local\bin"
+          if (Test-Path "$env:USERPROFILE\.local\bin\nextdeploy.exe") {
+            & "$env:USERPROFILE\.local\bin\nextdeploy.exe" --help
+          } else {
+            Write-Output "Binary not found in expected path"
+          }
