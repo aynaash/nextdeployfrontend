@@ -1355,9 +1355,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ianvs/prettier-plugin-sort-imports@npm:^4.3.1":
-  version: 4.5.1
-  resolution: "@ianvs/prettier-plugin-sort-imports@npm:4.5.1"
+"@ianvs/prettier-plugin-sort-imports@npm:^4.7.1":
+  version: 4.7.1
+  resolution: "@ianvs/prettier-plugin-sort-imports@npm:4.7.1"
   dependencies:
     "@babel/generator": "npm:^7.26.2"
     "@babel/parser": "npm:^7.26.2"
@@ -1365,15 +1365,21 @@ __metadata:
     "@babel/types": "npm:^7.26.0"
     semver: "npm:^7.5.2"
   peerDependencies:
-    "@prettier/plugin-oxc": ^0.0.4
+    "@prettier/plugin-oxc": ^0.0.4 || ^0.1.0
     "@vue/compiler-sfc": 2.7.x || 3.x
+    content-tag: ^4.0.0
     prettier: 2 || 3 || ^4.0.0-0
+    prettier-plugin-ember-template-tag: ^2.1.0
   peerDependenciesMeta:
     "@prettier/plugin-oxc":
       optional: true
     "@vue/compiler-sfc":
       optional: true
-  checksum: 10c0/3645a0bb85aa155b755ff4ae16b753139e7813d08e1f40b07b8f69a99b9829c2d8dbf1dbb4f00817240fed0dab3742a6110f6186adf233a2125aec83260a57ae
+    content-tag:
+      optional: true
+    prettier-plugin-ember-template-tag:
+      optional: true
+  checksum: 10c0/cda335ef13b4f95825c7667a4962bd679c0065863572f9d3bd715f2d2a463e56e93808dc7b5c24ecca33d63ddf2159780cfdb3d78f30c828b6efb054972dfc5b
   languageName: node
   linkType: hard
 
@@ -5865,7 +5871,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.3.0"
     "@commitlint/config-conventional": "npm:^19.2.2"
     "@hookform/resolvers": "npm:^5.0.1"
-    "@ianvs/prettier-plugin-sort-imports": "npm:^4.3.1"
+    "@ianvs/prettier-plugin-sort-imports": "npm:^4.7.1"
     "@mdx-js/loader": "npm:^3.1.0"
     "@neondatabase/serverless": "npm:^1.0.0"
     "@next/mdx": "npm:^15.4.3"
