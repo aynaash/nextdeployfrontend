@@ -5243,7 +5243,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:>=8.1.0, @types/node@npm:^24.1.0":
+"@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:^24.1.0":
   version: 24.1.0
   resolution: "@types/node@npm:24.1.0"
   dependencies:
@@ -5971,7 +5971,7 @@ __metadata:
     sharp: "npm:^0.33.4"
     shiki: "npm:^1.11.0"
     sonner: "npm:^1.5.0"
-    stripe: "npm:^15.12.0"
+    stripe: "npm:^22.1.0"
     tailwind-merge: "npm:^2.4.0"
     tailwindcss: "npm:^3.4.6"
     tailwindcss-animate: "npm:^1.0.7"
@@ -12745,15 +12745,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.11.0":
-  version: 6.14.0
-  resolution: "qs@npm:6.14.0"
-  dependencies:
-    side-channel: "npm:^1.1.0"
-  checksum: 10c0/8ea5d91bf34f440598ee389d4a7d95820e3b837d3fd9f433871f7924801becaa0cd3b3b4628d49a7784d06a8aea9bc4554d2b6d8d584e2d221dc06238a42909c
-  languageName: node
-  linkType: hard
-
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
@@ -14310,13 +14301,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stripe@npm:^15.12.0":
-  version: 15.12.0
-  resolution: "stripe@npm:15.12.0"
-  dependencies:
-    "@types/node": "npm:>=8.1.0"
-    qs: "npm:^6.11.0"
-  checksum: 10c0/95de07b108b98388d2ead2dedc3fc371df55287c9e926385f95890c680d655234ba2832a23e11e283e946d44dac01868eec823ccf878628eb75f5baa67f08175
+"stripe@npm:^22.1.0":
+  version: 22.1.0
+  resolution: "stripe@npm:22.1.0"
+  peerDependencies:
+    "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  checksum: 10c0/f83ab4338225b4f56d69afda804193ced8df70db50ba00ecb83188905f8d132dc0c5172a53f1eb77c559d4b32d7b61283534de6e6cf2aa2b6ddab205b4fbcd44
   languageName: node
   linkType: hard
 
