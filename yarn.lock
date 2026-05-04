@@ -1837,9 +1837,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdx-js/loader@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@mdx-js/loader@npm:3.1.0"
+"@mdx-js/loader@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@mdx-js/loader@npm:3.1.1"
   dependencies:
     "@mdx-js/mdx": "npm:^3.0.0"
     source-map: "npm:^0.7.0"
@@ -1848,7 +1848,7 @@ __metadata:
   peerDependenciesMeta:
     webpack:
       optional: true
-  checksum: 10c0/0f301dcc1dbc0f7aa0060fdeabf9efbc6218f3660562c4c97f273fa3e74a6259d231468a38998b4739cf3ea9bc7cf9f23d5b3deda919af2ac9c10b4580bd142c
+  checksum: 10c0/b277b0be53646e2cb047c5ee013631d6624c7924416c0ced203000eaf82401211c453250b716aca229401b34cb7a314b0f5c8b277a3230fbda4ddb568989e41e
   languageName: node
   linkType: hard
 
@@ -5866,7 +5866,7 @@ __metadata:
     "@commitlint/config-conventional": "npm:^19.2.2"
     "@hookform/resolvers": "npm:^5.0.1"
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.3.1"
-    "@mdx-js/loader": "npm:^3.1.0"
+    "@mdx-js/loader": "npm:^3.1.1"
     "@neondatabase/serverless": "npm:^1.0.0"
     "@next/mdx": "npm:^15.4.3"
     "@radix-ui/react-accessible-icon": "npm:^1.1.0"
