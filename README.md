@@ -55,9 +55,8 @@ nextdeploy.yml       Self-hosted: this site is deployed with NextDeploy
 
 ## Deploy
 
-This site dogfoods NextDeploy. The `nextdeploy.yml` at the repo root
-points at the production Cloudflare target, and pushing to `main`
-triggers `nextdeploy ship` from CI.
+This site dogfoods NextDeploy. `nextdeploy.yml` at the repo root holds
+the target config; deployments are kicked off with `nextdeploy ship`.
 
 ## Editing docs
 
