@@ -179,7 +179,7 @@ main() {
     check_dependencies
 
     # ── Detect platform ───────────────────────────────────────────────────────
-    local os arch os_title
+    local os arch
     os="$(uname -s | tr '[:upper:]' '[:lower:]')"
     arch="$(uname -m)"
 
@@ -200,17 +200,15 @@ main() {
         fi
     fi
 
-    # Title-case the OS name to match GoReleaser archive naming
     case "$os" in
-        darwin)  os_title="Darwin" ;;
-        linux)   os_title="Linux" ;;
+        darwin|linux) ;;
         *)
             echo -e "${RED}Unsupported OS: $os. Use install.bat on Windows.${NC}" >&2
             exit 1
             ;;
     esac
 
-    echo -e "${GREEN}✓ Platform:${NC} ${os_title}/${arch}"
+    echo -e "${GREEN}✓ Platform:${NC} ${os}/${arch}"
 
     # ── Resolve version ───────────────────────────────────────────────────────
     local version
@@ -227,7 +225,7 @@ main() {
 
     # ── Download archive ─────────────────────────────────────────────────────
     local archive_name download_url
-    archive_name="nextdeploy_${clean_version}_${os_title}_${arch}.tar.gz"
+    archive_name="nextdeploy_${clean_version}_${os}_${arch}.tar.gz"
     download_url="https://github.com/${REPO}/releases/download/${version}/${archive_name}"
 
     mkdir -p "$DOWNLOAD_DIR"

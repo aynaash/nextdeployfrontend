@@ -23,8 +23,8 @@ echo Latest Version: %LATEST_TAG%
 :: Strip leading 'v' from tag for archive naming (e.g. v0.6.2 -> 0.6.2)
 set "CLEAN_VERSION=%LATEST_TAG:~1%"
 
-:: GoReleaser archive name: nextdeploy_VERSION_Windows_amd64.zip
-set "ARCHIVE_NAME=nextdeploy_%CLEAN_VERSION%_Windows_amd64.zip"
+:: GoReleaser archive name: nextdeploy_VERSION_windows_amd64.zip
+set "ARCHIVE_NAME=nextdeploy_%CLEAN_VERSION%_windows_amd64.zip"
 set "ARCHIVE_URL=https://github.com/%REPO%/releases/download/%LATEST_TAG%/%ARCHIVE_NAME%"
 set "TMP_ZIP=%TEMP%\%ARCHIVE_NAME%"
 
