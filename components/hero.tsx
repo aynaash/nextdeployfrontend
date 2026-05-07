@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import {
   Terminal,
   Github,
@@ -23,21 +23,21 @@ const installOptions = [
     name: "Mac/Linux CLI",
     icon: Terminal,
     cmd: "curl -sSf https://nextdeploy.org/install.sh | sh",
-    desc: "Install CLI tool for developers",
+    desc: "Install the NextDeploy CLI on macOS or Linux.",
   },
   {
     id: "cli-win",
     name: "Windows CLI",
     icon: Monitor,
     cmd: "curl.exe -sSfO https://nextdeploy.org/install.bat && install.bat",
-    desc: "Install CLI tool on Windows",
+    desc: "Install the NextDeploy CLI on Windows.",
   },
   {
     id: "daemon",
     name: "Ubuntu Server",
     icon: Server,
     cmd: "curl -sSf https://nextdeploy.org/daemon.sh | sh",
-    desc: "Install NextDeploy Daemon: this daemon is auto-installed on the server it is the control plane",
+    desc: "Manual install of the nextdeployd control plane on a VPS — `nextdeploy ship` does this for you automatically.",
   },
 ];
 
@@ -59,17 +59,17 @@ export default function Hero() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
         {/* Main headline */}
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-emerald-100 via-green-200 to-emerald-100 bg-clip-text text-transparent leading-tight text-center">
-          Next.js Deployment
+          Deploy Next.js to a VPS, AWS, or Cloudflare.
           <br />
-          Without the Black Box
+          One config file, one command.
         </h1>
 
         {/* Tagline */}
         <p className="text-sm md:text-base text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed text-center">
-          The high-performance, developer-first deployment engine. Transform any
-          VPS into a premium hosting platform with
-          <strong> total ownership</strong> and <strong>zero-downtime</strong>{" "}
-          updates.
+          Open-source CLI written in Go. Ships to a Linux VPS over SSH, AWS
+          Lambda + S3, or Cloudflare Workers + R2 — with{" "}
+          <strong>zero-downtime rollouts</strong> and{" "}
+          <strong>total ownership</strong> of your infrastructure.
         </p>
 
         {/* Action Buttons - more compact */}
@@ -103,10 +103,11 @@ export default function Hero() {
                   <button
                     key={option.id}
                     onClick={() => setActiveTab(option)}
-                    className={`flex items-center gap-2 px-3 sm:px-5 py-2.5 sm:py-3 text-xs font-medium transition-colors border-b-2 whitespace-nowrap ${isActive
-                      ? "text-emerald-400 border-emerald-500 bg-slate-800/50"
-                      : "text-gray-400 border-transparent hover:text-gray-200 hover:bg-slate-800/30"
-                      }`}
+                    className={`flex items-center gap-2 px-3 sm:px-5 py-2.5 sm:py-3 text-xs font-medium transition-colors border-b-2 whitespace-nowrap ${
+                      isActive
+                        ? "text-emerald-400 border-emerald-500 bg-slate-800/50"
+                        : "text-gray-400 border-transparent hover:text-gray-200 hover:bg-slate-800/30"
+                    }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
                     {option.name}
@@ -163,10 +164,10 @@ export default function Hero() {
         <div className="mt-12 sm:mt-20 max-w-4xl mx-auto text-center">
           <div className="mb-6 sm:mb-8">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-white">
-              Watch the Tutorial
+              See it ship
             </h2>
             <p className="text-gray-400 text-sm md:text-base max-w-xl mx-auto">
-              How to deployment nextjs to vps with nextdeploy
+              End-to-end walkthrough: a Next.js app to a fresh VPS.
             </p>
           </div>
           <div className="relative group aspect-video w-full rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl bg-slate-900/50">

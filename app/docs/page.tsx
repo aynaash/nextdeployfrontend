@@ -1,380 +1,63 @@
-import {
-  Zap,
-  Terminal,
-  Server,
-  Shield,
-  Share2,
-  Lock,
-  FileText,
-  Cloud,
-  RefreshCw,
-  AlertTriangle,
-  Play,
-} from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Sparkles } from "lucide-react";
 import { CodeBlock } from "@/components/copy-button";
 import GitHubStarButton from "@/components/github-star-button";
-import DocPrevNext from "@/components/doc-prev-next";
 
-function VideoPlaceholder({
-  title,
-  badge = "Tutorial Video Placement",
-}: {
-  title: string;
-  badge?: string;
-}) {
-  return (
-    <div className="aspect-video w-full bg-slate-900/50 border border-slate-700/50 rounded-2xl flex flex-col items-center justify-center group cursor-pointer hover:border-emerald-500/30 transition-all mb-8 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform relative z-10">
-        <Play className="w-6 h-6 text-emerald-400 fill-emerald-400/20" />
-      </div>
-      <p className="text-gray-400 font-medium mt-4 group-hover:text-emerald-300 transition-colors relative z-10">
-        {title}
-      </p>
-      <div className="text-gray-500 text-xs mt-1 relative z-10">{badge}</div>
-    </div>
-  );
+export const revalidate = 3600;
+
+const REPO = "aynaash/NextDeploy";
+const REPO_URL = `https://github.com/${REPO}`;
+
+type Release = {
+  tag: string | null;
+  date: string | null;
+  url: string;
+};
+
+async function getLatestRelease(): Promise<Release> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${REPO}/releases/latest`,
+      {
+        next: { revalidate: 3600 },
+        headers: { Accept: "application/vnd.github+json" },
+      },
+    );
+    if (!res.ok) throw new Error(`status ${res.status}`);
+    const data = (await res.json()) as {
+      tag_name?: string;
+      published_at?: string;
+      html_url?: string;
+    };
+    return {
+      tag: data.tag_name ?? null,
+      date: data.published_at ?? null,
+      url: data.html_url ?? `${REPO_URL}/releases`,
+    };
+  } catch {
+    return { tag: null, date: null, url: `${REPO_URL}/releases` };
+  }
 }
 
-function YouTubeEmbed({ id, title }: { id: string; title: string }) {
-  return (
-    <div className="aspect-video w-full mb-8 rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl">
-      <iframe
-        width="100%"
-        height="100%"
-        src={`https://www.youtube.com/embed/${id}`}
-        title={title}
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-        className="w-full h-full"
-      ></iframe>
-    </div>
-  );
-}
+const CLI_COMMANDS: { cmd: string; desc: string }[] = [
+  { cmd: "nextdeploy init", desc: "Scaffold nextdeploy.yml in your Next.js project." },
+  { cmd: "nextdeploy plan", desc: "Show what would happen — change nothing." },
+  { cmd: "nextdeploy build", desc: "Run the build stage only — produce the artifact + metadata." },
+  { cmd: "nextdeploy ship", desc: "Build and deploy to the configured target (VPS / AWS / Cloudflare)." },
+  { cmd: "nextdeploy prepare", desc: "Provision a fresh Linux VPS (Caddy, nextdeployd, Fail2Ban)." },
+  { cmd: "nextdeploy logs", desc: "Tail live application logs from the deployment." },
+  { cmd: "nextdeploy status", desc: "Show health, current release, and route summary." },
+  { cmd: "nextdeploy rollback", desc: "Revert to the previous release." },
+  { cmd: "nextdeploy destroy", desc: "Tear down the deployment (asks for confirmation)." },
+  { cmd: "nextdeploy inspect", desc: "Inspect the local build artifact and its metadata." },
+  { cmd: "nextdeploy secrets", desc: "Manage app secrets — set / list / prune." },
+  { cmd: "nextdeploy creds", desc: "Manage cloud credentials — set / list / clear." },
+  { cmd: "nextdeploy generate-ci", desc: "Scaffold a GitHub Actions workflow." },
+  { cmd: "nextdeploy update", desc: "Self-update the CLI to the latest release." },
+  { cmd: "nextdeploy upgrade-daemon", desc: "Upgrade nextdeployd on a connected VPS." },
+  { cmd: "nextdeploy version", desc: "Print the CLI version." },
+];
 
-export default function DocsIndex() {
-  return (
-    <div className="py-6 sm:py-12 prose prose-invert max-w-none">
-      {/* ─── HEADER ─── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white m-0">
-          NextDeploy Documentation
-        </h1>
-        <GitHubStarButton />
-      </div>
-
-      <p className="text-gray-300 text-base sm:text-lg mb-4">
-        NextDeploy is a self-hosted deployment engine for Next.js. It builds a
-        complete picture of your app at build time — routes, integrations,
-        secrets, assets — and uses that intelligence to deploy correctly to your
-        own VPS or AWS, without a platform in the middle.
-      </p>
-      <p className="text-gray-400 text-sm mb-8">
-        No monthly platform bill. No vendor lock-in. Your infrastructure, your
-        AWS account, your server.
-      </p>
-
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 mb-8 flex gap-3">
-        <div className="text-amber-400 mt-0.5">⚠️</div>
-        <div>
-          <h4 className="text-amber-400 font-semibold mb-1">
-            Early Access — v0.1.x
-          </h4>
-          <p className="text-amber-200/70 text-sm">
-            Works well for personal and small-team projects. APIs may change
-            between minor versions. Back up secrets and read changelogs before
-            upgrading. Use{" "}
-            <code className="text-amber-300">nextdeploy update</code> to get the
-            latest binary.
-          </p>
-        </div>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── HOW IT ACTUALLY WORKS ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-        How it actually works
-      </h2>
-      <p className="text-gray-300 mb-6">
-        Most deployment tools are transport layers — they move your build from A
-        to B. NextDeploy is different. Every{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          nextdeploy build
-        </code>{" "}
-        produces a{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          metadata.json
-        </code>{" "}
-        that statically analyses your Next.js output before a single file is
-        uploaded:
-      </p>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        {[
-          {
-            title: "Route classification",
-            desc: "Separates static, SSR, ISR, API, and middleware routes by parsing Next.js manifests. No config needed.",
-            accent: "text-emerald-400",
-            border: "hover:border-emerald-500/30",
-          },
-          {
-            title: "Integration detection",
-            desc: "Detects Stripe, Cloudinary, Google Analytics, YouTube, and other external origins from the build output — not source code.",
-            accent: "text-blue-400",
-            border: "hover:border-blue-500/30",
-          },
-          {
-            title: "ISR awareness",
-            desc: "Identifies ISR routes and revalidation intervals. Foundation for selective CDN invalidation instead of nuking the whole cache.",
-            accent: "text-purple-400",
-            border: "hover:border-purple-500/30",
-          },
-          {
-            title: "Secret cross-referencing",
-            desc: "Knows which integrations your app uses. Can warn before deploy if Stripe is detected but STRIPE_KEY is missing.",
-            accent: "text-amber-400",
-            border: "hover:border-amber-500/30",
-          },
-          {
-            title: "Git provenance",
-            desc: "Records commit hash and dirty state at build time. Every deploy is traceable. Warns if you're shipping uncommitted changes.",
-            accent: "text-red-400",
-            border: "hover:border-red-500/30",
-          },
-          {
-            title: "Security Sandboxing",
-            desc: "Configures DynamicUser, ProtectSystem=strict, and PrivateTmp for process isolation. Minimal attack surface.",
-            accent: "text-amber-500",
-            border: "hover:border-amber-500/30",
-          },
-          {
-            title: "WAF & HMAC",
-            desc: "Integrated Coraza WAF (OWASP CRS) and HMAC-SHA256 request signing between CLI and daemon.",
-            accent: "text-purple-400",
-            border: "hover:border-purple-500/30",
-          },
-          {
-            title: "Build fingerprint",
-            desc: "Knows your package manager, entrypoint, output mode, Next.js version, and full asset inventory. Deploys exactly what your app needs.",
-            accent: "text-gray-300",
-            border: "hover:border-slate-600",
-          },
-        ].map(({ title, desc, accent, border }) => (
-          <div
-            key={title}
-            className={`p-5 bg-slate-900/30 border border-slate-800 rounded-xl ${border} transition-colors`}
-          >
-            <h4 className={`${accent} font-semibold text-sm mb-2`}>{title}</h4>
-            <p className="text-gray-400 text-sm leading-relaxed m-0">{desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-5 mb-8">
-        <p className="text-gray-300 text-sm leading-relaxed m-0">
-          This intelligence layer is what separates NextDeploy from a glorified
-          deploy script. The metadata drives pre-deploy validation, targeted
-          cache invalidation, deployment provenance, and — on the roadmap —
-          per-route CloudFront behavior configuration that eliminates
-          unnecessary Lambda invocations entirely.
-        </p>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── WHAT IT HANDLES TODAY ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
-        What it handles today
-      </h2>
-      <div className="grid md:grid-cols-2 gap-4 mb-8 text-gray-300">
-        <ul className="space-y-3 list-none p-0 m-0">
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>VPS deployments</strong> — atomic port-swap,
-              zero-downtime, Caddy reverse proxy, Fail2Ban, HSTS
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Advanced isolation</strong> — DynamicUser,
-              ProtectSystem=strict, PrivateTmp, and NoNewPrivileges
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>AWS serverless</strong> — Lambda + S3 + CloudFront + ACM,
-              fully provisioned on first deploy
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Build intelligence</strong> — static analysis of every
-              Next.js build, route classification, integration detection
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Lambda bridge adapter</strong> — translates Lambda events
-              to HTTP for the Next.js standalone server
-            </span>
-          </li>
-        </ul>
-        <ul className="space-y-3 list-none p-0 m-0">
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Secret management</strong> — encrypted locally, pushed to
-              AWS Secrets Manager, injected via Lambda Extension at cold-start
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Audit logging</strong> — structured JSON logs of every
-              command and system change for traceability
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Rollbacks</strong> — VPS ring buffer keeps last 5
-              releases, serverless restores from S3 deployment history
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Deployment provenance</strong> — git commit, dirty state,
-              Next.js version, and build timestamp on every deploy
-            </span>
-          </li>
-          <li className="flex gap-3 items-start">
-            <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-            <span>
-              <strong>Self-updating CLI</strong> — single static binary, no
-              runtime dependencies, updates via GitHub Releases
-            </span>
-          </li>
-        </ul>
-      </div>
-
-      <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6 mb-8">
-        <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-400" /> Current
-          limitations worth knowing
-        </h4>
-        <ul className="space-y-2 text-sm text-gray-400 list-none p-0 m-0">
-          <li>
-            • <strong className="text-gray-200">Lambda size limit:</strong>{" "}
-            250MB unzipped. Apps with heavy native binaries (sharp, Prisma) may
-            exceed this.
-          </li>
-          <li>
-            • <strong className="text-gray-200">No edge runtime:</strong>{" "}
-            Next.js middleware runs at the edge. Everything currently routes to
-            a single Lambda origin.
-          </li>
-          <li>
-            • <strong className="text-gray-200">Single region:</strong> One
-            Lambda per deploy. Multi-region requires manual configuration.
-          </li>
-          <li>
-            • <strong className="text-gray-200">No ISR cache layer yet:</strong>{" "}
-            ISR routes are detected and classified but selective revalidation
-            isn't wired up yet — it's on the roadmap.
-          </li>
-          <li>
-            • <strong className="text-gray-200">AWS only (for now):</strong>{" "}
-            Cloudflare, GCP, and Azure providers are planned. The provider
-            interface is already built for it.
-          </li>
-        </ul>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── INSTALLATION ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Installation</h2>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        CLI (your machine)
-      </h3>
-      <p className="text-gray-300 mb-4">
-        A single static binary. No Node, no runtime dependencies.
-      </p>
-      <Tabs defaultValue="linux" className="w-full mb-8">
-        <TabsList className="bg-slate-900 border border-slate-700">
-          <TabsTrigger value="linux">Linux / macOS</TabsTrigger>
-          <TabsTrigger value="windows">Windows</TabsTrigger>
-          <TabsTrigger value="go">Go (Source)</TabsTrigger>
-        </TabsList>
-        <TabsContent value="linux" className="mt-2">
-          <CodeBlock code="curl -sSf https://nextdeploy.org/install.sh | sh" />
-        </TabsContent>
-        <TabsContent value="windows" className="mt-2">
-          <CodeBlock
-            code={`curl.exe -sSfO https://nextdeploy.org/install.bat && install.bat`}
-          />
-        </TabsContent>
-        <TabsContent value="go" className="mt-2">
-          <CodeBlock code="go install github.com/aynaash/NextDeploy/cli@latest" />
-        </TabsContent>
-      </Tabs>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        Daemon (VPS only)
-      </h3>
-      <p className="text-gray-300 mb-4">
-        Runs as a systemd service on your server. Handles health checks, atomic
-        swaps, release management, and secret injection via a Unix socket
-        control plane. <em>Not needed for serverless.</em>
-      </p>
-      <Tabs defaultValue="script" className="w-full mb-8">
-        <TabsList className="bg-slate-900 border border-slate-700">
-          <TabsTrigger value="script">Install Script</TabsTrigger>
-          <TabsTrigger value="go">Go (Source)</TabsTrigger>
-        </TabsList>
-        <TabsContent value="script" className="mt-2">
-          <CodeBlock code="curl -sSf https://nextdeploy.org/daemon.sh | sh" />
-        </TabsContent>
-        <TabsContent value="go" className="mt-2">
-          <CodeBlock code="go install github.com/aynaash/NextDeploy/daemon/cmd/nextdeployd@main" />
-        </TabsContent>
-      </Tabs>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── VPS DEPLOYMENT ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">VPS Deployment</h2>
-      <p className="text-gray-400 mb-6 text-sm">
-        Deploy to any Linux server you own or rent.
-      </p>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        1. Initialize
-      </h3>
-      <CodeBlock code="nextdeploy init" className="mb-4" />
-      <p className="text-gray-300 mb-6">
-        Creates{" "}
-        <code className="bg-slate-900 px-2 py-1 rounded text-emerald-400 font-mono">
-          nextdeploy.yml
-        </code>{" "}
-        in your project root with sensible defaults.
-      </p>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        2. Configure
-      </h3>
-      <CodeBlock
-        code={`version: "1.0"
+const VPS_YAML = `version: "1.0"
 target_type: vps
 
 app:
@@ -386,569 +69,182 @@ app:
 servers:
   - name: prod
     host: 1.2.3.4
-    port: 22
     username: deploy
-    ssh_key: ~/.ssh/id_rsa`}
-        className="mb-8"
-      />
+    ssh_key: ~/.ssh/id_rsa`;
 
-      <YouTubeEmbed
-        id="9C8WNZSS5o0"
-        title="NextDeploy VPS Tutorial: Zero-Downtime Deployment"
-      />
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        3. Prepare the server (once)
-      </h3>
-      <p className="text-gray-300 mb-4">
-        Runs an Ansible playbook that installs Node, Bun, Caddy, Fail2Ban, and
-        the NextDeploy daemon. Configures systemd with advanced isolation (
-        <code className="text-emerald-400">DynamicUser=yes</code>,{" "}
-        <code className="text-emerald-300">ProtectSystem=strict</code>), Unix
-        socket permissions, and Caddy HTTPS automatically.
-      </p>
-      <CodeBlock code="nextdeploy prepare" className="mb-8" />
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        4. Deploy
-      </h3>
-      <CodeBlock code="nextdeploy ship" className="mb-4" />
-      <p className="text-gray-300 mb-4">
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          ship
-        </code>{" "}
-        runs the full pipeline in one step — analyses your Next.js output,
-        produces the metadata and artifact, uploads via SFTP, and signals the
-        daemon for an atomic port-swap that's health checked before traffic cuts
-        over. Incremental: skips the rebuild step when nothing has changed.
-      </p>
-      <p className="text-gray-400 text-sm mb-8">
-        For CI pipelines that want a separate build stage, run{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          nextdeploy build
-        </code>{" "}
-        first — it produces the same artifact{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          ship
-        </code>{" "}
-        would have built. Add{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          --force
-        </code>{" "}
-        to either command to bypass the incremental cache.
-      </p>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">Rollback</h3>
-      <p className="text-gray-300 mb-4">
-        The daemon keeps your last 5 releases. Revert instantly:
-      </p>
-      <CodeBlock code="nextdeploy rollback" className="mb-8" />
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── SERVERLESS DEPLOYMENT ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-        Serverless Deployment (AWS)
-      </h2>
-      <p className="text-gray-400 mb-6 text-sm">
-        No servers, no daemon — Lambda + S3 + CloudFront, provisioned
-        automatically.
-      </p>
-
-      <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-8 flex gap-3">
-        <div className="text-blue-400 mt-0.5">ℹ️</div>
-        <div>
-          <h4 className="text-blue-400 font-semibold mb-1">
-            What gets provisioned on first deploy
-          </h4>
-          <ul className="text-blue-200/80 text-sm space-y-1 list-none p-0 m-0 mt-2">
-            <li>
-              • S3 bucket with correct MIME types and cache headers per asset
-              type
-            </li>
-            <li>• Lambda function + IAM execution role</li>
-            <li>
-              • Lambda Function URL with CloudFront OAC — Lambda is never
-              publicly exposed
-            </li>
-            <li>• ACM certificate for your custom domain</li>
-            <li>• CloudFront distribution wired to both S3 and Lambda</li>
-            <li>• AWS Secrets Manager namespace for your app</li>
-          </ul>
-          <p className="text-blue-200/70 text-xs mt-3">
-            <em>
-              Prerequisite: AWS credentials in <code>~/.aws/credentials</code>{" "}
-              with the permissions listed in the AWS Deployer Permissions
-              section.
-            </em>
-          </p>
-        </div>
-      </div>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        1. Configure
-      </h3>
-      <CodeBlock
-        code={`version: "1.0"
+const AWS_YAML = `version: "1.0"
 target_type: serverless
 
 app:
   name: my-next-app
   domain: app.example.com
 
+CloudProvider:
+  name: aws
+
 serverless:
   provider: aws
-  region: us-east-1      # ACM certificates must be us-east-1 for CloudFront`}
-        className="mb-8"
-      />
+  region: us-east-1   # ACM + CloudFront require us-east-1`;
 
-      <VideoPlaceholder
-        title="Tutorial: Automated AWS Serverless Deployment"
-        badge="Coming Soon"
-      />
+const CF_YAML = `version: "1.0"
+target_type: serverless
 
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        2. Add <code className="text-emerald-400">output: 'standalone'</code>
-      </h3>
-      <CodeBlock
-        code={`// next.config.mjs
-const nextConfig = {
-  output: 'standalone',
+app:
+  name: my-next-app
+  domain: app.example.com
+
+CloudProvider:
+  name: cloudflare
+
+serverless:
+  provider: cloudflare
+  cloudflare:
+    compatibility_date: "2025-04-01"
+    compatibility_flags:
+      - nodejs_compat_v2`;
+
+function formatDate(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
-export default nextConfig`}
-        className="mb-4"
-      />
-      <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-5 mb-8">
-        <h4 className="text-white font-semibold mb-2">Why standalone?</h4>
-        <p className="text-gray-400 text-sm leading-relaxed m-0">
-          Default Next.js builds include the full <code>node_modules</code> —
-          often 500MB+, over Lambda's 250MB unzipped limit. Standalone mode
-          traces your actual imports and produces a self-contained{" "}
-          <code>server.js</code>. NextDeploy then injects a bridge adapter that
-          translates Lambda invocation events into HTTP requests the Next.js
-          server understands.
-        </p>
+
+export default async function DocsPage() {
+  const release = await getLatestRelease();
+  const releaseDate = formatDate(release.date);
+
+  return (
+    <div className="prose prose-invert max-w-none">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white m-0">
+          Documentation
+        </h1>
+        <GitHubStarButton />
       </div>
 
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-3">
-        3. Deploy
-      </h3>
-      <CodeBlock code="nextdeploy ship" className="mb-4" />
+      <div className="not-prose flex items-start gap-3 p-4 mb-8 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+        <Sparkles className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+        <div className="text-sm">
+          <div className="text-emerald-300 font-semibold mb-1">
+            Auto-generated overview
+          </div>
+          <div className="text-emerald-100/80 leading-relaxed">
+            Latest release pulled live from{" "}
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-emerald-200"
+            >
+              github.com/{REPO}
+            </a>{" "}
+            at build time. Configuration and CLI surface mirror the engine
+            repository. Hand-written guides are in progress — until then, this
+            page is enough to ship a Next.js app to any of the three supported
+            targets.
+          </div>
+        </div>
+      </div>
+
+      {release.tag && (
+        <div className="not-prose mb-10 text-sm">
+          <a
+            href={release.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 hover:border-emerald-500/40 transition-colors"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-gray-300">Latest release</span>
+            <code className="text-emerald-400 font-mono">{release.tag}</code>
+            {releaseDate && (
+              <span className="text-gray-500">· {releaseDate}</span>
+            )}
+          </a>
+        </div>
+      )}
+
+      <h2 className="text-2xl font-bold text-white mt-12 mb-4">Install</h2>
+      <p className="text-gray-300 mb-4">
+        Single static binary, no Node runtime required.
+      </p>
+      <CodeBlock code="curl -fsSL https://nextdeploy.org/install.sh | bash" />
+      <p className="text-gray-500 text-sm mt-3">
+        Windows:{" "}
+        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+          curl.exe -sSfO https://nextdeploy.org/install.bat &amp;&amp;
+          install.bat
+        </code>
+      </p>
+
+      <h2 className="text-2xl font-bold text-white mt-12 mb-4">Quickstart</h2>
       <p className="text-gray-300 mb-6">
-        One command runs the full pipeline.{" "}
-        <code className="bg-slate-900 px-2 py-1 rounded text-emerald-400 font-mono">
-          ship
+        Drop one of the snippets below into{" "}
+        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+          nextdeploy.yml
         </code>{" "}
-        builds your app (only when something changed), then:
+        at the root of your Next.js project, then run{" "}
+        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+          nextdeploy ship
+        </code>
+        .
       </p>
 
-      <div className="grid md:grid-cols-2 gap-4 mb-8">
-        {[
-          {
-            step: "1",
-            title: "Validate build",
-            desc: "Reads metadata.json — route types, integrations, ISR config, git state. Validates before uploading anything.",
-          },
-          {
-            step: "2",
-            title: "Push secrets",
-            desc: "Syncs secrets to AWS Secrets Manager. They never touch the artifact or Lambda env vars directly.",
-          },
-          {
-            step: "3",
-            title: "Upload static assets",
-            desc: "Syncs public/ and _next/static/ to S3 with correct MIME types and cache headers per asset type.",
-          },
-          {
-            step: "4",
-            title: "Deploy Lambda",
-            desc: "Injects bridge adapter, zips .next/standalone/, updates Lambda via UpdateFunctionCode with retry logic for IAM propagation.",
-          },
-          {
-            step: "5",
-            title: "SSL + DNS guide",
-            desc: "ACM cert requested. Detailed DNS guide generated in report. Re-run ship after DNS propagates.",
-          },
-          {
-            step: "6",
-            title: "Bust CDN cache",
-            desc: "CloudFront /* invalidation triggered. Selective per-route invalidation using ISR metadata is on the roadmap.",
-          },
-        ].map(({ step, title, desc }) => (
-          <div
-            key={step}
-            className="flex gap-4 p-4 bg-slate-900/30 border border-slate-800 rounded-xl"
-          >
-            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-sm">
-              {step}
-            </span>
-            <div>
-              <h4 className="text-white font-semibold text-sm mb-1">{title}</h4>
-              <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── SECRETS ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Secret Management</h2>
-      <p className="text-gray-400 mb-2 text-sm">
-        Encrypted locally. Never in build artifacts. Never hardcoded in Lambda
-        env vars.
-      </p>
-      <p className="text-gray-500 mb-6 text-xs italic">
-        Commands from the CLI are now cryptographically signed using HMAC-SHA256
-        to ensure daemon control plane integrity.
+      <h3 className="text-lg font-semibold text-white mt-8 mb-3">
+        VPS — Linux box, deploys over SSH
+      </h3>
+      <CodeBlock code={VPS_YAML} />
+      <p className="text-gray-500 text-sm mt-3">
+        First time on a fresh box? Run{" "}
+        <code className="text-emerald-400">nextdeploy prepare</code> once to
+        install Caddy, nextdeployd, and Fail2Ban.
       </p>
 
-      <CodeBlock
-        code={`nextdeploy secrets set DATABASE_URL "postgres://user:pass@host/db"
-nextdeploy secrets load
-nextdeploy secrets list
-nextdeploy secrets delete OLD_KEY`}
-        className="mb-8"
-      />
-
-      <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6 mb-8">
-        <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
-          <Lock className="w-4 h-4 text-purple-400" /> How secrets are stored
-        </h4>
-        <ul className="space-y-3 text-sm text-gray-400 list-none p-0 m-0">
-          <li className="flex gap-4 items-start">
-            <span className="text-gray-500 flex-shrink-0 w-16">VPS</span>
-            <span>
-              Encrypted on-disk at{" "}
-              <code className="text-emerald-400">/opt/nextdeploy/secrets/</code>{" "}
-              with 0600 permissions. Decrypted and injected as environment
-              variables at startup. Key is derived per-machine.
-            </span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <span className="text-gray-500 flex-shrink-0 w-16">AWS</span>
-            <span>
-              Pushed to AWS Secrets Manager under{" "}
-              <code className="text-emerald-400">
-                nextdeploy/apps/&lt;name&gt;/production
-              </code>
-              . Lambda fetches them at cold-start via the AWS Secrets Extension
-              — available as plain{" "}
-              <code className="text-emerald-400">process.env</code>. Only the
-              ARN is set in Lambda, not the values.
-            </span>
-          </li>
-        </ul>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── DNS CONFIGURATION ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">DNS Configuration</h2>
-      <p className="text-gray-400 mb-6 text-sm">
-        How to point your domain to your new infrastructure correctly.
+      <h3 className="text-lg font-semibold text-white mt-8 mb-3">
+        AWS — Lambda + S3 + CloudFront
+      </h3>
+      <CodeBlock code={AWS_YAML} />
+      <p className="text-gray-500 text-sm mt-3">
+        Requires AWS credentials in{" "}
+        <code className="text-emerald-400">~/.aws/credentials</code>. Lambda,
+        S3, ACM and CloudFront are provisioned on first ship.
       </p>
 
-      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-5 mb-8">
-        <h4 className="text-emerald-400 font-semibold mb-2 flex items-center gap-2">
-          <Share2 className="w-4 h-4" /> The "Loud" DNS Guide
-        </h4>
-        <p className="text-emerald-200/70 text-sm leading-relaxed m-0">
-          NextDeploy generates a{" "}
-          <code className="text-emerald-300 bg-slate-900 px-1.5 py-0.5 rounded">
-            dns.md
-          </code>{" "}
-          file in your project root and a visual{" "}
-          <strong>DNS Setup Guide</strong> in your deployment report. It
-          explicitly tells you which records to add to your registrar.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
-        <div>
-          <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 flex items-center gap-2">
-            <Server className="w-5 h-5 text-blue-400" /> VPS Target
-          </h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Point your domain directly to your server IP.
-          </p>
-          <ul className="space-y-2 text-sm text-gray-300 list-none p-0">
-            <li>
-              • <strong className="text-white">A Record:</strong>{" "}
-              <code className="text-blue-400">@</code> &rarr;{" "}
-              <code className="text-blue-400">Server IP</code>
-            </li>
-            <li>
-              • <strong className="text-white">CNAME:</strong>{" "}
-              <code className="text-blue-400">www</code> &rarr;{" "}
-              <code className="text-blue-400">@</code>
-            </li>
-          </ul>
-          <p className="text-gray-500 text-xs mt-4 italic">
-            Caddy handles SSL automatically via Let's Encrypt once DNS
-            propagates.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 flex items-center gap-2">
-            <Cloud className="w-5 h-5 text-purple-400" /> Serverless Target
-          </h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Requires two steps: verify ownership and route traffic.
-          </p>
-          <ul className="space-y-4 text-sm text-gray-300 list-none p-0">
-            <li>
-              <strong className="text-white block mb-1">
-                1. SSL Validation (ACM)
-              </strong>
-              <span className="text-xs text-gray-500">
-                Add the unique CNAME records provided in your report to prove
-                ownership to AWS.
-              </span>
-            </li>
-            <li>
-              <strong className="text-white block mb-1">
-                2. Traffic Routing
-              </strong>
-              <span className="text-xs text-gray-500">
-                Point your domain to the CloudFront distribution:
-              </span>
-              <div className="mt-1">
-                <code className="text-purple-400">@</code> &rarr;{" "}
-                <code className="text-purple-400">xxxx.cloudfront.net</code>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── SECURITY & ISOLATION ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-        Security & Isolation
-      </h2>
-      <p className="text-gray-400 mb-6 text-sm">
-        Hardened by default for both VPS and Serverless deployments.
+      <h3 className="text-lg font-semibold text-white mt-8 mb-3">
+        Cloudflare — Workers + R2
+      </h3>
+      <CodeBlock code={CF_YAML} />
+      <p className="text-gray-500 text-sm mt-3">
+        Requires{" "}
+        <code className="text-emerald-400">CLOUDFLARE_API_TOKEN</code> and{" "}
+        <code className="text-emerald-400">CLOUDFLARE_ACCOUNT_ID</code>. R2
+        credentials are derived from the API token automatically.
       </p>
 
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {[
-          {
-            icon: <Lock className="w-5 h-5 text-purple-400" />,
-            title: "HMAC-SHA256 Command Signing",
-            desc: "All CLI-to-Daemon commands require a cryptographic signature. A shared secret is generated during 'nextdeploy prepare', ensuring only authorized clients can control your apps.",
-          },
-          {
-            icon: <Shield className="w-5 h-5 text-emerald-400" />,
-            title: "Coraza WAF Integration",
-            desc: "Caddy includes an embedded Web Application Firewall using the OWASP Core Rule Set. It blocks SQLi, XSS, and common exploit attempts at the edge.",
-          },
-          {
-            icon: <Server className="w-5 h-5 text-blue-400" />,
-            title: "Advanced Systemd Sandboxing",
-            desc: "Apps run with DynamicUser=yes, ProtectSystem=strict, and PrivateTmp=yes. The process is sandboxed with minimal kernel attack surface and no filesystem access outside its data dir.",
-          },
-          {
-            icon: <FileText className="w-5 h-5 text-amber-400" />,
-            title: "Structured Audit Logging",
-            desc: "Every deployment, secret change, and system command is recorded in JSON format at /var/log/nextdeployd/audit.log for full environment traceability.",
-          },
-          {
-            icon: <Lock className="w-5 h-5 text-blue-500" />,
-            title: "Mutual TLS (mTLS)",
-            desc: "Daemon communication supports an optional TCP+mTLS listener. For network-attached management, both client and server must present valid certificates.",
-          },
-          {
-            icon: <Shield className="w-5 h-5 text-red-500" />,
-            title: "Atomic Permissions",
-            desc: "Unix sockets are restricted to the 'nextdeploy' group with 0660 permissions, ensuring local privilege separation between users and the deployment plane.",
-          },
-        ].map(({ icon, title, desc }) => (
-          <div
-            key={title}
-            className="p-5 bg-slate-900/30 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              {icon}
-              <h4 className="text-white font-semibold m-0">{title}</h4>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed m-0">{desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── NEXTCORE METADATA ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-        Deep Dive: NextCore Metadata
-      </h2>
-      <p className="text-gray-400 mb-6 text-sm">
-        The "Brain" that makes NextDeploy provider-agnostic.
-      </p>
-
+      <h2 className="text-2xl font-bold text-white mt-12 mb-4">CLI commands</h2>
       <p className="text-gray-300 mb-6">
-        During <code className="text-emerald-400">nextdeploy build</code>, the
-        NextCore engine performs a deep inspection of your Next.js build output.
-        It doesn't just copy files; it understands the <strong>intent</strong>{" "}
-        of every route and asset.
+        Every command supports{" "}
+        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+          nextdeploy &lt;cmd&gt; explain
+        </code>{" "}
+        for inline help, and{" "}
+        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+          --help
+        </code>{" "}
+        for the flag list.
       </p>
-
-      <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6 mb-8">
-        <h4 className="text-white font-semibold mb-4">
-          Metadata Analysis Loop
-        </h4>
-        <div className="grid sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-lg">
-            <div className="text-emerald-400 font-bold mb-1">
-              Manifest Scanning
-            </div>
-            <div className="text-gray-400">
-              Parses .next/routes-manifest.json to map every route (Static,
-              Dynamic, ISR, Middleware).
-            </div>
-          </div>
-          <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-lg">
-            <div className="text-blue-400 font-bold mb-1">
-              Integration Detection
-            </div>
-            <div className="text-gray-400">
-              Detects Stripe, Cloudinary, etc., by scanning chunks for external
-              origin calls.
-            </div>
-          </div>
-          <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-lg">
-            <div className="text-purple-400 font-bold mb-1">
-              Secret Cross-Ref
-            </div>
-            <div className="text-gray-400">
-              Matches detected integrations against your stored secrets to warn
-              of missing config.
-            </div>
-          </div>
-          <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-lg">
-            <div className="text-amber-400 font-bold mb-1">Git Provenance</div>
-            <div className="text-gray-400">
-              Records commit hash, branch, and dirty state to ensure deployment
-              traceability.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <p className="text-gray-300 mb-6">
-        The resulting{" "}
-        <code className="text-emerald-400 font-mono">metadata.json</code> serves
-        as the source of truth for all providers:
-      </p>
-
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
-        <div className="p-5 bg-blue-500/5 border border-blue-500/10 rounded-xl">
-          <h4 className="text-blue-400 font-semibold mb-3 flex items-center gap-2">
-            <Server className="w-4 h-4" /> VPS (nextdeployd)
-          </h4>
-          <ul className="space-y-2 text-sm text-gray-400 list-none p-0">
-            <li>
-              • Maps the entrypoint to a <strong>Systemd Sandbox</strong>
-            </li>
-            <li>
-              • Allocates and persists <strong>Dynamic Ports</strong>
-            </li>
-            <li>
-              • Translates Domain metadata to{" "}
-              <strong>Caddyfile Directives</strong>
-            </li>
-          </ul>
-        </div>
-        <div className="p-5 bg-purple-500/5 border border-purple-500/10 rounded-xl">
-          <h4 className="text-purple-400 font-semibold mb-3 flex items-center gap-2">
-            <Cloud className="w-4 h-4" /> AWS Serverless
-          </h4>
-          <ul className="space-y-2 text-sm text-gray-400 list-none p-0">
-            <li>
-              • Splits assets between <strong>S3 (Static)</strong> and{" "}
-              <strong>Lambda (Dynamic)</strong>
-            </li>
-            <li>
-              • Configures <strong>CloudFront Behaviors</strong> per route type
-            </li>
-            <li>
-              • Maps secrets to <strong>AWS Secrets Manager</strong>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── CLI REFERENCE ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">CLI Reference</h2>
-      <div className="space-y-3 mb-8">
-        {[
-          {
-            cmd: "nextdeploy init",
-            desc: "Scaffold nextdeploy.yml in your project",
-          },
-          {
-            cmd: "nextdeploy ship",
-            desc: "Build (incrementally) and deploy in one step — the typical command. Targets VPS or serverless based on nextdeploy.yml.",
-          },
-          {
-            cmd: "nextdeploy ship --force",
-            desc: "Force a full rebuild before deploying (skips the incremental cache).",
-          },
-          {
-            cmd: "nextdeploy build",
-            desc: "Run only the build stage — analyse Next.js output, classify routes, detect integrations, produce metadata.json and app.tar.gz. Useful for CI when you want build and deploy on separate runners.",
-          },
-          {
-            cmd: "nextdeploy build --force",
-            desc: "Force a clean rebuild from scratch.",
-          },
-          {
-            cmd: "nextdeploy prepare",
-            desc: "Provision a VPS — Caddy, daemon, Fail2Ban, Node, Bun, systemd (VPS only)",
-          },
-          {
-            cmd: "nextdeploy rollback",
-            desc: "Revert to the previous release (VPS ring buffer or S3 history)",
-          },
-          {
-            cmd: "nextdeploy status",
-            desc: "Show health, active release, route summary, and resource usage",
-          },
-          {
-            cmd: "nextdeploy logs",
-            desc: "Tail live application logs from the server",
-          },
-          {
-            cmd: "nextdeploy secrets load",
-            desc: "Load secrets from a .env file to your server securely",
-          },
-          {
-            cmd: "nextdeploy secrets set KEY VALUE",
-            desc: "Encrypt and store — routed to daemon store or AWS Secrets Manager automatically",
-          },
-          {
-            cmd: "nextdeploy secrets list",
-            desc: "List secret names (values always hidden)",
-          },
-          {
-            cmd: "nextdeploy secrets delete KEY",
-            desc: "Remove a secret permanently",
-          },
-          {
-            cmd: "nextdeploy update",
-            desc: "Self-update the CLI binary from GitHub Releases",
-          },
-        ].map(({ cmd, desc }) => (
+      <div className="not-prose space-y-2">
+        {CLI_COMMANDS.map(({ cmd, desc }) => (
           <div
             key={cmd}
-            className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 p-4 bg-slate-900/30 border border-slate-800 rounded-xl"
+            className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 p-3 bg-slate-900/30 border border-slate-800 rounded-lg"
           >
-            <code className="text-emerald-400 font-mono text-xs sm:text-sm flex-shrink-0 break-all sm:break-normal sm:whitespace-nowrap">
+            <code className="text-emerald-400 font-mono text-sm flex-shrink-0 sm:w-64">
               {cmd}
             </code>
             <span className="text-gray-400 text-sm">{desc}</span>
@@ -956,620 +252,56 @@ nextdeploy secrets delete OLD_KEY`}
         ))}
       </div>
 
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── CONFIG REFERENCE ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+      <h2 className="text-2xl font-bold text-white mt-12 mb-4">
         Configuration reference
       </h2>
-      <Tabs defaultValue="vps" className="w-full mb-8">
-        <TabsList className="bg-slate-900 border border-slate-700">
-          <TabsTrigger value="vps">VPS</TabsTrigger>
-          <TabsTrigger value="serverless">Serverless</TabsTrigger>
-        </TabsList>
-        <TabsContent value="vps" className="mt-2">
-          <CodeBlock
-            code={`version: "1.0"
-target_type: vps
-
-app:
-  name: my-next-app         # Used for process naming and secret namespacing
-  domain: app.example.com   # Caddy configures HTTPS automatically
-  port: 3000
-  environment: production
-
-servers:
-  - name: prod
-    host: 1.2.3.4
-    port: 22
-    username: deploy
-    ssh_key: ~/.ssh/id_rsa
-
-secrets:
-  provider: local           # "local" | "doppler" coming soon
-
-logging:
-  enabled: true`}
-          />
-        </TabsContent>
-        <TabsContent value="serverless" className="mt-2">
-          <CodeBlock
-            code={`version: "1.0"
-target_type: serverless
-
-app:
-  name: my-next-app
-  domain: app.example.com
-
-serverless:
-  provider: aws             # "cloudflare" | "gcp" | "azure" coming soon
-  region: us-east-1         # Must be us-east-1 for CloudFront + ACM
-  # Optional — NextDeploy provisions these automatically on first ship:
-  s3_bucket: my-nextjs-assets
-  cloudfront_id: EXXXXXXXXXXXXXXXXX
-  lambda_function_name: my-next-app-handler`}
-          />
-        </TabsContent>
-      </Tabs>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── ARCHITECTURE ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Architecture</h2>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-4">VPS</h3>
-      <div className="my-6 p-3 sm:p-6 bg-slate-900/50 border border-slate-800 rounded-2xl flex flex-col items-center overflow-x-auto">
-        <svg viewBox="0 0 800 320" className="w-full max-w-3xl min-w-[480px] sm:min-w-[600px]">
-          <defs>
-            <marker
-              id="arrowhead"
-              markerWidth="10"
-              markerHeight="7"
-              refX="0"
-              refY="3.5"
-              orientation="auto"
-            >
-              <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
-            </marker>
-            <marker
-              id="arrowhead-small"
-              markerWidth="6"
-              markerHeight="4"
-              refX="0"
-              refY="2"
-              orientation="auto"
-            >
-              <polygon points="0 0, 6 2, 0 4" fill="#94a3b8" />
-            </marker>
-          </defs>
-          <rect
-            x="30"
-            y="80"
-            width="170"
-            height="160"
-            rx="12"
-            fill="none"
-            stroke="#334155"
-            strokeWidth="2"
-            strokeDasharray="4 4"
-          />
-          <text
-            x="115"
-            y="65"
-            textAnchor="middle"
-            fill="#94a3b8"
-            fontSize="12"
-            fontWeight="600"
-          >
-            Local Machine
-          </text>
-          <rect
-            x="50"
-            y="110"
-            width="130"
-            height="60"
-            rx="8"
-            fill="#064e3b"
-            stroke="#10b981"
-            strokeWidth="2"
-          />
-          <text
-            x="115"
-            y="145"
-            textAnchor="middle"
-            fill="#ecfdf5"
-            fontSize="14"
-            fontWeight="600"
-          >
-            nextdeploy CLI
-          </text>
-          <path
-            d="M 200 150 L 310 150"
-            stroke="#10b981"
-            strokeWidth="2"
-            markerEnd="url(#arrowhead)"
-          />
-          <text
-            x="255"
-            y="140"
-            textAnchor="middle"
-            fill="#10b981"
-            fontSize="11"
-            fontWeight="600"
-          >
-            SFTP
-          </text>
-          <rect
-            x="310"
-            y="40"
-            width="440"
-            height="240"
-            rx="12"
-            fill="none"
-            stroke="#334155"
-            strokeWidth="2"
-            strokeDasharray="4 4"
-          />
-          <text
-            x="530"
-            y="25"
-            textAnchor="middle"
-            fill="#94a3b8"
-            fontSize="12"
-            fontWeight="600"
-          >
-            Production VPS
-          </text>
-          <rect
-            x="330"
-            y="110"
-            width="100"
-            height="60"
-            rx="8"
-            fill="#1e293b"
-            stroke="#3b82f6"
-            strokeWidth="2"
-          />
-          <text
-            x="380"
-            y="145"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="13"
-            fontWeight="600"
-          >
-            Daemon
-          </text>
-          <rect
-            x="500"
-            y="50"
-            width="100"
-            height="60"
-            rx="8"
-            fill="#1e293b"
-            stroke="#8b5cf6"
-            strokeWidth="2"
-          />
-          <text
-            x="550"
-            y="85"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="13"
-            fontWeight="600"
-          >
-            Caddy
-          </text>
-          <rect
-            x="500"
-            y="200"
-            width="100"
-            height="60"
-            rx="8"
-            fill="#1e293b"
-            stroke="#f59e0b"
-            strokeWidth="2"
-          />
-          <text
-            x="550"
-            y="235"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="13"
-            fontWeight="600"
-          >
-            Next.js
-          </text>
-          <rect
-            x="660"
-            y="120"
-            width="70"
-            height="50"
-            rx="8"
-            fill="#1e293b"
-            stroke="#ef4444"
-            strokeWidth="2"
-          />
-          <text
-            x="695"
-            y="150"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="11"
-            fontWeight="600"
-          >
-            Fail2Ban
-          </text>
-          <path
-            d="M 380 170 L 380 230 L 500 230"
-            stroke="#94a3b8"
-            strokeWidth="1.5"
-            strokeDasharray="2 2"
-            markerEnd="url(#arrowhead-small)"
-          />
-          <text x="390" y="210" textAnchor="start" fill="#94a3b8" fontSize="10">
-            Supervises
-          </text>
-          <path
-            d="M 380 110 L 380 80 L 500 80"
-            stroke="#94a3b8"
-            strokeWidth="1.5"
-            strokeDasharray="2 2"
-            markerEnd="url(#arrowhead-small)"
-          />
-          <text x="390" y="68" textAnchor="start" fill="#94a3b8" fontSize="10">
-            Configures
-          </text>
-          <path
-            d="M 550 110 L 550 200"
-            stroke="#8b5cf6"
-            strokeWidth="1.5"
-            markerEnd="url(#arrowhead-small)"
-          />
-          <text x="558" y="160" textAnchor="start" fill="#8b5cf6" fontSize="10">
-            HTTPS Proxy
-          </text>
-        </svg>
-      </div>
-
-      <h3 className="text-lg sm:text-xl font-semibold text-white mt-8 mb-4">Serverless</h3>
-      <div className="my-6 p-3 sm:p-6 bg-slate-900/50 border border-slate-800 rounded-2xl flex flex-col items-center overflow-x-auto">
-        <svg viewBox="0 0 800 280" className="w-full max-w-3xl min-w-[480px] sm:min-w-[600px]">
-          <defs>
-            <marker
-              id="arrow-green"
-              markerWidth="10"
-              markerHeight="7"
-              refX="0"
-              refY="3.5"
-              orientation="auto"
-            >
-              <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
-            </marker>
-            <marker
-              id="arrow-gray-sl"
-              markerWidth="6"
-              markerHeight="4"
-              refX="0"
-              refY="2"
-              orientation="auto"
-            >
-              <polygon points="0 0, 6 2, 0 4" fill="#94a3b8" />
-            </marker>
-          </defs>
-          <text
-            x="115"
-            y="30"
-            textAnchor="middle"
-            fill="#94a3b8"
-            fontSize="12"
-            fontWeight="600"
-          >
-            Local
-          </text>
-          <rect
-            x="30"
-            y="80"
-            width="170"
-            height="60"
-            rx="8"
-            fill="#064e3b"
-            stroke="#10b981"
-            strokeWidth="2"
-          />
-          <text
-            x="115"
-            y="115"
-            textAnchor="middle"
-            fill="#ecfdf5"
-            fontSize="14"
-            fontWeight="600"
-          >
-            nextdeploy CLI
-          </text>
-          <path
-            d="M 200 110 L 280 110"
-            stroke="#10b981"
-            strokeWidth="2"
-            markerEnd="url(#arrow-green)"
-          />
-          <text
-            x="240"
-            y="100"
-            textAnchor="middle"
-            fill="#10b981"
-            fontSize="10"
-          >
-            Deploy
-          </text>
-          <text
-            x="530"
-            y="20"
-            textAnchor="middle"
-            fill="#94a3b8"
-            fontSize="12"
-            fontWeight="600"
-          >
-            AWS Cloud
-          </text>
-          <rect
-            x="240"
-            y="40"
-            width="540"
-            height="220"
-            rx="12"
-            fill="none"
-            stroke="#334155"
-            strokeWidth="2"
-            strokeDasharray="4 4"
-          />
-          <rect
-            x="280"
-            y="80"
-            width="100"
-            height="60"
-            rx="8"
-            fill="#1e293b"
-            stroke="#f59e0b"
-            strokeWidth="2"
-          />
-          <text
-            x="330"
-            y="111"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="12"
-            fontWeight="600"
-          >
-            Lambda
-          </text>
-          <text x="330" y="127" textAnchor="middle" fill="#94a3b8" fontSize="9">
-            + Bridge Adapter
-          </text>
-          <rect
-            x="430"
-            y="80"
-            width="100"
-            height="60"
-            rx="8"
-            fill="#1e293b"
-            stroke="#3b82f6"
-            strokeWidth="2"
-          />
-          <text
-            x="480"
-            y="115"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="13"
-            fontWeight="600"
-          >
-            S3
-          </text>
-          <rect
-            x="580"
-            y="80"
-            width="120"
-            height="60"
-            rx="8"
-            fill="#1e293b"
-            stroke="#8b5cf6"
-            strokeWidth="2"
-          />
-          <text
-            x="640"
-            y="115"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="13"
-            fontWeight="600"
-          >
-            CloudFront
-          </text>
-          <rect
-            x="350"
-            y="190"
-            width="160"
-            height="50"
-            rx="8"
-            fill="#1e293b"
-            stroke="#ef4444"
-            strokeWidth="2"
-          />
-          <text
-            x="430"
-            y="220"
-            textAnchor="middle"
-            fill="#f1f5f9"
-            fontSize="12"
-            fontWeight="600"
-          >
-            Secrets Manager
-          </text>
-          <path
-            d="M 330 140 L 330 190"
-            stroke="#94a3b8"
-            strokeWidth="1.5"
-            strokeDasharray="2 2"
-            markerEnd="url(#arrow-gray-sl)"
-          />
-          <text x="338" y="170" fill="#94a3b8" fontSize="9">
-            cold-start fetch
-          </text>
-          <path
-            d="M 640 140 L 640 200 L 530 215"
-            stroke="#8b5cf6"
-            strokeWidth="1.5"
-            strokeDasharray="2 2"
-            markerEnd="url(#arrow-gray-sl)"
-          />
-          <path
-            d="M 580 110 L 530 110"
-            stroke="#8b5cf6"
-            strokeWidth="1.5"
-            strokeDasharray="2 2"
-          />
-        </svg>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── UNDER THE HOOD ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Under the hood</h2>
-      <div className="grid md:grid-cols-3 gap-6 my-8">
-        <div className="p-6 bg-slate-900/40 border border-slate-800 rounded-2xl">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 m-0 font-sans">
-            <Terminal className="w-5 h-5 text-emerald-400" /> CLI
-          </h3>
-          <ul className="space-y-2 text-sm text-gray-400 list-none p-0">
-            <li>• Next.js manifest parsing + route classification</li>
-            <li>• Static integration detection from build output</li>
-            <li>• HMAC-SHA256 request signing & verification</li>
-            <li>• Build metadata generation per deploy</li>
-            <li>• Encrypted local secret storage</li>
-            <li>• SFTP (VPS) or AWS SDK (serverless)</li>
-            <li>• Self-update via GitHub Releases</li>
-          </ul>
-        </div>
-
-        <div className="p-6 bg-slate-900/40 border border-slate-800 rounded-2xl">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 m-0 font-sans">
-            <Server className="w-5 h-5 text-blue-400" /> Daemon (VPS)
-          </h3>
-          <ul className="space-y-2 text-sm text-gray-400 list-none p-0">
-            <li>• Systemd with socket & process isolation</li>
-            <li>• DynamicUser & ProtectSystem sandboxing</li>
-            <li>• Unix socket & TCP/mTLS control plane</li>
-            <li>• Health check + port arbitration & persistence</li>
-            <li>• Atomic hot-swap with instant rollback</li>
-            <li>• Release buffer (last 5 builds)</li>
-            <li>• Secret hot-reload without restart</li>
-          </ul>
-        </div>
-
-        <div className="p-6 bg-slate-900/40 border border-slate-800 rounded-2xl border-purple-500/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 m-0 font-sans">
-            <Cloud className="w-5 h-5 text-purple-400" /> Serverless engine
-          </h3>
-          <ul className="space-y-2 text-sm text-gray-400 list-none p-0">
-            <li>• Lambda bridge adapter (event → HTTP)</li>
-            <li>• CloudFront OAC + Lambda URL auth</li>
-            <li>• S3 deployment history for rollback</li>
-            <li>• Lambda version publishing per deploy</li>
-            <li>• Idempotent AWS resource provisioning</li>
-            <li>• Provider interface (GCP, Cloudflare planned)</li>
-          </ul>
-        </div>
-      </div>
-
-      <hr className="border-slate-800 my-8 sm:my-10" />
-
-      {/* ─── ROADMAP ─── */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Roadmap</h2>
-      <p className="text-gray-400 text-sm mb-6">
-        The build metadata layer already collects the data needed for most of
-        these. Several are one function away from the information that enables
-        them.
+      <p className="text-gray-300 mb-4">
+        The full schema — every field, its purpose, defaults, and validation
+        rules — is annotated in{" "}
+        <a
+          href={`${REPO_URL}/blob/main/sample.nextdeploy.yml`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-emerald-400 underline hover:text-emerald-300"
+        >
+          sample.nextdeploy.yml
+        </a>
+        . That file is the source of truth; this page intentionally does not
+        duplicate it.
       </p>
 
-      <div className="space-y-3 mb-8">
-        {[
-          {
-            label: "✅ AWS — Lambda + S3 + CloudFront + ACM + Secrets Manager",
-            status: "Live — v0.1.60",
-            done: true,
-          },
-          {
-            label:
-              "✅ Build intelligence — route classification, integration detection, ISR awareness, git provenance",
-            status: "Live — v0.1.60",
-            done: true,
-          },
-          {
-            label:
-              "✅ VPS — atomic swap, Caddy, Fail2Ban, daemon, ring buffer rollback",
-            status: "Live — v0.1.60",
-            done: true,
-          },
-          {
-            label:
-              "✅ Pre-deploy validation — secret cross-referencing, git dirty warnings, Lambda size checks",
-            status: "Live — v0.1.110",
-            done: true,
-          },
-          {
-            label:
-              "🔜 Selective CDN invalidation — invalidate only changed routes using ISR metadata diff",
-            status: "Planned",
-            done: false,
-          },
-          {
-            label:
-              "🔜 Smart CloudFront routing — static routes → S3, Lambda only for SSR/API routes",
-            status: "Planned",
-            done: false,
-          },
-          {
-            label:
-              "🔜 Deployment dashboard — route map, build trends, history, provenance per deploy",
-            status: "Planned",
-            done: false,
-          },
-          {
-            label: "🔜 Cloudflare Workers + R2 + CDN provider",
-            status: "Planned",
-            done: false,
-          },
-          {
-            label: "🔜 GCP Cloud Run + GCS provider",
-            status: "Planned",
-            done: false,
-          },
-          {
-            label: "🔜 Doppler / 1Password secret provider integration",
-            status: "Planned",
-            done: false,
-          },
-        ].map(({ label, status, done }) => (
-          <div
-            key={label}
-            className={`flex justify-between items-center p-4 rounded-xl border ${done ? "bg-emerald-500/5 border-emerald-500/20" : "bg-slate-900/30 border-slate-800"}`}
+      <h2 className="text-2xl font-bold text-white mt-12 mb-4">
+        Where to go next
+      </h2>
+      <ul className="text-gray-300 space-y-2">
+        <li>
+          <strong className="text-white">Source &amp; issues:</strong>{" "}
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 underline hover:text-emerald-300"
           >
-            <span
-              className={`text-sm ${done ? "text-emerald-300/80" : "text-gray-300"}`}
-            >
-              {label}
-            </span>
-            <span
-              className={`text-xs flex-shrink-0 ml-4 ${done ? "text-emerald-500" : "text-gray-500"}`}
-            >
-              {status}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <DocPrevNext />
+            {REPO_URL.replace("https://", "")}
+          </a>
+        </li>
+        <li>
+          <strong className="text-white">Releases:</strong>{" "}
+          <a
+            href={`${REPO_URL}/releases`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 underline hover:text-emerald-300"
+          >
+            changelog and binaries
+          </a>
+        </li>
+        <li>
+          <strong className="text-white">Detailed guides:</strong> being written
+          by hand. This page will stay live and in sync with the engine until
+          they land.
+        </li>
+      </ul>
     </div>
   );
 }

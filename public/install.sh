@@ -2,6 +2,30 @@
 # NextDeploy Installation Script
 # Secure, defensive, and production-ready
 
+# ─── Bash re-exec shim ────────────────────────────────────────────────────────
+# `curl … | sh` is muscle memory for many users, but this script uses bash-
+# only features ([[ … ]], =~, arrays). When invoked under a POSIX shell, refetch
+# the script and re-exec under bash so the user gets a working install instead
+# of a parser error on line ~24. Skipped when already running under bash, so
+# `bash install.sh` and local development work unchanged.
+if [ -z "${BASH_VERSION:-}" ]; then
+    if ! command -v bash >/dev/null 2>&1; then
+        printf 'Error: NextDeploy installer requires bash.\n' >&2
+        printf '  Debian/Ubuntu: sudo apt install bash\n' >&2
+        printf '  macOS:         brew install bash\n' >&2
+        exit 1
+    fi
+    _ND_URL='https://nextdeploy.org/install.sh'
+    if command -v curl >/dev/null 2>&1; then
+        exec bash -c "$(curl -fsSL "$_ND_URL")" _ "$@"
+    elif command -v wget >/dev/null 2>&1; then
+        exec bash -c "$(wget -qO- "$_ND_URL")" _ "$@"
+    else
+        printf 'Error: curl or wget is required to bootstrap the installer.\n' >&2
+        exit 1
+    fi
+fi
+
 set -euo pipefail
 
 # ─── Colors ───────────────────────────────────────────────────────────────────
