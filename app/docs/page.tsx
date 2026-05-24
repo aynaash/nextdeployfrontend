@@ -183,16 +183,43 @@ export default async function DocsPage() {
       </p>
 
       <h2 className="text-2xl font-bold text-white mt-12 mb-4">Quickstart</h2>
-      <p className="text-gray-300 mb-6">
-        Drop one of the snippets below into{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          nextdeploy.yml
-        </code>{" "}
-        at the root of your Next.js project, then run{" "}
-        <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
-          nextdeploy ship
-        </code>
-        .
+      <p className="text-gray-300 mb-4">
+        One flow, three targets. Inside your Next.js project:
+      </p>
+      <ol className="text-gray-300 mb-4 space-y-1 list-decimal list-inside">
+        <li>
+          <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+            nextdeploy init
+          </code>{" "}
+          — pick your platform (VPS / AWS / Cloudflare). Writes{" "}
+          <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+            nextdeploy.yml
+          </code>
+          .
+        </li>
+        <li>
+          Set the env and secrets your platform needs (
+          <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+            nextdeploy secrets set …
+          </code>{" "}
+          or{" "}
+          <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+            nextdeploy secrets load .env
+          </code>
+          ).
+        </li>
+        <li>
+          <code className="text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded">
+            nextdeploy ship
+          </code>{" "}
+          — builds and deploys.
+        </li>
+      </ol>
+      <p className="text-gray-400 text-sm mb-6">
+        Snippets below show what{" "}
+        <code className="text-emerald-400">nextdeploy.yml</code> ends up looking
+        like for each target — useful for editing by hand or seeing what{" "}
+        <code className="text-emerald-400">init</code> wrote.
       </p>
 
       <h3 className="text-lg font-semibold text-white mt-8 mb-3">
@@ -274,6 +301,18 @@ export default async function DocsPage() {
         Where to go next
       </h2>
       <ul className="text-gray-300 space-y-2">
+        <li>
+          <strong className="text-white">Community:</strong>{" "}
+          <a
+            href="https://discord.gg/xd9Cub9fm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 underline hover:text-emerald-300"
+          >
+            join the Discord
+          </a>{" "}
+          — fastest place to ask questions or report bugs.
+        </li>
         <li>
           <strong className="text-white">Source &amp; issues:</strong>{" "}
           <a

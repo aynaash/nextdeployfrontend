@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X, Github } from "lucide-react";
+import DiscordIcon, { DISCORD_INVITE } from "./discord-icon";
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -54,6 +55,15 @@ export default function MobileNav() {
               className="px-4 py-3 rounded-lg text-base font-medium text-gray-200 hover:bg-slate-800 hover:text-white transition-colors flex items-center gap-2"
             >
               <Github className="w-4 h-4" /> GitHub
+            </a>
+            <a
+              href={DISCORD_INVITE}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="px-4 py-3 rounded-lg text-base font-medium text-gray-200 hover:bg-slate-800 hover:text-white transition-colors flex items-center gap-2"
+            >
+              <DiscordIcon className="w-4 h-4" /> Discord
             </a>
             <Link
               href="/docs"

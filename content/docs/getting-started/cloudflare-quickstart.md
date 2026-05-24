@@ -1,8 +1,8 @@
 ---
 title: Cloudflare Quickstart
-lede: Five-minute path to deploying a Next.js app to Cloudflare Workers — single CLI, single nextdeploy.yml. For full coverage of bindings and runtime details, see the Cloudflare section.
+lede: Deploy a Next.js app to Cloudflare Workers + R2. Same flow as every other target — `nextdeploy init`, set your env and secrets, `nextdeploy ship`.
 status: in-progress
-sourceRef: cli/cmd/init.go, cli/cmd/deploy.go, cli/internal/serverless/cloudflare*.go
+sourceRef: cli/cmd/init.go, cli/cmd/ship.go, cli/internal/serverless/cloudflare*.go
 related:
   - title: Cloudflare Overview
     href: /docs/cloudflare/overview
@@ -12,34 +12,57 @@ related:
     href: /docs/cloudflare/bindings
 ---
 
+## The flow
+
+NextDeploy has one universal flow, regardless of where you deploy:
+
+1. `nextdeploy init` — pick your deployment platform.
+2. Set the env and secrets that platform needs.
+3. `nextdeploy ship` — build and deploy.
+
+For Cloudflare, that's: pick **Serverless (Cloudflare Workers + R2)** at the prompt, give it a Cloudflare API token and your app's secrets, then ship.
+
 ## Prerequisites
 
-> **TODO** Cloudflare account, API token (Workers + R2 + DNS scopes if using custom domain), a domain on Cloudflare or willingness to use `*.workers.dev`.
+A Cloudflare account, an API token with Workers + R2 + DNS scopes (DNS only if you want a custom domain), and a domain on Cloudflare or willingness to use `*.workers.dev`.
 
-## 1. Add Cloudflare credentials
+## 1. Initialize
 
-> **TODO** `nextdeploy creds --provider cloudflare` — paste API token, account ID picked automatically or prompt.
+Run `nextdeploy init` and choose **Serverless (Cloudflare Workers + R2)**. NextDeploy writes a `nextdeploy.yml` with `target_type: cloudflare`, a sensible compatibility date, and a `cloudflare` block where you can declare R2 buckets, KV, and other bindings.
 
-## 2. Initialize for Cloudflare
+## 2. Configure Cloudflare credentials + app secrets
 
-> **TODO** `nextdeploy init --target=serverless --provider=cloudflare` — generates `nextdeploy.yml` with `cloudflare` block + sensible compatibility date.
+Set your Cloudflare API token and account ID in the environment NextDeploy reads (or in `nextdeploy.yml`). Then load any runtime env your app needs:
 
-## 3. Plan
+```sh
+nextdeploy secrets set DATABASE_URL=...
+nextdeploy secrets set NEXTAUTH_SECRET=...
+# or bulk-load from a .env file
+nextdeploy secrets load .env.production
+```
 
-> **TODO** `nextdeploy plan` — what bindings will be created, what's missing, drift if anything pre-exists.
+Secrets become Worker secrets — they're not bundled into the script.
 
-## 4. Deploy
+## 3. Ship
 
-> **TODO** `nextdeploy deploy` — NextCompile build → R2 asset upload → bindings reconcile → worker deploy → routes / domain.
+```sh
+nextdeploy ship
+```
 
-## 5. Tail logs
+For Cloudflare, `ship` runs the build with the webpack path (required by the Workers runtime), uploads static assets to R2, reconciles bindings declared in `nextdeploy.yml`, and deploys the Worker. Subsequent ships only upload changed assets.
 
-> **TODO** `nextdeploy logs --follow` — wraps wrangler tail style.
+## 4. Tail logs
 
-## 6. Iterate
+```sh
+nextdeploy logs --follow
+```
 
-> **TODO** subsequent deploys upload only changed assets, re-deploy worker, reconcile bindings.
+Wraps the `wrangler tail`-style live log stream from your Worker.
 
-## What if your app isn't supported yet?
+## 5. Iterate
 
-> **TODO** point at limitations / roadmap. Same `nextdeploy.yml` can target AWS — switch `target_type` / provider.
+Edit code, edit `nextdeploy.yml`, run `nextdeploy ship` again. Bindings are declarative — adding an R2 bucket or KV namespace to the yaml and re-shipping reconciles it. Removing one from the yaml detaches it from the Worker (the underlying resource is preserved; use `nextdeploy destroy` if you actually want it gone).
+
+## What if your app isn't supported on Workers yet?
+
+Some Next.js features don't work on the Workers runtime — see [limitations](/docs/reference/limitations) and the [roadmap](/docs/roadmap). The same `nextdeploy.yml` can target AWS instead — re-run `nextdeploy init` and pick AWS, or edit `target_type` directly.

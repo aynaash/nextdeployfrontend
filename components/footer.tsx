@@ -1,4 +1,5 @@
 import { Github, Twitter, Mail } from "lucide-react";
+import DiscordIcon, { DISCORD_INVITE } from "./discord-icon";
 
 export default function Footer() {
   return (
@@ -19,14 +20,25 @@ export default function Footer() {
             href="https://github.com/aynaash/NextDeploy"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub"
             className="text-gray-400 hover:text-white transition-colors"
           >
             <Github className="w-5 h-5" />
           </a>
           <a
+            href={DISCORD_INVITE}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discord"
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <DiscordIcon className="w-5 h-5" />
+          </a>
+          <a
             href="https://twitter.com/hersiyussuf"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Twitter"
             className="text-gray-400 hover:text-white transition-colors"
           >
             <Twitter className="w-5 h-5" />

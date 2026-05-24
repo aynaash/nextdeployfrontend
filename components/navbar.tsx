@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import GitHubStarButton from "./github-star-button";
 import MobileNav from "./mobile-nav";
+import DiscordIcon, { DISCORD_INVITE } from "./discord-icon";
 
 export default function Navbar() {
   return (
@@ -31,6 +32,14 @@ export default function Navbar() {
               className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
             >
               GitHub
+            </a>
+            <a
+              href={DISCORD_INVITE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors"
+            >
+              <DiscordIcon className="w-4 h-4" /> Discord
             </a>
           </div>
         </div>
