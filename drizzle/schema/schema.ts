@@ -884,3 +884,22 @@ export const auditLogRelations = relations(auditLog, ({ one }) => ({
     references: [project.id],
   }),
 }));
+
+// ====================== TELEMETRY ======================
+// Anonymous "apps shipped" events from the nextdeploy CLI. One row per
+// successful, Ed25519-verified ship. No identifying data — see the ingest route
+// (app/api/telemetry/route.ts) and nextdeploy shared/telemetry/README.md.
+export const shipEvents = pgTable(
+  'ship_events',
+  {
+    nonce: text('nonce').primaryKey(), // per-event → idempotent dedup of replays
+    installId: text('install_id').notNull(), // anonymous per-install id
+    target: text('target').notNull(), // vps | aws | cloudflare | other
+    version: text('version').notNull(),
+    os: text('os'),
+    arch: text('arch'),
+    eventTs: integer('event_ts').notNull(), // client unix seconds
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [index('idx_ship_events_created').on(table.createdAt)],
+);
