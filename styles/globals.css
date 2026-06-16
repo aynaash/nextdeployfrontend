@@ -38,38 +38,83 @@
     --chart-5: 270 100% 95%;
   }
 
+  /* Codex — Terminal Noir. The void where processes sleep. */
   .dark {
-    --background: 240 10% 10%;
-    --foreground: 240 15% 90%;
-    --card: 240 10% 10%;
-    --card-foreground: 240 15% 90%;
-    --popover: 240 10% 10%;
-    --popover-foreground: 240 15% 90%;
+    --background: 218 33% 6%; /* #0A0E14 */
+    --foreground: 210 17% 92%;
+    --card: 215 28% 7%; /* #0D1117 */
+    --card-foreground: 210 17% 92%;
+    --popover: 215 28% 7%;
+    --popover-foreground: 210 17% 92%;
 
-    --primary: 240 100% 70%;
-    --primary-foreground: 240 15% 10%;
+    --primary: 159 100% 50%; /* #00FF9D terminal green */
+    --primary-foreground: 218 33% 6%;
 
-    --secondary: 252 100% 30%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 225 28% 14%; /* #1A1F2E */
+    --secondary-foreground: 210 17% 92%;
 
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 10% 60%;
+    --muted: 222 24% 11%;
+    --muted-foreground: 215 14% 58%;
 
-    --accent: 260 100% 75%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 225 28% 14%;
+    --accent-foreground: 159 100% 50%;
 
-    --destructive: 0 62.8% 40%;
+    --destructive: 347 100% 60%; /* #FF3366 error crimson */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 10% 25%;
-    --input: 240 10% 25%;
-    --ring: 240 10% 70%;
+    --border: 225 28% 14%; /* #1A1F2E accent lines */
+    --input: 225 28% 14%;
+    --ring: 159 100% 50%;
 
-    --chart-1: 250 80% 60%;
-    --chart-2: 255 85% 70%;
-    --chart-3: 260 90% 80%;
-    --chart-4: 265 95% 90%;
-    --chart-5: 270 100% 95%;
+    --chart-1: 159 100% 50%;
+    --chart-2: 190 100% 50%;
+    --chart-3: 41 100% 50%;
+    --chart-4: 347 100% 60%;
+    --chart-5: 255 100% 64%;
+  }
+}
+
+@layer utilities {
+  /* Subtle CRT grain over the void */
+  .grain {
+    position: relative;
+  }
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Faint horizontal scanlines */
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 255, 157, 0.025) 3px,
+      transparent 4px
+    );
+  }
+
+  /* Sharp terminal edges — no rounding. */
+  .codex-card {
+    border: 1px solid #1a1f2e;
+    background: linear-gradient(135deg, #0a0e14 0%, #0d1117 100%);
+    box-shadow: 8px 8px 0 0 rgba(0, 255, 157, 0.08);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .codex-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 12px 12px 0 0 rgba(0, 255, 157, 0.16);
   }
 }
 

@@ -4,16 +4,12 @@ import { Icons } from '@/components/shared/icons';
 export const marketingConfig: MarketingConfig = {
   mainNav: [
     {
-      title: 'Pricing',
-      href: '/pricing',
-    },
-    {
-      title: 'Blog',
-      href: '/blog',
-    },
-    {
-      title: 'Documentation',
+      title: 'Docs',
       href: '/docs',
+    },
+    {
+      title: 'Security',
+      href: '/docs/security',
     },
   ],
   features: [

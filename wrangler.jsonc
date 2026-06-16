@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nextdeploy",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-05-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "nextdeploy"
+    }
+  ],
+  // Non-secret vars. Secrets (NOTION_TOKEN, REVALIDATE_SECRET) are set with `wrangler secret put`.
+  "vars": {
+    "NOTION_DATABASE_ID": "f16a6574be784513b5f94c419f974612"
+  },
+  // Custom domain — requires the nextdeploy.org zone to exist in this Cloudflare account.
+  // Comment these out to deploy to <name>.workers.dev first.
+  "routes": [
+    { "pattern": "nextdeploy.org", "custom_domain": true },
+    { "pattern": "www.nextdeploy.org", "custom_domain": true }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

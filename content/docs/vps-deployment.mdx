@@ -1,0 +1,352 @@
+---
+title: "VPS Deployment"
+description: "Deploy a Next.js app to your own VPS over SSH — HTTPS, zero-downtime redeploys, and instant rollbacks."
+---
+
+import { CodeBlock, Info, Warning, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
+
+# VPS Deployment
+
+Take a Next.js app from an empty Linux server to a live HTTPS deployment with
+zero-downtime redeploys and instant rollbacks — all driven from one config file
+and a handful of commands.
+
+## How it works
+
+Your laptop builds the app and ships an artifact over SSH. A small daemon
+(`nextdeployd`) on the VPS does all the privileged work — systemd units, Caddy
+config, secrets, port allocation — behind an HMAC-authenticated Unix socket. You
+never SSH in by hand or touch systemd, Caddy, or certificates yourself.
+
+<CodeBlock title="The flow">
+your laptop / CI                          VPS
+┌──────────────┐   build + upload (SSH)   ┌──────────────────────────────┐
+│  nextdeploy   │ ───────────────────────► │  nextdeployd → systemd       │
+│               │ ◄──── status / logs ──── │              → Caddy + TLS   │
+└──────────────┘                          └──────────────────────────────┘
+</CodeBlock>
+
+## Prerequisites
+
+- **A VPS** — any Linux host (Ubuntu 20.04+ / Amazon Linux 2 tested), 512 MB+ RAM.
+- **SSH access** — a user that can `sudo` (key-based auth recommended).
+- **The `nextdeploy` CLI** installed locally.
+- **Ansible** (`ansible-playbook`) on your laptop — used by `prepare`; the CLI prompts to install it if missing.
+- **A domain** *(optional)* — for automatic HTTPS. You'll point an A record at the VPS.
+- **A Next.js app** — the CLI validates it's a real Next.js project.
+
+<Info>
+You do **not** need Docker — the CLI builds your app locally before uploading.
+</Info>
+
+## The five steps
+
+<CodeBlock>
+init → prepare → secrets → ship → point DNS
+</CodeBlock>
+
+After this first run, every later deploy is a single `nextdeploy ship`.
+
+---
+
+## Step 1 — `init`
+
+From the root of your Next.js project:
+
+<CodeBlock title="Terminal">
+nextdeploy init
+</CodeBlock>
+
+This scaffolds `nextdeploy.yml` (and a `Dockerfile` if you don't have one). Open
+`nextdeploy.yml` and fill in your target, app, and server details.
+
+### Minimal `nextdeploy.yml`
+
+<CodeBlock title="nextdeploy.yml" language="yaml">
+version: "1.0"
+target_type: vps
+
+app:
+  name: myapp            # unique identifier for this app
+  port: 3000             # the port your Next.js server listens on
+  environment: production
+  domain: myapp.com      # public domain — Caddy auto-provisions TLS
+
+servers:
+  - name: prod
+    host: 203.0.113.10   # VPS IP or hostname
+    port: 22
+    username: ubuntu     # an SSH user that can sudo
+    key_path: ~/.ssh/id_rsa
+</CodeBlock>
+
+<Info>
+`nextdeploy prepare` and `ship` use the **first** entry in `servers:`.
+</Info>
+
+### Common optional blocks
+
+<CodeBlock title="nextdeploy.yml (optional sections)" language="yaml">
+secrets:
+  provider: doppler      # "doppler" | "vault"
+  doppler:
+    project: myapp
+    config: prd
+
+ssl:
+  enabled: true          # auto-enabled for vps targets
+  provider: letsencrypt
+  email: admin@myapp.com
+  auto_renew: true
+
+logging:
+  enabled: true
+  stream_logs: true
+
+database:
+  type: postgres
+  host: 203.0.113.11
+  port: 5432
+  username: dbuser
+  password: secret
+  name: myappdb
+  migrate_on_deploy: true
+</CodeBlock>
+
+See `sample.nextdeploy.yml` in the repo for the full schema.
+
+---
+
+## Step 2 — `prepare`
+
+Provision the VPS. Run this **once per server** (or after a server rebuild):
+
+<CodeBlock title="Terminal">
+nextdeploy prepare
+</CodeBlock>
+
+Useful flags:
+
+<table>
+  <thead>
+    <tr><th>Flag</th><th>Purpose</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--verbose</code></td><td>Verbose Ansible output (<code>-v</code>).</td></tr>
+    <tr><td><code>--stream</code></td><td>Stream raw, uncolored Ansible output.</td></tr>
+    <tr><td><code>--timeout</code></td><td>Overall timeout (default <code>10m</code>).</td></tr>
+  </tbody>
+</table>
+
+This runs an embedded Ansible playbook against `servers[0]` and installs:
+
+- **Runtimes** — Node.js (with a glibc fallback chain), Bun, Go.
+- **Caddy** with the Coraza **WAF**, as a systemd service (handles TLS for you).
+- **`nextdeployd`** daemon — installed as a systemd service, listening on a secure socket at `/run/nextdeployd/nextdeployd.sock`.
+- **Doppler CLI** — for secret injection.
+- **Fail2Ban** — bans IPs that trigger repeated 401/403s in the Caddy logs.
+- The `/opt/nextdeploy/` directory tree and an unprivileged `nextdeploy` user that your apps actually run as.
+
+<Success>
+When `prepare` finishes, the VPS is ready to receive deploys.
+</Success>
+
+---
+
+## Step 3 — `secrets` (optional)
+
+Runtime secrets are stored on the VPS (`0600`) and injected into your app's
+environment. Setting a secret **hot-reloads** the app.
+
+<CodeBlock title="Terminal">
+# Load everything from a .env file
+nextdeploy secrets load .env.production
+
+# Set one or more individually
+nextdeploy secrets set DATABASE_URL="postgres://..." API_KEY="sk_live_..."
+
+# Inspect
+nextdeploy secrets list
+nextdeploy secrets get DATABASE_URL
+
+# Remove
+nextdeploy secrets unset OLD_KEY
+
+# Delete remote secrets not present locally (dry-run unless --apply)
+nextdeploy secrets prune
+nextdeploy secrets prune --apply
+</CodeBlock>
+
+If you use Doppler, you can skip the CLI store entirely and inject at ship time:
+
+<CodeBlock title="Terminal">
+doppler run -- nextdeploy ship
+</CodeBlock>
+
+---
+
+## Step 4 — `ship`
+
+Build and deploy:
+
+<CodeBlock title="Terminal">
+nextdeploy ship          # alias: nextdeploy deploy
+nextdeploy ship -v       # verbose: show every step
+</CodeBlock>
+
+What happens:
+
+1. Loads `nextdeploy.yml` (warns if your Git tree is dirty).
+2. Builds the app — **skipped automatically** if the Git commit hasn't changed since the last build (incremental).
+3. Packages the build into `app.tar.gz`.
+4. Uploads it over SSH to `/opt/nextdeploy/uploads/` on the VPS.
+5. Triggers the daemon, which then:
+   - extracts the release into `/opt/nextdeploy/apps/<app>/releases/<ts>-<sha>/`,
+   - allocates a free port and writes a systemd unit,
+   - **health-checks the new release before exposing it**,
+   - atomically flips the `current` symlink (zero downtime),
+   - writes the per-app Caddy config and reloads Caddy,
+   - prunes old releases (keeps the newest 5).
+
+<Success>
+Because the new release is health-checked **before** the Caddy flip, a broken
+build never takes your site down.
+</Success>
+
+---
+
+## Step 5 — Point DNS
+
+For HTTPS to be issued, your domain must resolve to the VPS. `nextdeploy ship`
+writes a `dns.md` file with the exact records you need. In short:
+
+<CodeBlock title="DNS record">
+Type   Name        Value
+A      myapp.com   203.0.113.10   (your VPS IP)
+</CodeBlock>
+
+Add the record at your DNS provider and wait for propagation (usually a few
+minutes). Caddy then provisions a Let's Encrypt certificate automatically on the
+first request.
+
+---
+
+## Day-2 operations
+
+<Tabs defaultValue="status" className="w-full">
+  <TabsList>
+    <TabsTrigger value="status">Status</TabsTrigger>
+    <TabsTrigger value="logs">Logs</TabsTrigger>
+    <TabsTrigger value="redeploy">Redeploy</TabsTrigger>
+    <TabsTrigger value="rollback">Rollback</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="status">
+    <CodeBlock title="Terminal">
+nextdeploy status        # active release, port, uptime, memory, routes
+    </CodeBlock>
+  </TabsContent>
+
+  <TabsContent value="logs">
+    <CodeBlock title="Terminal">
+nextdeploy logs                    # app logs (journald)
+nextdeploy logs --route /api/upload  # filter by route
+nextdeploy logs --audit            # daemon command audit log
+nextdeploy logs --daemon           # daemon process log
+nextdeploy logs --all              # everything
+    </CodeBlock>
+  </TabsContent>
+
+  <TabsContent value="redeploy">
+    <CodeBlock title="Terminal">
+git commit -am "new feature"
+nextdeploy ship                    # same zero-downtime flow
+    </CodeBlock>
+  </TabsContent>
+
+  <TabsContent value="rollback">
+    <CodeBlock title="Terminal">
+nextdeploy rollback                # back one release
+nextdeploy rollback --steps 2      # back two releases (max 5)
+nextdeploy rollback --to abc123    # roll back to a specific git commit
+    </CodeBlock>
+    Rollback is just an atomic symlink flip to a previous release — it's instant.
+  </TabsContent>
+</Tabs>
+
+### Upgrade the daemon
+
+<CodeBlock title="Terminal">
+nextdeploy upgrade-daemon          # pull a newer nextdeployd onto the VPS
+</CodeBlock>
+
+### Tear down
+
+<CodeBlock title="Terminal">
+nextdeploy destroy                 # stop the service, remove app files + Caddy config
+</CodeBlock>
+
+---
+
+## On-disk layout (for reference)
+
+After a deploy, the VPS looks like this:
+
+<CodeBlock>
+/opt/nextdeploy/
+├── apps/&lt;app&gt;/
+│   ├── current -> releases/&lt;ts&gt;-&lt;sha&gt;/   # atomic symlink to the live release
+│   ├── port                              # the port the live release listens on
+│   ├── shared_static/                    # persisted .next/static
+│   └── releases/&lt;ts&gt;-&lt;sha&gt;/              # one dir per release (newest 5 kept)
+├── uploads/                              # incoming tarballs
+├── secrets/&lt;app&gt;.json                    # secret store (0600)
+└── tmp/                                  # extraction scratch
+
+/etc/caddy/nextdeploy.d/&lt;app&gt;.caddy       # per-app Caddy config
+/run/nextdeployd/nextdeployd.sock         # daemon control socket
+/var/log/nextdeployd/                     # daemon + audit logs
+</CodeBlock>
+
+---
+
+## Security model
+
+- **HMAC-signed commands** — every CLI→daemon command is signed with a shared secret. An empty secret means *reject everything* (fail-closed).
+- **Replay protection** — each command carries a timestamp + nonce; stale or duplicate commands are rejected.
+- **Least privilege** — the daemon runs privileged work, but your app runs as the unprivileged `nextdeploy` user.
+- **Traversal-safe extraction** — the tar reader rejects `..`, absolute paths, and escaping symlinks.
+- **Injection-safe SSH** — all dynamic arguments are POSIX-quoted.
+- **WAF + Fail2Ban** — Caddy runs the Coraza WAF; repeated 401/403s get the source IP banned.
+
+---
+
+## Troubleshooting
+
+<table>
+  <thead>
+    <tr><th>Symptom</th><th>Where to look</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>prepare</code> fails</td><td>Re-run with <code>--verbose</code>; confirm the SSH user can <code>sudo</code>.</td></tr>
+    <tr><td>Deploy succeeds but site is 502/down</td><td><code>nextdeploy status</code>, then <code>nextdeploy logs</code>.</td></tr>
+    <tr><td>HTTPS not issued</td><td>Confirm the DNS A record resolves to the VPS (Step 5).</td></tr>
+    <tr><td>Secret not picked up</td><td><code>nextdeploy secrets list</code>; re-ship or re-set to reload.</td></tr>
+    <tr><td>Daemon issues</td><td><code>nextdeploy logs --daemon</code> and <code>--audit</code>.</td></tr>
+  </tbody>
+</table>
+
+---
+
+## Command cheat sheet
+
+<CodeBlock title="Terminal">
+nextdeploy init                  # scaffold nextdeploy.yml
+nextdeploy prepare               # provision the VPS (once)
+nextdeploy secrets load .env     # push secrets
+nextdeploy ship                  # build + deploy
+nextdeploy status                # what's live
+nextdeploy logs                  # tail logs
+nextdeploy rollback --steps 1    # revert
+nextdeploy destroy               # tear down
+</CodeBlock>

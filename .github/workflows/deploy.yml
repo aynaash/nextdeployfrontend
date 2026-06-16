@@ -1,0 +1,21 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ship:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Install NextDeploy
+        run: go install github.com/aynaash/nextdeploy/cli@latest
+      - name: Ship to Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        run: nextdeploy ship

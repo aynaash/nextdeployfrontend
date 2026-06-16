@@ -11,9 +11,12 @@ export const docsConfig: DocsConfig = {
       href: '/guides',
     },
   ],
+  // Two tiers: "Guides" eases you in; "Technical Reference" goes deep. The docs
+  // sidebar (components/docs-layout.tsx) and the prev/next pager both read this
+  // list, so item order here defines the reading flow across the whole site.
   sidebarNav: [
     {
-      title: 'Getting Started',
+      title: 'Guides',
       items: [
         {
           title: 'Introduction',
@@ -23,46 +26,38 @@ export const docsConfig: DocsConfig = {
           title: 'Installation',
           href: '/docs/installation',
         },
+        {
+          title: 'Quick Start',
+          href: '/docs/quick-start',
+        },
+        {
+          title: 'VPS Deployment',
+          href: '/docs/vps-deployment',
+        },
+        {
+          title: 'Cloudflare Deployment',
+          href: '/docs/cloudflare-deployment',
+        },
       ],
     },
     {
-      title: 'Configuration',
+      title: 'Technical Reference',
       items: [
         {
-          title: 'Authentification',
-          href: '/docs/configuration/authentification',
+          title: 'Configuration',
+          href: '/docs/configuration',
         },
         {
-          title: 'Blog',
-          href: '/docs/configuration/blog',
+          title: 'nextdeploy.yml Reference',
+          href: '/docs/nextdeploy-yml',
         },
         {
-          title: 'Components',
-          href: '/docs/configuration/components',
+          title: 'Secrets & Credentials',
+          href: '/docs/secrets',
         },
         {
-          title: 'Config files',
-          href: '/docs/configuration/config-files',
-        },
-        {
-          title: 'Database',
-          href: '/docs/configuration/database',
-        },
-        {
-          title: 'Email',
-          href: '/docs/configuration/email',
-        },
-        {
-          title: 'Layouts',
-          href: '/docs/configuration/layouts',
-        },
-        {
-          title: 'Markdown files',
-          href: '/docs/configuration/markdown-files',
-        },
-        {
-          title: 'Subscriptions',
-          href: '/docs/configuration/subscriptions',
+          title: 'Cloudflare Protection',
+          href: '/docs/cloudflare-protection',
         },
       ],
     },

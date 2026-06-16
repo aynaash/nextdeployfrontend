@@ -1,0 +1,70 @@
+{
+  "tags": {
+    "/docs": [
+      "/docs"
+    ],
+    "/docs/cloudflare-deployment": [
+      "/docs/cloudflare-deployment"
+    ],
+    "/docs/cloudflare-protection": [
+      "/docs/cloudflare-protection"
+    ],
+    "/docs/configuration": [
+      "/docs/configuration"
+    ],
+    "/docs/deploy-flow": [
+      "/docs/deploy-flow"
+    ],
+    "/docs/index": [
+      "/docs/index"
+    ],
+    "/docs/installation": [
+      "/docs/installation"
+    ],
+    "/docs/nextdeploy-yml": [
+      "/docs/nextdeploy-yml"
+    ],
+    "/docs/quick-start": [
+      "/docs/quick-start"
+    ],
+    "/docs/secrets": [
+      "/docs/secrets"
+    ],
+    "/docs/security": [
+      "/docs/security"
+    ],
+    "/docs/vps-deployment": [
+      "/docs/vps-deployment"
+    ],
+    "/guides": [
+      "/guides"
+    ],
+    "/guides/deploy-to-digitalocean-vps": [
+      "/guides/deploy-to-digitalocean-vps"
+    ],
+    "/guides/getting-started": [
+      "/guides/getting-started"
+    ],
+    "/guides/ship-your-first-app": [
+      "/guides/ship-your-first-app"
+    ]
+  },
+  "intervals": {
+    "/docs": 60,
+    "/docs/cloudflare-deployment": 60,
+    "/docs/cloudflare-protection": 60,
+    "/docs/configuration": 60,
+    "/docs/deploy-flow": 60,
+    "/docs/index": 60,
+    "/docs/installation": 60,
+    "/docs/nextdeploy-yml": 60,
+    "/docs/quick-start": 60,
+    "/docs/secrets": 60,
+    "/docs/security": 60,
+    "/docs/vps-deployment": 60,
+    "/guides": 60,
+    "/guides/deploy-to-digitalocean-vps": 60,
+    "/guides/getting-started": 60,
+    "/guides/ship-your-first-app": 60
+  }
+}

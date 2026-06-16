@@ -4,16 +4,13 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-  experimental: {
-    mdxRs: true,
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-   experimental: {
+  experimental: {
     globalNotFound: true,
   },
     images: {
@@ -55,11 +52,16 @@ const nextConfig = {
   },
 };
 
-const withMDX = require('@next/mdx')({
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
-
-module.exports = withMDX(nextConfig);
+// next.config.js is CommonJS but remark-frontmatter is ESM-only, so load it
+// via dynamic import inside an async config export. Without it, the JS MDX
+// compiler renders each doc's YAML frontmatter as a stray heading.
+module.exports = async () => {
+  const remarkFrontmatter = (await import('remark-frontmatter')).default;
+  const withMDX = require('@next/mdx')({
+    options: {
+      remarkPlugins: [remarkFrontmatter],
+      rehypePlugins: [],
+    },
+  });
+  return withMDX(nextConfig);
+};

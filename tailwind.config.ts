@@ -54,6 +54,17 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // Codex — Terminal Noir + Diagnostic Neon
+        void: '#0A0E14',
+        surface: '#0D1117',
+        rule: '#1A1F2E',
+        term: {
+          green: '#00FF9D',
+          amber: '#FFB800',
+          crimson: '#FF3366',
+          blue: '#00D4FF',
+          purple: '#6E44FF',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -65,6 +76,8 @@ const config = {
         urban: ['var(--font-urban)', ...fontFamily.sans],
         heading: ['var(--font-heading)', ...fontFamily.sans],
         geist: ['var(--font-geist)', ...fontFamily.sans],
+        mono: ['var(--font-mono)', ...fontFamily.mono],
+        grotesk: ['var(--font-grotesk)', ...fontFamily.sans],
       },
       keyframes: {
         'accordion-down': {
@@ -125,6 +138,18 @@ const config = {
             opacity: '1',
           },
         },
+        // Codex motion
+        'cursor-blink': {
+          '0%, 49%': { opacity: '1' },
+          '50%, 100%': { opacity: '0' },
+        },
+        glitch: {
+          '0%, 100%': { transform: 'translate(0)' },
+          '20%': { transform: 'translate(-1px, 1px)' },
+          '40%': { transform: 'translate(-1px, -1px)' },
+          '60%': { transform: 'translate(1px, 1px)' },
+          '80%': { transform: 'translate(1px, -1px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -137,6 +162,10 @@ const config = {
         // Fade in and out
         'fade-in': 'fade-in 0.4s',
         'fade-out': 'fade-out 0.4s',
+
+        // Codex
+        'cursor-blink': 'cursor-blink 1.1s step-end infinite',
+        glitch: 'glitch 0.18s steps(2) infinite',
       },
     },
   },

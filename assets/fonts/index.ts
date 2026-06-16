@@ -1,4 +1,19 @@
 import localFont from 'next/font/local';
+import { JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+
+// Codex system — body/code is mono, headings are Space Grotesk.
+// "Documentation that feels like you're SSH'd into the machine."
+export const fontMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
+export const fontGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-grotesk',
+  display: 'swap',
+});
 
 // Local fonts - paths are relative to this file
 export const fontHeading = localFont({

@@ -1,0 +1,354 @@
+---
+title: "Cloudflare Deployment"
+description: "Deploy a Next.js app to Cloudflare Workers + R2 — D1/Hyperdrive, KV, R2, Workers AI, an edge protection guard, and one-command provisioning."
+---
+
+import { CodeBlock, Info, Warning, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
+
+# Cloudflare Deployment
+
+Ship a Next.js app to Cloudflare's edge — Workers for compute, R2 for assets,
+D1 or your own Postgres for data — with bindings, an edge protection guard, and
+every backing resource **provisioned for you** from one config file.
+
+NextDeploy is a **deployment pipeline**, not an app generator. It compiles your
+Next.js build into a Worker, creates and wires the infrastructure, protects the
+edge, and ships. Your application code stays yours.
+
+## How it works
+
+Your laptop (or CI) builds Next.js, NextDeploy compiles the standalone output
+into a single Worker bundle (pure Go + esbuild — no `@opennextjs/cloudflare`,
+no `next-on-pages`), provisions the resources your `nextdeploy.yml` declares via
+the official Cloudflare API, and uploads the Worker. A generated **edge guard**
+runs ahead of your app for auth, rate-limiting, and IP rules.
+
+<CodeBlock title="The flow">
+{`your laptop / CI                                  Cloudflare
++--------------+   compile + provision + upload   +-----------------------------+
+|  nextdeploy  | -------------------------------> |  Worker (your app)          |
+|              |                                  |   - edge guard (auth/rate)  |
+|              | <----- plan / status / logs ---- |   - R2 . D1 . KV . AI       |
++--------------+                                  |   - Hyperdrive (BYO PG)     |
+                                                  +-----------------------------+`}
+</CodeBlock>
+
+## Prerequisites
+
+- **A Cloudflare account** and a single **API token** (Workers, R2, D1, KV scopes).
+- **The `nextdeploy` CLI** installed locally.
+- **Node.js** — used once at build time to bundle the Worker (esbuild via `npx`).
+- **A Next.js app** — App Router or Pages Router; RSC, Server Actions, ISR,
+  `middleware.ts`, and Next 15 `proxy.ts` are supported.
+
+<Info>
+You only need <strong>one</strong> secret: <code>CLOUDFLARE_API_TOKEN</code>.
+NextDeploy auto-discovers your account ID and derives R2 credentials from the
+token — no dashboard clicking, no separate R2 keys.
+</Info>
+
+## The flow
+
+<CodeBlock>
+init -> configure nextdeploy.yml -> secrets -> apply -> ship
+</CodeBlock>
+
+After the first run, every later deploy is a single `nextdeploy ship`.
+
+---
+
+## Step 1 — `init`
+
+From the root of your Next.js project:
+
+<CodeBlock title="Terminal">
+nextdeploy init
+</CodeBlock>
+
+Choose **Serverless (Cloudflare Workers + R2)**. NextDeploy then offers two paths:
+
+<Tabs defaultValue="cwd" className="w-full">
+  <TabsList>
+    <TabsTrigger value="cwd">Use my existing app</TabsTrigger>
+    <TabsTrigger value="scaffold">Scaffold deployment infra</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="cwd">
+    NextDeploy <strong>sniffs</strong> your project — it reads your source and any
+    <code>wrangler.jsonc</code> / <code>wrangler.toml</code> — to detect which
+    resources you need (D1, R2, KV, Workers AI, Hyperdrive, queues), the server
+    secrets you reference, and whether you have an auth layer. It writes a
+    prefilled <code>nextdeploy.yml</code> you review and tweak.
+    <CodeBlock title="Terminal">
+{`nextdeploy init
+# -> "Use my existing app in this directory"`}
+    </CodeBlock>
+  </TabsContent>
+
+  <TabsContent value="scaffold">
+    NextDeploy writes a <strong>deployment-infra</strong> starter (not an app): a
+    complete <code>nextdeploy.yml</code>, a <code>proxy.ts</code> placeholder, a
+    <code>lib/env.ts</code> binding accessor, a <code>migrations/</code> folder,
+    and a CI workflow. Pick your database: <strong>D1</strong> (Cloudflare-native
+    SQLite) or <strong>BYO</strong> Postgres/MySQL via Hyperdrive.
+    <CodeBlock title="Terminal">
+{`nextdeploy init
+# -> "Scaffold deployment infra (nextdeploy.yml + proxy.ts + bindings + CI)"
+# -> choose: Cloudflare D1  |  Bring my own Postgres (Hyperdrive)`}
+    </CodeBlock>
+  </TabsContent>
+</Tabs>
+
+---
+
+## Step 2 — Configure `nextdeploy.yml`
+
+Everything Cloudflare lives under `serverless.cloudflare`. A minimal config:
+
+<CodeBlock title="nextdeploy.yml" language="yaml">
+{`app:
+  name: myapp
+
+serverless:
+  provider: cloudflare
+  cloudflare:
+    compatibility_date: "2025-04-01"
+    compatibility_flags: [nodejs_compat_v2]
+
+    bindings:
+      r2:
+        - { name: ASSETS }            # static assets bucket (auto-created)
+      d1:
+        - { name: DB, ref: myapp-db } # bind env.DB to a provisioned D1
+
+    resources:
+      d1:
+        - { name: myapp-db, migrations_dir: migrations }`}
+</CodeBlock>
+
+### Bindings — what your Worker can reach at runtime
+
+Each entry becomes an `env.NAME` binding inside the Worker. Use an explicit
+`id` / `namespace_id`, **or** a `ref:` that points at a `resources` entry
+NextDeploy provisions and resolves for you.
+
+<table>
+  <thead>
+    <tr><th>Binding</th><th>Runtime</th><th>Backed by</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>r2</code></td><td><code>env.ASSETS</code></td><td>R2 bucket (auto-created)</td></tr>
+    <tr><td><code>d1</code></td><td><code>env.DB</code></td><td>D1 (SQLite) — id or ref</td></tr>
+    <tr><td><code>kv</code></td><td><code>env.CACHE</code></td><td>KV namespace — namespace_id or ref</td></tr>
+    <tr><td><code>hyperdrive</code></td><td><code>env.DB</code></td><td>pooled Postgres/MySQL — id or ref</td></tr>
+    <tr><td><code>ai</code></td><td><code>env.AI</code></td><td>Workers AI</td></tr>
+    <tr><td><code>vectorize</code></td><td><code>env.VEC</code></td><td>Vectorize index</td></tr>
+    <tr><td><code>secrets_store</code></td><td><code>env.STRIPE</code></td><td>Cloudflare Secret Store reference</td></tr>
+  </tbody>
+</table>
+
+### Resources — what NextDeploy provisions
+
+`resources` is the desired-state layer. `nextdeploy apply` (and `ship`) creates
+anything missing and resolves `ref:` bindings to real IDs.
+
+<CodeBlock title="nextdeploy.yml — resources" language="yaml">
+{`    resources:
+      d1:
+        - { name: myapp-db, migrations_dir: migrations }   # +migrations
+      kv:
+        - { name: myapp-cache }
+      hyperdrive:
+        - { name: primary, origin_env: DATABASE_URL }      # BYO Postgres
+      vectorize:
+        - { name: prod-embeddings, dimensions: 1536, metric: cosine }
+      dns:
+        - { zone: myapp.com, name: "@", type: A, content: 192.0.2.1, proxied: true }`}
+</CodeBlock>
+
+<Info>
+Bringing your own database? Declare a <code>hyperdrive</code> resource with
+<code>origin_env: DATABASE_URL</code> and bind <code>env.DB</code> to it.
+NextDeploy pools your existing Postgres/MySQL at the edge — no migration to D1
+required.
+</Info>
+
+### D1 migrations
+
+Put `*.sql` files in your `migrations_dir`. On `ship`/`apply`, NextDeploy applies
+each one **exactly once**, in filename order, tracked in a `_nextdeploy_migrations`
+table inside the database (so a recreated DB re-applies cleanly).
+
+<CodeBlock title="migrations/0001_init.sql" language="sql">
+{`CREATE TABLE IF NOT EXISTS items (
+  id   TEXT PRIMARY KEY,
+  name TEXT NOT NULL
+);`}
+</CodeBlock>
+
+---
+
+## Step 3 — `secrets`
+
+Server secrets are uploaded as encrypted `secret_text` bindings on the Worker —
+folded **atomically** into the upload (no per-secret rate limits).
+
+<CodeBlock title="Terminal">
+{`nextdeploy secrets set AUTH_SECRET "$(openssl rand -hex 32)"
+nextdeploy secrets set STRIPE_SECRET_KEY "sk_live_..."`}
+</CodeBlock>
+
+NextDeploy is secure-by-default about your environment:
+
+- **Vars vs secrets** — only `NEXT_PUBLIC_*` (and keys you explicitly mark
+  public) become visible `plain_text` bindings. Everything else is a secret.
+- **Redaction** — secret values are scrubbed from all deploy logs.
+- **Commit-safety** — `ship` warns if `.env` isn't gitignored or a secret-looking
+  value sits in plaintext.
+
+<Info>
+For production, prefer <strong>Cloudflare Secret Store</strong> or
+<strong>Doppler</strong> over plaintext. With Secret Store, only a reference
+ships — the value never touches your YAML or the Worker metadata. Add a
+<code>secrets_store</code> binding with a <code>store_id</code> and
+<code>secret_name</code>.
+</Info>
+
+---
+
+## Step 4 — `plan` & `apply`
+
+Preview, then create your infrastructure (idempotent — safe to re-run):
+
+<CodeBlock title="Terminal">
+{`nextdeploy plan      # dry-run diff: what would be created / changed
+nextdeploy apply     # create everything declared; recreate anything deleted`}
+</CodeBlock>
+
+`apply` is the **reconcile** step. A D1 database, KV namespace, or Hyperdrive
+config that was deleted out-of-band shows up as a `create` in the plan and is
+recreated. It stops without changes if it detects immutable drift (for example,
+a Vectorize dimension change).
+
+<Success>
+<code>ship</code> runs provisioning too — <code>apply</code> is for provisioning
+without a full redeploy, and for reviewing the plan first.
+</Success>
+
+---
+
+## Step 5 — `ship`
+
+Compile, bundle, and upload the Worker:
+
+<CodeBlock title="Terminal">
+{`nextdeploy ship
+nextdeploy ship -v       # verbose: every step`}
+</CodeBlock>
+
+What happens:
+
+1. Builds your Next.js app (Cloudflare target forces the Webpack bundler).
+2. **Compiles** the standalone output into a Worker: a dispatch table + an
+   embedded runtime (RSC, Server Actions, ISR, image optimization,
+   `middleware.ts`, `proxy.ts`).
+3. Provisions declared resources and resolves `ref:` bindings.
+4. Uploads static assets to R2 (content-hashed — unchanged files are skipped).
+5. Bundles the Worker with esbuild and uploads it (skipped if the deploy hash
+   is unchanged).
+6. Attaches custom domains / routes / cron triggers, purges the cache, and runs
+   a non-fatal smoke check.
+
+---
+
+## Day-2 operations
+
+<Tabs defaultValue="logs" className="w-full">
+  <TabsList>
+    <TabsTrigger value="logs">Logs</TabsTrigger>
+    <TabsTrigger value="redeploy">Redeploy</TabsTrigger>
+    <TabsTrigger value="rollback">Rollback</TabsTrigger>
+    <TabsTrigger value="destroy">Destroy</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="logs">
+    Workers Logs are enabled by default on every deploy (tune sampling or disable
+    via <code>cloudflare.observability</code>). View them in the Cloudflare
+    dashboard under your Worker's <strong>Logs</strong> tab.
+    <CodeBlock title="nextdeploy.yml — observability" language="yaml">
+{`    cloudflare:
+      observability:
+        enabled: true
+        head_sampling_rate: 1.0   # 0..1`}
+    </CodeBlock>
+  </TabsContent>
+
+  <TabsContent value="redeploy">
+    <CodeBlock title="Terminal">
+{`git commit -am "new feature"
+nextdeploy ship          # re-compile + upload (no-op uploads are skipped)`}
+    </CodeBlock>
+  </TabsContent>
+
+  <TabsContent value="rollback">
+    <CodeBlock title="Terminal">
+nextdeploy rollback                # previous Worker deployment
+    </CodeBlock>
+    Rollback flips the Worker to a previous deployment via the Cloudflare
+    Deployments API.
+  </TabsContent>
+
+  <TabsContent value="destroy">
+    <CodeBlock title="Terminal">
+nextdeploy destroy                 # delete the Worker + its R2 bucket
+    </CodeBlock>
+  </TabsContent>
+</Tabs>
+
+---
+
+## Security & secrets model
+
+- **One-token auth** — `CLOUDFLARE_API_TOKEN` is verified, the account ID is
+  auto-discovered, and R2 credentials are derived from the token.
+- **Atomic secret uploads** — all secrets fold into a single Worker upload as
+  `secret_text` (avoids CF's per-secret rate limit).
+- **Secure-by-default classification** — unknown env keys are treated as secrets,
+  never leaked as visible `plain_text` bindings.
+- **Log redaction** — secret values are registered and scrubbed from output.
+- **Edge protection guard** — IP allow/deny, KV-backed rate limiting, and
+  stateless session auth run *before* your app. See
+  [Cloudflare Protection](/docs/cloudflare-protection).
+- **Cloudflare Secret Store** — reference secrets by ID so values never ship.
+
+---
+
+## Troubleshooting
+
+<table>
+  <thead>
+    <tr><th>Symptom</th><th>Where to look</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Token / account errors on init</td><td>Confirm <code>CLOUDFLARE_API_TOKEN</code> has Workers, R2, D1, KV scopes.</td></tr>
+    <tr><td>"ref not found"</td><td>Run <code>nextdeploy apply</code> first, or set an explicit <code>id</code>/<code>namespace_id</code>.</td></tr>
+    <tr><td>Immutable drift on apply</td><td>A Vectorize dimension/metric changed — delete and recreate the index.</td></tr>
+    <tr><td>Migrations didn't apply</td><td>Confirm <code>resources.d1[].migrations_dir</code> points at your <code>{`*.sql`}</code>.</td></tr>
+    <tr><td>Protected routes 401 / redirect loop</td><td>See <a href="/docs/cloudflare-protection">Cloudflare Protection</a> — check <code>public_paths</code> and the session cookie.</td></tr>
+    <tr><td>esbuild / npx not found</td><td>Install Node.js locally — it's used once to bundle the Worker.</td></tr>
+  </tbody>
+</table>
+
+---
+
+## Command cheat sheet
+
+<CodeBlock title="Terminal">
+{`nextdeploy init                              # choose Cloudflare; scaffold or sniff
+nextdeploy secrets set AUTH_SECRET "..."     # upload a secret
+nextdeploy plan                              # dry-run resource diff
+nextdeploy apply                             # provision / reconcile resources
+nextdeploy ship                              # compile + upload the Worker
+nextdeploy rollback                          # previous deployment
+nextdeploy destroy                           # delete the Worker + R2 bucket`}
+</CodeBlock>

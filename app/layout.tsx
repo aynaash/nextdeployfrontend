@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { fontGeist, fontHeading, fontSans, fontUrban } from '../assets/fonts/index';
+import { fontGeist, fontGrotesk, fontHeading, fontMono, fontSans, fontUrban } from '../assets/fonts/index';
 import { ThemeProvider } from 'next-themes';
 import { cn, constructMetadata } from '../lib/utils';
 import { Toaster } from '@/components/ui/sonner';
@@ -15,8 +15,9 @@ interface RootLayoutProps {
 export const metadata = constructMetadata();
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  // No light mode. Deployment happens in the dark.
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' className='dark' suppressHydrationWarning>
       <head />
       <body
         className={cn(
@@ -24,13 +25,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontSans.variable,
           fontUrban.variable,
           fontHeading.variable,
-          fontGeist.variable
+          fontGeist.variable,
+          fontMono.variable,
+          fontGrotesk.variable
         )}
       >
         <ThemeProvider
           attribute='class'
-          defaultTheme='system'
-          enableSystem
+          defaultTheme='dark'
+          forcedTheme='dark'
+          enableSystem={false}
           disableTransitionOnChange
         >
           <RootProvider>

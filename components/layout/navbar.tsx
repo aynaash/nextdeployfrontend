@@ -1,140 +1,76 @@
 'use client';
 import Link from 'next/link';
-// import { useSelectedLayoutSegment, useRouter } from "next/navigation";
-// import { authClient } from "../../auth-client.ts";
-import { docsConfig } from '@/config/docs';
 import { marketingConfig } from '@/config/marketing';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
-// import { useScroll } from "@/hooks/use-scroll";
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { DocsSearch } from '@/components/docs/search';
 import { Icons } from '@/components/shared/icons';
 import MaxWidthWrapper from '@/components/shared/max-width-wrapper';
-import Logo from '../../components/logo.tsx';
 
 interface NavBarProps {
   scroll?: boolean;
 }
 
-interface NavItem {
-  title: string;
-  href: string;
-  disabled?: boolean;
-}
-
 export function NavBar({ scroll = false }: NavBarProps) {
-  // const scrolled = useScroll(50);
-  // const { data: session } = authClient.useSession();
-  // const router = useRouter();
-  // const selectedLayout = useSelectedLayoutSegment();
-
-  // const isDocsLayout = selectedLayout === "docs";
-
-  // Define all possible layout configurations
-  const layoutConfigs = {
-    docs: docsConfig.mainNav,
-    // Add other layout configurations here as needed
-  } as const;
-
-  // Safely get the appropriate nav items
-  const getNavItems = () => {
-    // if (!selectedLayout) return marketingConfig.mainNav;
-
-    // const config = layoutConfigs[selectedLayout as keyof typeof layoutConfigs];
-    // return config || marketingConfig.mainNav;
-    return marketingConfig.mainNav; // Fallback to marketing config
-  };
-
-  const navItems = getNavItems();
+  const navItems = marketingConfig.mainNav;
 
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 flex w-full justify-center bg-background/60 backdrop-blur-xl transition-all',
-        scroll ? /* (scrolled ? "border-b" : "bg-transparent") */ 'border-b' : 'border-b'
+        'sticky top-0 z-40 flex w-full justify-center border-b border-rule bg-void/80 font-mono backdrop-blur-xl'
       )}
     >
-      <MaxWidthWrapper
-        className='flex h-14 items-center justify-between py-4'
-        // large={isDocsLayout}
-        large={false}
-      >
-        <div className='flex gap-6 md:gap-10'>
-<Link href="/" className="flex items-center space-x-1.5">
-  <Logo />
-</Link>
+      <MaxWidthWrapper className='flex h-12 items-center justify-between' large={false}>
+        <div className='flex items-center gap-6'>
+          {/* terminal title bar — traffic lights + prompt */}
+          <Link href='/' className='flex items-center gap-2.5'>
+            <span className='hidden items-center gap-1.5 sm:flex'>
+              <span className='size-2.5 rounded-full bg-term-crimson/70' />
+              <span className='size-2.5 rounded-full bg-term-amber/70' />
+              <span className='size-2.5 rounded-full bg-term-green/70' />
+            </span>
+            <span className='text-sm'>
+              <span className='text-term-green'>nextdeploy</span>
+              <span className='text-muted-foreground'>:~$</span>
+            </span>
+          </Link>
+
           {navItems.length > 0 && (
-            <nav className='hidden gap-6 md:flex'>
+            <nav className='hidden items-center gap-1 md:flex'>
               {navItems.map((item, index) => (
                 <Link
                   key={index}
                   href={item.disabled ? '#' : item.href}
                   prefetch={true}
                   className={cn(
-                    'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
-                    // item.href.startsWith(`/${selectedLayout}`)
-                    //   ? "text-foreground"
-                    //   : "text-foreground/60",
-                    'text-foreground/60',
+                    'px-2 py-1 text-xs text-foreground/55 transition-colors hover:text-term-green',
                     item.disabled && 'cursor-not-allowed opacity-80'
                   )}
                 >
-                  {item.title}
+                  <span className='text-rule'>./</span>
+                  {item.title.toLowerCase()}
                 </Link>
               ))}
             </nav>
           )}
         </div>
 
-        <div className='flex items-center space-x-3'>
-          {/* {isDocsLayout && ( */}
-          {false && ( // Disabled docs layout features
-            (<div className='hidden flex-1 items-center space-x-4 sm:justify-end lg:flex'>
-              <div className='hidden lg:flex lg:grow-0'>
-                <DocsSearch />
-              </div>
-              <div className='flex lg:hidden'>
-                <Icons.search className='size-6 text-muted-foreground' />
-              </div>
-              <div className='flex space-x-4'>
-                <Link
-                  href={siteConfig.links.github}
-                  target='_blank'
-                  rel='noreferrer'
-                >
-                  <Icons.gitHub className='size-7' />
-                  <span className='sr-only'>GitHub</span>
-                </Link>
-              </div>
-            </div>)
-          )}
-
-          {/* {!session ? ( */}
-          {true ? ( // Always show sign in button
-            (<Button
-              className='hidden gap-2 px-5 md:flex'
-              variant='default'
-              size='sm'
-              rounded='full'
-              // onClick={() => router.push("/login")}
-              onClick={() => (window.location.href = '/login')}
-            >
-              <span>Sign In</span>
-              <Icons.arrowRight className='size-4' />
-            </Button>)
-          ) : (
-            <Link
-              // href={session.user.role === "admin" ? "/admin" : "/dashboard"}
-              href='/dashboard'
-              className='hidden md:block'
-            >
-              <Button className='gap-2 px-5' variant='default' size='sm' rounded='full'>
-                <span>Dashboard</span>
-              </Button>
-            </Link>
-          )}
+        <div className='flex items-center gap-2 text-xs'>
+          <Link
+            href={siteConfig.links.github}
+            target='_blank'
+            rel='noreferrer'
+            className='hidden items-center gap-1.5 border border-rule px-3 py-1.5 text-foreground/70 transition-colors hover:border-term-green/60 hover:text-term-green sm:inline-flex'
+          >
+            <Icons.gitHub className='size-3.5' />
+            <span>star</span>
+          </Link>
+          <Link
+            href='/docs'
+            className='inline-flex items-center gap-1.5 border border-term-green/40 bg-term-green/5 px-3 py-1.5 text-term-green transition-colors hover:border-term-green'
+          >
+            <span className='text-foreground/50'>$</span>
+            <span>docs</span>
+          </Link>
         </div>
       </MaxWidthWrapper>
     </header>

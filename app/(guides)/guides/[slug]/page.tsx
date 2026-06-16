@@ -2,10 +2,15 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Clock, ArrowLeft } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { ArrowLeft } from "lucide-react"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { getContentBySlug, getBlocks, getAllSlugs } from "@/lib/notion/content"
+import { isNotionConfigured } from "@/lib/notion/client"
+import { NotionPage } from "@/components/notion/notion-page"
+
+// Content is sourced from Notion (Kind = Guide). The hardcoded `guides` below is
+// a temporary fallback so the two seeded guides keep working until the DB is wired.
+export const revalidate = 60
 
 // This would typically come from a CMS or markdown files
 const guides = {
@@ -208,130 +213,94 @@ Your application should now be live! Visit your droplet's IP address to see your
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const guide = guides[params.slug as keyof typeof guides]
+  const { slug } = await params
 
-  if (!guide) {
+  // Notion first
+  const fromNotion = await getContentBySlug("Guide", slug)
+  if (fromNotion) {
     return {
-      title: "Guide Not Found",
+      title: `${fromNotion.title} | NextDeploy Guides`,
+      description: fromNotion.summary,
+      openGraph: { title: fromNotion.title, description: fromNotion.summary, type: "article" },
     }
   }
+
+  const guide = guides[slug as keyof typeof guides]
+  if (!guide) return { title: "Guide Not Found" }
 
   return {
     title: `${guide.title} | NextDeploy Guides`,
     description: guide.description,
-    openGraph: {
-      title: guide.title,
-      description: guide.description,
-      type: "article",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: guide.title,
-      description: guide.description,
-    },
+    openGraph: { title: guide.title, description: guide.description, type: "article" },
+    twitter: { card: "summary_large_image", title: guide.title, description: guide.description },
   }
 }
 
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
-    case "Beginner":
-      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-    case "Intermediate":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-    case "Advanced":
-      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-    default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-  }
+function BackLink() {
+  return (
+    <Link
+      href="/guides"
+      className="group mb-8 inline-flex items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-term-green"
+    >
+      <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />
+      cd ../guides
+    </Link>
+  )
 }
 
 export default async function GuidePage({ params }: PageProps) {
-  const guide = guides[params.slug as keyof typeof guides]
+  const { slug } = await params
 
-  if (!guide) {
-    notFound()
+  // 1. Notion (source of truth)
+  const meta = await getContentBySlug("Guide", slug)
+  if (meta) {
+    const blocks = await getBlocks(meta.id)
+    return (
+      <div className="grain min-h-screen font-mono">
+        <div className="container max-w-4xl py-12">
+          <BackLink />
+          <NotionPage meta={meta} blocks={blocks} />
+        </div>
+      </div>
+    )
   }
 
+  // 2. Fallback to seeded content until the Notion DB is connected
+  const guide = guides[slug as keyof typeof guides]
+  if (!guide) notFound()
+
   return (
-    <div className="container py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-8">
-          <Link
-            href="/guides"
-            className="group mb-6 inline-flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-            <ArrowLeft className="mr-2 size-4 transition-transform group-hover:-translate-x-1" />
-            Back to Guides
-          </Link>
+    <div className="grain min-h-screen font-mono">
+      <div className="container max-w-4xl py-12">
+        <BackLink />
 
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-4">
-              <Badge className={cn("rounded-md px-3 py-1 text-sm font-medium", getDifficultyColor(guide.difficulty))}>
-                {guide.difficulty}
-              </Badge>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Clock className="mr-1.5 size-4" />
-                {guide.duration}
-              </div>
-            </div>
-
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{guide.title}</h1>
-
-            <p className="text-lg text-muted-foreground">{guide.description}</p>
-
-            <div className="flex flex-wrap gap-2">
-              {guide.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="rounded-md px-2.5 py-0.5 text-xs font-medium"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+        <header className="border-b border-rule pb-8">
+          <span className="font-mono text-xs uppercase tracking-[0.3em] text-term-green">// guide</span>
+          <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            <span className="border border-term-amber/40 px-2 py-0.5 text-term-amber">{guide.difficulty}</span>
+            <span>{guide.duration}</span>
           </div>
-        </div>
+          <h1 className="mt-4 font-grotesk text-4xl font-bold tracking-tight text-foreground">{guide.title}</h1>
+          <p className="mt-3 text-sm text-muted-foreground">{guide.description}</p>
+        </header>
 
-        <div className="prose prose-lg max-w-none dark:prose-invert">
+        <div className="prose prose-invert mt-8 max-w-none prose-headings:font-grotesk prose-pre:border prose-pre:border-rule prose-pre:bg-surface prose-code:text-term-green">
           <MarkdownRenderer content={guide.content} />
-        </div>
-
-        <div className="mt-12 border-t pt-8 dark:border-t-gray-800">
-          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Ready for more advanced topics?</h3>
-              <p className="text-muted-foreground">Explore our comprehensive courses for deeper learning.</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/courses"
-                className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
-              >
-                Browse Courses
-              </Link>
-              <Link
-                href="/blog"
-                className="inline-flex items-center rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-              >
-                Read Blog
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export async function generateStaticParams() {
-  return Object.keys(guides).map((slug) => ({
-    slug,
-  }))
+  const notionSlugs = isNotionConfigured() ? await getAllSlugs("Guide") : []
+  const seeded = Object.keys(guides).map((slug) => ({ slug }))
+  const seen = new Set(notionSlugs.map((s) => s.slug))
+  return [...notionSlugs, ...seeded.filter((s) => !seen.has(s.slug))]
 }

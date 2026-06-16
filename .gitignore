@@ -44,3 +44,16 @@ next-env.d.ts
 .contentlayer
 # NextDeploy
 dist
+
+# Cloudflare / OpenNext
+.open-next
+.dev.vars
+.wrangler
+
+# NextDeploy build artifacts & deploy reports
+app.tar.gz
+nextdeploy-*.html
+nextdeploy-latest.html
+
+# Claude Code local state (agent memory, sessions)
+.claude/

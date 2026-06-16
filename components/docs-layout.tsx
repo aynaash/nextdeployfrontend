@@ -13,16 +13,13 @@ import {
   Menu,
   ChevronRight,
   ChevronDown,
-  Book,
-  Zap,
   Terminal,
-  Layers,
-  Activity,
-  Shield,
-  Code,
-  FileText,
+  Compass,
+  Book,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { ExplainProvider, ExplainToggle } from "@/components/docs/explain-context"
+import { docsConfig } from "@/config/docs"
 
 interface DocSection {
   title: string
@@ -34,98 +31,29 @@ interface DocSection {
   }[]
 }
 
-const docSections: DocSection[] = [
-  {
-    title: "Getting Started",
-    icon: Zap,
-    items: [
-      { title: "Installation", href: "/docs/installation" },
-      { title: "Quick Start", href: "/docs/quick-start" },
-      { title: "Configuration", href: "/docs/configuration" },
-      { title: "First Deployment", href: "/docs/first-deployment" },
-    ],
-  },
-  {
-    title: "Core Concepts",
-    icon: Book,
-    items: [
-      { title: "Architecture", href: "/docs/architecture" },
-      { title: "Deployment Strategies", href: "/docs/deployment-strategies" },
-      { title: "Infrastructure as Code", href: "/docs/infrastructure-as-code" },
-      { title: "Environment Management", href: "/docs/environments" },
-    ],
-  },
-  {
-    title: "CLI Reference",
-    icon: Terminal,
-    items: [
-      { title: "Commands", href: "/docs/cli/commands" },
-      { title: "Configuration File", href: "/docs/cli/config-file" },
-      { title: "Environment Variables", href: "/docs/cli/environment-variables" },
-      { title: "Hooks & Scripts", href: "/docs/cli/hooks" },
-    ],
-  },
-  {
-    title: "Deployment Targets",
-    icon: Layers,
-    items: [
-      { title: "VPS Deployment", href: "/docs/targets/vps" },
-      { title: "Kubernetes", href: "/docs/targets/kubernetes" },
-      { title: "Docker Swarm", href: "/docs/targets/docker-swarm" },
-      { title: "Cloud Providers", href: "/docs/targets/cloud" },
-    ],
-  },
-  {
-    title: "Monitoring",
-    icon: Activity,
-    items: [
-      { title: "Metrics Collection", href: "/docs/monitoring/metrics" },
-      { title: "Logging", href: "/docs/monitoring/logging" },
-      { title: "Alerting", href: "/docs/monitoring/alerting" },
-      { title: "Dashboards", href: "/docs/monitoring/dashboards" },
-    ],
-  },
-  {
-    title: "Security",
-    icon: Shield,
-    items: [
-      { title: "Authentication", href: "/docs/security/authentication" },
-      { title: "Secrets Management", href: "/docs/security/secrets" },
-      { title: "Network Security", href: "/docs/security/network" },
-      { title: "SSL/TLS", href: "/docs/security/ssl" },
-    ],
-  },
-  {
-    title: "API Reference",
-    icon: Code,
-    items: [
-      { title: "REST API", href: "/docs/api/rest" },
-      { title: "GraphQL API", href: "/docs/api/graphql" },
-      { title: "Webhooks", href: "/docs/api/webhooks" },
-      { title: "SDKs", href: "/docs/api/sdks" },
-    ],
-  },
-  {
-    title: "Examples",
-    icon: FileText,
-    items: [
-      { title: "Basic Next.js App", href: "/docs/examples/basic-nextjs" },
-      { title: "Full-Stack App", href: "/docs/examples/fullstack" },
-      { title: "Microservices", href: "/docs/examples/microservices" },
-      { title: "Multi-Environment", href: "/docs/examples/multi-env" },
-    ],
-  },
-]
+// Per-group sidebar icon, keyed by the group titles in config/docs.ts.
+const SECTION_ICONS: Record<string, any> = {
+  Guides: Compass,
+  "Technical Reference": Terminal,
+}
 
 interface DocsLayoutProps {
   children: React.ReactNode
 }
 
+// The docs sidebar is config-driven — config/docs.ts is the single source of
+// truth. Group + item order there defines both this sidebar and the pager flow.
+const navSections: DocSection[] = docsConfig.sidebarNav.map((group) => ({
+  title: group.title,
+  icon: SECTION_ICONS[group.title] ?? Book,
+  items: group.items,
+}))
+
 export function DocsLayout({ children }: DocsLayoutProps) {
   const pathname = usePathname()
-  const [expandedSections, setExpandedSections] = useState<string[]>([
-    "Getting Started", // Expand getting started by default
-  ])
+  const [expandedSections, setExpandedSections] = useState<string[]>(
+    navSections.map((s) => s.title),
+  )
 
   const toggleSection = (sectionTitle: string) => {
     setExpandedSections((prev) =>
@@ -139,12 +67,15 @@ export function DocsLayout({ children }: DocsLayoutProps) {
   const SidebarContent = () => (
     <div className="space-y-4">
       <div className="px-3 py-2">
-        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Documentation</h2>
+        <h2 className="mb-2 flex items-center gap-2 px-4 font-grotesk text-lg font-semibold tracking-tight">
+          <Terminal className="h-4 w-4 text-term-green" />
+          Documentation
+        </h2>
       </div>
 
       <ScrollArea className="h-[calc(100vh-8rem)] px-1">
         <div className="space-y-2">
-          {docSections.map((section) => {
+          {navSections.map((section) => {
             const IconComponent = section.icon
             const isExpanded = expandedSections.includes(section.title)
             const hasActiveItem = isInSection(section)
@@ -167,12 +98,12 @@ export function DocsLayout({ children }: DocsLayoutProps) {
                         key={item.href}
                         href={item.href}
                         className={cn(
-                          "block px-4 py-2 text-sm rounded-md transition-colors hover:bg-muted",
+                          "block border-l px-4 py-1.5 font-mono text-sm transition-colors",
                           isActive(item.href)
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:text-foreground",
+                            ? "border-term-green bg-term-green/10 text-term-green"
+                            : "border-rule text-muted-foreground hover:border-term-green/50 hover:text-foreground",
                         )}
-                        legacyBehavior>
+                      >
                         {item.title}
                       </Link>
                     ))}
@@ -187,7 +118,19 @@ export function DocsLayout({ children }: DocsLayoutProps) {
   )
 
   return (
+    <ExplainProvider>
     <div className="min-h-screen bg-background">
+      {/* Explain Everything toolbar */}
+      <div className="sticky top-14 z-20 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex items-center justify-between gap-4 py-2">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Compass className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Curious how it works under the hood?</span>
+          </div>
+          <ExplainToggle />
+        </div>
+      </div>
+
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
         {/* Mobile Sidebar */}
         <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block">
@@ -223,19 +166,17 @@ export function DocsLayout({ children }: DocsLayoutProps) {
               <div className="space-y-2">
                 <p className="font-medium">On This Page</p>
                 <div className="space-y-1">
-                  {/* This would be populated by extracting headings from the content */}
-                  <Link href="#overview" className="block py-1 text-muted-foreground hover:text-foreground">
-                    Overview
-                  </Link>
-                  <Link href="#installation" className="block py-1 text-muted-foreground hover:text-foreground">
-                    Installation
-                  </Link>
-                  <Link href="#configuration" className="block py-1 text-muted-foreground hover:text-foreground">
-                    Configuration
-                  </Link>
-                  <Link href="#examples" className="block py-1 text-muted-foreground hover:text-foreground">
-                    Examples
-                  </Link>
+                  {[
+                    ["#install", "Install"],
+                    ["#quickstart", "Quickstart"],
+                    ["#cli", "CLI commands"],
+                    ["#configuration", "Configuration"],
+                    ["#next", "Where to go next"],
+                  ].map(([href, label]) => (
+                    <Link key={href} href={href} className="block py-1 text-muted-foreground hover:text-term-green">
+                      {label}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
@@ -243,5 +184,6 @@ export function DocsLayout({ children }: DocsLayoutProps) {
         </main>
       </div>
     </div>
+    </ExplainProvider>
   )
 }

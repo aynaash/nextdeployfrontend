@@ -10,7 +10,7 @@ export const siteConfig: SiteConfig = {
   ogImage: `${site_url}/_static/og.jpg`,
   links: {
     twitter: 'https://twitter.com/nextdeploy',
-    github: 'https://github.com/aynaash',
+    github: 'https://github.com/aynaash/NextDeploy',
   },
   mailSupport: 'nextdeploy@nextdeploy.one',
 };
@@ -43,5 +43,3 @@ export const footerLinks: SidebarNavItem[] = [
     ],
   },
 ];
-
-

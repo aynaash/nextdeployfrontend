@@ -1,86 +1,55 @@
-import Link from 'next/link';
-import { Doc } from '../../.contentlayer/generated';
-import { docsConfig } from '../../config/docs';
-import { cn } from '../../lib/utils';
-import { buttonVariants } from '@/components/ui/button';
-import { Icons } from '@/components/shared/icons';
+import Link from "next/link"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { docsConfig } from "@/config/docs"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 
-// ---- TYPES ----
-interface SidebarNavItem {
-  title: string;
-  href?: string;
-  items?: SidebarNavItem[];
+interface FlatLink {
+  title: string
+  href: string
 }
 
-interface DocsPagerProps {
-  doc: Doc;
+// Flatten config/docs.ts into a single reading order — the same list the
+// sidebar renders, so prev/next walks groups in the order they're declared.
+function flattenDocs(): FlatLink[] {
+  return docsConfig.sidebarNav.flatMap((group) =>
+    group.items.map((item) => ({ title: item.title, href: item.href })),
+  )
 }
 
-interface FlattenedLink {
-  title: string;
-  href: string;
-}
+/** Previous / next navigation, derived from the docs sidebar order. */
+export function DocsPager({ slug }: { slug: string }) {
+  const currentHref = slug ? `/docs/${slug}` : "/docs"
+  const links = flattenDocs()
+  const index = links.findIndex((link) => link.href === currentHref)
+  if (index === -1) return null
 
-// ---- COMPONENT ----
-export function DocsPager({ doc }: DocsPagerProps) {
-  const pager = getPagerForDoc(doc);
-
-  if (!pager) return null;
+  const prev = index > 0 ? links[index - 1] : null
+  const next = index < links.length - 1 ? links[index + 1] : null
+  if (!prev && !next) return null
 
   return (
-    <div className='flex flex-row items-center justify-between'>
-      {pager.prev && (
-        <Link
-          href={pager.prev.href}
-          className={cn(buttonVariants({ variant: 'outline' }))}
-          legacyBehavior
-        >
-          <Icons.chevronLeft className='mr-2 size-4' />
-          {pager.prev.title}
+    <div className="not-prose mt-12 flex flex-row items-center justify-between gap-4 border-t border-rule pt-6">
+      {prev ? (
+        <Link href={prev.href} className={cn(buttonVariants({ variant: "outline" }), "h-auto py-2")}>
+          <ChevronLeft className="mr-2 size-4 shrink-0" />
+          <span className="flex flex-col items-start text-left">
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">Previous</span>
+            <span>{prev.title}</span>
+          </span>
         </Link>
+      ) : (
+        <span />
       )}
-      {pager.next && (
-        <Link
-          href={pager.next.href}
-          className={cn(buttonVariants({ variant: 'outline' }), 'ml-auto')}
-          legacyBehavior
-        >
-          {pager.next.title}
-          <Icons.chevronRight className='ml-2 size-4' />
+      {next ? (
+        <Link href={next.href} className={cn(buttonVariants({ variant: "outline" }), "ml-auto h-auto py-2")}>
+          <span className="flex flex-col items-end text-right">
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">Next</span>
+            <span>{next.title}</span>
+          </span>
+          <ChevronRight className="ml-2 size-4 shrink-0" />
         </Link>
-      )}
+      ) : null}
     </div>
-  );
-}
-
-// ---- LOGIC ----
-function getPagerForDoc(
-  doc: Doc
-): { prev: FlattenedLink | null; next: FlattenedLink | null } | null {
-  const links = flattenSidebarNav(docsConfig.sidebarNav);
-  const activeIndex = links.findIndex((link) => doc.slug === link.href);
-
-  if (activeIndex === -1) return null;
-
-  return {
-    prev: activeIndex > 0 ? links[activeIndex - 1] : null,
-    next: activeIndex < links.length - 1 ? links[activeIndex + 1] : null,
-  };
-}
-
-// ---- FLATTENING ----
-function flattenSidebarNav(items: SidebarNavItem[]): FlattenedLink[] {
-  const flat: FlattenedLink[] = [];
-
-  for (const item of items) {
-    if (item.href) {
-      flat.push({ title: item.title, href: item.href });
-    }
-
-    if (item.items) {
-      flat.push(...flattenSidebarNav(item.items));
-    }
-  }
-
-  return flat;
+  )
 }
