@@ -50,8 +50,11 @@ URL="https://github.com/$REPO/releases/download/$TAG/$ASSET"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-info "Downloading $ASSET…"
-curl -fsSL "$URL" -o "$TMP/$ASSET" || err "download failed: $URL"
+info "Downloading $ASSET (~28 MB)…"
+# Show a progress bar (the binary is large) and fail fast on a dead connection
+# rather than hanging forever; retry a few times on transient network errors.
+curl -fL --progress-bar --connect-timeout 20 --retry 3 --retry-delay 2 \
+  "$URL" -o "$TMP/$ASSET" || err "download failed: $URL"
 
 # Verify checksum when checksums.txt is published and a sha256 tool exists.
 if curl -fsSL "https://github.com/$REPO/releases/download/$TAG/checksums.txt" \
