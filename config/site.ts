@@ -1,6 +1,6 @@
 import { SidebarNavItem, SiteConfig } from 'types';
 import { sanitizeUrl } from '../lib/utils';
-const uncleanurl = process.env.BETTER_AUTH_URL || 'https://nextdeploy.one';
+const uncleanurl = process.env.BETTER_AUTH_URL || 'https://nextdeploy.org';
 const site_url = sanitizeUrl(uncleanurl);
 export const siteConfig: SiteConfig = {
   name: 'NextDeploy',
@@ -12,7 +12,7 @@ export const siteConfig: SiteConfig = {
     twitter: 'https://twitter.com/nextdeploy',
     github: 'https://github.com/aynaash/NextDeploy',
   },
-  mailSupport: 'nextdeploy@nextdeploy.one',
+  mailSupport: 'nextdeploy@nextdeploy.org',
 };
 export const footerLinks: SidebarNavItem[] = [
   {

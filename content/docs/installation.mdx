@@ -3,18 +3,13 @@ title: "Installation"
 description: "Install the NextDeploy CLI — a single self-contained binary, no Node or npm required"
 ---
 
-import { CodeBlock, Info, Warning, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
+import { CodeBlock, Info, Success, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/mdx-components"
 
 # Installation
 
 NextDeploy is a single self-contained CLI binary (written in Go) plus a daemon
 (`nextdeployd`) that runs on your servers. The CLI is **not** an npm package —
 you install it with a one-line script or by downloading a release binary.
-
-<Warning>
-There is no `npm install -g nextdeploy`. NextDeploy is a compiled binary, not a
-JavaScript library. Use the install script or a release binary below.
-</Warning>
 
 ## Requirements
 
@@ -52,12 +47,15 @@ on your machine. See the [VPS Deployment guide](/docs/targets/vps) for the full 
 
     <CodeBlock title="Manual binary download" language="bash">
 {`# Pick the latest tag and your arch (amd64 / arm64)
-VERSION=$(curl -s https://api.github.com/repos/aynaash/NextDeploy/releases/latest | jq -r .tag_name)
+TAG=$(curl -s https://api.github.com/repos/aynaash/NextDeploy/releases/latest | jq -r .tag_name)
+VERSION=\${TAG#v}                            # strip the leading "v" for the filename
 ARCH=$(uname -m); [ "$ARCH" = "x86_64" ] && ARCH=amd64; [ "$ARCH" = "aarch64" ] && ARCH=arm64
 OS=$(uname | tr '[:upper:]' '[:lower:]')   # linux or darwin
 
+# Release assets are GoReleaser tarballs: nextdeploy_<version>_<os>_<arch>.tar.gz
 mkdir -p ~/.local/bin
-curl -L "https://github.com/aynaash/NextDeploy/releases/download/\${VERSION}/nextdeploy-\${OS}-\${ARCH}" -o ~/.local/bin/nextdeploy
+curl -L "https://github.com/aynaash/NextDeploy/releases/download/\${TAG}/nextdeploy_\${VERSION}_\${OS}_\${ARCH}.tar.gz" \\
+  | tar -xz -C ~/.local/bin nextdeploy
 chmod +x ~/.local/bin/nextdeploy
 
 # Make sure ~/.local/bin is on your PATH

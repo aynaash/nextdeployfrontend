@@ -22,21 +22,21 @@ interface PricingCardsProps {
 export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
   return (
     <MaxWidthWrapper>
-      <section className='flex flex-col items-center text-center'>
-        <HeaderSection label='Pricing' title='Start at full speed!' />
+      <section className="flex flex-col items-center text-center">
+        <HeaderSection label="Pricing" title="Start at full speed!" />
 
-        <div className='mt-10 w-full rounded-lg border bg-muted/20 p-6 text-center shadow-sm'>
-          <p className='text-lg font-semibold text-muted-foreground'>
+        <div className="mt-10 w-full rounded-lg border bg-muted/20 p-6 text-center shadow-sm">
+          <p className="text-lg font-semibold text-muted-foreground">
             Pricing plans will be available soon. We’re working hard to build a billing experience
             that supports your needs.
           </p>
-          <p className='mt-2 text-sm text-muted-foreground'>
+          <p className="mt-2 text-sm text-muted-foreground">
             For now, feel free to explore the app and reach out to{' '}
             <a
-              className='font-medium text-primary hover:underline'
-              href='mailto:support@nextdeploy.one'
+              className="font-medium text-primary hover:underline"
+              href="mailto:support@nextdeploy.org"
             >
-              support@nextdeploy.one
+              support@nextdeploy.org
             </a>{' '}
             if you have questions.
           </p>
@@ -243,7 +243,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
 //             className="font-medium text-primary hover:underline"
 //             href="mailto:support@saas-starter.com"
 //           >
-//             support@nextdeploy.one
+//             support@nextdeploy.org
 //           </a>{" "}
 //           for to contact our support team.
 //           <br />

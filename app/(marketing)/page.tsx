@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from 'next/link';
 import {
   Server,
   Cloud,
@@ -10,30 +10,65 @@ import {
   Rocket,
   Globe,
   Github,
-} from "lucide-react"
-import HeroLanding from "@/components/sections/hero-landing"
-import { StructCard } from "@/components/codex/struct-card"
-import { SectionHeading } from "@/components/codex/section-heading"
+} from 'lucide-react';
+import HeroLanding from '@/components/sections/hero-landing';
+import { StructCard } from '@/components/codex/struct-card';
+import { SectionHeading } from '@/components/codex/section-heading';
+import { CopyCommand } from '@/components/codex/copy-command';
 
-const REPO = "https://github.com/aynaash/NextDeploy"
+const REPO = 'https://github.com/aynaash/NextDeploy';
 
 const steps = [
-  { cmd: "nextdeploy init", desc: "Pick your target — VPS / AWS / Cloudflare. Writes nextdeploy.yml." },
-  { cmd: "nextdeploy secrets load .env", desc: "Inject the env and secrets your platform needs." },
-  { cmd: "nextdeploy ship", desc: "Build, upload, activate, verify — zero downtime, instant rollback." },
-]
+  {
+    cmd: 'nextdeploy init',
+    desc: 'Pick your target — VPS / AWS / Cloudflare. Writes nextdeploy.yml.',
+  },
+  { cmd: 'nextdeploy secrets load .env', desc: 'Inject the env and secrets your platform needs.' },
+  {
+    cmd: 'nextdeploy ship',
+    desc: 'Build, upload, activate, verify — zero downtime, instant rollback.',
+  },
+];
 
 const targets = [
-  { icon: Server, name: "VPS", tagline: "Your box. Your rules. Our automation.", detail: "Deploys over SSH (chacha20-poly1305). Caddy, nextdeployd, and Fail2Ban provisioned in one command." },
-  { icon: Cloud, name: "AWS", tagline: "Provisioned, not configured.", detail: "Lambda, S3, ACM and CloudFront stood up on first ship from a single nextdeploy.yml." },
-  { icon: CloudCog, name: "Cloudflare", tagline: "The edge. Now with Next.js.", detail: "Workers + R2, with R2 credentials derived from your API token automatically." },
-]
+  {
+    icon: Server,
+    name: 'VPS',
+    tagline: 'Your box. Your rules. Our automation.',
+    detail:
+      'Deploys over SSH (chacha20-poly1305). Caddy, nextdeployd, and Fail2Ban provisioned in one command.',
+  },
+  {
+    icon: Cloud,
+    name: 'AWS',
+    tagline: 'Provisioned, not configured.',
+    detail: 'Lambda, S3, ACM and CloudFront stood up on first ship from a single nextdeploy.yml.',
+  },
+  {
+    icon: CloudCog,
+    name: 'Cloudflare',
+    tagline: 'The edge. Now with Next.js.',
+    detail: 'Workers + R2, with R2 credentials derived from your API token automatically.',
+  },
+];
 
 const pillars = [
-  { icon: Zap, title: "Fast deployment", desc: "A Go-powered engine ships your Next.js app in seconds — standalone build, parallel upload, atomic cutover." },
-  { icon: Shield, title: "Infrastructure ownership", desc: "Deploy to your own VPS or cloud account. No vendor lock-in, full control over your infrastructure and costs." },
-  { icon: Activity, title: "Observability built in", desc: "Tail live logs, check health and current release, and roll back the moment a deploy goes sideways." },
-]
+  {
+    icon: Zap,
+    title: 'Fast deployment',
+    desc: 'A Go-powered engine ships your Next.js app in seconds — standalone build, parallel upload, atomic cutover.',
+  },
+  {
+    icon: Shield,
+    title: 'Infrastructure ownership',
+    desc: 'Deploy to your own VPS or cloud account. No vendor lock-in, full control over your infrastructure and costs.',
+  },
+  {
+    icon: Activity,
+    title: 'Observability built in',
+    desc: 'Tail live logs, check health and current release, and roll back the moment a deploy goes sideways.',
+  },
+];
 
 export default function IndexPage() {
   return (
@@ -44,7 +79,9 @@ export default function IndexPage() {
       <section className="relative z-10 border-b border-rule py-20">
         <div className="container max-w-5xl">
           <SectionHeading icon={Rocket}>Three commands to production</SectionHeading>
-          <p className="mt-3 font-mono text-sm text-muted-foreground">Type less. Understand more.</p>
+          <p className="mt-3 font-mono text-sm text-muted-foreground">
+            Type less. Understand more.
+          </p>
 
           <div className="mt-8 border border-rule">
             {steps.map((s, i) => (
@@ -71,20 +108,23 @@ export default function IndexPage() {
         <div className="container max-w-6xl">
           <SectionHeading icon={Globe}>One flow, three targets</SectionHeading>
           <p className="mt-3 font-mono text-sm text-muted-foreground">
-            The same <code className="text-term-green">nextdeploy ship</code> — your choice of machine.
+            The same <code className="text-term-green">nextdeploy ship</code> — your choice of
+            machine.
           </p>
 
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {targets.map((t) => {
-              const Icon = t.icon
+              const Icon = t.icon;
               return (
                 <StructCard key={t.name} className="flex flex-col">
                   <Icon className="size-6 text-term-blue" strokeWidth={1.5} />
                   <h3 className="mt-4 font-grotesk text-xl font-bold text-foreground">{t.name}</h3>
                   <p className="mt-1 font-mono text-xs text-term-green">{t.tagline}</p>
-                  <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground">{t.detail}</p>
+                  <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground">
+                    {t.detail}
+                  </p>
                 </StructCard>
-              )
+              );
             })}
           </div>
         </div>
@@ -100,14 +140,16 @@ export default function IndexPage() {
 
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {pillars.map((p) => {
-              const Icon = p.icon
+              const Icon = p.icon;
               return (
                 <StructCard key={p.title}>
                   <Icon className="size-6 text-term-green" strokeWidth={1.5} />
                   <h3 className="mt-4 font-grotesk text-lg font-bold text-foreground">{p.title}</h3>
-                  <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{p.desc}</p>
+                  <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                    {p.desc}
+                  </p>
                 </StructCard>
-              )
+              );
             })}
           </div>
         </div>
@@ -121,15 +163,12 @@ export default function IndexPage() {
             One binary. No Node runtime. Just curl and ship.
           </p>
 
-          <div className="mx-auto mt-8 max-w-xl border border-rule bg-surface text-left">
-            <div className="border-b border-rule bg-void/60 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              install.sh
-            </div>
-            <pre className="overflow-x-auto p-4 font-mono text-sm text-term-green">
-              <span className="text-muted-foreground"># one line, no dependencies</span>
-              {"\n"}curl -fsSL https://nextdeploy.org/install.sh | bash
-            </pre>
-          </div>
+          <CopyCommand
+            className="mx-auto mt-8 max-w-xl"
+            label="install.sh"
+            comment="# one line, no dependencies"
+            command="curl -fsSL https://nextdeploy.org/install.sh | bash"
+          />
 
           <div className="mt-8 flex flex-wrap justify-center gap-3 font-mono">
             <Link
@@ -158,5 +197,5 @@ export default function IndexPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

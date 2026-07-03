@@ -1,27 +1,24 @@
-import type React from "react"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AlertTriangle, InfoIcon, CheckCircle, Terminal } from "lucide-react"
+import type React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertTriangle, InfoIcon, CheckCircle } from 'lucide-react';
+import { DocsCodeBlock } from '@/components/codex/docs-code-block';
 
 export function CodeBlock({
   children,
   title,
-  language = "bash",
-}: { children: React.ReactNode; title?: string; language?: string }) {
+  language = 'bash',
+}: {
+  children: React.ReactNode;
+  title?: string;
+  language?: string;
+}) {
   return (
-    <div className="not-prose my-6 border border-rule bg-surface font-mono text-[13px]">
-      <div className="flex items-center justify-between border-b border-rule bg-void/60 px-3 py-1.5 text-[11px] uppercase tracking-wider text-muted-foreground">
-        <span className="flex items-center gap-2">
-          <Terminal className="h-3.5 w-3.5 text-term-green" />
-          {title ?? language}
-        </span>
-      </div>
-      <pre className="overflow-x-auto p-3 text-slate-200">
-        <code className={`language-${language}`}>{children}</code>
-      </pre>
-    </div>
-  )
+    <DocsCodeBlock title={title} language={language}>
+      {children}
+    </DocsCodeBlock>
+  );
 }
 
 /** Codex callout — terminal-styled, sharp left rule. */
@@ -31,16 +28,16 @@ function Callout({
   icon: Icon,
   children,
 }: {
-  tone: "info" | "warning" | "success"
-  label: string
-  icon: typeof InfoIcon
-  children: React.ReactNode
+  tone: 'info' | 'warning' | 'success';
+  label: string;
+  icon: typeof InfoIcon;
+  children: React.ReactNode;
 }) {
   const tones = {
-    info: "border-term-blue/40 bg-term-blue/5 text-term-blue",
-    warning: "border-term-amber/40 bg-term-amber/5 text-term-amber",
-    success: "border-term-green/40 bg-term-green/5 text-term-green",
-  }[tone]
+    info: 'border-term-blue/40 bg-term-blue/5 text-term-blue',
+    warning: 'border-term-amber/40 bg-term-amber/5 text-term-amber',
+    success: 'border-term-green/40 bg-term-green/5 text-term-green',
+  }[tone];
   return (
     <div className={`not-prose my-6 border-l-2 px-4 py-3 ${tones}`}>
       <div className="mb-1 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider">
@@ -49,7 +46,7 @@ function Callout({
       </div>
       <div className="text-sm leading-relaxed text-slate-300">{children}</div>
     </div>
-  )
+  );
 }
 
 export function Info({ children }: { children: React.ReactNode }) {
@@ -57,7 +54,7 @@ export function Info({ children }: { children: React.ReactNode }) {
     <Callout tone="info" label="Note" icon={InfoIcon}>
       {children}
     </Callout>
-  )
+  );
 }
 
 export function Warning({ children }: { children: React.ReactNode }) {
@@ -65,7 +62,7 @@ export function Warning({ children }: { children: React.ReactNode }) {
     <Callout tone="warning" label="Warning" icon={AlertTriangle}>
       {children}
     </Callout>
-  )
+  );
 }
 
 export function Success({ children }: { children: React.ReactNode }) {
@@ -73,18 +70,18 @@ export function Success({ children }: { children: React.ReactNode }) {
     <Callout tone="success" label="Success" icon={CheckCircle}>
       {children}
     </Callout>
-  )
+  );
 }
 
 // Step-by-step flow — the canonical guide primitive.
-export { Steps, Step, FlowOverview } from "@/components/codex/steps"
+export { Steps, Step, FlowOverview } from '@/components/codex/steps';
 
 // Interactive, explain-aware doc primitives.
-export { Explainable, ExplainableCode } from "@/components/docs/explainable"
-export { Mermaid } from "@/components/docs/mermaid"
-export { TerminalHero } from "@/components/docs/terminal-hero"
-export { DeployTimeline } from "@/components/docs/deploy-timeline"
-export { SecurityGates } from "@/components/docs/security-gates"
+export { Explainable, ExplainableCode } from '@/components/docs/explainable';
+export { Mermaid } from '@/components/docs/mermaid';
+export { TerminalHero } from '@/components/docs/terminal-hero';
+export { DeployTimeline } from '@/components/docs/deploy-timeline';
+export { SecurityGates } from '@/components/docs/security-gates';
 
 export {
   Badge,
@@ -97,4 +94,4 @@ export {
   TabsContent,
   TabsList,
   TabsTrigger,
-}
+};

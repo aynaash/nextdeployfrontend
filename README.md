@@ -2,7 +2,7 @@
 
 > **A production-ready UI that validates NextDeploy while serving real users**
 
-[![Production Status](https://img.shields.io/badge/status-production-green)](https://nextdeploy.one) [![Built with Next.js](https://img.shields.io/badge/built%20with-Next.js-black)](https://nextjs.org/) [![Self-Deployed](https://img.shields.io/badge/deployed%20with-NextDeploy-blue)](https://nextdeploy.one)
+[![Production Status](https://img.shields.io/badge/status-production-green)](https://nextdeploy.org) [![Built with Next.js](https://img.shields.io/badge/built%20with-Next.js-black)](https://nextjs.org/) [![Self-Deployed](https://img.shields.io/badge/deployed%20with-NextDeploy-blue)](https://nextdeploy.org)
 
 ---
 
@@ -41,7 +41,7 @@ pnpm dev
 
 ```bash
 # Install NextDeploy CLI
-curl -fsSL https://nextdeploy.one/install.sh | sh
+curl -fsSL https://nextdeploy.org/install.sh | bash
 
 # Deploy this frontend
 nextdeploy build && nextdeploy ship
@@ -158,12 +158,12 @@ pnpm type-check
 
 ```bash
 # Required
-NEXTDEPLOY_API_URL=https://api.nextdeploy.one
+NEXTDEPLOY_API_URL=https://api.nextdeploy.org
 NEXTAUTH_SECRET=your-secret-key
 
 # Optional  
 DATABASE_URL=postgresql://...
-WEBSOCKET_URL=wss://ws.nextdeploy.one
+WEBSOCKET_URL=wss://ws.nextdeploy.org
 ```
 
 ---
@@ -176,23 +176,23 @@ Choose your platform:
 
 #### Linux
 ```bash
-curl -fsSL https://nextdeploy.one/linux-cli.sh | sh
+curl -fsSL https://nextdeploy.org/linux-cli.sh | sh
 ```
 
 #### macOS
 ```bash
-curl -fsSL https://nextdeploy.one/mac-cli.sh | sh
+curl -fsSL https://nextdeploy.org/mac-cli.sh | sh
 ```
 
 #### Windows (PowerShell)
 ```powershell
 # Run as Administrator
-iwr -useb https://nextdeploy.one/windows.ps1 | iex
+iwr -useb https://nextdeploy.org/windows.ps1 | iex
 ```
 
 ### NextDeploy Daemon (Linux/macOS)
 ```bash
-curl -fsSL https://nextdeploy.one/nextdeployd.sh | sh
+curl -fsSL https://nextdeploy.org/nextdeployd.sh | sh
 ```
 
 > 💡 **Pro tip**: Use versioned installs (`/install/v0.1.0.sh`) for reproducible environments
@@ -255,7 +255,7 @@ gantt
 ### Documentation
 - [NextDeploy CLI Repository](https://github.com/aynaash/nextdeploy) - Core deployment engine
 - [Architecture Decisions](/.github/ARCHITECTURE.md) - Technical design choices
-- [API Documentation](https://docs.nextdeploy.one/api) - Complete API reference
+- [API Documentation](https://docs.nextdeploy.org/api) - Complete API reference
 
 ### Community
 - [Contributing Guide](/.github/CONTRIBUTING.md) - Detailed contribution workflow
@@ -282,6 +282,6 @@ This project embodies our commitment to:
 
 **Ready to deploy?**
 
-[Get Started](https://nextdeploy.one/docs/quickstart) • [View Dashboard](https://nextdeploy.one/dashboard) • [Join Community](https://github.com/aynaash/nextdeploy-frontend/discussions)
+[Get Started](https://nextdeploy.org/docs/quickstart) • [View Dashboard](https://nextdeploy.org/dashboard) • [Join Community](https://github.com/aynaash/nextdeploy-frontend/discussions)
 
 </div>

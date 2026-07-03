@@ -35,8 +35,8 @@ export function NewsletterForm() {
     toast({
       title: 'You submitted the following values:',
       description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
     });
@@ -44,18 +44,18 @@ export function NewsletterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2 sm:max-w-sm'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2 sm:max-w-sm">
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Subscribe to our newsletter</FormLabel>
               <FormControl>
                 <Input
-                  type='email'
-                  className='rounded-full px-4'
-                  placeholder='nextdeploy@nextdeploy.one'
+                  type="email"
+                  className="rounded-full px-4"
+                  placeholder="nextdeploy@nextdeploy.org"
                   {...field}
                 />
               </FormControl>
@@ -63,7 +63,7 @@ export function NewsletterForm() {
             </FormItem>
           )}
         />
-        <Button type='submit' size='sm' rounded='full' className='px-4'>
+        <Button type="submit" size="sm" rounded="full" className="px-4">
           Subscribe
         </Button>
       </form>

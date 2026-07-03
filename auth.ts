@@ -16,7 +16,7 @@ const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
 const sanitizeBetterAuthUrl = sanitizeUrl(BETTER_AUTH_URL || '');
 console.log('BetterAuth URL:', sanitizeBetterAuthUrl);
 
-const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || 'no-reply@nextdeploy.one';
+const FROM_EMAIL = process.env.BETTER_AUTH_EMAIL || 'no-reply@nextdeploy.org';
 const TEST_EMAIL = process.env.TEST_EMAIL;
 // const STRIPE_KEY = process.env.STRIPE_API_KEY!;
 // const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -42,6 +42,9 @@ const adapter = drizzleAdapter(db, {
 const devOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
+  'https://nextdeploy.org',
+  'https://www.nextdeploy.org',
+  // legacy origin — keep trusted during the .one → .org transition
   'https://nextdeploy.one',
   'https://www.nextdeploy.one',
 ];
@@ -49,7 +52,7 @@ let baseURL;
 if (process.env.NODE_ENV === 'development') {
   baseURL = 'http://localhost:3000/';
 } else {
-  baseURL = 'https://nextdeploy.one/';
+  baseURL = 'https://nextdeploy.org/';
 }
 
 //FIX: remove the localhost origins in production later
