@@ -1,14 +1,14 @@
 {
   "app_name": "nextdeploy",
   "nextbuildmetadata": {
-    "buildId": "CwjpLyjAG23hlQWUrGqf4",
+    "buildId": "0rRNs8FpGbFYpnaK7Gk7_",
     "buildManifest": {
       "ampDevFiles": [],
       "ampFirstPages": [],
       "devFiles": [],
       "lowPriorityFiles": [
-        "static/CwjpLyjAG23hlQWUrGqf4/_buildManifest.js",
-        "static/CwjpLyjAG23hlQWUrGqf4/_ssgManifest.js"
+        "static/0rRNs8FpGbFYpnaK7Gk7_/_buildManifest.js",
+        "static/0rRNs8FpGbFYpnaK7Gk7_/_ssgManifest.js"
       ],
       "pages": {
         "/_app": [
@@ -62,10 +62,10 @@
           "static/chunks/9051-ade3b6bc5ff4054d.js",
           "static/chunks/1438-3c6851aa606476f2.js",
           "static/chunks/9039-c85b5180b6f8b4d2.js",
-          "static/chunks/6585-7e9ad776cd577ce2.js",
-          "static/chunks/5860-e86f00df7c6c032f.js",
+          "static/chunks/2740-4713439086dcbbfc.js",
+          "static/chunks/5860-c1e05f82d34997d8.js",
           "static/chunks/8308-4dd9e16055b5ed53.js",
-          "static/chunks/app/(docs)/docs/[...slug]/page-f07d9eda9dde9eb7.js"
+          "static/chunks/app/(docs)/docs/[...slug]/page-6ce923688494f777.js"
         ],
         "/(docs)/docs/deploy-flow/page": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -74,7 +74,7 @@
           "static/chunks/main-app-37637f6910f35937.js",
           "static/chunks/2256-9e7342ce800ee10d.js",
           "static/chunks/9051-ade3b6bc5ff4054d.js",
-          "static/chunks/app/(docs)/docs/deploy-flow/page-0967fba8b6df054c.js"
+          "static/chunks/app/(docs)/docs/deploy-flow/page-635d0f72a92ba5b5.js"
         ],
         "/(docs)/docs/layout": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -86,7 +86,7 @@
           "static/chunks/4202-b9ee1b36570ec45c.js",
           "static/chunks/6851-43561a8061e8c10a.js",
           "static/chunks/7701-c93b4195ba121e38.js",
-          "static/chunks/app/(docs)/docs/layout-516a1aec1d50d3df.js"
+          "static/chunks/app/(docs)/docs/layout-fe80dc4a9d584289.js"
         ],
         "/(docs)/docs/page": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -97,7 +97,7 @@
           "static/chunks/2256-9e7342ce800ee10d.js",
           "static/chunks/9051-ade3b6bc5ff4054d.js",
           "static/chunks/1438-3c6851aa606476f2.js",
-          "static/chunks/5860-e86f00df7c6c032f.js",
+          "static/chunks/5860-c1e05f82d34997d8.js",
           "static/chunks/8308-4dd9e16055b5ed53.js",
           "static/chunks/app/(docs)/docs/page-bfd2d4b4221a0fea.js"
         ],
@@ -109,7 +109,7 @@
           "static/chunks/2256-9e7342ce800ee10d.js",
           "static/chunks/9051-ade3b6bc5ff4054d.js",
           "static/chunks/1438-3c6851aa606476f2.js",
-          "static/chunks/5860-e86f00df7c6c032f.js",
+          "static/chunks/5860-c1e05f82d34997d8.js",
           "static/chunks/app/(docs)/docs/security/page-679f66f5beba7e44.js"
         ],
         "/(guides)/guides/[slug]/page": [
@@ -122,7 +122,7 @@
           "static/chunks/2256-9e7342ce800ee10d.js",
           "static/chunks/9051-ade3b6bc5ff4054d.js",
           "static/chunks/1438-3c6851aa606476f2.js",
-          "static/chunks/5860-e86f00df7c6c032f.js",
+          "static/chunks/5860-c1e05f82d34997d8.js",
           "static/chunks/8308-4dd9e16055b5ed53.js",
           "static/chunks/app/(guides)/guides/[slug]/page-a191ad17b03b3789.js"
         ],
@@ -140,7 +140,7 @@
           "static/chunks/5964-40978821a2ce41e4.js",
           "static/chunks/main-app-37637f6910f35937.js",
           "static/chunks/2256-9e7342ce800ee10d.js",
-          "static/chunks/app/(marketing)/error-66c1a6cacf8340f8.js"
+          "static/chunks/app/(marketing)/error-411179e04241bbe2.js"
         ],
         "/(marketing)/layout": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -155,7 +155,7 @@
           "static/chunks/9039-c85b5180b6f8b4d2.js",
           "static/chunks/3753-91f8f570491250df.js",
           "static/chunks/6999-eb028e2052536361.js",
-          "static/chunks/7541-9f7a7720c22b760b.js",
+          "static/chunks/7541-97059a6ff3f2a450.js",
           "static/chunks/app/(marketing)/layout-6070c45de4b15d7d.js"
         ],
         "/(marketing)/not-found": [
@@ -165,7 +165,7 @@
           "static/chunks/main-app-37637f6910f35937.js",
           "static/chunks/6874-414075bb21e16c80.js",
           "static/chunks/2256-9e7342ce800ee10d.js",
-          "static/chunks/app/(marketing)/not-found-f575442f6e18d8b0.js"
+          "static/chunks/app/(marketing)/not-found-2937c477d3c05fea.js"
         ],
         "/(marketing)/page": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -175,7 +175,7 @@
           "static/chunks/6874-414075bb21e16c80.js",
           "static/chunks/2256-9e7342ce800ee10d.js",
           "static/chunks/9051-ade3b6bc5ff4054d.js",
-          "static/chunks/app/(marketing)/page-5c70c71929ad63dd.js"
+          "static/chunks/app/(marketing)/page-a67a3e472119ee62.js"
         ],
         "/(marketing)/pricing/loading": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -258,7 +258,7 @@
           "static/chunks/2256-9e7342ce800ee10d.js",
           "static/chunks/8721-63c794e59342aa94.js",
           "static/chunks/6381-3c97a93dce93c5be.js",
-          "static/chunks/app/(protected)/dashboard/charts/page-8a99dde50f38f3fe.js"
+          "static/chunks/app/(protected)/dashboard/charts/page-a876f1f150078645.js"
         ],
         "/(protected)/dashboard/loading": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -301,7 +301,7 @@
           "static/chunks/6999-eb028e2052536361.js",
           "static/chunks/6851-43561a8061e8c10a.js",
           "static/chunks/6866-d202057860e858de.js",
-          "static/chunks/7541-9f7a7720c22b760b.js",
+          "static/chunks/7541-97059a6ff3f2a450.js",
           "static/chunks/app/(protected)/layout-490751e1f08d7776.js"
         ],
         "/_not-found/page": [
@@ -361,7 +361,7 @@
           "static/chunks/main-app-37637f6910f35937.js",
           "static/chunks/6874-414075bb21e16c80.js",
           "static/chunks/2256-9e7342ce800ee10d.js",
-          "static/chunks/app/dash/page-a4efeed944780dc5.js"
+          "static/chunks/app/dash/page-fb92257b0d636e42.js"
         ],
         "/global-not-found": [
           "static/chunks/webpack-2850696840d17b03.js",
@@ -489,9 +489,9 @@
       },
       "notFoundRoutes": [],
       "preview": {
-        "previewModeEncryptionKey": "f13f049840b974f60fad5268f48b1ea57d47b82e1a5ca189c9b57d81b5e55e7c",
-        "previewModeId": "0e83a26a34af9ff67af228151300d189",
-        "previewModeSigningKey": "fc67761deb0afe48f9d5841140e93b1ed61b497e1666e61ef2bea77dbc6c532f"
+        "previewModeEncryptionKey": "b2e10ae862c7a12806310d68b479927dd64720d32b40da7e6a2b78f271ddd089",
+        "previewModeId": "b3cf10e1911b07559c28df1efcca52ab",
+        "previewModeSigningKey": "ebea35200ae304019d418bb0204881d9f9350326a09f05ed506e337239aaea57"
       },
       "routes": {
         "/": {
@@ -2146,6 +2146,14 @@
         "size": 71963
       },
       {
+        "path": "public/install.sh",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/public/install.sh",
+        "public_path": "/install.sh",
+        "type": "other",
+        "extension": ".sh",
+        "size": 3079
+      },
+      {
         "path": "public/logo (1).png",
         "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/public/logo (1).png",
         "public_path": "/logo (1).png",
@@ -2181,17 +2189,17 @@
     "static_folder": null,
     "next_static": [
       {
-        "path": ".next/static/CwjpLyjAG23hlQWUrGqf4/_buildManifest.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/CwjpLyjAG23hlQWUrGqf4/_buildManifest.js",
-        "public_path": "/_next/static/CwjpLyjAG23hlQWUrGqf4/_buildManifest.js",
+        "path": ".next/static/0rRNs8FpGbFYpnaK7Gk7_/_buildManifest.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/0rRNs8FpGbFYpnaK7Gk7_/_buildManifest.js",
+        "public_path": "/_next/static/0rRNs8FpGbFYpnaK7Gk7_/_buildManifest.js",
         "type": "script",
         "extension": ".js",
         "size": 1661
       },
       {
-        "path": ".next/static/CwjpLyjAG23hlQWUrGqf4/_ssgManifest.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/CwjpLyjAG23hlQWUrGqf4/_ssgManifest.js",
-        "public_path": "/_next/static/CwjpLyjAG23hlQWUrGqf4/_ssgManifest.js",
+        "path": ".next/static/0rRNs8FpGbFYpnaK7Gk7_/_ssgManifest.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/0rRNs8FpGbFYpnaK7Gk7_/_ssgManifest.js",
+        "public_path": "/_next/static/0rRNs8FpGbFYpnaK7Gk7_/_ssgManifest.js",
         "type": "script",
         "extension": ".js",
         "size": 134
@@ -2299,6 +2307,14 @@
         "type": "script",
         "extension": ".js",
         "size": 11029
+      },
+      {
+        "path": ".next/static/chunks/2740-4713439086dcbbfc.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/2740-4713439086dcbbfc.js",
+        "public_path": "/_next/static/chunks/2740-4713439086dcbbfc.js",
+        "type": "script",
+        "extension": ".js",
+        "size": 11149
       },
       {
         "path": ".next/static/chunks/2918becc.0ad9e21458fcf35c.js",
@@ -2445,9 +2461,9 @@
         "size": 158
       },
       {
-        "path": ".next/static/chunks/5860-e86f00df7c6c032f.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/5860-e86f00df7c6c032f.js",
-        "public_path": "/_next/static/chunks/5860-e86f00df7c6c032f.js",
+        "path": ".next/static/chunks/5860-c1e05f82d34997d8.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/5860-c1e05f82d34997d8.js",
+        "public_path": "/_next/static/chunks/5860-c1e05f82d34997d8.js",
         "type": "script",
         "extension": ".js",
         "size": 7769
@@ -2507,14 +2523,6 @@
         "type": "script",
         "extension": ".js",
         "size": 159
-      },
-      {
-        "path": ".next/static/chunks/6585-7e9ad776cd577ce2.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/6585-7e9ad776cd577ce2.js",
-        "public_path": "/_next/static/chunks/6585-7e9ad776cd577ce2.js",
-        "type": "script",
-        "extension": ".js",
-        "size": 10972
       },
       {
         "path": ".next/static/chunks/6851-43561a8061e8c10a.js",
@@ -2629,9 +2637,9 @@
         "size": 166
       },
       {
-        "path": ".next/static/chunks/7541-9f7a7720c22b760b.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/7541-9f7a7720c22b760b.js",
-        "public_path": "/_next/static/chunks/7541-9f7a7720c22b760b.js",
+        "path": ".next/static/chunks/7541-97059a6ff3f2a450.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/7541-97059a6ff3f2a450.js",
+        "public_path": "/_next/static/chunks/7541-97059a6ff3f2a450.js",
         "type": "script",
         "extension": ".js",
         "size": 12362
@@ -2845,25 +2853,25 @@
         "size": 210
       },
       {
-        "path": ".next/static/chunks/app/(docs)/docs/[...slug]/page-f07d9eda9dde9eb7.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/[...slug]/page-f07d9eda9dde9eb7.js",
-        "public_path": "/_next/static/chunks/app/(docs)/docs/[...slug]/page-f07d9eda9dde9eb7.js",
+        "path": ".next/static/chunks/app/(docs)/docs/[...slug]/page-6ce923688494f777.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/[...slug]/page-6ce923688494f777.js",
+        "public_path": "/_next/static/chunks/app/(docs)/docs/[...slug]/page-6ce923688494f777.js",
         "type": "script",
         "extension": ".js",
-        "size": 6903
+        "size": 8215
       },
       {
-        "path": ".next/static/chunks/app/(docs)/docs/deploy-flow/page-0967fba8b6df054c.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/deploy-flow/page-0967fba8b6df054c.js",
-        "public_path": "/_next/static/chunks/app/(docs)/docs/deploy-flow/page-0967fba8b6df054c.js",
+        "path": ".next/static/chunks/app/(docs)/docs/deploy-flow/page-635d0f72a92ba5b5.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/deploy-flow/page-635d0f72a92ba5b5.js",
+        "public_path": "/_next/static/chunks/app/(docs)/docs/deploy-flow/page-635d0f72a92ba5b5.js",
         "type": "script",
         "extension": ".js",
         "size": 17646
       },
       {
-        "path": ".next/static/chunks/app/(docs)/docs/layout-516a1aec1d50d3df.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/layout-516a1aec1d50d3df.js",
-        "public_path": "/_next/static/chunks/app/(docs)/docs/layout-516a1aec1d50d3df.js",
+        "path": ".next/static/chunks/app/(docs)/docs/layout-fe80dc4a9d584289.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(docs)/docs/layout-fe80dc4a9d584289.js",
+        "public_path": "/_next/static/chunks/app/(docs)/docs/layout-fe80dc4a9d584289.js",
         "type": "script",
         "extension": ".js",
         "size": 12708
@@ -2901,9 +2909,9 @@
         "size": 210
       },
       {
-        "path": ".next/static/chunks/app/(marketing)/error-66c1a6cacf8340f8.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(marketing)/error-66c1a6cacf8340f8.js",
-        "public_path": "/_next/static/chunks/app/(marketing)/error-66c1a6cacf8340f8.js",
+        "path": ".next/static/chunks/app/(marketing)/error-411179e04241bbe2.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(marketing)/error-411179e04241bbe2.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/error-411179e04241bbe2.js",
         "type": "script",
         "extension": ".js",
         "size": 6579
@@ -2917,20 +2925,20 @@
         "size": 12516
       },
       {
-        "path": ".next/static/chunks/app/(marketing)/not-found-f575442f6e18d8b0.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(marketing)/not-found-f575442f6e18d8b0.js",
-        "public_path": "/_next/static/chunks/app/(marketing)/not-found-f575442f6e18d8b0.js",
+        "path": ".next/static/chunks/app/(marketing)/not-found-2937c477d3c05fea.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(marketing)/not-found-2937c477d3c05fea.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/not-found-2937c477d3c05fea.js",
         "type": "script",
         "extension": ".js",
         "size": 9678
       },
       {
-        "path": ".next/static/chunks/app/(marketing)/page-5c70c71929ad63dd.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(marketing)/page-5c70c71929ad63dd.js",
-        "public_path": "/_next/static/chunks/app/(marketing)/page-5c70c71929ad63dd.js",
+        "path": ".next/static/chunks/app/(marketing)/page-a67a3e472119ee62.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(marketing)/page-a67a3e472119ee62.js",
+        "public_path": "/_next/static/chunks/app/(marketing)/page-a67a3e472119ee62.js",
         "type": "script",
         "extension": ".js",
-        "size": 11816
+        "size": 13215
       },
       {
         "path": ".next/static/chunks/app/(marketing)/pricing/loading-27eaac92d1651179.js",
@@ -3013,9 +3021,9 @@
         "size": 261
       },
       {
-        "path": ".next/static/chunks/app/(protected)/dashboard/charts/page-8a99dde50f38f3fe.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/charts/page-8a99dde50f38f3fe.js",
-        "public_path": "/_next/static/chunks/app/(protected)/dashboard/charts/page-8a99dde50f38f3fe.js",
+        "path": ".next/static/chunks/app/(protected)/dashboard/charts/page-a876f1f150078645.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/(protected)/dashboard/charts/page-a876f1f150078645.js",
+        "public_path": "/_next/static/chunks/app/(protected)/dashboard/charts/page-a876f1f150078645.js",
         "type": "script",
         "extension": ".js",
         "size": 26780
@@ -3117,9 +3125,9 @@
         "size": 261
       },
       {
-        "path": ".next/static/chunks/app/dash/page-a4efeed944780dc5.js",
-        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/dash/page-a4efeed944780dc5.js",
-        "public_path": "/_next/static/chunks/app/dash/page-a4efeed944780dc5.js",
+        "path": ".next/static/chunks/app/dash/page-fb92257b0d636e42.js",
+        "absolute_path": "/home/hersi/Music/workspace/nd/nextdeployfrontend/.next/static/chunks/app/dash/page-fb92257b0d636e42.js",
+        "public_path": "/_next/static/chunks/app/dash/page-fb92257b0d636e42.js",
         "type": "script",
         "extension": ".js",
         "size": 11405
@@ -3415,9 +3423,9 @@
     ],
     "other_assets": null
   },
-  "git_commit": "f86377a",
+  "git_commit": "3c87a8c",
   "git_dirty": true,
-  "generated_at": "2026-06-16T02:54:16+03:00",
+  "generated_at": "2026-07-03T21:46:57+03:00",
   "config": {
     "app_name": "nextdeploy",
     "domain": "nextdeploy.org",
@@ -3830,51 +3838,16 @@
     },
     "isr_detail": [
       {
-        "path": "/docs/secrets",
+        "path": "/docs",
         "tags": [
-          "/docs/secrets"
+          "/docs"
         ],
         "revalidate": 60
       },
       {
-        "path": "/docs/cloudflare-deployment",
+        "path": "/docs/configuration",
         "tags": [
-          "/docs/cloudflare-deployment"
-        ],
-        "revalidate": 60
-      },
-      {
-        "path": "/docs/installation",
-        "tags": [
-          "/docs/installation"
-        ],
-        "revalidate": 60
-      },
-      {
-        "path": "/docs/nextdeploy-yml",
-        "tags": [
-          "/docs/nextdeploy-yml"
-        ],
-        "revalidate": 60
-      },
-      {
-        "path": "/guides/deploy-to-digitalocean-vps",
-        "tags": [
-          "/guides/deploy-to-digitalocean-vps"
-        ],
-        "revalidate": 60
-      },
-      {
-        "path": "/guides/ship-your-first-app",
-        "tags": [
-          "/guides/ship-your-first-app"
-        ],
-        "revalidate": 60
-      },
-      {
-        "path": "/docs/security",
-        "tags": [
-          "/docs/security"
+          "/docs/configuration"
         ],
         "revalidate": 60
       },
@@ -3886,23 +3859,16 @@
         "revalidate": 60
       },
       {
-        "path": "/docs/vps-deployment",
+        "path": "/docs/secrets",
         "tags": [
-          "/docs/vps-deployment"
+          "/docs/secrets"
         ],
         "revalidate": 60
       },
       {
-        "path": "/docs/quick-start",
+        "path": "/guides/ship-your-first-app",
         "tags": [
-          "/docs/quick-start"
-        ],
-        "revalidate": 60
-      },
-      {
-        "path": "/guides/getting-started",
-        "tags": [
-          "/guides/getting-started"
+          "/guides/ship-your-first-app"
         ],
         "revalidate": 60
       },
@@ -3921,9 +3887,37 @@
         "revalidate": 60
       },
       {
-        "path": "/docs",
+        "path": "/docs/security",
         "tags": [
-          "/docs"
+          "/docs/security"
+        ],
+        "revalidate": 60
+      },
+      {
+        "path": "/docs/nextdeploy-yml",
+        "tags": [
+          "/docs/nextdeploy-yml"
+        ],
+        "revalidate": 60
+      },
+      {
+        "path": "/docs/cloudflare-deployment",
+        "tags": [
+          "/docs/cloudflare-deployment"
+        ],
+        "revalidate": 60
+      },
+      {
+        "path": "/docs/quick-start",
+        "tags": [
+          "/docs/quick-start"
+        ],
+        "revalidate": 60
+      },
+      {
+        "path": "/guides/deploy-to-digitalocean-vps",
+        "tags": [
+          "/guides/deploy-to-digitalocean-vps"
         ],
         "revalidate": 60
       },
@@ -3935,9 +3929,23 @@
         "revalidate": 60
       },
       {
-        "path": "/docs/configuration",
+        "path": "/docs/installation",
         "tags": [
-          "/docs/configuration"
+          "/docs/installation"
+        ],
+        "revalidate": 60
+      },
+      {
+        "path": "/docs/vps-deployment",
+        "tags": [
+          "/docs/vps-deployment"
+        ],
+        "revalidate": 60
+      },
+      {
+        "path": "/guides/getting-started",
+        "tags": [
+          "/guides/getting-started"
         ],
         "revalidate": 60
       }
